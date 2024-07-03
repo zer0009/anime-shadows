@@ -3,9 +3,6 @@ const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-
-
-
 const viewedEpisodeSchema = new mongoose.Schema({
   animeId: { type: mongoose.Schema.Types.ObjectId, ref: 'Anime', required: true },
   episodeNumber: { type: Number, required: true },
