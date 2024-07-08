@@ -1,0 +1,19 @@
+/* src/index.css */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    background-color: #f5f5f5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto', sans-serif;
+}
+
+.home-title {
+    color: #333;
+}
+
+.anime-card {
+    font-family: 'Roboto', sans-serif;
+    background-color: #fff;
+}

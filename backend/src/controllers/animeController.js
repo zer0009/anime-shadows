@@ -2,6 +2,7 @@ const { body, validationResult } = require('express-validator');
 const AnimeService = require('../services/animeService');
 const User = require('../models/user');
 const Anime = require('../models/anime');
+const Genre = require('../models/genre');
 
 exports.uploadAnime = async (req, res) => {
   const errors = validationResult(req);
@@ -114,10 +115,33 @@ exports.getAnime = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const anime = await AnimeService.getAnime(id);
-    res.json(anime);
+      const anime = await Anime.findById(id);
+      if (!anime) {
+          return res.status(404).json({ message: 'Anime not found' });
+      }
+
+      // Check if the user is logged in
+      if (req.user) {
+          console.log(`User ${req.user._id} is logged in, saving anime ${id} to history`);
+          const user = await User.findById(req.user._id);
+          if (user) {
+              console.log(`User history before update: ${JSON.stringify(user.history)}`);
+              // Check if the anime is already in the user's history
+              const historyItem = user.history.find(item => item.anime && item.anime.toString() === id);
+              if (historyItem) {
+                  historyItem.views.push(new Date());
+              } else {
+                  user.history.push({ anime: id, views: [new Date()] });
+              }
+              await user.save();
+              console.log(`User history after update: ${JSON.stringify(user.history)}`);
+          }
+      }
+
+      res.json(anime);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+      console.error('Error fetching anime:', err); // Log the error
+      res.status(400).json({ error: err.message });
   }
 };
 
@@ -200,17 +224,30 @@ exports.getAnimeByGenre = async (req, res) => {
   }
 };
 
-exports.searchAnime = async (req, res) => {
-  const { query } = req.query;
+exports.getsearchAnime = async (req, res) => {
+  console.log('Received request for searchAnime');
+  console.log('Query parameters:', req.query); // Log the query parameters
+
+  const query = req.query.q; // Access the 'q' parameter from the query string
+  console.log('Query value:', query); // Log the query value
 
   if (!query) {
+    console.log('Query parameter is missing');
     return res.status(400).json({ error: 'Query parameter is required' });
   }
 
   try {
+    // Ensure the query is a string
+    if (typeof query !== 'string') {
+      console.log('Query parameter is not a string');
+      throw new Error('Query parameter must be a string');
+    }
+
     const animes = await AnimeService.searchAnime(query);
+    console.log('Search results:', animes); // Log the search results
     res.json(animes);
   } catch (err) {
+    console.log('Error:', err.message);
     res.status(400).json({ error: err.message });
   }
 };
@@ -245,4 +282,48 @@ exports.getPopularEpisodes = async (req, res) => {
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
+};
+
+
+exports.filterAnimes = async (req, res) => {
+  try {
+      const { tags, broadMatches } = req.query;
+      console.log('Received tags:', tags);
+      console.log('Broad matches:', broadMatches);
+      const tagsArray = tags.split(',');
+      const animes = await AnimeService.getFilteredAnimes(tagsArray, broadMatches === 'true');
+      res.json(animes);
+  } catch (error) {
+      console.error('Error filtering animes:', error);
+      res.status(500).json({ message: error.message });
+  }
+};
+
+exports.searchAnime = async (req, res) => {
+    try {
+        const { q, tags, broadMatches } = req.query;
+        let query = {};
+
+        if (q) {
+            query.title = { $regex: q, $options: 'i' };
+        }
+
+        if (tags) {
+            const tagsArray = tags.split(',');
+            const tagObjectIds = await Genre.find({ name: { $in: tagsArray } }).select('_id');
+            const tagIds = tagObjectIds.map(tag => tag._id);
+
+            const filterQuery = broadMatches === 'true'
+                ? { genres: { $in: tagIds } }
+                : { genres: { $all: tagIds } };
+
+            query = { ...query, ...filterQuery };
+        }
+
+        const animes = await Anime.find(query).populate('season').populate('type').populate('genres');
+        res.json(animes);
+    } catch (error) {
+        console.error('Error searching animes:', error);
+        res.status(500).json({ message: error.message });
+    }
 };

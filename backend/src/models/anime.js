@@ -20,20 +20,20 @@ const ratingSchema = new mongoose.Schema({
 });
 
 const animeSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  season: { type: mongoose.Schema.Types.ObjectId, ref: 'Season', required: true },
+  title: { type: String, required: true, trim: true },
+  description: { type: String, required: true, trim: true },
+  season: { type: mongoose.Schema.Types.ObjectId, ref: 'Season' },
   episodes: [episodeSchema],
-  pictureUrl: { type: String }, 
+  pictureUrl: { type: String },
   myAnimeListRating: { type: Number },
-  type: { type: mongoose.Schema.Types.ObjectId, ref: 'Type', required: true },
+  type: { type: mongoose.Schema.Types.ObjectId, ref: 'Type' },
   genres: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' }],
   ratings: [ratingSchema],
   createdAt: { type: Date, default: Date.now },
-  numberOfEpisodes: { type: Number, required: true },
-  source: { type: String, default:"N/A"},
-  duration: { type: String, required: true },
-  status: { type: String, enum: ['ongoing', 'completed', 'upcoming'], required: true },
+  numberOfEpisodes: { type: Number, default: 0 },
+  source: { type: String, default: "N/A" },
+  duration: { type: String, default: "N/A" },
+  status: { type: String, enum: ['ongoing', 'completed', 'upcoming'], default: "upcoming" },
   viewCount: { type: Number, default: 0 },
   views: [{ type: Date, default: Date.now }]
 });

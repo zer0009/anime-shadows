@@ -1,0 +1,36 @@
+.footer {
+    background-color: var(--primary-dark); /* Adjust to your primary color */
+    color: var(--text-color); /* Adjust to your text color */
+    padding: 1rem;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+}
+
+.footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-nav a {
+    color: var(--text-color); /* Adjust to your text color */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-nav a:hover {
+    color: var(--highlight-color); /* Adjust to your highlight color */
+}

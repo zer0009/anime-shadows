@@ -9,6 +9,17 @@ const viewedEpisodeSchema = new mongoose.Schema({
   viewedAt: { type: Date, default: Date.now }
 });
 
+const historySchema = new mongoose.Schema({
+  anime: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Anime',
+  },
+  views: {
+      type: [Date],
+      default: []
+  }
+});
+
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true, trim: true },
   email: { type: String, required: true, unique: true,  trim:true, lowercase: true,
@@ -24,6 +35,8 @@ const userSchema = new mongoose.Schema({
   tokens:[{ token:{ type:String,required: true}}],
   avatar:{ type:Buffer},
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
+  // history: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Anime' }] 
+  history: [historySchema],
 });
 
 userSchema.methods.generateAuthToken = async function (){

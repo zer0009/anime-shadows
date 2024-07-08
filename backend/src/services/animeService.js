@@ -195,11 +195,11 @@ const addEpisode = async (animeId, { number, title, servers }) => {
 };
 
 const getAnimes = async () => {
-  return await Anime.find();
+  return await Anime.find().populate('season').populate('type').populate('genres');
 };
 
 const getAnime = async (id) => {
-  const anime = await Anime.findById(id);
+  const anime = await Anime.findById(id).populate('season').populate('type').populate('genres');
   if (anime) {
     anime.viewCount += 1;
     anime.views.push(new Date());
@@ -300,7 +300,23 @@ const getAnimeByGenre = async (genre) => {
 };
 
 const searchAnime = async (query) => {
-  return await Anime.find({ title: new RegExp(query, 'i') });
+  console.log('Searching for animes with query:', query); // Log the query
+  try {
+    // Use a regular expression to perform a case-insensitive search
+    const searchRegex = new RegExp(query, 'i');
+    const animes = await Anime.find({
+      $or: [
+        { title: searchRegex },
+        { description: searchRegex },
+        // Add other fields you want to search by
+      ]
+    });
+    console.log('Found animes:', animes); // Log the found animes
+    return animes;
+  } catch (err) {
+    console.log('Error in searchAnime service:', err.message);
+    throw new Error('Error searching for animes: ' + err.message);
+  }
 };
 
 const getAnimeViewCount = async (animeId) => {
@@ -364,6 +380,47 @@ const getPopularEpisodes = async (timeFrame, genre) => {
   return sortedEpisodes;
 };
 
+const addToHistory = async (userId, animeId) => {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Check if the anime is already in the history
+    const isInHistory = user.history.some(historyItem => historyItem.toString() === animeId);
+    if (!isInHistory) {
+      user.history.push(animeId);
+      await user.save();
+    }
+  } catch (err) {
+    throw new Error('Failed to add anime to history');
+  }
+};
+
+
+const getFilteredAnimes = async (tags, broadMatches) => {
+  try {
+      console.log('Filtering animes with tags:', tags);
+      console.log('Broad matches:', broadMatches);
+
+              // Convert tag names to ObjectIds
+      const tagObjectIds = await Genre.find({ name: { $in: tags } }).select('_id');
+      const tagIds = tagObjectIds.map(tag => tag._id);
+
+      const query = broadMatches
+      ? { genres: { $in: tagIds } }
+      : { genres: { $all: tagIds } };
+
+      return await Anime.find(query).populate('season').populate('type').populate('genres');
+  } catch (error) {
+      console.error('Error in getFilteredAnimes:', error);
+      throw error;
+  }
+};
+
+
+
 module.exports = {
   createAnime,
   updateAnime,
@@ -382,5 +439,8 @@ module.exports = {
   handleFileDeletion,
   getAnimeViewCount,
   getPopularAnimes,
-  getPopularEpisodes
+  getPopularEpisodes,
+  addToHistory,
+  getFilteredAnimes
 };
+

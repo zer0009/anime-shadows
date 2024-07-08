@@ -1,0 +1,31 @@
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+    max-height: 300px; /* Adjust the height as needed */
+    overflow-y: auto; /* Add scroll if the content exceeds the height */
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.modal-dialog {
+    width: 500px; /* Adjust the width as needed */
+    max-width: 100%;
+    padding: 16px;
+}
+
+.modal-title {
+    margin-bottom: 16px;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}

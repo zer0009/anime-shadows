@@ -7,10 +7,9 @@ const validateAnimeUpload = [
   body('typeId').notEmpty().withMessage('Type is required').isMongoId().withMessage('Invalid type ID'),
   body('genres').exists().withMessage('Genres are required'),
   body('source').optional(),
-  body('duration').exists().withMessage('Duration is required'),
+  body('duration').optional(),
   body('status').exists().isIn(['ongoing', 'completed', 'upcoming']).withMessage('Invalid status'),
   body('numberOfEpisodes').isInt({ min: 1 }).withMessage('Number of episodes is required and must be a positive integer'),
-  body('rating').isFloat({ min: 0, max: 10 }).withMessage('Rating must be between 0 and 10')
 ];
 
 const validateAnimeUpdate = [

@@ -1,0 +1,90 @@
+.anime-card {
+    width: 100%; /* Adjust to fit the grid */
+    height: 300px; /* Set a fixed height for all cards */
+    margin: 2px;
+    border-radius: 5px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add transition effect */
+    box-shadow: 0 2px 5px var(--shadow-color);
+    background-color: var(--secondary-dark);
+    position: relative;
+  }
+  
+  .anime-card:hover {
+    transform: scale(1.05); /* Scale up the card on hover */
+    box-shadow: 0 4px 10px var(--shadow-color); /* Increase shadow on hover */
+  }
+  
+  .anime-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+  }
+  
+  .card-cover {
+    position: relative;
+    height: 100%;
+    border-radius: 5px; /* Match the card's border radius */
+    overflow: hidden; /* Ensure the image doesn't overflow */
+    background-size: cover; /* Ensure the image covers the entire card */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent the image from repeating */
+  }
+  
+  .status-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: var(--highlight-color);
+    color: var(--text-color);
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px var(--shadow-color);
+  }
+  
+  .status-badge.completed {
+    background-color: red; /* Change to your desired color */
+  }
+  
+  .status-badge.ongoing {
+    background-color: green; /* Change to your desired color */
+  }
+  
+  .favorite-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: var(--text-color);
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .favorite-icon:hover {
+    color: yellow; /* Change to your desired hover color */
+  }
+  
+  .card-content {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Ensure content is aligned to the bottom */
+    background: linear-gradient(180deg,transparent, var(--secondary-dark) );
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    color: var(--text-color);
+  }
+  
+  .title {
+    font-size: 0.9rem; /* Smaller font size */
+    font-weight: bold;
+    margin: 0 10px; /* Padding on left and right */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: white;
+  }
