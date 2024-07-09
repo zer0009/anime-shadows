@@ -1,0 +1,19 @@
+.historyCard {
+    margin-bottom: 20px;
+    background-color: var(--secondary-dark);
+    color: var(--text-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.cardTitle {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.animeGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive columns */
+    gap: 16px; /* Space between items */
+    justify-items: center; /* Center items horizontally */
+}

@@ -1,9 +1,5 @@
 import API from '../client'; // Ensure you have the correct path to your API setup
 
-export const loginUser = async (credentials) => {
-    return API.post('/user/login', credentials);
-};
-
 export const fetchUserProfile = () => {
     const token = localStorage.getItem('token');
     return API.get('/user/profile', {
@@ -20,15 +16,6 @@ export const registerUser = (userData) => {
 export const updateUserProfile = (userData) => {
     const token = localStorage.getItem('token');
     return API.patch('/user/profile', userData, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
-};
-
-export const logoutUser = () => {
-    const token = localStorage.getItem('token');
-    return API.post('/user/logout', {}, {
         headers: {
             Authorization: `Bearer ${token}`
         }

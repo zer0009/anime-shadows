@@ -15,43 +15,44 @@ const handleFileDeletion = (filePath) => {
   }
 };
 
+const handleFileUpload = (file, title) => {
+  const newFileName = `${title.replace(/\s+/g, '_')}${path.extname(file.originalname)}`;
+  const newFilePath = path.join(uploadDir, newFileName);
+  fs.renameSync(file.path, newFilePath);
+  return `/uploads/${newFileName}`;
+};
+
+const findOrCreateGenre = async (genreName) => {
+  let genre = await Genre.findOne({ name: genreName.trim() });
+  if (!genre) {
+    genre = new Genre({ name: genreName.trim() });
+    await genre.save();
+  }
+  return genre._id;
+};
+
+const getGenreIds = async (genres) => {
+  return await Promise.all(genres.map(findOrCreateGenre));
+};
+
+const validateEntityById = async (Model, id, entityName, file) => {
+  const entity = await Model.findById(id.trim());
+  if (!entity) {
+    if (file) handleFileDeletion(file.path);
+    throw new Error(`${entityName} not found`);
+  }
+  return entity;
+};
+
 const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeId, genres, numberOfEpisodes, source, duration, status, file }) => {
   if (!typeId || !seasonId) {
     throw new Error('Type ID and Season ID are required');
   }
 
-  // if (!source) {
-  //   throw new Error('Source is required');
-  // }
+  await validateEntityById(Type, typeId, 'Type', file);
+  await validateEntityById(Season, seasonId, 'Season', file);
 
-  // if (!duration) {
-  //   throw new Error('Duration is required');
-  // }
-
-  // if (!status || !['ongoing', 'completed', 'upcoming'].includes(status)) {
-  //   throw new Error('Valid status is required');
-  // }
-
-  const type = await Type.findById(typeId.trim());
-  if (!type) {
-    if (file) handleFileDeletion(file.path);
-    throw new Error('Type not found');
-  }
-
-  const season = await Season.findById(seasonId.trim());
-  if (!season) {
-    if (file) handleFileDeletion(file.path);
-    throw new Error('Season not found');
-  }
-
-  const genreIds = await Promise.all(genres.map(async (genreName) => {
-    let genre = await Genre.findOne({ name: genreName.trim() });
-    if (!genre) {
-      genre = new Genre({ name: genreName.trim() });
-      await genre.save();
-    }
-    return genre._id;
-  }));
+  const genreIds = await getGenreIds(genres);
 
   let myAnimeListRating = null;
   if (myAnimeListUrl) {
@@ -75,10 +76,7 @@ const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeI
   await newAnime.save();
 
   if (file) {
-    const newFileName = `${title.replace(/\s+/g, '_')}${path.extname(file.originalname)}`;
-    const newFilePath = path.join(uploadDir, newFileName);
-    fs.renameSync(file.path, newFilePath);
-    newAnime.pictureUrl = `/uploads/${newFileName}`;
+    newAnime.pictureUrl = handleFileUpload(file, title);
     await newAnime.save();
   }
 
@@ -87,29 +85,15 @@ const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeI
 
 const updateAnime = async (id, updateData, file) => {
   if (updateData.typeId) {
-    const type = await Type.findById(updateData.typeId.trim());
-    if (!type) {
-      throw new Error('Type not found');
-    }
+    await validateEntityById(Type, updateData.typeId, 'Type', file);
   }
 
   if (updateData.seasonId) {
-    const season = await Season.findById(updateData.seasonId.trim());
-    if (!season) {
-      throw new Error('Season not found');
-    }
+    await validateEntityById(Season, updateData.seasonId, 'Season', file);
   }
 
   if (updateData.genres) {
-    const genreIds = await Promise.all(updateData.genres.map(async (genreName) => {
-      let genre = await Genre.findOne({ name: genreName.trim() });
-      if (!genre) {
-        genre = new Genre({ name: genreName.trim() });
-        await genre.save();
-      }
-      return genre._id;
-    }));
-    updateData.genres = genreIds;
+    updateData.genres = await getGenreIds(updateData.genres);
   }
 
   if (updateData.status && !['ongoing', 'completed', 'upcoming'].includes(updateData.status)) {
@@ -122,17 +106,10 @@ const updateAnime = async (id, updateData, file) => {
   }
 
   if (file) {
-    // Delete the old image if it exists
     if (anime.pictureUrl) {
-      const oldFilePath = path.join(uploadDir, path.basename(anime.pictureUrl));
-      handleFileDeletion(oldFilePath);
+      handleFileDeletion(path.join(uploadDir, path.basename(anime.pictureUrl)));
     }
-
-    // Save the new image
-    const newFileName = `${anime.title.replace(/\s+/g, '_')}${path.extname(file.originalname)}`;
-    const newFilePath = path.join(uploadDir, newFileName);
-    fs.renameSync(file.path, newFilePath);
-    updateData.pictureUrl = `/uploads/${newFileName}`;
+    updateData.pictureUrl = handleFileUpload(file, anime.title);
   }
 
   const updatedAnime = await Anime.findByIdAndUpdate(id, { $set: updateData }, { new: true });
@@ -164,11 +141,9 @@ const toggleEpisodeWatched = async (userId, animeId, episodeNumber) => {
 
   let message;
   if (watchedIndex !== -1) {
-    // Episode is already marked as watched, so unmark it
     user.viewingHistory.splice(watchedIndex, 1);
     message = 'Episode unmarked as watched';
   } else {
-    // Episode is not marked as watched, so mark it
     user.viewingHistory.push({ animeId, episodeNumber });
     message = 'Episode marked as watched';
   }
@@ -183,12 +158,7 @@ const addEpisode = async (animeId, { number, title, servers }) => {
     throw new Error('Anime not found');
   }
 
-  const episode = {
-    number,
-    title,
-    servers
-  };
-
+  const episode = { number, title, servers };
   anime.episodes.push(episode);
   await anime.save();
   return anime;
@@ -229,7 +199,7 @@ const getEpisode = async (animeId, episodeId) => {
 
 const rateAnime = async (animeId, userId, rating) => {
   const user = await User.findById(userId);
-  if (!user || !userId) {
+  if (!user) {
     throw new Error('Please Login');
   }
 
@@ -241,15 +211,13 @@ const rateAnime = async (animeId, userId, rating) => {
   const existingRating = anime.ratings.find(r => r.userId.toString() === userId.toString());
 
   if (existingRating) {
-    // Update existing rating
     existingRating.rating = rating;
   } else {
-    // Add new rating
     anime.ratings.push({ userId, rating });
   }
 
   await anime.save();
-  return {status: 200, data: {message: 'Rating updated', rating: anime.calculateAverageRating()}};
+  return { status: 200, data: { message: 'Rating updated', rating: anime.calculateAverageRating() } };
 };
 
 const addFavorite = async (userId, animeId) => {
@@ -300,18 +268,19 @@ const getAnimeByGenre = async (genre) => {
 };
 
 const searchAnime = async (query) => {
-  console.log('Searching for animes with query:', query); // Log the query
+  console.log('Searching for animes with query:', query);
   try {
-    // Use a regular expression to perform a case-insensitive search
     const searchRegex = new RegExp(query, 'i');
     const animes = await Anime.find({
       $or: [
         { title: searchRegex },
         { description: searchRegex },
-        // Add other fields you want to search by
+        { type: searchRegex },
+        { season: searchRegex },
+        { genres: searchRegex },
       ]
     });
-    console.log('Found animes:', animes); // Log the found animes
+    console.log('Found animes:', animes);
     return animes;
   } catch (err) {
     console.log('Error in searchAnime service:', err.message);
@@ -387,7 +356,6 @@ const addToHistory = async (userId, animeId) => {
       throw new Error('User not found');
     }
 
-    // Check if the anime is already in the history
     const isInHistory = user.history.some(historyItem => historyItem.toString() === animeId);
     if (!isInHistory) {
       user.history.push(animeId);
@@ -398,28 +366,24 @@ const addToHistory = async (userId, animeId) => {
   }
 };
 
-
 const getFilteredAnimes = async (tags, broadMatches) => {
   try {
-      console.log('Filtering animes with tags:', tags);
-      console.log('Broad matches:', broadMatches);
+    console.log('Filtering animes with tags:', tags);
+    console.log('Broad matches:', broadMatches);
 
-              // Convert tag names to ObjectIds
-      const tagObjectIds = await Genre.find({ name: { $in: tags } }).select('_id');
-      const tagIds = tagObjectIds.map(tag => tag._id);
+    const tagObjectIds = await Genre.find({ name: { $in: tags } }).select('_id');
+    const tagIds = tagObjectIds.map(tag => tag._id);
 
-      const query = broadMatches
+    const query = broadMatches
       ? { genres: { $in: tagIds } }
       : { genres: { $all: tagIds } };
 
-      return await Anime.find(query).populate('season').populate('type').populate('genres');
+    return await Anime.find(query).populate('season').populate('type').populate('genres');
   } catch (error) {
-      console.error('Error in getFilteredAnimes:', error);
-      throw error;
+    console.error('Error in getFilteredAnimes:', error);
+    throw error;
   }
 };
-
-
 
 module.exports = {
   createAnime,
@@ -443,4 +407,3 @@ module.exports = {
   addToHistory,
   getFilteredAnimes
 };
-

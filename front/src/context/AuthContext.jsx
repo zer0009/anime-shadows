@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginUser, fetchUserProfile, logoutUser } from '../api/modules/auth';
+import { loginUser, logoutUser } from '../api/modules/auth';
+import { fetchUserProfile } from '../api/modules/user';
 
 const AuthContext = createContext();
 
@@ -13,7 +14,9 @@ export const AuthProvider = ({ children }) => {
         if (token) {
             fetchUserProfile()
                 .then(data => {
-                    console.log('Fetched user profile:', data); // Debug log
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('Fetched user profile:', data); // Debug log
+                    }
                     setUser(data);
                 })
                 .catch(error => {
@@ -26,9 +29,13 @@ export const AuthProvider = ({ children }) => {
     const login = async (credentials) => {
         try {
             const response = await loginUser(credentials);
-            console.log('Login response:', response); // Add detailed logging
+            if (process.env.NODE_ENV === 'development') {
+                console.log('Login response:', response); // Add detailed logging
+            }
             localStorage.setItem('token', response.token); // Ensure the token is correctly set
-            console.log('Logged in user:', response.user); // Debug log
+            if (process.env.NODE_ENV === 'development') {
+                console.log('Logged in user:', response.user); // Debug log
+            }
             setUser(response.user); // Ensure the user state is correctly set
             navigate('/profile');
         } catch (error) {
@@ -40,7 +47,9 @@ export const AuthProvider = ({ children }) => {
         try {
             await logoutUser();
             localStorage.removeItem('token');
-            console.log('User logged out'); // Debug log
+            if (process.env.NODE_ENV === 'development') {
+                console.log('User logged out'); // Debug log
+            }
             setUser(null);
             navigate('/login');
         } catch (error) {

@@ -1,0 +1,10 @@
+.favoriteList {
+    margin-bottom: 20px;
+}
+
+.animeGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive columns */
+    gap: 16px; /* Space between items */
+    justify-items: center; /* Center items horizontally */
+}

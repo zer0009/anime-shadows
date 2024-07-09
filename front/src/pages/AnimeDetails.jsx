@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchAnimeDetails } from '../api/modules/anime'; // Correctly import fetchAnimeDetails
+import { fetchAnimeById } from '../api/modules/anime';
 import { saveAnimeToHistory } from '../api/modules/user';
-import './AnimeDetails.css';
+import styles from './AnimeDetails.module.css';
 
 const AnimeDetails = () => {
     const { id } = useParams();
@@ -11,7 +11,7 @@ const AnimeDetails = () => {
     useEffect(() => {
         const getAnimeDetails = async () => {
             try {
-                const response = await fetchAnimeDetails(id);
+                const response = await fetchAnimeById(id);
                 setAnime(response.data);
                 // Save the anime to the user's history if logged in
                 const token = localStorage.getItem('token');
@@ -31,43 +31,43 @@ const AnimeDetails = () => {
     }
 
     return (
-        <div className="anime-details-page">
-            <div className="anime-header">
-                <h1 className="anime-title">{anime.title}</h1>
-                <p className="anime-subtitle">{anime.subtitle}</p>
-                <div className="anime-rating">
-                    <div className="rating-stars">
+        <div className={styles.animeDetailsPage}>
+            <div className={styles.animeHeader}>
+                <h1 className={styles.animeTitle}>{anime.title}</h1>
+                <p className={styles.animeSubtitle}>{anime.subtitle}</p>
+                <div className={styles.animeRating}>
+                    <div className={styles.ratingStars}>
                         {/* Render stars based on rating */}
                         {[...Array(5)].map((star, index) => (
                             <i key={index} className={`fas fa-star ${index < anime.rating ? 'filled' : ''}`}></i>
                         ))}
                     </div>
-                    <div className="rating-score">{anime.rating}</div>
-                    <div className="rating-users">{anime.ratingUsers} مستخدم</div>
+                    <div className={styles.ratingScore}>{anime.rating}</div>
+                    <div className={styles.ratingUsers}>{anime.ratingUsers} مستخدم</div>
                 </div>
             </div>
-            <div className="anime-content">
-                <div className="anime-episodes">
+            <div className={styles.animeContent}>
+                <div className={styles.animeEpisodes}>
                     <h2>قائمة الحلقات</h2>
                     <ul>
                         {anime.episodes.map(episode => (
-                            <li key={episode._id} className="episode-item" onClick={() => openModal(episode)}>
-                                <div className="episode-play-icon">▶</div>
-                                <div className="episode-info">
+                            <li key={episode._id} className={styles.episodeItem} onClick={() => openModal(episode)}>
+                                <div className={styles.episodePlayIcon}>▶</div>
+                                <div className={styles.episodeInfo}>
                                     <h3>{episode.title}</h3>
                                     <p>{anime.title}</p>
                                 </div>
-                                <img src={`http://localhost:5000${anime.pictureUrl}`} alt={episode.title} className="episode-thumbnail" />
+                                <img src={`http://localhost:5000${anime.pictureUrl}`} alt={episode.title} className={styles.episodeThumbnail} />
                             </li>
                         ))}
                     </ul>
                 </div>
-                <div className="anime-sidebar">
-                    <img src={`http://localhost:5000${anime.pictureUrl}`} alt={anime.title} className="anime-image" />
-                    <div className="anime-meta">
-                        <button className="watch-now-button">يعرض الآن</button>
-                        <button className="mal-button">MAL صفحة</button>
-                        <button className="trailer-button">العرض التشويقي</button>
+                <div className={styles.animeSidebar}>
+                    <img src={`http://localhost:5000${anime.pictureUrl}`} alt={anime.title} className={styles.animeImage} />
+                    <div className={styles.animeMeta}>
+                        <button className={styles.watchNowButton}>يعرض الآن</button>
+                        <button className={styles.malButton}>MAL صفحة</button>
+                        <button className={styles.trailerButton}>العرض التشويقي</button>
                         <p><strong>النوع:</strong> {anime.type ? anime.type.name : 'N/A'}</p>
                         <p><strong>سنة العرض:</strong> {anime.startDate ? anime.startDate : 'N/A'}</p>
                         <p><strong>الموسم:</strong> {anime.season ? anime.season.name : 'N/A'}</p>
@@ -84,15 +84,15 @@ const AnimeDetails = () => {
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
                 contentLabel="Episode Details"
-                className="modal"
-                overlayClassName="overlay"
+                className={styles.modal}
+                overlayClassName={styles.overlay}
             >
                 {selectedEpisode && (
                     <div className="modal-content">
                         <h2>{selectedEpisode.title}</h2>
                         <p>Server Details: {selectedEpisode.serverDetails}</p>
                         <p>URL: <a href={selectedEpisode.url} target="_blank" rel="noopener noreferrer">{selectedEpisode.url}</a></p>
-                        <button onClick={closeModal} className="close-modal-button">Close</button>
+                        <button onClick={closeModal} className={styles.closeModalButton}>Close</button>
                     </div>
                 )}
             </Modal> */}

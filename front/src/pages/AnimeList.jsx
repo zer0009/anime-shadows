@@ -1,25 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import AnimeCard from '../components/AnimeCard.jsx';
-import axios from 'axios';
+import React from 'react';
+import AnimeCard from '../components/AnimeCard/AnimeCard.jsx';
+import useFetchAnimes from '../hooks/useFetchAnimes';
+import styles from './AnimeList.module.css';
 
 const AnimeList = () => {
-    const [animeList, setAnimeList] = useState([]);
+    const { animeList, loading, error } = useFetchAnimes();
 
-    useEffect(() => {
-        const fetchAnimes = async () => {
-            try {
-                const response = await axios.get('http://localhost:5000/api/anime');
-                setAnimeList(response.data);
-            } catch (error) {
-                console.error('Error fetching animes:', error);
-            }
-        };
+    if (loading) {
+        return <div className={styles.loading}>Loading...</div>;
+    }
 
-        fetchAnimes();
-    }, []);
+    if (error) {
+        return <div className={styles.error}>{error}</div>;
+    }
 
     return (
-        <div className="anime-list">
+        <div className={styles.animeList}>
             {animeList.map(anime => (
                 <AnimeCard key={anime._id} anime={anime} />
             ))}

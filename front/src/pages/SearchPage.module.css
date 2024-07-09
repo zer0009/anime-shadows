@@ -1,0 +1,85 @@
+.searchPage {
+    padding: 20px;
+    background-color: var(--primary-dark);
+    color: var(--text-color);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.searchNavbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--secondary-dark);
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+
+.navButton {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 10px;
+    display: flex;
+    align-items: center;
+}
+
+.navButton:hover {
+    color: var(--highlight-color);
+}
+
+.navButton .icon {
+    margin-right: 5px;
+}
+
+.searchForm {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.searchInput {
+    padding: 10px;
+    border: 1px solid var(--secondary-dark);
+    border-radius: 4px 0 0 4px;
+    background-color: var(--secondary-dark);
+    color: var(--text-color);
+    width: 300px;
+}
+
+.searchButton {
+    padding: 10px;
+    border: 1px solid var(--secondary-dark);
+    border-radius: 0 4px 4px 0;
+    background-color: var(--highlight-color);
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.animeCards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+
+.loading {
+    text-align: center;
+    font-size: 24px;
+    color: var(--highlight-color);
+}
+
+.error {
+    text-align: center;
+    font-size: 24px;
+    color: var(--error-color);
+}
+
+.noResults {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    margin-top: 20px;
+}

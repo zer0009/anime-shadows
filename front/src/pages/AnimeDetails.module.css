@@ -1,0 +1,217 @@
+@import '../styles/global.css';
+
+.animeDetailsPage {
+  padding: 20px;
+  background-color: var(--primary-dark);
+  color: var(--text-color);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.animeHeader {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.animeTitle {
+  font-size: 36px;
+  color: var(--highlight-color);
+}
+
+.animeSubtitle {
+  font-size: 18px;
+  color: var(--subtext-color);
+  margin: 10px 0;
+}
+
+.animeRating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.ratingStars {
+  display: flex;
+}
+
+.ratingStars .fa-star {
+  color: var(--highlight-color);
+  margin: 0 2px;
+}
+
+.ratingStars .fa-star.filled {
+  color: var(--highlight-color);
+}
+
+.ratingScore {
+  font-size: 24px;
+  margin-left: 10px;
+  color: var(--highlight-color);
+}
+
+.ratingUsers {
+  font-size: 14px;
+  color: var(--subtext-color);
+  margin-left: 10px;
+}
+
+.animeContent {
+  display: flex;
+  gap: 20px;
+}
+
+.animeEpisodes {
+  flex: 2;
+}
+
+.animeEpisodes h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: var(--highlight-color);
+}
+
+.animeEpisodes ul {
+  list-style: none;
+  padding: 0;
+}
+
+.episodeItem {
+  display: flex;
+  align-items: center;
+  background-color: var(--secondary-dark);
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s;
+}
+
+.episodeItem:hover {
+  background-color: var(--highlight-color);
+}
+
+.episodePlayIcon {
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.episodeInfo {
+  flex: 1;
+}
+
+.episodeInfo h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.episodeInfo p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--subtext-color);
+}
+
+.episodeThumbnail {
+  width: 120px; /* Adjust the width as needed */
+  height: 80px; /* Adjust the height as needed */
+  border-radius: 4px;
+  object-fit: cover;
+  object-position: top;
+}
+
+.animeSidebar {
+  flex: 1;
+  background-color: var(--secondary-dark);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.animeImage {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.animeMeta {
+  text-align: center;
+}
+
+.watchNowButton,
+.malButton,
+.trailerButton {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.watchNowButton {
+  background-color: var(--highlight-color);
+  color: var(--text-color);
+}
+
+.watchNowButton:hover {
+  background-color: var(--glow-color);
+}
+
+.malButton {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+.malButton:hover {
+  background-color: var(--glow-color);
+}
+
+.trailerButton {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+}
+
+.trailerButton:hover {
+  background-color: var(--glow-color);
+}
+
+.animeMeta p {
+  margin: 10px 0;
+  font-size: 14px;
+  text-align: left;
+}
+
+.animeMeta p strong {
+  color: var(--highlight-color);
+}
+
+/* Modal styles */
+.modal {
+  background-color: var(--primary-dark);
+  color: var(--text-color);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.closeModalButton {
+  background-color: var(--highlight-color);
+  color: var (--text-color);
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.closeModalButton:hover {
+  background-color: var(--glow-color);
+}

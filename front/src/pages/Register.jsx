@@ -1,45 +1,24 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import './Auth.css';
+import React from 'react';
+import useAuthForm from '../hooks/useAuthForm';
+import styles from './Auth.module.css';
 
 const Register = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const navigate = useNavigate();
-
-    const handleRegister = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post('http://localhost:5000/register', { email, password });
-            // Save the token or user data as needed
-            navigate('/login');
-        } catch (error) {
-            setError('Registration failed');
-        }
-    };
+    const { credentials, error, handleChange, handleRegister } = useAuthForm({ email: '', password: '' });
 
     return (
-        <div className="auth-container">
+        <div className={styles.authContainer}>
             <h2>Register</h2>
             <form onSubmit={handleRegister}>
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email"
-                    required
-                />
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
-                    required
-                />
-                {error && <p className="error">{error}</p>}
+                <div>
+                    <label>Email:</label>
+                    <input type="email" name="email" value={credentials.email} onChange={handleChange} required />
+                </div>
+                <div>
+                    <label>Password:</label>
+                    <input type="password" name="password" value={credentials.password} onChange={handleChange} required />
+                </div>
                 <button type="submit">Register</button>
+                {error && <p className={styles.error}>{error}</p>}
             </form>
         </div>
     );

@@ -1,57 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import './Profile.css';
+import React from 'react';
+import useFetchUserData from '../hooks/useFetchUserData';
+import HistoryList from '../components/HistoryList/HistoryList.jsx';
+import FavoriteList from '../components/FavoriteList/FavoriteList.jsx';
+import styles from './Profile.module.css';
 
 const Profile = () => {
-    const [user, setUser] = useState(null);
-    const [favorites, setFavorites] = useState([]);
-    const [watchedEpisodes, setWatchedEpisodes] = useState([]);
+    const { userData, animeDetails } = useFetchUserData();
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:5000/profile', {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                setUser(response.data.user);
-                setFavorites(response.data.favorites);
-                setWatchedEpisodes(response.data.watchedEpisodes);
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        };
-
-        fetchUserData();
-    }, []);
-
-    if (!user) {
+    if (!userData) {
         return <div>Loading...</div>;
     }
 
+    console.log("animeDetails", userData.history)
+
     return (
-        <div className="profile-container">
+        <div className={styles.profileContainer}>
             <h2>User Profile</h2>
-            <div className="user-details">
-                <p><strong>Name:</strong> {user.name}</p>
-                <p><strong>Email:</strong> {user.email}</p>
+            <div className={styles.userDetails}>
+                <p><strong>Name:</strong> {userData.name}</p>
+                <p><strong>Email:</strong> {userData.email}</p>
             </div>
-            <div className="favorites">
-                <h3>Favorites</h3>
-                <ul>
-                    {favorites.map(favorite => (
-                        <li key={favorite._id}>{favorite.title}</li>
-                    ))}
-                </ul>
-            </div>
-            <div className="watched-episodes">
-                <h3>Watched Episodes</h3>
-                <ul>
-                    {watchedEpisodes.map(episode => (
-                        <li key={episode._id}>{episode.title}</li>
-                    ))}
-                </ul>
-            </div>
+            <FavoriteList favorites={userData.favorites} />
+            <HistoryList watchedEpisodes={userData.history} animeDetails={animeDetails} />
         </div>
     );
 };
