@@ -21,6 +21,8 @@ const Header = () => {
         }
     };
 
+    const defaultProfilePicture = '/assets/images/default-profile-picture.jpg'; // Ensure this path is correct
+
     return (
         <header className={styles.header}>
             <div className={styles.container}>
@@ -34,6 +36,9 @@ const Header = () => {
                     </ul>
                 </nav>
                 <div className={styles.headerIcons}>
+                    <Link to="/search" className={styles.searchIconButton}>
+                        <FaSearch className={styles.icon} />
+                    </Link>
                     {!user ? (
                         <>
                             <Link to="/login"><FaUser className={styles.icon} /></Link>
@@ -41,20 +46,28 @@ const Header = () => {
                         </>
                     ) : (
                         <div className={styles.userProfile}>
-                            <img src={user.profilePicture} alt="Profile" className={styles.profilePicture} onClick={toggleDropdown} />
+                            <img
+                                src={user.profilePicture || defaultProfilePicture}
+                                alt="Profile"
+                                className={styles.profilePicture}
+                                onError={(e) => { e.target.src = defaultProfilePicture; }} // Fallback to default if error
+                                onClick={toggleDropdown}
+                            />
                             <span className={styles.username} onClick={toggleDropdown}>{user.username}</span>
                             {dropdownOpen && (
                                 <div className={styles.dropdownMenu}>
                                     <Link to="/profile">Profile</Link>
                                     <Link to="/settings">Settings</Link>
+                                    <Link to="/history">History</Link>
+                                    <Link to="/favorites">Favorites</Link>
+                                    {user.role === 'admin' && (
+                                        <Link to="/admin-dashboard">Admin Dashboard</Link>
+                                    )}
                                     <button onClick={handleLogout}>Logout</button>
                                 </div>
                             )}
                         </div>
                     )}
-                    <Link to="/search" className={styles.searchIconButton}>
-                        <FaSearch className={styles.icon} />
-                    </Link>
                 </div>
             </div>
         </header>

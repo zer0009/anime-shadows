@@ -8,25 +8,25 @@
 
 .animeCard {
   width: 100%; /* Adjust to fit the grid */
-  height: 300px; /* Set a fixed height for all cards */
-  margin: 2px;
-  border-radius: 5px;
+  height: 320px; /* Slightly increased height for better content fit */
+  margin: 8px; /* Increased margin for better spacing */
+  border-radius: 12px; /* Increased border radius for a smoother look */
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add transition effect */
-  box-shadow: 0 2px 5px var(--shadow-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Updated box-shadow for a softer look */
   background-color: var(--secondary-dark);
   position: relative;
 }
 
 .animeCard:hover {
   transform: scale(1.05); /* Scale up the card on hover */
-  box-shadow: 0 4px 10px var(--shadow-color); /* Increase shadow on hover */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
 }
 
 .cardCover {
   position: relative;
   height: 100%;
-  border-radius: 5px; /* Match the card's border radius */
+  border-radius: 12px; /* Match the card's border radius */
   overflow: hidden; /* Ensure the image doesn't overflow */
   background-size: cover; /* Ensure the image covers the entire card */
   background-position: center; /* Center the image */
@@ -35,7 +35,7 @@
 
 .statusBadge {
   position: absolute;
-  top: 10px;
+  top: 20px;
   left: 10px;
   background-color: var(--highlight-color);
   color: var(--text-color);
@@ -43,7 +43,7 @@
   border-radius: 8px;
   font-size: 12px;
   font-weight: bold;
-  box-shadow: 0 2px 4px var(--shadow-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Updated box-shadow for a softer look */
 }
 
 .statusBadgeCompleted {
@@ -57,7 +57,7 @@
 .favoriteIcon {
   position: absolute;
   top: 10px;
-  right: 10px;
+  right: 10px; /* Moved to the right */
   color: var(--text-color);
   font-size: 24px;
   cursor: pointer;
@@ -69,7 +69,7 @@
 }
 
 .cardContent {
-  padding: 10px;
+  padding: 12px; /* Increased padding for better spacing */
   display: flex;
   flex-direction: column;
   justify-content: flex-end; /* Ensure content is aligned to the bottom */
@@ -81,7 +81,7 @@
 }
 
 .title {
-  font-size: 0.9rem; /* Smaller font size */
+  font-size: 1.1rem; /* Slightly increased font size */
   font-weight: bold;
   margin: 0 10px; /* Padding on left and right */
   white-space: nowrap;
@@ -91,7 +91,20 @@
 }
 
 .lastViewed {
-  font-size: 0.8rem;
+  font-size: 0.9rem; /* Slightly increased font size */
   color: var(--subtext-color);
   margin-top: 5px;
+}
+
+.typeBadge {
+  position: absolute;
+  bottom: 50px;
+  right: 40px;
+  background-color: var(--highlight-color);
+  color: var(--text-color);
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Updated box-shadow for a softer look */
 }

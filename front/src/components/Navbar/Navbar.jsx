@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaTags } from 'react-icons/fa';
+import { FaTags, FaUndo } from 'react-icons/fa';
 import SearchBar from '../SearchBar/SearchBar.jsx';
 import TypeSelect from '../TypeSelect/TypeSelect.jsx';
 import SeasonSelect from '../SeasonSelect/SeasonSelect.jsx';
@@ -18,7 +18,7 @@ const Navbar = ({ onTagsClick, onTypeChange, onSeasonChange, onSortChange, onPop
             <SortSelect onChange={onSortChange} />
             <PopularSelect onChange={onPopularChange} />
             <button className={styles.navButton} onClick={onReset}>
-                Reset All
+                <FaUndo /> Reset All
             </button>
             <SearchBar onSearch={onSearch} />
         </div>

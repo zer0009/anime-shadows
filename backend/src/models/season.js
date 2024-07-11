@@ -1,7 +1,21 @@
 const mongoose = require('mongoose');
 
 const seasonSchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true }
+    name: {
+        type: String,
+        required: true,
+        enum: ['Winter', 'Spring', 'Summer', 'Fall']
+    },
+    startDate: {
+        type: Date,
+        required: true
+    },
+    endDate: {
+        type: Date,
+        required: true
+    }
 });
 
-module.exports = mongoose.model('Season', seasonSchema);
+const Season = mongoose.model('Season', seasonSchema);
+
+module.exports = Season;

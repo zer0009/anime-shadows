@@ -21,7 +21,6 @@ const Profile = () => {
                 <p><strong>Email:</strong> {userData.email}</p>
             </div>
             <FavoriteList favorites={userData.favorites} />
-            <HistoryList watchedEpisodes={userData.history} animeDetails={animeDetails} />
         </div>
     );
 };

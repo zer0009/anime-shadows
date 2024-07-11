@@ -1,8 +1,8 @@
 .searchBar {
     display: flex;
     align-items: center;
-    background-color: white;
-    border: 1px solid #ddd;
+    background-color: var(--primary-dark); /* Updated to use primary dark color */
+    border: 1px solid var(--secondary-dark); /* Updated to use secondary dark color */
     border-radius: 5px;
     padding: 5px;
     width: 100%;
@@ -16,11 +16,13 @@
     padding: 10px;
     flex-grow: 1;
     border-radius: 5px 0 0 5px;
+    background-color: var(--secondary-light); /* Updated to use secondary light color */
+    color: var(--text-color); /* Updated to use text color */
 }
 
 .searchButton {
-    background-color: #007bff; /* Adjust to your primary color */
-    color: white;
+    background-color: var(--highlight-color); /* Updated to use highlight color */
+    color: var(--text-color); /* Updated to use text color */
     border: none;
     padding: 10px;
     border-radius: 0 5px 5px 0;
@@ -32,5 +34,5 @@
 }
 
 .searchButton:hover {
-    background-color: #0056b3; /* Adjust to your hover color */
+    background-color: var(--secondary-light); /* Updated to use secondary light color for hover */
 }

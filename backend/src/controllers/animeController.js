@@ -105,7 +105,7 @@ exports.getAnime = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const anime = await Anime.findById(id);
+    const anime = await AnimeService.getAnime(id);
     if (!anime) {
       return res.status(404).json({ message: 'Anime not found' });
     }

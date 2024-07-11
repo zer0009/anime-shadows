@@ -1,13 +1,16 @@
 .select {
-    padding: 5px;
+    padding: 10px; /* Increased padding for better touch target */
     background-color: var(--secondary-dark);
     color: var(--text-color);
     border: none;
-    border-radius: 4px;
+    border-radius: 8px; /* Increased border-radius for a smoother look */
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s; /* Added transform transition */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Added box-shadow for depth */
 }
 
 .select:hover {
     background-color: var(--secondary-light);
+    transform: scale(1.05); /* Slightly scales up on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Enhanced box-shadow on hover */
 }

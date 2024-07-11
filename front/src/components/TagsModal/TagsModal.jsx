@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Modal, ModalDialog, ModalClose, Typography, Button, Switch } from '@mui/joy';
+import { Modal, ModalDialog, ModalClose, Typography, Button, Switch, Checkbox } from '@mui/joy';
 import { FormControlLabel } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import Box from '@mui/joy/Box';
-import Checkbox from '@mui/joy/Checkbox';
 import Chip from '@mui/joy/Chip';
 import styles from './TagsModal.module.css';
 
@@ -17,7 +16,6 @@ const TagsModal = ({ open, onClose, onApply }) => {
         const fetchTags = async () => {
             try {
                 const response = await axios.get('http://localhost:5000/api/genres');
-                console.log('Fetched tags:', response.data);
                 setTags(response.data);
             } catch (error) {
                 console.error('Error fetching tags:', error);
@@ -41,27 +39,27 @@ const TagsModal = ({ open, onClose, onApply }) => {
     };
 
     return (
-        <Modal open={open} onClose={onClose}>
+        <Modal open={open} onClose={onClose} className={styles.modal}>
             <ModalDialog className={styles.modalDialog}>
-                <ModalClose />
+                <ModalClose className={styles.modalClose} />
                 <Typography component="h2" className={styles.modalTitle}>Tags</Typography>
                 <div className={styles.modalContent}>
                     <FormControlLabel
                         control={<Switch checked={broadMatches} onChange={() => setBroadMatches(!broadMatches)} />}
                         label="Broad Matches"
+                        className={styles.switchLabel}
                     />
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                    <Box className={styles.tagsContainer}>
                         {tags.length > 0 ? (
                             tags.map((tag) => {
                                 const checked = selectedTags.includes(tag.name);
                                 return (
                                     <Chip
-                                        key={tag._id} // Ensure each tag has a unique key
+                                        key={tag._id}
                                         variant="plain"
                                         color={checked ? 'primary' : 'neutral'}
-                                        startDecorator={
-                                            checked && <CheckIcon sx={{ zIndex: 1, pointerEvents: 'none' }} />
-                                        }
+                                        className={styles.tagChip}
+                                        startDecorator={checked && <CheckIcon sx={{ zIndex: 1, pointerEvents: 'none' }} />}
                                     >
                                         <Checkbox
                                             variant="outlined"
@@ -74,7 +72,7 @@ const TagsModal = ({ open, onClose, onApply }) => {
                                                 setSelectedTags((names) =>
                                                     !event.target.checked
                                                         ? names.filter((n) => n !== tag.name)
-                                                        : [...names, tag.name],
+                                                        : [...names, tag.name]
                                                 );
                                             }}
                                         />
@@ -86,8 +84,8 @@ const TagsModal = ({ open, onClose, onApply }) => {
                         )}
                     </Box>
                     <div className={styles.dialogActions}>
-                        <Button onClick={onClose}>Cancel</Button>
-                        <Button onClick={handleApply}>Apply</Button>
+                        <Button onClick={onClose} variant="outlined">Cancel</Button>
+                        <Button onClick={handleApply} variant="contained">Apply</Button>
                     </div>
                 </div>
             </ModalDialog>

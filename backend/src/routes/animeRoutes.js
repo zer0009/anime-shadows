@@ -25,9 +25,9 @@ router.post('/:id/favorite', authMiddleware, animeController.addFavorite);
 router.delete('/:id/favorite', authMiddleware, animeController.removeFavorite);
 
 // Admin Routes
-router.post('/upload', upload.single('file'), authMiddleware, authorize('admin'), validateAnimeUpload, animeController.uploadAnime);
-router.put('/update/:id', upload.single('file'), authMiddleware, authorize('admin'), validateAnimeUpdate, animeController.updateAnime);
-router.post('/:animeId/episodes', authMiddleware, authorize('admin'), animeController.addEpisode);
+router.post('/upload', upload.single('file'), authMiddleware, authorize('moderator', 'admin'), validateAnimeUpload, animeController.uploadAnime);
+router.put('/update/:id', upload.single('file'), authMiddleware, authorize('moderator', 'admin'), validateAnimeUpdate, animeController.updateAnime);
+router.post('/:animeId/episodes', authMiddleware, authorize('moderator', 'admin'), animeController.addEpisode);
 router.delete('/:id', authMiddleware, authorize('admin'), animeController.deleteAnime);
 
 module.exports = router;

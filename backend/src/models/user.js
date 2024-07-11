@@ -33,8 +33,8 @@ const userSchema = new mongoose.Schema({
   favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Anime' }],
   viewingHistory: [viewedEpisodeSchema],
   tokens:[{ token:{ type:String,required: true}}],
-  avatar:{ type:Buffer},
-  role: { type: String, enum: ['user', 'admin'], default: 'user' },
+  avatar: { type: String },
+  role: { type: String, enum: ['user','moderator', 'admin'], default: 'user' },
   // history: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Anime' }] 
   history: [historySchema],
 });

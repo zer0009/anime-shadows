@@ -31,10 +31,9 @@ const AnimeDetails = () => {
     }
 
     return (
-        <div className={styles.animeDetailsPage}>
-            <div className={styles.animeHeader}>
+        <div className={styles.animeDetailsContainer}>
+            <div className={styles.leftSection}>
                 <h1 className={styles.animeTitle}>{anime.title}</h1>
-                <p className={styles.animeSubtitle}>{anime.subtitle}</p>
                 <div className={styles.animeRating}>
                     <div className={styles.ratingStars}>
                         {/* Render stars based on rating */}
@@ -45,8 +44,14 @@ const AnimeDetails = () => {
                     <div className={styles.ratingScore}>{anime.rating}</div>
                     <div className={styles.ratingUsers}>{anime.ratingUsers} مستخدم</div>
                 </div>
-            </div>
-            <div className={styles.animeContent}>
+                <div className={styles.animeDetailsPage}>
+                    <p className={styles.animeSubtitle}>{anime.description}</p>
+                    <div className={styles.animeTags}>
+                        {anime.genres.map(genre => (
+                            <span key={genre._id} className={styles.animeTag}>{genre.name}</span>
+                        ))}
+                    </div>
+                </div>
                 <div className={styles.animeEpisodes}>
                     <h2>قائمة الحلقات</h2>
                     <ul>
@@ -62,20 +67,20 @@ const AnimeDetails = () => {
                         ))}
                     </ul>
                 </div>
-                <div className={styles.animeSidebar}>
-                    <img src={`http://localhost:5000${anime.pictureUrl}`} alt={anime.title} className={styles.animeImage} />
-                    <div className={styles.animeMeta}>
-                        <button className={styles.watchNowButton}>يعرض الآن</button>
-                        <button className={styles.malButton}>MAL صفحة</button>
-                        <button className={styles.trailerButton}>العرض التشويقي</button>
-                        <p><strong>النوع:</strong> {anime.type ? anime.type.name : 'N/A'}</p>
-                        <p><strong>سنة العرض:</strong> {anime.startDate ? anime.startDate : 'N/A'}</p>
-                        <p><strong>الموسم:</strong> {anime.season ? anime.season.name : 'N/A'}</p>
-                        <p><strong>المصدر:</strong> {anime.source ? anime.source : 'N/A'}</p>
-                        <p><strong>الأستوديو:</strong> {anime.studio ? anime.studio : 'N/A'}</p>
-                        <p><strong>مدة الحلقة:</strong> {anime.episodeDuration ? `${anime.episodeDuration} دقيقة` : 'N/A'}</p>
-                        <p><strong>التصنيف:</strong> {anime.rating ? anime.rating : 'N/A'}</p>
-                    </div>
+            </div>
+            <div className={styles.animeSidebar}>
+                <img src={`http://localhost:5000${anime.pictureUrl}`} alt={anime.title} className={styles.animeImage} />
+                <div className={styles.animeMeta}>
+                    <button className={styles.watchNowButton}>يعرض الآن</button>
+                    <button className={styles.malButton}>MAL صفحة</button>
+                    <button className={styles.trailerButton}>العرض التشويقي</button>
+                    <p><strong>النوع:</strong> {anime.type ? anime.type.name : 'N/A'}</p>
+                    <p><strong>سنة العرض:</strong> {anime.startDate ? anime.startDate : 'N/A'}</p>
+                    <p><strong>الموسم:</strong> {anime.season ? anime.season.name : 'N/A'}</p>
+                    <p><strong>المصدر:</strong> {anime.source ? anime.source : 'N/A'}</p>
+                    <p><strong>الأستوديو:</strong> {anime.studio ? anime.studio : 'N/A'}</p>
+                    <p><strong>مدة الحلقة:</strong> {anime.episodeDuration ? `${anime.episodeDuration} دقيقة` : 'N/A'}</p>
+                    <p><strong>التصنيف:</strong> {anime.rating ? anime.rating : 'N/A'}</p>
                 </div>
             </div>
 

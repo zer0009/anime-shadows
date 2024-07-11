@@ -10,8 +10,8 @@ import Login from './pages/Login.jsx';
 import AnimeDetails from './pages/AnimeDetails.jsx';
 import Register from './pages/Register.jsx';
 import SearchPage from './pages/SearchPage.jsx';
-import UserProfile from './components/UserProfile/UserProfile.jsx';
 import Profile from './pages/Profile.jsx';
+import History from './pages/History.jsx';
 
 function App() {
   return (
@@ -28,6 +28,10 @@ function App() {
           <Route path="/anime/:id" element={<AnimeDetails />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/profile" element={<Profile />} />
+          {/* <Route path="/settings" component={Settings} /> */}
+          <Route path="/history" element={<History />} />
+          {/* <Route path="/favorites" component={Favorites} />
+          <Route path="/admin-dashboard" component={AdminDashboard} /> */}
         </Routes>
       </div>
     </AuthProvider>

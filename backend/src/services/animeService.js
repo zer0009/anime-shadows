@@ -169,14 +169,26 @@ const getAnimes = async () => {
 };
 
 const getAnime = async (id) => {
-  const anime = await Anime.findById(id).populate('season').populate('type').populate('genres');
-  if (anime) {
-    anime.viewCount += 1;
-    anime.views.push(new Date());
-    await anime.save();
-    return anime;
-  } else {
-    throw new Error('Anime not found');
+  try {
+    const anime = await Anime.findById(id)
+      .populate('season')
+      .populate('type')
+      .populate('genres');
+
+    console.log('Fetched Anime:', anime);
+
+    if (anime) {
+      anime.viewCount += 1;
+      anime.views.push(new Date());
+      await anime.save();
+      console.log('Fetched Anime:', anime); // Log the result
+      return anime;
+    } else {
+      throw new Error('Anime not found');
+    }
+  } catch (error) {
+    console.error('Error fetching anime:', error);
+    throw error;
   }
 };
 
@@ -324,7 +336,7 @@ const filterViewsByTimeFrame = (views, timeFrame) => {
 
 const getPopularAnimes = async (timeFrame, genre) => {
   const query = genre ? { genres: genre } : {};
-  const animes = await Anime.find(query);
+  const animes = await Anime.find(query).populate('season').populate('type').populate('genres');
   const sortedAnimes = animes.map(anime => ({
     ...anime.toObject(),
     filteredViewCount: filterViewsByTimeFrame(anime.views, timeFrame)
