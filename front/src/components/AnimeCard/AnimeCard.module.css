@@ -1,0 +1,148 @@
+.animeCardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.animeCard {
+  width: 100%; /* Adjust to fit the grid */
+  height: 320px; /* Slightly increased height for better content fit */
+  margin: 8px; /* Increased margin for better spacing */
+  border-radius: 12px; /* Increased border radius for a smoother look */
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add transition effect */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Updated box-shadow for a softer look */
+  background-color: var(--secondary-dark);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.animeCard:hover {
+  transform: scale(1.05); /* Scale up the card on hover */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+}
+
+.cardCover {
+  position: relative;
+  height: 100%;
+  border-radius: 12px; /* Match the card's border radius */
+  overflow: hidden; /* Ensure the image doesn't overflow */
+  background-size: cover; /* Ensure the image covers the entire card */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+}
+
+.statusBadge {
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  background-color: var(--highlight-color);
+  color: var(--text-color);
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Updated box-shadow for a softer look */
+}
+
+.statusBadgeCompleted {
+  background-color: red; /* Change to your desired color */
+}
+
+.statusBadgeOngoing {
+  background-color: green; /* Change to your desired color */
+}
+
+.favoriteIcon {
+  position: absolute;
+  top: 10px;
+  right: 10px; /* Moved to the right */
+  color: var(--text-color);
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.favoriteIcon:hover {
+  color: yellow; /* Change to your desired hover color */
+}
+
+.cardContent {
+  padding: 12px; /* Increased padding for better spacing */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* Ensure content is aligned to the bottom */
+  background: linear-gradient(180deg, transparent, var(--secondary-dark));
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  color: var(--text-color);
+}
+
+.title {
+  font-size: 1.1rem; /* Slightly increased font size */
+  font-weight: bold;
+  margin: 0 10px; /* Padding on left and right */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: white;
+}
+
+.lastViewed {
+  font-size: 0.9rem; /* Slightly increased font size */
+  color: var(--subtext-color);
+  margin-top: 5px;
+}
+
+.typeBadge {
+  position: absolute;
+  bottom: 50px;
+  right: 40px;
+  background-color: var(--highlight-color);
+  color: var(--text-color);
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Updated box-shadow for a softer look */
+}
+
+.episodeBadge {
+  position: absolute;
+  bottom: 10px;
+  right: 40px;
+  background-color: var(--secondary-dark);
+  color: var(--text-color);
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 600px) {
+  .episodeBadge {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 960px) {
+  .episodeBadge {
+    font-size: 0.75rem;
+    padding: 5px 11px;
+  }
+}
+
+@media (min-width: 961px) {
+  .episodeBadge {
+    font-size: 0.8rem;
+    padding: 5px 12px;
+  }
+}

@@ -1,0 +1,110 @@
+.tagsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+    max-height: 300px; /* Adjust the height as needed */
+    overflow-y: auto; /* Add scroll if the content exceeds the height */
+    padding: 8px; /* Added padding for better spacing */
+    border: 1px solid var(--secondary-dark); /* Added border for better separation */
+    border-radius: 8px; /* Added border-radius for smoother look */
+    background-color: var(--primary-dark); /* Added background color for consistency */
+}
+
+.dialogActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.modal {
+    background-color: rgba(0, 0, 0, 0.5); /* Set the overlay background color */
+}
+
+.modalDialog {
+    width: 500px; /* Adjust the width as needed */
+    max-width: 100%;
+    padding: 24px; /* Increased padding for better spacing */
+    border-radius: 12px; /* Added border-radius for smoother look */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added box-shadow for depth */
+    background-color: var(--primary-dark); /* Set the modal dialog background color */
+    color: var(--text-color); /* Ensure text color is readable */
+    border: none; /* Remove any default border */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align items */
+    max-width: 600px; /* Set a maximum width for the modal */
+    margin: auto; /* Center the modal */
+}
+
+.modalClose {
+    color: var(--text-color); /* Ensure the close button color matches the theme */
+    border: none; /* Remove any default border */
+    background: none; /* Remove any default background */
+    box-shadow: none; /* Remove any default box shadow */
+    padding: 0; /* Remove any default padding */
+    margin: 0; /* Remove any default margin */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.modalTitle {
+    margin-bottom: 16px;
+    font-size: 1.5rem; /* Increased font size for better readability */
+    font-weight: bold; /* Added font weight for emphasis */
+    text-align: center; /* Center align text */
+    border: none; /* Remove any default border */
+    background: none; /* Remove any default background */
+    color: var(--text-color);
+}
+
+.modalContent {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px; /* Added padding for better spacing */
+    background-color: var(--secondary-dark); /* Added background color for separation */
+    border-radius: 8px; /* Added border-radius for smoother look */
+    width: 100%; /* Ensure content takes full width */
+    margin-top: 20px; /* Added margin for better spacing */
+}
+
+.switchLabel {
+    color: var(--text-color); /* Ensure the switch label is visible */
+    margin-bottom: 16px; /* Added margin for better spacing */
+}
+
+.tagChip {
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 4px; /* Added margin for better spacing */
+    padding: 8px 12px; /* Added padding for better touch target */
+    border-radius: 16px; /* Added border-radius for smoother look */
+    font-size: 0.875rem; /* Adjusted font size for better readability */
+    background-color: var(--secondary-dark); /* Set the background color for the tag chip */
+    color: var(--text-color); /* Set the text color for the tag chip */
+}
+
+.tagChip:hover {
+    background-color: var(--highlight-color);
+    color: var(--text-color);
+}
+
+.tagChip .MuiChip-icon {
+    margin-left: 4px; /* Adjusted icon margin for better alignment */
+}
+
+.dialogActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px; /* Adjusted gap for better spacing */
+    margin-top: 20px; /* Adjusted margin for better spacing */
+}
+
+.dialogActions button {
+    min-width: 100px; /* Ensured buttons have a minimum width for consistency */
+    padding: 8px 16px; /* Added padding for better touch target */
+    font-size: 0.875rem; /* Adjusted font size for better readability */
+}

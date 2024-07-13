@@ -1,0 +1,23 @@
+.seasonAnimePage {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.pageTitle {
+    margin-bottom: 20px;
+    color: var(--highlight-color);
+}
+
+.animeGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center; /* Center the grid items */
+}
+
+.noAnimeMessage {
+    color: var(--subtext-color);
+    text-align: center;
+    margin-top: 20px;
+}

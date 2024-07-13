@@ -1,0 +1,163 @@
+@import '../../styles/global.css';
+
+.header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 50%, var(--tertiary-dark) 100%);
+  padding: 20px 0;
+  text-align: center;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  border-bottom: 1px solid var(--secondary-dark);
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.headerTitle {
+  margin: 0;
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--text-color);
+  text-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color), 0 0 30px var(--glow-color);
+}
+
+.headerNav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 20px;
+}
+
+.headerNav li {
+  margin: 0;
+}
+
+.headerNav a {
+  color: var(--highlight-color);
+  text-decoration: none;
+  font-size: 18px;
+  position: relative;
+  padding: 5px 0;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.headerNav a::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: var(--highlight-color);
+  transition: width 0.3s;
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+}
+
+.headerNav a:hover {
+  color: var(--glow-color);
+  transform: scale(1.05);
+}
+
+.headerNav a:hover::after {
+  width: 100%;
+}
+
+.headerIcons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.icon {
+  color: var(--highlight-color);
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.icon:hover {
+  color: var(--glow-color);
+  transform: scale(1.1);
+}
+
+.searchContainer {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.searchOpen .searchInput {
+  width: 200px;
+  opacity: 1;
+}
+
+.userProfile {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.profilePicture {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--highlight-color);
+  margin-right: 10px;
+  transition: transform 0.3s;
+}
+
+.profilePicture:hover {
+  transform: scale(1.1);
+}
+
+.username {
+  color: var(--text-color);
+  font-size: 18px;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.username:hover {
+  color: var(--highlight-color);
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: var(--secondary-dark);
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.dropdownMenu a, .dropdownMenu button {
+  color: var(--text-color);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 5px 10px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.dropdownMenu a:hover, .dropdownMenu button:hover {
+  background-color: var(--secondary-light);
+  color: var(--highlight-color);
+}

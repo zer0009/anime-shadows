@@ -1,0 +1,82 @@
+.home {
+    padding: 20px;
+    background-color: #121212; /* Dark background color */
+    color: #fff; /* White text color */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.home > .MuiContainer-root {
+    flex: 1;
+}
+
+footer {
+    margin-top: auto;
+}
+
+.heroSection {
+    position: relative;
+    height: 400px;
+    background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 50%, #262626 100%); /* Gradient background */
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5); /* Inner shadow */
+}
+
+.heroOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.heroTitle {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.heroSubtitle {
+    font-size: 24px;
+    margin: 10px 0 0;
+    color: #b0b0b0;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Text shadow */
+}
+
+.homeTitle {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: var(--highlight-color);
+}
+
+.loading {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.error {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.episodeInfo {
+    text-align: center;
+    margin-top: 10px;
+    color: var(--subtext-color);
+}
+
+.animeGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive columns */
+    gap: 16px; /* Space between items */
+    justify-items: center; /* Center items horizontally */
+}
+
+.animeGridItem {
+    width: 100%;
+}

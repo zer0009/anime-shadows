@@ -1,173 +1,69 @@
-const Anime = require('../models/anime');
-const User = require('../models/user');
-const Category = require('../models/category');
-const { fetchMyAnimeListRating } = require('../utils/myAnimeList');
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
 const { body, validationResult } = require('express-validator');
+const AnimeService = require('../services/animeService');
+const User = require('../models/user');
+const Anime = require('../models/anime');
+const Genre = require('../models/genre');
 
-// Ensure the uploads directory exists
-const uploadDir = 'uploads';
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// File upload settings
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    // Temporarily use a generic name
-    cb(null, 'temp-' + Date.now() + path.extname(file.originalname));
+exports.uploadAnime = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    if (req.file) AnimeService.handleFileDeletion(req.file.path);
+    return res.status(400).json({ errors: errors.array() });
   }
-});
-const upload = multer({ storage });
 
-exports.uploadAnime = [
-  upload.single('file'),
-  body('categoryId').notEmpty().withMessage('Category is required').isMongoId().withMessage('Invalid category ID'),
-  body('title').notEmpty().withMessage('Title is required'),
-  body('description').notEmpty().withMessage('Description is required'),
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      if (req.file) {
-        fs.unlinkSync(req.file.path); // Delete the uploaded file if validation fails
-      }
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    const { title, description, myAnimeListUrl, categoryId, tags } = req.body;
-    const file = req.file;
-
-    try {
-      const category = await Category.findById(categoryId.trim());
-      if (!category) {
-        if (file) {
-          fs.unlinkSync(file.path); // Delete the uploaded file if category is not found
-        }
-        return res.status(404).json({ error: 'Category not found' });
-      }
-
-      let myAnimeListRating = null;
-      if (myAnimeListUrl) {
-        myAnimeListRating = await fetchMyAnimeListRating(myAnimeListUrl);
-      }
-
-      const newAnime = new Anime({
-        title,
-        description,
-        myAnimeListRating,
-        category: categoryId.trim(),
-        tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
-        pictureUrl: undefined // Initially set to undefined
-      });
-
-      await newAnime.save();
-
-      if (file) {
-        const newFileName = `${title.replace(/\s+/g, '_')}${path.extname(file.originalname)}`;
-        const newFilePath = path.join(uploadDir, newFileName);
-        fs.renameSync(file.path, newFilePath); // Rename the file
-        newAnime.pictureUrl = `/uploads/${newFileName}`;
-        await newAnime.save(); // Save the updated anime with the picture URL
-      }
-
-      res.status(201).json(newAnime);
-    } catch (err) {
-      if (file) {
-        fs.unlinkSync(file.path); // Delete the uploaded file if an error occurs
-      }
-      res.status(400).json({ error: err.message });
-    }
-  }
-];
-
-exports.updateAnime = [
-  upload.single('file'),
-  body('categoryId').optional().isMongoId().withMessage('Invalid category ID'),
-  body('title').optional().notEmpty().withMessage('Title is required'),
-  body('description').optional().notEmpty().withMessage('Description is required'),
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      if (req.file) {
-        fs.unlinkSync(req.file.path); // Delete the uploaded file if validation fails
-      }
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    const { title, description, myAnimeListRating, categoryId, tags } = req.body;
-    const file = req.file;
-
-    try {
-      const anime = await Anime.findById(req.params.id);
-      if (!anime) {
-        if (file) {
-          fs.unlinkSync(file.path); // Delete the uploaded file if anime is not found
-        }
-        return res.status(404).json({ error: 'Anime not found' });
-      }
-
-      if (title) anime.title = title;
-      if (description) anime.description = description;
-      if (myAnimeListRating) anime.myAnimeListRating = myAnimeListRating;
-      if (categoryId) anime.category = categoryId.trim();
-      if (tags) anime.tags = tags;
-
-      if (file) {
-        // Delete the old picture if it exists
-        if (anime.pictureUrl) {
-          const oldFilePath = path.join(__dirname, '..', anime.pictureUrl);
-          if (fs.existsSync(oldFilePath)) {
-            fs.unlinkSync(oldFilePath);
-          }
-        }
-
-        const newFileName = `${anime.title.replace(/\s+/g, '_')}${path.extname(file.originalname)}`;
-        const newFilePath = path.join(uploadDir, newFileName);
-        fs.renameSync(file.path, newFilePath); // Rename the file
-        anime.pictureUrl = `/uploads/${newFileName}`;
-      }
-
-      await anime.save();
-      res.json(anime);
-    } catch (err) {
-      if (file) {
-        fs.unlinkSync(file.path); // Delete the uploaded file if an error occurs
-      }
-      res.status(400).json({ error: err.message });
-    }
-  }
-];
-
-exports.addEpisode = async (req, res) => {
-  const { animeId } = req.params;
-  const { number, title, servers } = req.body;
+  const { title, description, seasonId, myAnimeListUrl, typeId, genres, numberOfEpisodes, source, duration, status } = req.body;
+  const file = req.file;
 
   try {
-    const anime = await Anime.findById(animeId);
-    if (!anime) {
-      return res.status(404).json({ error: 'Anime not found' });
+    const genresArray = JSON.parse(genres);
+    if (!Array.isArray(genresArray) || !genresArray.every(genre => typeof genre === 'string')) {
+      throw new Error('Genres must be an array of strings');
     }
 
-    const newEpisode = {
-      number,
+    const newAnime = await AnimeService.createAnime({
       title,
-      servers: servers.map(server => ({
-        serverName: server.serverName,
-        quality: server.quality,
-        url: server.url,
-      })),
-    };
+      description,
+      seasonId,
+      myAnimeListUrl,
+      typeId,
+      genres: genresArray,
+      numberOfEpisodes,
+      source,
+      duration,
+      status,
+      file
+    });
 
-    anime.episodes.push(newEpisode);
-    await anime.save();
-
-    res.status(201).json(anime);
+    res.status(201).json(newAnime);
   } catch (err) {
+    if (file) AnimeService.handleFileDeletion(file.path);
+    res.status(400).json({ error: err.message });
+  }
+};
+
+exports.updateAnime = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { id } = req.params;
+  const updateData = req.body;
+  const file = req.file;
+
+  try {
+    if (updateData.genres) {
+      const genresArray = JSON.parse(updateData.genres);
+      if (!Array.isArray(genresArray) || !genresArray.every(genre => typeof genre === 'string')) {
+        throw new Error('Genres must be an array of strings');
+      }
+      updateData.genres = genresArray;
+    }
+
+    const updatedAnime = await AnimeService.updateAnime(id, updateData, file);
+    res.status(200).json(updatedAnime);
+  } catch (err) {
+    if (file) AnimeService.handleFileDeletion(file.path);
     res.status(400).json({ error: err.message });
   }
 };
@@ -176,40 +72,21 @@ exports.toggleEpisodeWatched = async (req, res) => {
   const { animeId, episodeNumber } = req.body;
 
   try {
-    // Validate user
-    const user = await User.findById(req.user._id);
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
+    const result = await AnimeService.toggleEpisodeWatched(req.user._id, animeId, episodeNumber);
+    const statusCode = result.message.includes('unmarked') ? 200 : 201;
+    res.status(statusCode).json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
 
-    // Validate anime
-    const anime = await Anime.findById(animeId);
-    if (!anime) {
-      return res.status(404).json({ error: 'Anime not found' });
-    }
+exports.addEpisode = async (req, res) => {
+  const { animeId } = req.params;
+  const { number, title, servers } = req.body;
 
-    // Validate episode
-    const episode = anime.episodes.find(ep => ep.number === episodeNumber);
-    if (!episode) {
-      return res.status(404).json({ error: 'Episode not found' });
-    }
-
-    // Check if the episode is already marked as watched
-    const watchedIndex = user.viewingHistory.findIndex(
-      history => history.animeId.toString() === animeId && history.episodeNumber === episodeNumber
-    );
-
-    if (watchedIndex !== -1) {
-      // Episode is already marked as watched, so unmark it
-      user.viewingHistory.splice(watchedIndex, 1);
-      await user.save();
-      return res.status(200).json({ message: 'Episode unmarked as watched', viewingHistory: user.viewingHistory });
-    } else {
-      // Episode is not marked as watched, so mark it
-      user.viewingHistory.push({ animeId, episodeNumber });
-      await user.save();
-      return res.status(201).json({ message: 'Episode marked as watched', viewingHistory: user.viewingHistory });
-    }
+  try {
+    const updatedAnime = await AnimeService.addEpisode(animeId, { number, title, servers });
+    res.status(200).json(updatedAnime);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -217,7 +94,7 @@ exports.toggleEpisodeWatched = async (req, res) => {
 
 exports.getAnimes = async (req, res) => {
   try {
-    const animes = await Anime.find().populate('category');
+    const animes = await AnimeService.getAnimes();
     res.json(animes);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -225,106 +102,77 @@ exports.getAnimes = async (req, res) => {
 };
 
 exports.getAnime = async (req, res) => {
+  const { id } = req.params;
+
   try {
-    const anime = await Anime.findById(req.params.id).populate('category');
+    const anime = await AnimeService.getAnime(id);
     if (!anime) {
-      return res.status(404).json({ error: 'Anime not found' });
+      return res.status(404).json({ message: 'Anime not found' });
     }
+
+    if (req.user) {
+      console.log(`User ${req.user._id} is logged in, saving anime ${id} to history`);
+      await AnimeService.addToHistory(req.user._id, id);
+    }
+
     res.json(anime);
+  } catch (err) {
+    console.error('Error fetching anime:', err);
+    res.status(400).json({ error: err.message });
+  }
+};
+
+exports.getEpisode = async (req, res) => {
+  const { animeId, episodeId } = req.params;
+
+  try {
+    const episode = await AnimeService.getEpisode(animeId, episodeId);
+    res.json(episode);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
 
-exports.rateAnime = [
-  body('rating').isFloat({ min: 0, max: 10 }).withMessage('Rating must be between 0 and 10'),
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+exports.rateAnime = async (req, res) => {
+  const { rating } = req.body;
+  const animeId = req.params.id;
 
-    const { rating } = req.body;
-
-    if (!req.user || !req.user._id) {
-      return res.status(401).json({ error: 'User not authenticated' });
-    }
-
-    try {
-      const anime = await Anime.findById(req.params.id);
-      if (!anime) {
-        return res.status(404).json({ error: 'Anime not found' });
-      }
-
-      const existingRating = anime.ratings.find(r => r.userId.toString() === req.user._id.toString());
-
-      if (existingRating) {
-        // Update existing rating
-        existingRating.rating = rating;
-      } else {
-        // Add new rating
-        anime.ratings.push({ userId: req.user._id, rating });
-      }
-
-      await anime.save();
-      res.json(anime.calculateAverageRating());
-    } catch (err) {
-      res.status(400).json({ error: err.message });
-    }
+  try {
+    const updatedAnime = await AnimeService.rateAnime(animeId, req.user._id, rating);
+    res.status(200).json(updatedAnime);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
-];
+};
 
 exports.addFavorite = async (req, res) => {
+  const { userId, animeId } = req.body;
+
   try {
-    const user = await User.findById(req.user.userId);
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    const anime = await Anime.findById(req.params.id);
-    if (!anime) {
-      return res.status(404).json({ error: 'Anime not found' });
-    }
-
-    if (user.favorites.includes(anime._id)) {
-      return res.status(400).json({ error: 'Anime already in favorites' });
-    }
-
-    user.favorites.push(anime._id);
-    await user.save();
-    res.status(201).json(user.favorites);
+    const result = await AnimeService.addFavorite(userId, animeId);
+    res.status(result.status).json(result.data);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
 
 exports.removeFavorite = async (req, res) => {
+  const { userId, animeId } = req.body;
+
   try {
-    const user = await User.findById(req.user.userId);
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    const animeIndex = user.favorites.indexOf(req.params.id);
-    if (animeIndex === -1) {
-      return res.status(404).json({ error: 'Anime not found in favorites' });
-    }
-
-    user.favorites.splice(animeIndex, 1);
-    await user.save();
-    res.status(200).json(user.favorites);
+    const result = await AnimeService.removeFavorite(userId, animeId);
+    res.status(result.status).json(result.data);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
 
 exports.deleteAnime = async (req, res) => {
+  const { id } = req.params;
+
   try {
-    const anime = await Anime.findByIdAndDelete(req.params.id);
-    if (!anime) {
-      return res.status(404).json({ error: 'Anime not found' });
-    }
-    res.json({ message: 'Anime deleted' });
+    const result = await AnimeService.deleteAnime(id);
+    res.status(200).json(result);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -334,75 +182,122 @@ exports.getRecommendations = async (req, res) => {
   const { animeId } = req.params;
 
   try {
-    const anime = await Anime.findById(animeId);
-    if (!anime) {
-      return res.status(404).json({ error: 'Anime not found' });
-    }
-
-    // Find users who have watched or completed all episodes of the anime
-    const users = await User.find({
-      $or: [
-        { 'viewingHistory.animeId': animeId },
-        { 'favorites': animeId }
-      ]
-    });
-
-    // Collect all anime IDs watched or favorited by these users
-    const animeIds = new Set();
-    users.forEach(user => {
-      user.viewingHistory.forEach(history => animeIds.add(history.animeId.toString()));
-      user.favorites.forEach(favorite => animeIds.add(favorite.toString()));
-    });
-
-    // Convert Set to Array
-    const animeIdArray = Array.from(animeIds);
-
-    // Find anime that match the tags and are in the collected anime IDs
-    // $ne is a MongoDB query operator that stands for "not equal".
-    // $in is a MongoDB query operator that checks if a field's value is in a specified array
-    const recommendations = await Anime.find({
-      _id: { $in: animeIdArray, $ne: animeId },
-      tags: { $in: anime.tags }
-    }).sort({ myAnimeListRating: -1 }).limit(10);
-
+    const recommendations = await AnimeService.getRecommendations(animeId);
     res.json(recommendations);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
 
-exports.getAnimeByTag = async (req, res) => {
-  const { tag } = req.params;
+exports.getAnimeByGenre = async (req, res) => {
+  const { genre } = req.params;
 
   try {
-    const animes = await Anime.find({ tags: tag });
+    const animes = await AnimeService.getAnimeByGenre(genre);
     res.json(animes);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
 
-exports.searchAnime = async (req, res) => {
-  const { query } = req.query;
+exports.getsearchAnime = async (req, res) => {
+  console.log('Received request for searchAnime');
+  console.log('Query parameters:', req.query);
+
+  const query = req.query.q;
+  console.log('Query value:', query);
 
   if (!query) {
+    console.log('Query parameter is missing');
     return res.status(400).json({ error: 'Query parameter is required' });
   }
 
   try {
-    const animes = await Anime.find({
-      //$or It takes an array of conditions and returns documents that match at least one of the conditions.
-      // $regex is a MongoDB operator that allows for regular expression matching
-      // $options: 'i' makes the search case-insensitive (i stands for "ignore case").
-      $or: [
-        { title: { $regex: query, $options: 'i' } },
-        { description: { $regex: query, $options: 'i' } },
-        { tags: { $regex: query, $options: 'i' } }
-      ]
-    });
+    if (typeof query !== 'string') {
+      console.log('Query parameter is not a string');
+      throw new Error('Query parameter must be a string');
+    }
 
+    const animes = await AnimeService.searchAnime(query);
+    console.log('Search results:', animes);
     res.json(animes);
   } catch (err) {
+    console.log('Error:', err.message);
     res.status(400).json({ error: err.message });
+  }
+};
+
+exports.getAnimeViewCount = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const viewCount = await AnimeService.getAnimeViewCount(id);
+    res.json(viewCount);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+exports.getPopularAnimes = async (req, res) => {
+  const { timeFrame, genre } = req.query;
+
+  try {
+    const popularAnimes = await AnimeService.getPopularAnimes(timeFrame, genre);
+    res.json(popularAnimes);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+exports.getPopularEpisodes = async (req, res) => {
+  const { timeFrame, genre } = req.query;
+
+  try {
+    const popularEpisodes = await AnimeService.getPopularEpisodes(timeFrame, genre);
+    res.json(popularEpisodes);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+exports.filterAnimes = async (req, res) => {
+  try {
+    const { tags, broadMatches } = req.query;
+    console.log('Received tags:', tags);
+    console.log('Broad matches:', broadMatches);
+    const tagsArray = tags.split(',');
+    const animes = await AnimeService.getFilteredAnimes(tagsArray, broadMatches === 'true');
+    res.json(animes);
+  } catch (error) {
+    console.error('Error filtering animes:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.searchAnime = async (req, res) => {
+  try {
+    const { q, tags, broadMatches } = req.query;
+    let query = {};
+
+    if (q) {
+      query.title = { $regex: q, $options: 'i' };
+    }
+
+    if (tags) {
+      const tagsArray = tags.split(',');
+      const tagObjectIds = await Genre.find({ name: { $in: tagsArray } }).select('_id');
+      const tagIds = tagObjectIds.map(tag => tag._id);
+
+      const filterQuery = broadMatches === 'true'
+        ? { genres: { $in: tagIds } }
+        : { genres: { $all: tagIds } };
+
+      query = { ...query, ...filterQuery };
+    }
+
+    const animes = await Anime.find(query).populate('season').populate('type').populate('genres');
+    res.json(animes);
+  } catch (error) {
+    console.error('Error searching animes:', error);
+    res.status(500).json({ message: error.message });
   }
 };

@@ -1,0 +1,110 @@
+.userProfile {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: var(--primary-dark);
+  color: var(--text-color);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px var(--shadow-color);
+}
+
+.profileHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profileAvatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-right: 20px;
+  border: 2px solid var(--highlight-color);
+}
+
+.profileInfo {
+  flex: 1;
+}
+
+.profileName {
+  font-size: 2rem;
+  margin: 0;
+}
+
+.profileBio {
+  font-size: 1rem;
+  color: var(--subtext-color);
+}
+
+.profileContent {
+  margin-top: 20px;
+}
+
+.profileSectionTitle {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.favoriteAnimeList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.favoriteAnimeCard {
+  width: 150px;
+  background-color: var(--secondary-dark);
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px var(--shadow-color);
+  transition: transform 0.3s;
+}
+
+.favoriteAnimeCard:hover {
+  transform: translateY(-5px);
+}
+
+.favoriteAnimeImage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.favoriteAnimeInfo {
+  padding: 10px;
+}
+
+.favoriteAnimeTitle {
+  font-size: 1rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.favoriteAnimeType {
+  font-size: 0.8rem;
+  color: var(--subtext-color);
+}
+
+.viewingHistoryList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.viewingHistoryCard {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.viewingHistoryImage {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.viewingHistoryInfo {
+  margin-left: 10px;
+}

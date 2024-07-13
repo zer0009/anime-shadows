@@ -3,13 +3,21 @@ const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-
-
-
 const viewedEpisodeSchema = new mongoose.Schema({
   animeId: { type: mongoose.Schema.Types.ObjectId, ref: 'Anime', required: true },
   episodeNumber: { type: Number, required: true },
   viewedAt: { type: Date, default: Date.now }
+});
+
+const historySchema = new mongoose.Schema({
+  anime: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Anime',
+  },
+  views: {
+      type: [Date],
+      default: []
+  }
 });
 
 const userSchema = new mongoose.Schema({
@@ -25,8 +33,10 @@ const userSchema = new mongoose.Schema({
   favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Anime' }],
   viewingHistory: [viewedEpisodeSchema],
   tokens:[{ token:{ type:String,required: true}}],
-  avatar:{ type:Buffer},
-  role: { type: String, enum: ['user', 'admin'], default: 'user' },
+  avatar: { type: String },
+  role: { type: String, enum: ['user','moderator', 'admin'], default: 'user' },
+  // history: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Anime' }] 
+  history: [historySchema],
 });
 
 userSchema.methods.generateAuthToken = async function (){

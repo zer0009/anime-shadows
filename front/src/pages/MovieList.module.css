@@ -1,0 +1,23 @@
+.movieListPage {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.pageTitle {
+    margin-bottom: 20px;
+    color: var(--highlight-color);
+}
+
+.movieGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center; /* Center the grid items */
+}
+
+.noMoviesMessage {
+    color: var(--subtext-color);
+    text-align: center;
+    margin-top: 20px;
+}
