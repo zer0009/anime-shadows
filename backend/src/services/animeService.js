@@ -173,7 +173,13 @@ const getAnime = async (id) => {
     const anime = await Anime.findById(id)
       .populate('season')
       .populate('type')
-      .populate('genres');
+      .populate('genres')
+      .populate({
+        path: 'episodes',
+        options: {
+          sort: { updateAt: -1 },
+        }
+      });
 
     console.log('Fetched Anime:', anime);
 

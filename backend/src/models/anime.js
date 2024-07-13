@@ -1,19 +1,5 @@
 const mongoose = require('mongoose');
 
-const serverSchema = new mongoose.Schema({
-  serverName: { type: String, required: true },
-  quality: { type: String, required: true },
-  url: { type: String, required: true },
-});
-
-const episodeSchema = new mongoose.Schema({
-  number: { type: Number, required: true },
-  title: { type: String },
-  servers: [serverSchema],
-  viewCount: { type: Number, default: 0 },
-  views: [{ type: Date, default: Date.now }]
-});
-
 const ratingSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   rating: { type: Number, required: true }
@@ -23,7 +9,7 @@ const animeSchema = new mongoose.Schema({
   title: { type: String, required: true, trim: true },
   description: { type: String, required: true, trim: true },
   season: { type: mongoose.Schema.Types.ObjectId, ref: 'Season' },
-  episodes: [episodeSchema],
+  episodes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Episode' }],
   pictureUrl: { type: String },
   myAnimeListRating: { type: Number },
   type: { type: mongoose.Schema.Types.ObjectId, ref: 'Type' },

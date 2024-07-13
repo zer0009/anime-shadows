@@ -5,13 +5,14 @@ import { saveAnimeToHistory } from '../api/modules/user';
 import AnimeCard from '../components/AnimeCard/AnimeCard.jsx';
 import Footer from '../components/common/Footer.jsx';
 import SearchBar from '../components/SearchBar/SearchBar.jsx';
-import { Grid } from '@mui/joy';
-import { Container } from '@mui/material';
+import { Grid, Container, Typography } from '@mui/material';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
+import useFetchRecentEpisodes from '../hooks/useFetchRecentEpisodes';
 import styles from './Home.module.css';
 
 const Home = () => {
     const { animeList, searchResults, loading, error, handleSearch } = useFetchAnimeList();
+    const { recentEpisodes, loading: recentLoading, error: recentError } = useFetchRecentEpisodes();
     const navigate = useNavigate();
 
     const handleAnimeClick = async (animeId) => {
@@ -44,6 +45,16 @@ const Home = () => {
                     {(searchResults.length > 0 ? searchResults : animeList).map(anime => (
                         <Grid item xs={12} sm={6} md={4} lg={2.4} key={anime._id}>
                             <AnimeCard anime={anime} onClick={() => handleAnimeClick(anime._id)} />
+                        </Grid>
+                    ))}
+                </Grid>
+                <h2 className={styles.homeTitle}>Recently Updated Episodes</h2>
+                {recentLoading && <div className={styles.loading}>Loading...</div>}
+                {recentError && <div className={styles.error}>{recentError}</div>}
+                <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+                    {recentEpisodes.map(episode => (
+                        <Grid item xs={12} sm={6} md={4} lg={2.4} key={episode._id}>
+                            <AnimeCard anime={episode.anime} episodeNumber={episode.number} onClick={() => handleAnimeClick(episode.anime._id)} />
                         </Grid>
                     ))}
                 </Grid>

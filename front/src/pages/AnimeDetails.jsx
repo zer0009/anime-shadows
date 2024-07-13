@@ -7,11 +7,14 @@ import styles from './AnimeDetails.module.css';
 const AnimeDetails = () => {
     const { id } = useParams();
     const [anime, setAnime] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const getAnimeDetails = async () => {
             try {
                 const response = await fetchAnimeById(id);
+                console.log('Fetched anime details:', response.data); // Debugging log
                 setAnime(response.data);
                 // Save the anime to the user's history if logged in
                 const token = localStorage.getItem('token');
@@ -20,15 +23,28 @@ const AnimeDetails = () => {
                 }
             } catch (error) {
                 console.error('Error fetching anime details or saving to history:', error);
+                setError('Error fetching anime details');
+            } finally {
+                setLoading(false);
             }
         };
 
         getAnimeDetails();
     }, [id]);
 
-    if (!anime) {
+    if (loading) {
         return <div>Loading...</div>;
     }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
+
+    if (!anime) {
+        return <div>No anime details found.</div>;
+    }
+
+    console.log(anime.episodes); // Debugging log
 
     return (
         <div className={styles.animeDetailsContainer}>
@@ -55,16 +71,20 @@ const AnimeDetails = () => {
                 <div className={styles.animeEpisodes}>
                     <h2>قائمة الحلقات</h2>
                     <ul>
-                        {anime.episodes.map(episode => (
-                            <li key={episode._id} className={styles.episodeItem} onClick={() => openModal(episode)}>
-                                <div className={styles.episodePlayIcon}>▶</div>
-                                <div className={styles.episodeInfo}>
-                                    <h3>{episode.title}</h3>
-                                    <p>{anime.title}</p>
-                                </div>
-                                <img src={`http://localhost:5000${anime.pictureUrl}`} alt={episode.title} className={styles.episodeThumbnail} />
-                            </li>
-                        ))}
+                        {anime.episodes && anime.episodes.length > 0 ? (
+                            anime.episodes.map(episode => (
+                                <li key={episode._id} className={styles.episodeItem} onClick={() => openModal(episode)}>
+                                    <div className={styles.episodePlayIcon}>▶</div>
+                                    <div className={styles.episodeInfo}>
+                                        <h3>{episode.title}</h3>
+                                        <p>{anime.title}</p>
+                                    </div>
+                                    <img src={`http://localhost:5000${anime.pictureUrl}`} alt={episode.title} className={styles.episodeThumbnail} />
+                                </li>
+                            ))
+                        ) : (
+                            <li>No episodes available</li>
+                        )}
                     </ul>
                 </div>
             </div>

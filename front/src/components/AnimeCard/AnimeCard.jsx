@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CardMedia, CardContent, Typography, Box, IconButton } from '@mui/material';
+import { CardMedia, CardContent, Typography, Box, IconButton, Badge } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import styles from './AnimeCard.module.css';
 
-function AnimeCard({ anime, lastViewed, showLastViewed }) {
+function AnimeCard({ anime, lastViewed, showLastViewed,episodeNumber, onClick }) {
     const [imageError, setImageError] = useState(false);
 
     if (!anime) {
@@ -20,8 +20,8 @@ function AnimeCard({ anime, lastViewed, showLastViewed }) {
     };
 
     return (
-        <Link to={`/anime/${anime._id}`} className={styles.animeCardLink}>
-            <div className={styles.animeCard}>
+        <div className={styles.animeCard} onClick={onClick}>
+            <Link to={`/anime/${anime._id}`} className={styles.animeCardLink}>
                 <CardMedia
                     component="div"
                     className={styles.cardCover}
@@ -45,12 +45,19 @@ function AnimeCard({ anime, lastViewed, showLastViewed }) {
                             Last viewed: {new Date(lastViewed).toLocaleDateString()}
                         </Typography>
                     )}
-                    <Box className={styles.typeBadge}>
-                        {anime.type.name}
-                    </Box>
+                    {anime.type && anime.type.name && (
+                        <Box className={styles.typeBadge}>
+                            {anime.type.name}
+                        </Box>
+                    )}
+                    {episodeNumber && (
+                        <Box className={styles.episodeBadge}>
+                            {`Episode ${episodeNumber}`}
+                        </Box>
+                    )}
                 </CardContent>
-            </div>
-        </Link>
+            </Link>
+        </div>
     );
 }
 

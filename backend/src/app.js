@@ -7,6 +7,7 @@ const animeRoutes = require('./routes/animeRoutes');
 const typeRoutes = require('./routes/typeRoutes');
 const genreRoutes = require('./routes/genreRoutes');
 const seasonRoutes = require('./routes/seasonRoutes');
+const episodeRoutes = require('./routes/episodeRoutes');
 
 
 const cors = require('cors');
@@ -28,6 +29,7 @@ app.use('/api/anime', animeRoutes);
 app.use('/api/types', typeRoutes);
 app.use('/api/genres', genreRoutes);
 app.use('/api/seasons', seasonRoutes);
+app.use('/api/episodes', episodeRoutes);
 
 
 app.use('/api/user',userRoutes)

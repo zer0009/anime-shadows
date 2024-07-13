@@ -36,10 +36,8 @@ footer {
 }
 
 .heroTitle {
-    font-size: 48px;
-    margin: 0;
-    color: #fff;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Text shadow */
+    font-size: 3rem;
+    margin-bottom: 10px;
 }
 
 .heroSubtitle {
@@ -50,9 +48,26 @@ footer {
 }
 
 .homeTitle {
-    color: #fff;
-    text-align: center;
+    margin-top: 20px;
     margin-bottom: 20px;
+    color: var(--highlight-color);
+}
+
+.loading {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.error {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.episodeInfo {
+    text-align: center;
+    margin-top: 10px;
+    color: var(--subtext-color);
 }
 
 .animeGrid {
@@ -64,16 +79,4 @@ footer {
 
 .animeGridItem {
     width: 100%;
-}
-
-.loading {
-    text-align: center;
-    font-size: 24px;
-    color: var(--highlight-color);
-}
-
-.error {
-    text-align: center;
-    font-size: 24px;
-    color: var(--error-color);
 }

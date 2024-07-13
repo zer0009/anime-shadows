@@ -16,6 +16,9 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Updated box-shadow for a softer look */
   background-color: var(--secondary-dark);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .animeCard:hover {
@@ -107,4 +110,39 @@
   font-size: 12px;
   font-weight: bold;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Updated box-shadow for a softer look */
+}
+
+.episodeBadge {
+  position: absolute;
+  bottom: 10px;
+  right: 40px;
+  background-color: var(--secondary-dark);
+  color: var(--text-color);
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 600px) {
+  .episodeBadge {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 960px) {
+  .episodeBadge {
+    font-size: 0.75rem;
+    padding: 5px 11px;
+  }
+}
+
+@media (min-width: 961px) {
+  .episodeBadge {
+    font-size: 0.8rem;
+    padding: 5px 12px;
+  }
 }
