@@ -5,6 +5,8 @@ const Anime = require('../models/anime');
 const Genre = require('../models/genre');
 
 exports.uploadAnime = async (req, res) => {
+  console.log('Request body:', req.body);
+  console.log('Request file:', req.file)
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     if (req.file) AnimeService.handleFileDeletion(req.file.path);
@@ -103,9 +105,11 @@ exports.getAnimes = async (req, res) => {
 
 exports.getAnime = async (req, res) => {
   const { id } = req.params;
+  const user = req.user;
+  console.log(user);
 
   try {
-    const anime = await AnimeService.getAnime(id);
+    const anime = user ? await AnimeService.getAnime(id, user._id) : await AnimeService.getAnime(id);
     if (!anime) {
       return res.status(404).json({ message: 'Anime not found' });
     }

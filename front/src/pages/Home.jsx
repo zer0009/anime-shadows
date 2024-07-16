@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchAnimeById } from '../api/modules/anime';
 import { saveAnimeToHistory } from '../api/modules/user';
-import AnimeCard from '../components/AnimeCard/AnimeCard.jsx';
-import Footer from '../components/common/Footer.jsx';
-import SearchBar from '../components/SearchBar/SearchBar.jsx';
-import { Grid, Container, Typography } from '@mui/material';
+import Footer from '../components/common/Footer';
+import SearchBar from '../components/SearchBar/SearchBar';
+import ListDisplay from '../components/ListDisplay/ListDisplay';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import useFetchRecentEpisodes from '../hooks/useFetchRecentEpisodes';
 import styles from './Home.module.css';
@@ -21,12 +20,16 @@ const Home = () => {
             if (token) {
                 await saveAnimeToHistory(animeId);
             }
-            const response = await fetchAnimeById(animeId);
+            await fetchAnimeById(animeId);
             navigate(`/anime/${animeId}`);
         } catch (error) {
             console.error('Error fetching anime details:', error);
         }
     };
+
+    useEffect(() => {
+        console.log('recentEpisodes:', recentEpisodes);
+    }, [recentEpisodes]);
 
     return (
         <div className={styles.home}>
@@ -37,28 +40,25 @@ const Home = () => {
                     <SearchBar onSearch={handleSearch} />
                 </div>
             </div>
-            <Container>
-                <h2 className={styles.homeTitle}>Anime List</h2>
-                {loading && <div className={styles.loading}>Loading...</div>}
-                {error && <div className={styles.error}>{error}</div>}
-                <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-                    {(searchResults.length > 0 ? searchResults : animeList).map(anime => (
-                        <Grid item xs={12} sm={6} md={4} lg={2.4} key={anime._id}>
-                            <AnimeCard anime={anime} onClick={() => handleAnimeClick(anime._id)} />
-                        </Grid>
-                    ))}
-                </Grid>
-                <h2 className={styles.homeTitle}>Recently Updated Episodes</h2>
-                {recentLoading && <div className={styles.loading}>Loading...</div>}
-                {recentError && <div className={styles.error}>{recentError}</div>}
-                <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-                    {recentEpisodes.map(episode => (
-                        <Grid item xs={12} sm={6} md={4} lg={2.4} key={episode._id}>
-                            <AnimeCard anime={episode.anime} episodeNumber={episode.number} onClick={() => handleAnimeClick(episode.anime._id)} />
-                        </Grid>
-                    ))}
-                </Grid>
-            </Container>
+            <div className={styles.content}>
+                <ListDisplay
+                    title="Anime List"
+                    list={searchResults.length > 0 ? searchResults : animeList}
+                    loading={loading}
+                    error={error}
+                    fields={{ onClick: handleAnimeClick }}
+                />
+                <ListDisplay
+                    title="Recently Updated Episodes"
+                    list={recentEpisodes.map(episode => ({
+                        ...episode.anime,
+                        episodeNumber: episode.number
+                    }))}
+                    loading={recentLoading}
+                    error={recentError}
+                    fields={{ onClick: handleAnimeClick }}
+                />
+            </div>
             <Footer />
         </div>
     );

@@ -1,19 +1,22 @@
-.historyCard {
-    margin-bottom: 20px;
-    background-color: var(--secondary-dark);
-    color: var(--text-color);
-    border-radius: 8px;
-    box-shadow: 0 4px 8px var(--shadow-color);
+.historyList {
+  padding: 20px;
+  background-color: var(--secondary-dark);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
 .cardTitle {
-    margin-bottom: 20px;
-    text-align: center;
+  margin-bottom: 20px;
+  color: var(--highlight-color);
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .animeGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive columns */
-    gap: 16px; /* Space between items */
-    justify-items: center; /* Center items horizontally */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  justify-items: center;
 }

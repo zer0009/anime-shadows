@@ -1,36 +1,41 @@
 .footer {
-    background-color: var(--primary-dark); /* Adjust to your primary color */
-    color: var(--text-color); /* Adjust to your text color */
-    padding: 1rem;
-    text-align: center;
     position: fixed;
-    width: 100%;
-    bottom: 0;
+    bottom: -100px; /* Hide the footer initially */
     left: 0;
+    width: 100%;
+    background-color: var(--secondary-dark);
+    color: var(--text-color);
+    transition: bottom 0.3s ease;
+    z-index: 1000; /* Ensure the footer is above other content */
+}
+
+.footer.visible {
+    bottom: 0; /* Show the footer when visible */
 }
 
 .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
 }
 
 .footerNav ul {
     list-style: none;
     display: flex;
-    gap: 1rem;
+    gap: 20px;
     padding: 0;
     margin: 0;
 }
 
 .footerNav a {
-    color: var(--text-color); /* Adjust to your text color */
+    color: var(--text-color);
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 .footerNav a:hover {
-    color: var(--highlight-color); /* Adjust to your highlight color */
+    color: var(--highlight-color);
 }

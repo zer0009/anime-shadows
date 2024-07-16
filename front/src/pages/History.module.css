@@ -3,16 +3,23 @@
     max-width: 1200px;
     margin: 0 auto;
     background-color: transparent; /* Ensure it does not override the global background */
-
 }
 
 .pageTitle {
     margin-bottom: 20px;
     color: var(--highlight-color);
+    text-align: center;
 }
 
 .noHistoryMessage {
     color: var(--subtext-color);
     text-align: center;
     margin-top: 20px;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
 }

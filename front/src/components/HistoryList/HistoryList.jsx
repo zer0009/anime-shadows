@@ -4,9 +4,6 @@ import AnimeCard from '../AnimeCard/AnimeCard';
 import styles from './HistoryList.module.css';
 
 const HistoryList = ({ watchedEpisodes, animeDetails }) => {
-    console.log("HistoryList component is rendered");
-    console.log("watchedEpisodes", watchedEpisodes);
-
     return (
         <div className={styles.historyList}>
             <Typography variant="h5" component="h3" className={styles.cardTitle}>

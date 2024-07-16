@@ -7,6 +7,7 @@
 .pageTitle {
     margin-bottom: 20px;
     color: var(--highlight-color);
+    text-align: center;
 }
 
 .grid {
@@ -18,6 +19,18 @@
 
 .noItemsMessage {
     color: var(--subtext-color);
+    text-align: center;
+    margin-top: 20px;
+}
+
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+}
+
+.errorMessage {
     text-align: center;
     margin-top: 20px;
 }

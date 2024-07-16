@@ -47,15 +47,15 @@ footer {
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Text shadow */
 }
 
-.homeTitle {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    color: var(--highlight-color);
+.content {
+    flex: 1;
 }
 
 .loading {
-    text-align: center;
-    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px; /* Adjust height as needed */
 }
 
 .error {

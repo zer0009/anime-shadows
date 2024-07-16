@@ -12,10 +12,16 @@ import Register from './pages/Register.jsx';
 import SearchPage from './pages/SearchPage.jsx';
 import Profile from './pages/Profile.jsx';
 import History from './pages/History.jsx';
+import Favorites from './pages/Favorites.jsx';
+import AdminDashboard from './pages/AdminDashboard.jsx';
+import EpisodePage from './pages/EpisodePage.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+import AdminRoute from './components/AdminRoute.jsx';
+
 
 function App() {
   return (
-    <AuthProvider> {/* Wrap the app with AuthProvider */}
+    <AuthProvider>
       <div className="App">
         <Header />
         <Routes>
@@ -27,11 +33,11 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/anime/:id" element={<AnimeDetails />} />
           <Route path="/search" element={<SearchPage />} />
-          <Route path="/profile" element={<Profile />} />
-          {/* <Route path="/settings" component={Settings} /> */}
-          <Route path="/history" element={<History />} />
-          {/* <Route path="/favorites" component={Favorites} />
-          <Route path="/admin-dashboard" component={AdminDashboard} /> */}
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
+          <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
+          <Route path="/admin-dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+          <Route path="/episode/:episodeId" element={<EpisodePage />} />
         </Routes>
       </div>
     </AuthProvider>

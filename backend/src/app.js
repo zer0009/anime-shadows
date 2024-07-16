@@ -20,7 +20,7 @@ app.use(express.json())
 
 
 
-app.use('/uploads', express.static('uploads'));
+app.use('/api/uploads', express.static('uploads'));
 
 // app.use(express.static('uploads'));
 // app.use('/images', express.static('uploads'));

@@ -168,9 +168,9 @@ const getAnimes = async () => {
   return await Anime.find().populate('season').populate('type').populate('genres');
 };
 
-const getAnime = async (id) => {
+const getAnime = async (animeId, userId) => {
   try {
-    const anime = await Anime.findById(id)
+    const anime = await Anime.findById(animeId)
       .populate('season')
       .populate('type')
       .populate('genres')
@@ -181,14 +181,23 @@ const getAnime = async (id) => {
         }
       });
 
-    console.log('Fetched Anime:', anime);
+    let isFavorite = false;
+    console.log(userId);
+    if (userId) {
+      const user = await User.findById(userId);
+      console.log(user.favorites);
+      if (user && user.favorites.includes(animeId)) {
+        isFavorite = true;
+      }
+    }
+
+    // console.log('Fetched Anime:', anime);
 
     if (anime) {
       anime.viewCount += 1;
       anime.views.push(new Date());
       await anime.save();
-      console.log('Fetched Anime:', anime); // Log the result
-      return anime;
+      return { ...anime.toObject(), isFavorite };
     } else {
       throw new Error('Anime not found');
     }
@@ -374,14 +383,22 @@ const addToHistory = async (userId, animeId) => {
       throw new Error('User not found');
     }
 
-    const isInHistory = user.history.some(historyItem => historyItem.toString() === animeId);
-    if (!isInHistory) {
-      user.history.push(animeId);
-      await user.save();
+        // Check if the anime is already in the user's history
+    const historyItem = user.history.find(item => item.anime && item.anime.toString() === animeId);
+    if (historyItem) {
+        // Update the view date
+        historyItem.views.push(new Date());
+    } else {
+        // Add new history item
+        user.history.push({ anime: animeId, views: [new Date()], pictureUrl: anime.pictureUrl, title: anime.title });
     }
-  } catch (err) {
-    throw new Error('Failed to add anime to history');
-  }
+    
+    await User.findByIdAndUpdate(userId, { history: user.history }, { new: true, upsert: true });
+    return { message: 'Anime saved to history' };
+    } catch (error) {
+        console.error('Error saving anime to history:', error); // Log the error
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
 };
 
 const getFilteredAnimes = async (tags, broadMatches) => {

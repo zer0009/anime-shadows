@@ -32,7 +32,9 @@ export const AuthProvider = ({ children }) => {
             if (process.env.NODE_ENV === 'development') {
                 console.log('Login response:', response); // Add detailed logging
             }
-            localStorage.setItem('token', response.token); // Ensure the token is correctly set
+            localStorage.setItem('token', response.token); 
+            localStorage.setItem('user', JSON.stringify(response.user));
+            // Ensure the token is correctly set
             if (process.env.NODE_ENV === 'development') {
                 console.log('Logged in user:', response.user); // Debug log
             }

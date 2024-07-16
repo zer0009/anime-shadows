@@ -31,10 +31,6 @@ a {
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline;
-}
-
 .container {
   padding: 20px;
 }

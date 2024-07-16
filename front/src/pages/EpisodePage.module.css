@@ -1,0 +1,100 @@
+.episodePage {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 20px;
+    background-color: var(--primary-dark);
+    color: var(--text-color);
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .headerSection {
+    grid-column: span 2;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .streamingSection {
+    background-color: var(--secondary-dark);
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .episodeListSection {
+    background-color: var(--secondary-dark);
+    padding: 20px;
+    border-radius: 8px;
+    overflow-y: auto;
+    max-height: 600px; /* Adjust as needed */
+  }
+  
+  .episodeListTitle {
+    margin-bottom: 10px;
+    color: var(--highlight-color);
+  }
+  
+  .episodeList {
+    max-height: 500px;
+    overflow-y: auto;
+  }
+  
+  .episodeTitle {
+    margin-bottom: 10px;
+    color: var(--highlight-color);
+  }
+  
+  .episodeNumber {
+    margin-bottom: 20px;
+    color: var(--highlight-color);
+  }
+  
+  .serverTabs {
+    margin-bottom: 20px;
+  }
+  
+  .serverTab {
+    color: var(--text-color);
+    background-color: var(--primary-dark);
+    border: none;
+    padding: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+  
+  .serverTab:hover {
+    background-color: var(--secondary-light);
+  }
+  
+  .videoContainer {
+    margin-top: 20px;
+    background-color: var(--secondary-dark);
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .downloadSection {
+    grid-column: span 2;
+    background-color: var(--secondary-dark);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .downloadTitle {
+    margin-bottom: 10px;
+    color: var(--highlight-color);
+  }
+  
+  .downloadButton {
+    margin: 5px;
+    background-color: var(--highlight-color);
+    color: var(--text-color);
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .downloadButton:hover {
+    background-color: var(--tertiary-dark);
+  }

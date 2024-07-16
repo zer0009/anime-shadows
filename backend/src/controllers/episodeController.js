@@ -2,11 +2,11 @@ const Episode = require('../models/episode');
 const Anime = require('../models/anime');
 
 const createEpisode = async (req, res) => {
-    const { animeId, number, title, servers } = req.body;
+    const { animeId, number, title, streamingServers, downloadServers } = req.body;
 
     try {
         // Create a new episode
-        const episode = new Episode({ anime: animeId, number, title, servers });
+        const episode = new Episode({ anime: animeId, number, title, streamingServers, downloadServers });
         await episode.save();
 
         // Find the anime by ID and update its episodes array
@@ -40,9 +40,9 @@ const getEpisodeById = async (req, res) => {
 
 const updateEpisode = async (req, res) => {
     const { id } = req.params;
-    const { animeId, number, title, servers } = req.body;
+    const { animeId, number, title, streamingServers, downloadServers } = req.body;
     try {
-        const episode = await Episode.findByIdAndUpdate(id, { anime: animeId, number, title, servers }, { new: true });
+        const episode = await Episode.findByIdAndUpdate(id, { anime: animeId, number, title, streamingServers, downloadServers }, { new: true });
         if (!episode) {
             return res.status(404).json({ message: 'Episode not found' });
         }

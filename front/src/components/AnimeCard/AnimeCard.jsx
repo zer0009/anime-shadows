@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CardMedia, CardContent, Typography, Box, IconButton, Badge } from '@mui/material';
-import StarIcon from '@mui/icons-material/Star';
+import { CardMedia, CardContent, Typography, Box } from '@mui/material';
 import styles from './AnimeCard.module.css';
 
-function AnimeCard({ anime, lastViewed, showLastViewed,episodeNumber, onClick }) {
+function AnimeCard({ anime, lastViewed, showLastViewed, episodeNumber, onClick }) {
     const [imageError, setImageError] = useState(false);
 
     if (!anime) {
         return null; // Return null if anime is not defined
     }
 
-    // Add a cache-busting query parameter to the image URL
-    const imageUrl = `http://localhost:5000${anime.pictureUrl}?t=${new Date().getTime()}`;
-    const defaultPictureUrl = '../../assets/images/default-anime-picture.jpg'; // Ensure this path is correct
+    const imageUrl = `${import.meta.env.VITE_API_URL}${anime.pictureUrl}?t=${new Date().getTime()}`;
+    const defaultPictureUrl = 'public/assets/images/default-anime-picture.jpg'; // Ensure this path is correct
 
     const handleError = () => {
         setImageError(true);
@@ -32,9 +30,6 @@ function AnimeCard({ anime, lastViewed, showLastViewed,episodeNumber, onClick })
                     <Box className={`${styles.statusBadge} ${anime.status === 'completed' ? styles.statusBadgeCompleted : styles.statusBadgeOngoing}`}>
                         {anime.status === 'completed' ? 'مكتمل' : 'يعرض الآن'}
                     </Box>
-                    <IconButton className={styles.favoriteIcon}>
-                        <StarIcon />
-                    </IconButton>
                 </CardMedia>
                 <CardContent className={styles.cardContent}>
                     <Typography variant="body2" className={styles.title}>

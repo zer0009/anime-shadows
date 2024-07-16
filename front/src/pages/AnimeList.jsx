@@ -1,9 +1,9 @@
 import React from 'react';
-import useFetchAnimes from '../hooks/useFetchAnimes';
+import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import ListDisplay from '../components/ListDisplay/ListDisplay';
 
 const AnimeList = () => {
-    const { animeList, loading, error } = useFetchAnimes();
+    const { animeList, loading, error } = useFetchAnimeList();
 
     return (
         <ListDisplay

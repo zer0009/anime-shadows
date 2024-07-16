@@ -11,10 +11,9 @@ const useFetchAnimeList = () => {
         const fetchAnimeList = async () => {
             try {
                 const response = await fetchAnime();
-                const data = Array.isArray(response.data) ? response.data : [];
+                const data = Array.isArray(response) ? response : [];
                 setAnimeList(data);
                 setSearchResults(data); // Initialize search results with the full list
-                console.log('Fetched anime list:', data);
             } catch (error) {
                 setError('Error fetching anime list');
                 console.error('Error fetching anime list:', error);
@@ -31,14 +30,6 @@ const useFetchAnimeList = () => {
             setLoading(true);
             let results = animeList;
 
-            console.log('Search query:', query);
-            console.log('Selected tags:', tags);
-            console.log('Selected type:', type);
-            console.log('Selected season:', season);
-            console.log('Selected sort:', sort);
-            console.log('Selected popular:', popular);
-            console.log('Broad matches:', broadMatches);
-
             if (query) {
                 results = results.filter(anime =>
                     anime.title.toLowerCase().includes(query.toLowerCase())
@@ -51,12 +42,9 @@ const useFetchAnimeList = () => {
                         return false;
                     }
                     const animeTagNames = anime.genres.map(tag => tag.name.toLowerCase());
-                    console.log('Anime tag names:', animeTagNames);
-                    const tagMatch = broadMatches
+                    return broadMatches
                         ? tags.some(tag => animeTagNames.includes(tag.toLowerCase()))
                         : tags.every(tag => animeTagNames.includes(tag.toLowerCase()));
-                    console.log(`Anime: ${anime.title}, Tag match: ${tagMatch}`);
-                    return tagMatch;
                 });
             }
 
@@ -83,12 +71,9 @@ const useFetchAnimeList = () => {
 
             if (popular) {
                 const response = await fetchPopularAnime(popular);
-                results = Array.isArray(response.data) ? response.data : [];
-                console.log('Response data:', response.data);
+                results = Array.isArray(response) ? response : [];
             }
-            console.log('Popular:', popular);
 
-            console.log('Filtered results:', results);
             setSearchResults(results);
         } catch (error) {
             setError('Error searching anime');
