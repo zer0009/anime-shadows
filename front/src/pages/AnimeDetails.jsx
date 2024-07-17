@@ -6,6 +6,7 @@ import { IconButton, Typography, Container, Button, TextField, Dialog, DialogAct
 import { Favorite, FavoriteBorder, Star, List } from '@mui/icons-material';
 import { addEpisode } from '../api/modules/admin';
 import styles from './AnimeDetails.module.css';
+import LoadingSpinner from '../components/common/LoadingSpinner.jsx';
 
 const AnimeDetails = () => {
     const { id } = useParams();
@@ -23,16 +24,9 @@ const AnimeDetails = () => {
         const getAnimeDetails = async () => {
             try {
                 const response = await fetchAnimeById(id);
-                console.log(response);
                 setAnime(response);
                 const favoriteStatus = localStorage.getItem(`favorite-${id}`);
-                console.log(favoriteStatus);
                 setIsFavorite(favoriteStatus === 'true' || response.isFavorite || false);
-                // Save the anime to the user's history if logged in
-                // const token = localStorage.getItem('token');
-                // if (token) {
-                //     await saveAnimeToHistory(id);
-                // }
                 // Check if the user is an admin
                 const user = JSON.parse(localStorage.getItem('user'));
                 if (user && user.role === 'admin') {
@@ -80,8 +74,12 @@ const AnimeDetails = () => {
         navigate(`/episode/${episode._id}`);
     };
 
+    const handleGenreClick = (genreId) => {
+        navigate(`/filter/genre/${genreId}`);
+    };
+
     if (loading) {
-        return <div>Loading...</div>;
+        return <LoadingSpinner />;
     }
 
     if (error) {
@@ -110,7 +108,13 @@ const AnimeDetails = () => {
                     <p className={styles.animeSubtitle}>{anime.description}</p>
                     <div className={styles.animeTags}>
                         {anime.genres.map(genre => (
-                            <span key={genre._id} className={styles.animeTag}>{genre.name}</span>
+                            <span
+                                key={genre._id}
+                                className={styles.animeTag}
+                                onClick={() => handleGenreClick(genre._id)}
+                            >
+                                {genre.name}
+                            </span>
                         ))}
                     </div>
                 </div>

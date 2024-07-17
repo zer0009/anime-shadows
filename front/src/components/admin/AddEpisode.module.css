@@ -1,44 +1,21 @@
+/* AddEpisode.module.css */
 .addEpisode {
-    background-color: var(--primary-dark);
-    color: var(--text-color);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px var(--shadow-color);
-  }
-  
-  .serverSection {
-    margin-top: 20px;
-    background-color: var(--secondary-dark);
-    padding: 20px;
-    border-radius: 8px;
-  }
-  
-  .serverList {
-    margin-top: 20px;
-    background-color: var(--secondary-dark);
-    padding: 20px;
-    border-radius: 8px;
-  }
-  
-  .serverList .MuiListItem-root {
-    background-color: var(--primary-dark);
-    margin-bottom: 10px;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px var(--shadow-color);
-  }
-  
-  .serverList .MuiListItem-root .MuiListItemText-primary {
-    color: var(--highlight-color);
-  }
-  
-  .serverList .MuiListItem-root .MuiListItemText-secondary {
-    color: var(--subtext-color);
-  }
-  
-  .serverList .MuiIconButton-root {
-    color: var(--highlight-color);
-  }
-  
-  .serverList .MuiIconButton-root:hover {
-    color: var(--tertiary-dark);
-  }
+  padding: 20px;
+  margin: 20px 0;
+  background-color: var(--primary-dark);
+  color: var(--text-color);
+}
+
+.title {
+  margin-bottom: 20px;
+  color: var(--text-color);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.submitButton {
+  margin-top: 20px;
+}

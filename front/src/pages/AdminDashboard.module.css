@@ -1,14 +1,17 @@
+/* AdminDashboard.module.css */
 .adminDashboard {
-    padding: 20px;
-  }
-  
-  .title {
-    margin-bottom: 20px;
-    text-align: center;
-    color: var(--highlight-color);
-  }
-  
-  .paper {
-    padding: 20px;
-    margin-bottom: 20px;
-  }
+  padding: 20px;
+}
+
+.title {
+  margin-bottom: 20px;
+}
+
+.paper {
+  padding: 20px;
+  text-align: center;
+}
+
+.tabContent {
+  margin-top: 20px;
+}

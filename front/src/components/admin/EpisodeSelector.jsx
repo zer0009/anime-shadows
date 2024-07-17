@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextField, FormControl, InputLabel, Select, MenuItem, Box, Button } from '@mui/material';
+import { TextField, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
 
 const EpisodeSelector = ({ episodeId, setEpisodeId, title, setTitle, number, setNumber, allEpisodes }) => {
   const handleEpisodeChange = (e) => {
@@ -33,6 +33,7 @@ const EpisodeSelector = ({ episodeId, setEpisodeId, title, setTitle, number, set
         onChange={(e) => setTitle(e.target.value)}
         fullWidth
         margin="normal"
+        placeholder="Enter episode title"
       />
       <TextField
         label="Number"
@@ -40,6 +41,7 @@ const EpisodeSelector = ({ episodeId, setEpisodeId, title, setTitle, number, set
         onChange={(e) => setNumber(e.target.value)}
         fullWidth
         margin="normal"
+        placeholder="Enter episode number"
       />
     </Box>
   );

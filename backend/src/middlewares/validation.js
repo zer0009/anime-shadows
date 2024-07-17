@@ -29,7 +29,7 @@ const validateUser = [
   body('username').notEmpty().withMessage('Username is required'),
   body('password').notEmpty().withMessage('Password is required'),
   body('email').notEmpty().withMessage('Email is required').isEmail().withMessage('Invalid email'),
-  body('role').optional().isIn(['user', 'admin']).withMessage('Invalid role'),
+  body('role').optional().isIn(['user', 'admin','moderator']).withMessage('Invalid role'),
 ];
 
 module.exports = {

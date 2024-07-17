@@ -73,6 +73,16 @@ export const fetchGenre = async () => {
     }
 };
 
+export const fetchStates = async () => {
+    try {
+        const response = await API.get('/states');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching states:', error);
+        throw error;
+    }
+};
+
 export const fetchEpisodesByAnimeId = async (animeId) => {
     try {
         const response = await API.get(`/episodes/anime/${animeId}`);

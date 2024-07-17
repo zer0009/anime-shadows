@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Typography, MenuItem, Select, InputLabel, FormControl, Checkbox, ListItemText } from '@mui/material';
+import { TextField, Button, Typography, MenuItem, Select, InputLabel, FormControl, Checkbox, ListItemText, Box, Paper } from '@mui/material';
 import { addAnime } from '../../api/modules/admin';
 import { fetchGenre, fetchTypes, fetchSeasons } from '../../api/modules/anime';
+import styles from './AddAnime.module.css';
 
 const AddAnime = () => {
   const [title, setTitle] = useState('');
@@ -18,6 +19,7 @@ const AddAnime = () => {
   const [allGenres, setAllGenres] = useState([]);
   const [allTypes, setAllTypes] = useState([]);
   const [allSeasons, setAllSeasons] = useState([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,7 +39,7 @@ const AddAnime = () => {
     formData.append('title', title);
     formData.append('description', description);
     formData.append('typeId', type);
-    formData.append('genres', JSON.stringify(genres));
+    formData.append('genres', JSON.stringify(genres)); // Ensure genres is a JSON string
     formData.append('seasonId', seasonId);
     formData.append('myAnimeListUrl', myAnimeListUrl);
     formData.append('numberOfEpisodes', numberOfEpisodes);
@@ -53,21 +55,24 @@ const AddAnime = () => {
     try {
       await addAnime(formData);
       alert('Anime added successfully');
+      setError('');
     } catch (error) {
+      setError('Error adding anime');
       console.error('Error adding anime:', error);
     }
   };
 
   return (
-    <div>
-      <Typography variant="h6">Add Anime</Typography>
-      <form onSubmit={handleSubmit}>
+    <Paper className={styles.paper}>
+      <Typography variant="h6" className={styles.title}>Add Anime</Typography>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <TextField
           label="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           fullWidth
           margin="normal"
+          placeholder="Enter anime title"
         />
         <TextField
           label="Description"
@@ -75,12 +80,25 @@ const AddAnime = () => {
           onChange={(e) => setDescription(e.target.value)}
           fullWidth
           margin="normal"
+          multiline
+          rows={4}
+          placeholder="Enter anime description"
         />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setImage(e.target.files[0])}
-        />
+        <Box margin="normal">
+          <Button
+            variant="contained"
+            component="label"
+            fullWidth
+          >
+            Upload Image
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={(e) => setImage(e.target.files[0])}
+            />
+          </Button>
+        </Box>
         <FormControl fullWidth margin="normal">
           <InputLabel>Type</InputLabel>
           <Select
@@ -129,6 +147,7 @@ const AddAnime = () => {
           onChange={(e) => setMyAnimeListUrl(e.target.value)}
           fullWidth
           margin="normal"
+          placeholder="Enter MyAnimeList URL"
         />
         <TextField
           label="Number of Episodes"
@@ -136,6 +155,7 @@ const AddAnime = () => {
           onChange={(e) => setNumberOfEpisodes(e.target.value)}
           fullWidth
           margin="normal"
+          placeholder="Enter number of episodes"
         />
         <TextField
           label="Source"
@@ -143,6 +163,7 @@ const AddAnime = () => {
           onChange={(e) => setSource(e.target.value)}
           fullWidth
           margin="normal"
+          placeholder="Enter source"
         />
         <TextField
           label="Duration"
@@ -150,6 +171,7 @@ const AddAnime = () => {
           onChange={(e) => setDuration(e.target.value)}
           fullWidth
           margin="normal"
+          placeholder="Enter duration in minutes"
         />
         <FormControl fullWidth margin="normal">
           <InputLabel>Status</InputLabel>
@@ -162,9 +184,12 @@ const AddAnime = () => {
             <MenuItem value="upcoming">Upcoming</MenuItem>
           </Select>
         </FormControl>
-        <Button type="submit" variant="contained" color="primary">Add Anime</Button>
+        {error && <Typography color="error">{error}</Typography>}
+        <Button type="submit" variant="contained" color="primary" fullWidth className={styles.submitButton}>
+          Add Anime
+        </Button>
       </form>
-    </div>
+    </Paper>
   );
 };
 

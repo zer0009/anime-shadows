@@ -55,11 +55,9 @@ exports.updateAnime = async (req, res) => {
 
   try {
     if (updateData.genres) {
-      const genresArray = JSON.parse(updateData.genres);
-      if (!Array.isArray(genresArray) || !genresArray.every(genre => typeof genre === 'string')) {
+      if (!Array.isArray(updateData.genres) || !updateData.genres.every(genre => typeof genre === 'string')) {
         throw new Error('Genres must be an array of strings');
       }
-      updateData.genres = genresArray;
     }
 
     const updatedAnime = await AnimeService.updateAnime(id, updateData, file);

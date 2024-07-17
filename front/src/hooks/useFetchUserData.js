@@ -4,6 +4,8 @@ import API from '../api/client';
 const useFetchUserData = () => {
     const [userData, setUserData] = useState(null);
     const [animeDetails, setAnimeDetails] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -16,6 +18,9 @@ const useFetchUserData = () => {
                 setUserData(response.data);
             } catch (error) {
                 console.error('Error fetching user data:', error);
+                setError('Error fetching user data');
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -31,7 +36,12 @@ const useFetchUserData = () => {
                     [animeId]: response.data
                 }));
             } catch (error) {
-                console.error('Error fetching anime details:', error);
+                console.error(`Error fetching anime details for ID ${animeId}:`, error);
+                // Optionally, you can set a flag or message in animeDetails to indicate the error
+                setAnimeDetails(prevDetails => ({
+                    ...prevDetails,
+                    [animeId]: { error: 'Error fetching details' }
+                }));
             }
         };
 
@@ -44,7 +54,7 @@ const useFetchUserData = () => {
         }
     }, [userData]);
 
-    return { userData, animeDetails };
+    return { userData, animeDetails, loading, error };
 };
 
 export default useFetchUserData;

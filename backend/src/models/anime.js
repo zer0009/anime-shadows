@@ -6,7 +6,7 @@ const ratingSchema = new mongoose.Schema({
 });
 
 const animeSchema = new mongoose.Schema({
-  title: { type: String, required: true, trim: true },
+  title: { type: String, required: true, trim: true, unique: true },
   description: { type: String, required: true, trim: true },
   season: { type: mongoose.Schema.Types.ObjectId, ref: 'Season' },
   episodes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Episode' }],

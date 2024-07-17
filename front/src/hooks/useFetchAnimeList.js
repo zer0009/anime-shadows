@@ -25,7 +25,7 @@ const useFetchAnimeList = () => {
         fetchAnimeList();
     }, []);
 
-    const handleSearch = async (query = '', tags = [], type = '', season = '', sort = '', popular = '', broadMatches = false) => {
+    const handleSearch = async (query = '', tags = [], type = '', season = '', sort = '', popular = '', state = '', broadMatches = false) => {
         try {
             setLoading(true);
             let results = animeList;
@@ -72,6 +72,10 @@ const useFetchAnimeList = () => {
             if (popular) {
                 const response = await fetchPopularAnime(popular);
                 results = Array.isArray(response) ? response : [];
+            }
+
+            if (state) {
+                results = results.filter(anime => anime.status && anime.status.toLowerCase() === state.toLowerCase());
             }
 
             setSearchResults(results);

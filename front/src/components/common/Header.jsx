@@ -1,5 +1,4 @@
-// src/components/Header.jsx
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaUser, FaSearch, FaUserPlus } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext'; // Import useAuth from AuthContext
@@ -8,6 +7,7 @@ import styles from './Header.module.css';
 const Header = () => {
     const { user, logout } = useAuth(); // Get user and logout from AuthContext
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
 
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
@@ -20,6 +20,24 @@ const Header = () => {
             console.error('Error logging out:', error);
         }
     };
+
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setDropdownOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        if (dropdownOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [dropdownOpen]);
 
     const defaultProfilePicture = '/assets/images/default-profile-picture.jpg'; // Ensure this path is correct
 
@@ -45,7 +63,7 @@ const Header = () => {
                             <Link to="/register"><FaUserPlus className={styles.icon} /></Link>
                         </>
                     ) : (
-                        <div className={styles.userProfile}>
+                        <div className={styles.userProfile} ref={dropdownRef}>
                             <img
                                 src={user.profilePicture || defaultProfilePicture}
                                 alt="Profile"

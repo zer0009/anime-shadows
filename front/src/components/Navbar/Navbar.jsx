@@ -6,8 +6,9 @@ import SeasonSelect from '../SeasonSelect/SeasonSelect.jsx';
 import SortSelect from '../SortSelect/SortSelect.jsx';
 import PopularSelect from '../PopularSelect/PopularSelect.jsx';
 import styles from './Navbar.module.css';
+import StateSelect from '../StateSelect/StateSelect.jsx';
 
-const Navbar = ({ onTagsClick, onTypeChange, onSeasonChange, onSortChange, onPopularChange, onReset, onSearch }) => {
+const Navbar = ({ onTagsClick, onTypeChange, onSeasonChange, onSortChange, onPopularChange, onReset, onSearch, onStateChange }) => {
     return (
         <div className={styles.navbar}>
             <button className={styles.navButton} onClick={onTagsClick}>
@@ -20,6 +21,7 @@ const Navbar = ({ onTagsClick, onTypeChange, onSeasonChange, onSortChange, onPop
             <button className={styles.navButton} onClick={onReset}>
                 <FaUndo /> Reset All
             </button>
+            <StateSelect onChange={onStateChange} />
             <SearchBar onSearch={onSearch} />
         </div>
     );

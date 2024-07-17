@@ -49,10 +49,33 @@ const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeI
     throw new Error('Type ID and Season ID are required');
   }
 
+  // Parse genres if it's a string
+  let genreIds = genres;
+  if (typeof genres === 'string') {
+      try {
+        genreIds = JSON.parse(genres);
+      } catch (error) {
+        throw new Error('Invalid genres format');
+      }
+    }
+
+  if (!Array.isArray(genreIds)) {
+    throw new Error('genreIds must be an array');
+  }
+
   await validateEntityById(Type, typeId, 'Type', file);
   await validateEntityById(Season, seasonId, 'Season', file);
 
-  const genreIds = await getGenreIds(genres);
+  // Validate genre IDs
+  const validGenreIds = [];
+  for (const genreId of genreIds) {
+    try {
+      const genre = await validateEntityById(Genre, genreId, 'Genre', file);
+      validGenreIds.push(genre._id);
+    } catch (error) {
+      console.error(`Invalid genre ID: ${genreId}`, error);
+    }
+  }
 
   let myAnimeListRating = null;
   if (myAnimeListUrl) {
@@ -65,7 +88,7 @@ const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeI
     season: seasonId.trim(),
     myAnimeListRating,
     type: typeId.trim(),
-    genres: genreIds,
+    genres: validGenreIds,
     numberOfEpisodes,
     source,
     duration,
@@ -93,7 +116,7 @@ const updateAnime = async (id, updateData, file) => {
   }
 
   if (updateData.genres) {
-    updateData.genres = await getGenreIds(updateData.genres);
+    updateData.genres = updateData.genres.map(genre => genre._id || genre);
   }
 
   if (updateData.status && !['ongoing', 'completed', 'upcoming'].includes(updateData.status)) {
@@ -282,8 +305,19 @@ const deleteAnime = async (id) => {
     throw new Error('Anime not found');
   }
 
-  await anime.remove();
-  return { message: 'Anime deleted successfully' };
+  // Delete all episodes related to this anime
+  await Episode.deleteMany({ animeId: id });
+
+  // Remove the anime from all users' history and favorites
+  await User.updateMany(
+      { $or: [{ 'history.anime': id }, { favorites: id }] },
+      { $pull: { history: { anime: id }, favorites: id } }
+    );
+
+  // Delete the anime
+  await Anime.findByIdAndDelete(id);
+
+  return { message: 'Anime and related episodes deleted successfully' };
 };
 
 const getRecommendations = async (animeId) => {

@@ -17,6 +17,10 @@ import AdminDashboard from './pages/AdminDashboard.jsx';
 import EpisodePage from './pages/EpisodePage.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import AdminRoute from './components/AdminRoute.jsx';
+import EditAnime from './components/admin/EditAnime.jsx';
+import EditEpisodes from './components/admin/EditEpisodes.jsx';
+import ManageAnime from './components/admin/ManageAnime.jsx';
+import FilteredListPage from './pages/FilteredListPage.jsx';
 
 
 function App() {
@@ -32,12 +36,16 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/anime/:id" element={<AnimeDetails />} />
+          <Route path="/filter/:filterType/:filterValue" element={<FilteredListPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
           <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
           <Route path="/admin-dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
           <Route path="/episode/:episodeId" element={<EpisodePage />} />
+          <Route path="/admin/manage-anime" element={<AdminRoute><ManageAnime /></AdminRoute>} />
+          <Route path="/admin/edit-anime/:animeId" element={<AdminRoute><EditAnime /></AdminRoute>} />
+          <Route path="/admin/edit-episodes/:animeId" element={<AdminRoute><EditEpisodes /></AdminRoute>} />
         </Routes>
       </div>
     </AuthProvider>

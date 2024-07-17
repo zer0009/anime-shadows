@@ -86,7 +86,6 @@ const getEpisodesByAnimeId = async (req, res) => {
     }
 };
 
-// Controller function to fetch recent episodes
 const getRecentEpisodes = async (req, res) => {
     try {
         // Fetch the most recent episodes, limit to 10 for example
@@ -95,7 +94,10 @@ const getRecentEpisodes = async (req, res) => {
             .limit(10)
             .populate('anime'); // Populate the anime details
 
-        res.status(200).json(recentEpisodes);
+        // Filter out episodes whose anime has been deleted
+        const filteredEpisodes = recentEpisodes.filter(episode => episode.anime !== null);
+
+        res.status(200).json(filteredEpisodes);
     } catch (error) {
         console.error('Error fetching recent episodes:', error);
         res.status(500).json({ message: 'Error fetching recent episodes' });
@@ -122,9 +124,13 @@ const getRecentlyUpdatedEpisodes = async (req, res) => {
             }
         ]).exec();
 
+        // Populate the anime details
         const populatedEpisodes = await Episode.populate(recentEpisodes, { path: 'anime' });
 
-        res.status(200).json(populatedEpisodes);
+        // Filter out episodes whose anime has been deleted
+        const filteredEpisodes = populatedEpisodes.filter(episode => episode.anime !== null);
+
+        res.status(200).json(filteredEpisodes);
     } catch (error) {
         console.error('Error fetching recently updated episodes:', error);
         res.status(500).json({ message: 'Error fetching recently updated episodes' });

@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginUser, logoutUser } from '../api/modules/auth';
+import { loginUser, logoutUser, registerUser } from '../api/modules/auth';
 import { fetchUserProfile } from '../api/modules/user';
 
 const AuthContext = createContext();
@@ -45,6 +45,25 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const register = async (credentials) => {
+        try {
+            const response = await registerUser(credentials);
+            if (process.env.NODE_ENV === 'development') {
+                console.log('Register response:', response); // Add detailed logging
+            }
+            localStorage.setItem('token', response.token); 
+            localStorage.setItem('user', JSON.stringify(response.user));
+            // Ensure the token is correctly set
+            if (process.env.NODE_ENV === 'development') {
+                console.log('Registered user:', response.user); // Debug log
+            }
+            setUser(response.user); // Ensure the user state is correctly set
+            navigate('/profile');
+        } catch (error) {
+            console.error('Error registering:', error);
+        }
+    };
+
     const logout = async () => {
         try {
             await logoutUser();
@@ -60,7 +79,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     );

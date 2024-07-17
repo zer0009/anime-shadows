@@ -32,3 +32,13 @@ export const logoutUser = async () => {
         throw error;
     }
 };
+
+export const registerUser = async (credentials) => {
+    try {
+        const response = await API.post('/user/register', credentials);
+        return response.data;
+    } catch (error) {
+        console.error('Error in registerUser:', error);
+        throw error;
+    }
+};

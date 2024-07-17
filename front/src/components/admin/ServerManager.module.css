@@ -1,44 +1,29 @@
+/* ServerManager.module.css */
 .serverSection {
-    background-color: var(--primary-dark);
-    color: var(--text-color);
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px var(--shadow-color);
-  }
-  
-  .serverList {
-    margin-top: 20px;
-  }
-  
-  .serverList h6 {
-    color: var(--highlight-color);
-  }
-  
-  .serverList .MuiListItem-root {
-    background-color: var(--secondary-dark);
-    color: var(--text-color);
-    margin-bottom: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px var(--shadow-color);
-  }
-  
-  .serverList .MuiListItem-root .MuiListItemText-primary {
-    color: var(--text-color);
-  }
-  
-  .serverList .MuiListItem-root .MuiListItemText-secondary {
-    color: var(--subtext-color);
-  }
-  
-  .serverList .MuiIconButton-root {
-    color: var(--highlight-color);
-  }
-  
-  .serverSection .MuiButton-containedPrimary {
-    background-color: var(--highlight-color);
-    color: var(--text-color);
-  }
-  
-  .serverSection .MuiButton-containedPrimary:hover {
-    background-color: var(--secondary-light);
-  }
+  padding: 20px;
+  margin: 20px 0;
+  background-color: var(--primary-dark);
+  color: var(--text-color);
+}
+
+.title {
+  margin-bottom: 20px;
+  color: var(--text-color);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.subtitle {
+  margin-top: 20px;
+  color: var(--text-color);
+}
+
+.listItem {
+  background-color: var(--secondary-dark);
+  margin-bottom: 10px;
+  border-radius: 5px;
+  padding: 10px;
+}
