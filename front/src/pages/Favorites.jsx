@@ -12,20 +12,14 @@ const Favorites = () => {
     const [errorFavorites, setErrorFavorites] = useState(null);
 
     useEffect(() => {
-        const getFavorites = async () => {
-            try {
-                const response = await fetchFavorites();
-                setFavorites(response);
-            } catch (error) {
-                setErrorFavorites('Error fetching favorite animes');
-                console.error('Error fetching favorite animes:', error);
-            } finally {
-                setLoadingFavorites(false);
-            }
-        };
-
-        getFavorites();
-    }, []);
+        if (userData && userData.favorites) {
+            setFavorites(userData.favorites);
+            setLoadingFavorites(false);
+        } else if (userData && !userData.favorites) {
+            setErrorFavorites('No favorites found');
+            setLoadingFavorites(false);
+        }
+    }, [userData]);
 
     if (loading || loadingFavorites) {
         return <div className={styles.loading}><CircularProgress /></div>;
@@ -35,7 +29,7 @@ const Favorites = () => {
         return <div className={styles.error}>{error || errorFavorites}</div>;
     }
 
-    const filteredFavorites = favorites.filter(animeId => animeDetails[animeId] && !animeDetails[animeId].error);
+    const filteredFavorites = favorites.filter(favorite => animeDetails[favorite._id] && !animeDetails[favorite._id].error);
 
     return (
         <Container className={styles.favoritesContainer}>
