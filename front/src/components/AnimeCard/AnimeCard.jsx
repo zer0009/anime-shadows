@@ -27,8 +27,8 @@ function AnimeCard({ anime, lastViewed, showLastViewed, episodeNumber, onClick }
                     title={anime.title}
                     onError={handleError}
                 >
-                    <Box className={`${styles.statusBadge} ${anime.status === 'completed' ? styles.statusBadgeCompleted : styles.statusBadgeOngoing}`}>
-                        {anime.status === 'completed' ? 'مكتمل' : 'يعرض الآن'}
+                    <Box className={`${styles.statusBadge} ${anime.status === 'completed' ? styles.statusBadgeCompleted : anime.status === 'ongoing' ? styles.statusBadgeOngoing : styles.statusBadgeUpcoming}`}>
+                        {anime.status === 'completed' ? 'مكتمل' : anime.status === 'ongoing' ? 'يعرض الآن' : 'قادم قريبا'}
                     </Box>
                 </CardMedia>
                 <CardContent className={styles.cardContent}>

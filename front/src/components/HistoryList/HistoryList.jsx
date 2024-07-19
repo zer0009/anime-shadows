@@ -6,9 +6,6 @@ import styles from './HistoryList.module.css';
 const HistoryList = ({ watchedEpisodes, animeDetails }) => {
     return (
         <div className={styles.historyList}>
-            <Typography variant="h5" component="h3" className={styles.cardTitle}>
-                Watched Episodes
-            </Typography>
             <div className={styles.animeGrid}>
                 {watchedEpisodes.map(item => (
                     <AnimeCard

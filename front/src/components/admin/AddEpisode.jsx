@@ -1,32 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Typography, Button, Box, Paper, TextField, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
 import { addEpisode, updateEpisode, deleteEpisode } from '../../api/modules/admin';
-import { fetchAnime, fetchEpisodesByAnimeId } from '../../api/modules/anime';
-import AnimeSelector from './AnimeSelector';
+import { fetchEpisodesByAnimeId } from '../../api/modules/anime';
 import EpisodeSelector from './EpisodeSelector';
 import ServerManager from './ServerManager';
 import styles from './AddEpisode.module.css';
 
 const AddEpisode = () => {
-  const [animeId, setAnimeId] = useState('');
+  const { animeId: paramAnimeId } = useParams();
+  const [animeId] = useState(paramAnimeId || '');
   const [episodeId, setEpisodeId] = useState('');
   const [title, setTitle] = useState('');
   const [number, setNumber] = useState('');
-  const [allAnimes, setAllAnimes] = useState([]);
   const [allEpisodes, setAllEpisodes] = useState([]);
   const [streamingServers, setStreamingServers] = useState([]);
   const [downloadServers, setDownloadServers] = useState([]);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const animesData = await fetchAnime();
-      setAllAnimes(animesData);
-    };
-    fetchData();
-  }, []);
 
   useEffect(() => {
     if (animeId) {
@@ -87,11 +79,6 @@ const AddEpisode = () => {
     <Paper className={styles.addEpisode}>
       <Typography variant="h6" className={styles.title}>Add, Edit, or Delete Episode</Typography>
       <form onSubmit={handleSubmit} className={styles.form}>
-        <AnimeSelector
-          animeId={animeId}
-          setAnimeId={setAnimeId}
-          allAnimes={allAnimes}
-        />
         <EpisodeSelector
           episodeId={episodeId}
           setEpisodeId={setEpisodeId}

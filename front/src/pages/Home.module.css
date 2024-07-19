@@ -1,38 +1,25 @@
 .home {
     padding: 20px;
-    background-color: #121212; /* Dark background color */
-    color: #fff; /* White text color */
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-.home > .MuiContainer-root {
-    flex: 1;
-}
-
-footer {
-    margin-top: auto;
 }
 
 .heroSection {
     position: relative;
-    height: 400px;
-    background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 50%, #262626 100%); /* Gradient background */
-    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5); /* Inner shadow */
+    height: 300px;
+    background: url('/path/to/your/hero-image.jpg') no-repeat center center/cover;
 }
 
 .heroOverlay {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
+    color: white;
 }
 
 .heroTitle {
@@ -41,42 +28,35 @@ footer {
 }
 
 .heroSubtitle {
-    font-size: 24px;
-    margin: 10px 0 0;
-    color: #b0b0b0;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Text shadow */
+    font-size: 1.5rem;
+    margin-bottom: 20px;
 }
 
 .content {
-    flex: 1;
-}
-
-.loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px; /* Adjust height as needed */
-}
-
-.error {
-    color: red;
-    text-align: center;
     margin-top: 20px;
 }
 
-.episodeInfo {
+.sectionTitle {
+    font-size: 2rem;
+    margin-bottom: 20px;
     text-align: center;
-    margin-top: 10px;
-    color: var(--subtext-color);
 }
 
-.animeGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive columns */
-    gap: 16px; /* Space between items */
-    justify-items: center; /* Center items horizontally */
+.animeCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
 }
 
-.animeGridItem {
+.animeImage {
     width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.animeTitle {
+    font-size: 1.2rem;
+    text-align: center;
 }

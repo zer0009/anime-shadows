@@ -1,13 +1,16 @@
 const SeasonService = require('../services/seasonService');
 
 exports.createSeason = async (req, res) => {
-  const { name, startDate, endDate } = req.body;
-
   try {
-    const newSeason = await SeasonService.createSeason(name, startDate, endDate);
+    const { name, year, startDate, endDate } = req.body;
+    if (!name || !year || !startDate || !endDate) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+    const newSeason = await SeasonService.createSeason(name, year, startDate, endDate);
     res.status(201).json(newSeason);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+  } catch (error) {
+    console.error('Error adding season:', error);
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -21,12 +24,16 @@ exports.getSeasons = async (req, res) => {
 };
 
 exports.updateSeason = async (req, res) => {
-  const { id, name, startDate, endDate } = req.body;
   try {
-    const updatedSeason = await SeasonService.updateSeason(id, name, startDate, endDate);
-    res.json(updatedSeason);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+    const { name, year, startDate, endDate } = req.body;
+    if (!name || !year || !startDate || !endDate) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+    const updatedSeason = await SeasonService.updateSeason(req.params.id, name, year, startDate, endDate);
+    res.status(200).json(updatedSeason);
+  } catch (error) {
+    console.error('Error updating season:', error);
+    res.status(400).json({ error: error.message });
   }
 };
 

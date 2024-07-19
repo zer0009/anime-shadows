@@ -1,12 +1,15 @@
 import API from '../client';
+import getAuthHeaders from './authHeader';
 
-export const fetchAnime = async () => {
+export const fetchAnime = async (page = 1, limit = 10) => {
     try {
-        const response = await API.get('/anime');
-        return response.data;
+        const response = await API.get(`/anime?page=${page}&limit=${limit}`);
+        const data = response.data; // Access data directly from the response
+        console.log('data', data);
+        return Array.isArray(data.animes) ? data : { animes: [], totalPages: 1 };
     } catch (error) {
         console.error('Error fetching anime:', error);
-        throw error;
+        return { animes: [], totalPages: 1 };
     }
 };
 
@@ -73,6 +76,7 @@ export const fetchGenre = async () => {
     }
 };
 
+
 export const fetchStates = async () => {
     try {
         const response = await API.get('/states');
@@ -92,3 +96,25 @@ export const fetchEpisodesByAnimeId = async (animeId) => {
         throw error;
     }
 };
+
+
+export const rateAnime = async (animeId,userId, rating) => {
+    try {
+      const response = await API.post(`/anime/${animeId}/rate`, { userId, rating },getAuthHeaders());
+      return response.data;
+    } catch (error) {
+      console.error('Error rating anime:', error);
+      throw error;
+    }
+  };
+
+
+  export const fetchAnimesByTypeId = async (typeId) => {
+    try {
+      const response = await API.get(`/types/${typeId}/animes`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching animes by type ID:', error);
+      throw error;
+    }
+  };

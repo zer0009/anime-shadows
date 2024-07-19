@@ -1,10 +1,6 @@
 import API from '../client';
+import getAuthHeaders from './authHeader';
 
-const getAuthHeaders = () => ({
-    headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-    }
-});
 
 export const fetchUserProfile = async () => {
     try {
@@ -37,14 +33,18 @@ export const updateUserProfile = async (userData) => {
 };
 
 export const saveAnimeToHistory = async (animeId) => {
-    try {
-        const response = await API.post(`/user/history/${animeId}`, {}, getAuthHeaders());
-        return response.data;
-    } catch (error) {
-        console.error(`Error saving anime ${animeId} to history:`, error);
-        throw error;
+    if (!animeId) {
+      throw new Error('Anime ID is required');
     }
-};
+  
+    try {
+      const response = await API.post(`/user/history/${animeId}`,{}, getAuthHeaders());
+      return response.data;
+    } catch (error) {
+      console.error('Error saving anime to history:', error);
+      throw error;
+    }
+  };
 
 export const addFavorite = async (animeId) => {
     try {

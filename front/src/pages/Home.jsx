@@ -1,25 +1,49 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchAnimeById } from '../api/modules/anime';
+import { fetchAnimeById, fetchPopularAnime } from '../api/modules/anime';
 import { saveAnimeToHistory } from '../api/modules/user';
 import Footer from '../components/common/Footer';
 import SearchBar from '../components/SearchBar/SearchBar';
 import ListDisplay from '../components/ListDisplay/ListDisplay';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import useFetchRecentEpisodes from '../hooks/useFetchRecentEpisodes';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import { Navigation, Pagination, Scrollbar } from 'swiper/modules';
+import AnimeCard from '../components/AnimeCard/AnimeCard';
 import styles from './Home.module.css';
 
 const Home = () => {
     const { animeList, searchResults, loading, error, handleSearch } = useFetchAnimeList();
     const { recentEpisodes, loading: recentLoading, error: recentError } = useFetchRecentEpisodes();
+    const [popularAnimes, setPopularAnimes] = useState([]);
     const navigate = useNavigate();
 
-    const handleAnimeClick = async (animeId) => {
-        try {
-            const token = localStorage.getItem('token');
-            if (token) {
-                await saveAnimeToHistory(animeId);
+    useEffect(() => {
+        const fetchPopular = async () => {
+            try {
+                const response = await fetchPopularAnime('all');
+                setPopularAnimes(response);
+            } catch (error) {
+                console.error('Error fetching popular animes:', error);
             }
+        };
+
+        fetchPopular();
+    }, []);
+
+    const handleAnimeClick = async (animeId) => {
+        if (!animeId) {
+            console.error('Anime ID is undefined');
+            return;
+        }
+
+        try {
+            await saveAnimeToHistory(animeId);
+            console.log('Anime saved to history');
             await fetchAnimeById(animeId);
             navigate(`/anime/${animeId}`);
         } catch (error) {
@@ -41,23 +65,72 @@ const Home = () => {
                 </div>
             </div>
             <div className={styles.content}>
-                <ListDisplay
-                    title="Anime List"
-                    list={searchResults.length > 0 ? searchResults : animeList}
-                    loading={loading}
-                    error={error}
-                    fields={{ onClick: handleAnimeClick }}
-                />
-                <ListDisplay
-                    title="Recently Updated Episodes"
-                    list={recentEpisodes.map(episode => ({
-                        ...episode.anime,
-                        episodeNumber: episode.number
-                    }))}
-                    loading={recentLoading}
-                    error={recentError}
-                    fields={{ onClick: handleAnimeClick }}
-                />
+                <h2 className={styles.sectionTitle}>Popular Anime</h2>
+                <Swiper
+                    modules={[Navigation, Pagination, Scrollbar]}
+                    spaceBetween={30}
+                    slidesPerView={5}
+                    navigation
+                    pagination={{ clickable: true }}
+                    scrollbar={{ draggable: true }}
+                >
+                    {popularAnimes.map((anime) => (
+                        <SwiperSlide key={anime._id}>
+                            <AnimeCard
+                                anime={anime}
+                                onClick={() => {
+                                    console.log('Anime clicked:', anime); // Debug log
+                                    handleAnimeClick(anime._id);
+                                }}
+                            />
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+
+                <h2 className={styles.sectionTitle}>Anime List</h2>
+                <Swiper
+                    modules={[Navigation, Pagination, Scrollbar]}
+                    spaceBetween={30}
+                    slidesPerView={5}
+                    navigation
+                    pagination={{ clickable: true }}
+                    scrollbar={{ draggable: true }}
+                >
+                    {(searchResults.length > 0 ? searchResults : animeList).map((anime) => (
+                        <SwiperSlide key={anime._id}>
+                            <AnimeCard
+                                anime={anime}
+                                onClick={() => {
+                                    console.log('Anime clicked:', anime); // Debug log
+                                    handleAnimeClick(anime._id);
+                                }}
+                            />
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+
+                <h2 className={styles.sectionTitle}>Recently Updated Episodes</h2>
+                <Swiper
+                    modules={[Navigation, Pagination, Scrollbar]}
+                    spaceBetween={30}
+                    slidesPerView={5}
+                    navigation
+                    pagination={{ clickable: true }}
+                    scrollbar={{ draggable: true }}
+                >
+                    {recentEpisodes.map((episode) => (
+                        <SwiperSlide key={episode._id}>
+                            <AnimeCard
+                                anime={episode.anime}
+                                episodeNumber={episode.number}
+                                onClick={() => {
+                                    console.log('Episode clicked:', episode); // Debug log
+                                    handleAnimeClick(episode.anime._id);
+                                }}
+                            />
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
             </div>
             <Footer />
         </div>

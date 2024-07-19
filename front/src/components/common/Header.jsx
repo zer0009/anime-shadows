@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaUser, FaSearch, FaUserPlus } from 'react-icons/fa';
-import { useAuth } from '../../context/AuthContext'; // Import useAuth from AuthContext
+import { useAuth } from '../../context/AuthContext';
 import styles from './Header.module.css';
 
 const Header = () => {
-    const { user, logout } = useAuth(); // Get user and logout from AuthContext
+    const { user, logout } = useAuth();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -15,7 +15,7 @@ const Header = () => {
 
     const handleLogout = async () => {
         try {
-            await logout(); // Call the context logout function to update the state
+            await logout();
         } catch (error) {
             console.error('Error logging out:', error);
         }
@@ -39,7 +39,7 @@ const Header = () => {
         };
     }, [dropdownOpen]);
 
-    const defaultProfilePicture = '/assets/images/default-profile-picture.jpg'; // Ensure this path is correct
+    const defaultProfilePicture = '/assets/images/default-profile-picture.jpg';
 
     return (
         <header className={styles.header}>
@@ -68,7 +68,7 @@ const Header = () => {
                                 src={user.profilePicture || defaultProfilePicture}
                                 alt="Profile"
                                 className={styles.profilePicture}
-                                onError={(e) => { e.target.src = defaultProfilePicture; }} // Fallback to default if error
+                                onError={(e) => { e.target.src = defaultProfilePicture; }}
                                 onClick={toggleDropdown}
                             />
                             <span className={styles.username} onClick={toggleDropdown}>{user.username}</span>

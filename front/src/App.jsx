@@ -21,17 +21,17 @@ import EditAnime from './components/admin/EditAnime.jsx';
 import EditEpisodes from './components/admin/EditEpisodes.jsx';
 import ManageAnime from './components/admin/ManageAnime.jsx';
 import FilteredListPage from './pages/FilteredListPage.jsx';
+import AddEpisode from './components/admin/AddEpisode.jsx';
 
 
 function App() {
   return (
     <AuthProvider>
-      <div className="App">
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/anime-list" element={<AnimeList />} />
-          <Route path="/movie-list" element={<MovieList />} />
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/anime-list" element={<AnimeList />} />
+        <Route path="/movie-list" element={<MovieList />} />
           <Route path="/season-anime" element={<SeasonAnime />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -46,8 +46,8 @@ function App() {
           <Route path="/admin/manage-anime" element={<AdminRoute><ManageAnime /></AdminRoute>} />
           <Route path="/admin/edit-anime/:animeId" element={<AdminRoute><EditAnime /></AdminRoute>} />
           <Route path="/admin/edit-episodes/:animeId" element={<AdminRoute><EditEpisodes /></AdminRoute>} />
+          <Route path="/admin/add-episode/:animeId" element={<AdminRoute><AddEpisode /></AdminRoute>} />
         </Routes>
-      </div>
     </AuthProvider>
   );
 }

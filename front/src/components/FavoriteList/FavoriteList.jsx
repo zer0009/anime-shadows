@@ -5,7 +5,6 @@ import styles from './FavoriteList.module.css';
 const FavoriteList = ({ favorites }) => {
     return (
         <div className={styles.favoriteList}>
-            <h3 className={styles.title}>Favorites</h3>
             {favorites.length > 0 ? (
                 <div className={styles.animeGrid}>
                     {favorites.map(favorite => (

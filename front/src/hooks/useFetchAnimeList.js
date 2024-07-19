@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react';
 import { fetchAnime, searchAnime, fetchPopularAnime } from '../api/modules/anime';
 
-const useFetchAnimeList = () => {
+const useFetchAnimeList = (currentPage = 1) => {
     const [animeList, setAnimeList] = useState([]);
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
         const fetchAnimeList = async () => {
             try {
-                const response = await fetchAnime();
-                const data = Array.isArray(response) ? response : [];
+                const response = await fetchAnime(currentPage);
+                const data = Array.isArray(response.animes) ? response.animes : [];
                 setAnimeList(data);
                 setSearchResults(data); // Initialize search results with the full list
+                setTotalPages(response.totalPages || 1);
             } catch (error) {
                 setError('Error fetching anime list');
                 console.error('Error fetching anime list:', error);
@@ -23,7 +25,7 @@ const useFetchAnimeList = () => {
         };
 
         fetchAnimeList();
-    }, []);
+    }, [currentPage]);
 
     const handleSearch = async (query = '', tags = [], type = '', season = '', sort = '', popular = '', state = '', broadMatches = false) => {
         try {
@@ -87,7 +89,7 @@ const useFetchAnimeList = () => {
         }
     };
 
-    return { animeList, searchResults, loading, error, handleSearch };
+    return { animeList, searchResults, loading, error, totalPages, handleSearch };
 };
 
 export default useFetchAnimeList;

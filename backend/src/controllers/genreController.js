@@ -19,3 +19,35 @@ exports.getGenres = async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 };
+
+exports.getGenreById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const genre = await GenreService.getGenreById(id);
+    res.json(genre);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+exports.updateGenre = async (req, res) => {
+  const { name } = req.body;
+  const { id } = req.params;
+  try {
+    const updatedGenre = await GenreService.updateGenre(id, name);
+    console.log(updatedGenre);
+    res.json(updatedGenre);
+  } catch (err) {
+    res.status(4000).json({ error: err.message });
+  }
+};
+
+exports.deleteGenre = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await GenreService.deleteGenre(id);
+    res.status(204).end();
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};

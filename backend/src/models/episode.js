@@ -4,7 +4,7 @@ const serverSchema = new mongoose.Schema({
   serverName: { type: String, required: true },
   quality: { type: String, required: true },
   url: { type: String, required: true },
-  type: { type: String, enum: ['streaming', 'download'], required: true } // New field to differentiate server types
+  type: { type: String, enum: ['streaming', 'download'], required: true }
 });
 
 const episodeSchema = new mongoose.Schema({

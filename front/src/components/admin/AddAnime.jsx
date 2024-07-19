@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, MenuItem, Select, InputLabel, FormControl, Checkbox, ListItemText, Box, Paper } from '@mui/material';
 import { addAnime } from '../../api/modules/admin';
 import { fetchGenre, fetchTypes, fetchSeasons } from '../../api/modules/anime';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 import styles from './AddAnime.module.css';
 
 const AddAnime = () => {
@@ -16,6 +20,7 @@ const AddAnime = () => {
   const [source, setSource] = useState('');
   const [duration, setDuration] = useState('');
   const [status, setStatus] = useState('');
+  const [airingDate, setAiringDate] = useState(null);
   const [allGenres, setAllGenres] = useState([]);
   const [allTypes, setAllTypes] = useState([]);
   const [allSeasons, setAllSeasons] = useState([]);
@@ -46,6 +51,7 @@ const AddAnime = () => {
     formData.append('source', source);
     formData.append('duration', duration);
     formData.append('status', status);
+    formData.append('airingDate', airingDate ? airingDate.toISOString() : null);
     if (image) {
       formData.append('file', image);
     }
@@ -173,6 +179,14 @@ const AddAnime = () => {
           margin="normal"
           placeholder="Enter duration in minutes"
         />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label="Airing Date"
+            value={airingDate}
+            onChange={(date) => setAiringDate(date ? dayjs(date) : null)}
+            renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
+          />
+        </LocalizationProvider>
         <FormControl fullWidth margin="normal">
           <InputLabel>Status</InputLabel>
           <Select

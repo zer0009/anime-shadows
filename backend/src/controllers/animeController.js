@@ -5,15 +5,13 @@ const Anime = require('../models/anime');
 const Genre = require('../models/genre');
 
 exports.uploadAnime = async (req, res) => {
-  console.log('Request body:', req.body);
-  console.log('Request file:', req.file)
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     if (req.file) AnimeService.handleFileDeletion(req.file.path);
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { title, description, seasonId, myAnimeListUrl, typeId, genres, numberOfEpisodes, source, duration, status } = req.body;
+  const { title, description, seasonId, myAnimeListUrl, typeId, genres, numberOfEpisodes, source, duration, status, airingDate } = req.body;
   const file = req.file;
 
   try {
@@ -33,6 +31,7 @@ exports.uploadAnime = async (req, res) => {
       source,
       duration,
       status,
+      airingDate,
       file
     });
 
@@ -93,9 +92,11 @@ exports.addEpisode = async (req, res) => {
 };
 
 exports.getAnimes = async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+
   try {
-    const animes = await AnimeService.getAnimes();
-    res.json(animes);
+    const result = await AnimeService.getAnimes(parseInt(page), parseInt(limit));
+    res.json(result);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -104,7 +105,6 @@ exports.getAnimes = async (req, res) => {
 exports.getAnime = async (req, res) => {
   const { id } = req.params;
   const user = req.user;
-  console.log(user);
 
   try {
     const anime = user ? await AnimeService.getAnime(id, user._id) : await AnimeService.getAnime(id);
@@ -113,13 +113,11 @@ exports.getAnime = async (req, res) => {
     }
 
     if (req.user) {
-      console.log(`User ${req.user._id} is logged in, saving anime ${id} to history`);
       await AnimeService.addToHistory(req.user._id, id);
     }
 
     res.json(anime);
   } catch (err) {
-    console.error('Error fetching anime:', err);
     res.status(400).json({ error: err.message });
   }
 };
@@ -142,28 +140,6 @@ exports.rateAnime = async (req, res) => {
   try {
     const updatedAnime = await AnimeService.rateAnime(animeId, req.user._id, rating);
     res.status(200).json(updatedAnime);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-};
-
-exports.addFavorite = async (req, res) => {
-  const { userId, animeId } = req.body;
-
-  try {
-    const result = await AnimeService.addFavorite(userId, animeId);
-    res.status(result.status).json(result.data);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-};
-
-exports.removeFavorite = async (req, res) => {
-  const { userId, animeId } = req.body;
-
-  try {
-    const result = await AnimeService.removeFavorite(userId, animeId);
-    res.status(result.status).json(result.data);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -202,30 +178,31 @@ exports.getAnimeByGenre = async (req, res) => {
   }
 };
 
-exports.getsearchAnime = async (req, res) => {
-  console.log('Received request for searchAnime');
-  console.log('Query parameters:', req.query);
+exports.searchAnime = async (req, res) => {
+  const { q, tags, broadMatches } = req.query;
+  let query = {};
 
-  const query = req.query.q;
-  console.log('Query value:', query);
+  if (q) {
+    query.title = { $regex: q, $options: 'i' };
+  }
 
-  if (!query) {
-    console.log('Query parameter is missing');
-    return res.status(400).json({ error: 'Query parameter is required' });
+  if (tags) {
+    const tagsArray = tags.split(',');
+    const tagObjectIds = await Genre.find({ name: { $in: tagsArray } }).select('_id');
+    const tagIds = tagObjectIds.map(tag => tag._id);
+
+    const filterQuery = broadMatches === 'true'
+      ? { genres: { $in: tagIds } }
+      : { genres: { $all: tagIds } };
+
+    query = { ...query, ...filterQuery };
   }
 
   try {
-    if (typeof query !== 'string') {
-      console.log('Query parameter is not a string');
-      throw new Error('Query parameter must be a string');
-    }
-
-    const animes = await AnimeService.searchAnime(query);
-    console.log('Search results:', animes);
+    const animes = await Anime.find(query).populate('season').populate('type').populate('genres');
     res.json(animes);
-  } catch (err) {
-    console.log('Error:', err.message);
-    res.status(400).json({ error: err.message });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -262,44 +239,14 @@ exports.getPopularEpisodes = async (req, res) => {
 };
 
 exports.filterAnimes = async (req, res) => {
+  const { tags, broadMatches } = req.query;
+
   try {
-    const { tags, broadMatches } = req.query;
-    console.log('Received tags:', tags);
-    console.log('Broad matches:', broadMatches);
     const tagsArray = tags.split(',');
     const animes = await AnimeService.getFilteredAnimes(tagsArray, broadMatches === 'true');
     res.json(animes);
   } catch (error) {
-    console.error('Error filtering animes:', error);
     res.status(500).json({ message: error.message });
   }
 };
 
-exports.searchAnime = async (req, res) => {
-  try {
-    const { q, tags, broadMatches } = req.query;
-    let query = {};
-
-    if (q) {
-      query.title = { $regex: q, $options: 'i' };
-    }
-
-    if (tags) {
-      const tagsArray = tags.split(',');
-      const tagObjectIds = await Genre.find({ name: { $in: tagsArray } }).select('_id');
-      const tagIds = tagObjectIds.map(tag => tag._id);
-
-      const filterQuery = broadMatches === 'true'
-        ? { genres: { $in: tagIds } }
-        : { genres: { $all: tagIds } };
-
-      query = { ...query, ...filterQuery };
-    }
-
-    const animes = await Anime.find(query).populate('season').populate('type').populate('genres');
-    res.json(animes);
-  } catch (error) {
-    console.error('Error searching animes:', error);
-    res.status(500).json({ message: error.message });
-  }
-};

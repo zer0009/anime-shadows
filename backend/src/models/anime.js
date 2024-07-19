@@ -19,6 +19,7 @@ const animeSchema = new mongoose.Schema({
   numberOfEpisodes: { type: Number, default: 0 },
   source: { type: String, default: "N/A" },
   duration: { type: String, default: "N/A" },
+  airingDate: { type: Date, default: Date.now },
   status: { type: String, enum: ['ongoing', 'completed', 'upcoming'], default: "upcoming" },
   viewCount: { type: Number, default: 0 },
   views: [{ type: Date, default: Date.now }]

@@ -22,18 +22,6 @@ const handleFileUpload = (file, title) => {
   return `/uploads/${newFileName}`;
 };
 
-const findOrCreateGenre = async (genreName) => {
-  let genre = await Genre.findOne({ name: genreName.trim() });
-  if (!genre) {
-    genre = new Genre({ name: genreName.trim() });
-    await genre.save();
-  }
-  return genre._id;
-};
-
-const getGenreIds = async (genres) => {
-  return await Promise.all(genres.map(findOrCreateGenre));
-};
 
 const validateEntityById = async (Model, id, entityName, file) => {
   const entity = await Model.findById(id.trim());
@@ -44,7 +32,7 @@ const validateEntityById = async (Model, id, entityName, file) => {
   return entity;
 };
 
-const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeId, genres, numberOfEpisodes, source, duration, status, file }) => {
+const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeId, genres, numberOfEpisodes, source, duration, status, airingDate, file }) => {
   if (!typeId || !seasonId) {
     throw new Error('Type ID and Season ID are required');
   }
@@ -52,12 +40,12 @@ const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeI
   // Parse genres if it's a string
   let genreIds = genres;
   if (typeof genres === 'string') {
-      try {
-        genreIds = JSON.parse(genres);
-      } catch (error) {
-        throw new Error('Invalid genres format');
-      }
+    try {
+      genreIds = JSON.parse(genres);
+    } catch (error) {
+      throw new Error('Invalid genres format');
     }
+  }
 
   if (!Array.isArray(genreIds)) {
     throw new Error('genreIds must be an array');
@@ -93,6 +81,7 @@ const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeI
     source,
     duration,
     status,
+    airingDate,
     pictureUrl: undefined
   });
 
@@ -187,8 +176,21 @@ const addEpisode = async (animeId, { number, title, servers }) => {
   return anime;
 };
 
-const getAnimes = async () => {
-  return await Anime.find().populate('season').populate('type').populate('genres');
+const getAnimes = async (page = 1, limit = 10) => {
+  const skip = (page - 1) * limit;
+  const totalAnimes = await Anime.countDocuments();
+  const animes = await Anime.find()
+    .populate('season')
+    .populate('type')
+    .populate('genres')
+    .skip(skip)
+    .limit(limit);
+
+  return {
+    animes,
+    totalPages: Math.ceil(totalAnimes / limit),
+    currentPage: page
+  };
 };
 
 const getAnime = async (animeId, userId) => {
@@ -200,21 +202,17 @@ const getAnime = async (animeId, userId) => {
       .populate({
         path: 'episodes',
         options: {
-          sort: { updateAt: -1 },
+          sort: { number: 1 },
         }
       });
 
     let isFavorite = false;
-    console.log(userId);
     if (userId) {
       const user = await User.findById(userId);
-      console.log(user.favorites);
       if (user && user.favorites.includes(animeId)) {
         isFavorite = true;
       }
     }
-
-    // console.log('Fetched Anime:', anime);
 
     if (anime) {
       anime.viewCount += 1;
@@ -267,7 +265,9 @@ const rateAnime = async (animeId, userId, rating) => {
   }
 
   await anime.save();
-  return { status: 200, data: { message: 'Rating updated', rating: anime.calculateAverageRating() } };
+  const averageRating = anime.calculateAverageRating();
+  const ratingUsers = anime.ratings.length;
+  return { status: 200, data: { message: 'Rating updated', rating: averageRating, ratingUsers } };
 };
 
 const addFavorite = async (userId, animeId) => {
@@ -310,9 +310,9 @@ const deleteAnime = async (id) => {
 
   // Remove the anime from all users' history and favorites
   await User.updateMany(
-      { $or: [{ 'history.anime': id }, { favorites: id }] },
-      { $pull: { history: { anime: id }, favorites: id } }
-    );
+    { $or: [{ 'history.anime': id }, { favorites: id }] },
+    { $pull: { history: { anime: id }, favorites: id } }
+  );
 
   // Delete the anime
   await Anime.findByIdAndDelete(id);
@@ -341,10 +341,8 @@ const searchAnime = async (query) => {
         { genres: searchRegex },
       ]
     });
-    console.log('Found animes:', animes);
     return animes;
   } catch (err) {
-    console.log('Error in searchAnime service:', err.message);
     throw new Error('Error searching for animes: ' + err.message);
   }
 };
@@ -417,29 +415,27 @@ const addToHistory = async (userId, animeId) => {
       throw new Error('User not found');
     }
 
-        // Check if the anime is already in the user's history
+    // Check if the anime is already in the user's history
     const historyItem = user.history.find(item => item.anime && item.anime.toString() === animeId);
     if (historyItem) {
-        // Update the view date
-        historyItem.views.push(new Date());
+      // Update the view date
+      historyItem.views.push(new Date());
     } else {
-        // Add new history item
-        user.history.push({ anime: animeId, views: [new Date()], pictureUrl: anime.pictureUrl, title: anime.title });
+      // Add new history item
+      const anime = await Anime.findById(animeId);
+      user.history.push({ anime: animeId, views: [new Date()], pictureUrl: anime.pictureUrl, title: anime.title });
     }
-    
+
     await User.findByIdAndUpdate(userId, { history: user.history }, { new: true, upsert: true });
     return { message: 'Anime saved to history' };
-    } catch (error) {
-        console.error('Error saving anime to history:', error); // Log the error
-        res.status(500).json({ message: 'Server error', error: error.message });
-    }
+  } catch (error) {
+    console.error('Error saving anime to history:', error); // Log the error
+    throw new Error('Server error: ' + error.message);
+  }
 };
 
 const getFilteredAnimes = async (tags, broadMatches) => {
   try {
-    console.log('Filtering animes with tags:', tags);
-    console.log('Broad matches:', broadMatches);
-
     const tagObjectIds = await Genre.find({ name: { $in: tags } }).select('_id');
     const tagIds = tagObjectIds.map(tag => tag._id);
 

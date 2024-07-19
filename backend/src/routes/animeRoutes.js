@@ -21,8 +21,6 @@ router.get('/:animeId/recommendations', animeController.getRecommendations);
 // Authenticated Routes
 router.post('/toggleEpisodeWatched', authMiddleware, animeController.toggleEpisodeWatched);
 router.post('/:id/rate', authMiddleware, animeController.rateAnime);
-router.post('/:id/favorite', authMiddleware, animeController.addFavorite);
-router.delete('/:id/favorite', authMiddleware, animeController.removeFavorite);
 
 // Admin Routes
 router.post('/upload', upload.single('file'), authMiddleware, authorize('moderator', 'admin'), validateAnimeUpload, animeController.uploadAnime);

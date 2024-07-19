@@ -1,26 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Typography, Box, Paper, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { Search, Edit, Delete } from '@mui/icons-material';
+import { Search, Edit, Delete, Add } from '@mui/icons-material';
 import { deleteAnime } from '../../api/modules/admin';
 import { fetchAnime } from '../../api/modules/anime';
 import { useNavigate } from 'react-router-dom';
 import styles from './ManageAnime.module.css';
+import PaginationComponent from '../Pagination/PaginationComponent';
 
 const ManageAnime = () => {
   const [animes, setAnimes] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
     const loadAnimes = async () => {
-      const data = await fetchAnime();
-      setAnimes(data);
+      const { animes, totalPages } = await fetchAnime(currentPage);
+      setAnimes(animes);
+      setTotalPages(totalPages);
     };
     loadAnimes();
-  }, []);
+  }, [currentPage]);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   const handleDelete = async (animeId) => {
@@ -37,7 +45,11 @@ const ManageAnime = () => {
     navigate(`/admin/edit-anime/${animeId}`);
   };
 
-  const filteredAnimes = animes.filter(anime => anime.title.toLowerCase().includes(searchQuery.toLowerCase()));
+  const handleAddEpisode = (animeId) => {
+    navigate(`/admin/add-episode/${animeId}`);
+  };
+
+  const filteredAnimes = Array.isArray(animes) ? animes.filter(anime => anime.title.toLowerCase().includes(searchQuery.toLowerCase())) : [];
 
   return (
     <div>
@@ -80,12 +92,18 @@ const ManageAnime = () => {
                   <IconButton onClick={() => handleDelete(anime._id)}>
                     <Delete />
                   </IconButton>
+                  <IconButton onClick={() => handleAddEpisode(anime._id)}>
+                    <Add />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <Box display="flex" justifyContent="center" mt={2}>
+        <PaginationComponent totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} /> 
+      </Box>
     </div>
   );
 };
