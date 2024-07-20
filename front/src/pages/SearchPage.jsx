@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AnimeCard from '../components/AnimeCard/AnimeCard.jsx';
 import TagsModal from '../components/TagsModal/TagsModal.jsx';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import Navbar from '../components/Navbar/Navbar.jsx';
+import PaginationComponent from '../components/Pagination/PaginationComponent';
 import styles from './SearchPage.module.css';
 
 const SearchPage = () => {
-    const { animeList, searchResults, loading, error, handleSearch } = useFetchAnimeList();
+    const { searchResults, loading, error, handleSearch, totalPages, currentPage, setCurrentPage, limit, setLimit } = useFetchAnimeList();
     const [isTagsModalOpen, setIsTagsModalOpen] = useState(false);
     const [selectedTags, setSelectedTags] = useState([]);
     const [selectedType, setSelectedType] = useState('');
@@ -16,41 +17,39 @@ const SearchPage = () => {
     const [selectedState, setSelectedState] = useState('');
     const [broadMatches, setBroadMatches] = useState(false);
 
+    useEffect(() => {
+        handleSearch('', selectedTags, selectedType, selectedSeason, selectedSort, selectedPopular, selectedState, broadMatches, currentPage, limit);
+    }, [currentPage, limit]);
+
     const handleTagsApply = (tags, broadMatches) => {
         setSelectedTags(tags);
         setBroadMatches(broadMatches);
-        console.log('Applying tags:', tags, 'Broad matches:', broadMatches);
-        handleSearch('', tags, selectedType, selectedSeason, selectedSort, selectedPopular, selectedState, broadMatches); // Re-run the search with the new filters
+        handleSearch('', tags, selectedType, selectedSeason, selectedSort, selectedPopular, selectedState, broadMatches, 1, limit);
     };
 
     const handleTypeChange = (type) => {
         setSelectedType(type);
-        console.log('Applying type:', type);
-        handleSearch('', selectedTags, type, selectedSeason, selectedSort, selectedPopular, selectedState, broadMatches); // Re-run the search with the new filters
+        handleSearch('', selectedTags, type, selectedSeason, selectedSort, selectedPopular, selectedState, broadMatches, 1, limit);
     };
 
     const handleSeasonChange = (season) => {
         setSelectedSeason(season);
-        console.log('Applying season:', season);
-        handleSearch('', selectedTags, selectedType, season, selectedSort, selectedPopular, selectedState, broadMatches); // Re-run the search with the new filters
+        handleSearch('', selectedTags, selectedType, season, selectedSort, selectedPopular, selectedState, broadMatches, 1, limit);
     };
 
     const handleSortChange = (sort) => {
         setSelectedSort(sort);
-        console.log('Applying sort:', sort);
-        handleSearch('', selectedTags, selectedType, selectedSeason, sort, selectedPopular, selectedState, broadMatches); // Re-run the search with the new filters
+        handleSearch('', selectedTags, selectedType, selectedSeason, sort, selectedPopular, selectedState, broadMatches, 1, limit);
     };
 
     const handlePopularChange = (popular) => {
         setSelectedPopular(popular);
-        console.log('Applying popular:', popular);
-        handleSearch('', selectedTags, selectedType, selectedSeason, selectedSort, popular, selectedState, broadMatches); // Re-run the search with the new filters
+        handleSearch('', selectedTags, selectedType, selectedSeason, selectedSort, popular, selectedState, broadMatches, 1, limit);
     };
 
     const handleStateChange = (state) => {
         setSelectedState(state);
-        console.log('Applying state:', state);
-        handleSearch('', selectedTags, selectedType, selectedSeason, selectedSort, selectedPopular, state, broadMatches); // Re-run the search with the new filters
+        handleSearch('', selectedTags, selectedType, selectedSeason, selectedSort, selectedPopular, state, broadMatches, 1, limit);
     };
 
     const handleReset = () => {
@@ -61,8 +60,14 @@ const SearchPage = () => {
         setSelectedPopular('');
         setBroadMatches(false);
         setSelectedState('');
-        handleSearch('');
+        handleSearch('', [], '', '', '', '', '', false, 1, limit);
     };
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    console.log('searchResults:', searchResults);
 
     return (
         <div className={styles.searchPage}>
@@ -74,7 +79,7 @@ const SearchPage = () => {
                 onPopularChange={handlePopularChange}
                 onReset={handleReset}
                 onStateChange={handleStateChange}
-                onSearch={(query) => handleSearch(query, selectedTags, selectedType, selectedSeason, selectedSort, selectedPopular, selectedState, broadMatches)}
+                onSearch={(query) => handleSearch(query, selectedTags, selectedType, selectedSeason, selectedSort, selectedPopular, selectedState, broadMatches, 1, limit)}
             />
             {loading && <div className={styles.loading}>Loading...</div>}
             {error && <div className={styles.error}>{error}</div>}
@@ -87,6 +92,11 @@ const SearchPage = () => {
                     <div className={styles.noResults}>No anime found</div>
                 )}
             </div>
+            <PaginationComponent
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+            />
             <TagsModal
                 open={isTagsModalOpen}
                 onClose={() => setIsTagsModalOpen(false)}

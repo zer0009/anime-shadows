@@ -11,6 +11,7 @@ const optionalAuth = require('../middlewares/optionalAuth');
 router.get('/', animeController.getAnimes);
 router.get('/search', animeController.searchAnime);
 router.get('/filter', animeController.filterAnimes);
+router.get('/movies', animeController.getMovies);
 router.get('/genre/:genre', animeController.getAnimeByGenre);
 router.get('/popular/anime', animeController.getPopularAnimes);
 router.get('/popular/episodes', animeController.getPopularEpisodes);

@@ -96,16 +96,28 @@ const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeI
 };
 
 const updateAnime = async (id, updateData, file) => {
-  if (updateData.typeId) {
-    await validateEntityById(Type, updateData.typeId, 'Type', file);
+  console.log('Updating anime with ID:', id);
+  console.log('Update data:', updateData);
+
+  if (updateData.type) {
+    const typeDoc = await Type.findById(updateData.type);
+    if (!typeDoc) {
+      throw new Error('Invalid type ID');
+    }
   }
 
   if (updateData.seasonId) {
-    await validateEntityById(Season, updateData.seasonId, 'Season', file);
+    const seasonDoc = await Season.findById(updateData.seasonId);
+    if (!seasonDoc) {
+      throw new Error('Invalid season ID');
+    }
   }
 
   if (updateData.genres) {
-    updateData.genres = updateData.genres.map(genre => genre._id || genre);
+    const genreDocs = await Genre.find({ _id: { $in: updateData.genres } });
+    if (genreDocs.length !== updateData.genres.length) {
+      throw new Error('Invalid genre IDs');
+    }
   }
 
   if (updateData.status && !['ongoing', 'completed', 'upcoming'].includes(updateData.status)) {
@@ -176,13 +188,80 @@ const addEpisode = async (animeId, { number, title, servers }) => {
   return anime;
 };
 
-const getAnimes = async (page = 1, limit = 10) => {
+const getAnimes = async (query = '', tags = [], type = '', season = '', sort = '', popular = '', state = '', broadMatches = false, page = 1, limit = 10) => {
   const skip = (page - 1) * limit;
-  const totalAnimes = await Anime.countDocuments();
-  const animes = await Anime.find()
+  let filter = {};
+
+  if (query) {
+    filter.title = { $regex: query, $options: 'i' };
+  }
+
+  if (tags.length > 0) {
+    const genres = await Genre.find({ name: { $in: tags } }).select('_id');
+    const genreIds = genres.map(genre => genre._id);
+    filter.genres = broadMatches ? { $in: genreIds } : { $all: genreIds };
+  }
+
+  if (type) {
+    const typeDoc = await Type.findOne({ name: type }).select('_id');
+    if (typeDoc) {
+      filter.type = typeDoc._id;
+    } else {
+      throw new Error('Invalid type ID');
+    }
+  }
+
+  if (season) {
+    const seasonDoc = await Season.findOne({ name: season }).select('_id');
+    if (seasonDoc) {
+      filter.season = seasonDoc._id;
+    } else {
+      throw new Error('Invalid season ID');
+    }
+  }
+
+  if (state) {
+    filter.status = state.toLowerCase();
+  }
+
+  let sortOption = {};
+  if (sort) {
+    if (sort === 'title') {
+      sortOption.title = 1;
+    } else if (sort === 'rating') {
+      sortOption.rating = -1;
+    } else if (sort === 'releaseDate') {
+      sortOption.releaseDate = -1;
+    }
+  }
+
+  if (popular) {
+    const now = new Date();
+    let startDate;
+
+    switch (popular) {
+      case 'today':
+        startDate = new Date(now.setHours(0, 0, 0, 0));
+        break;
+      case 'week':
+        startDate = new Date(now.setDate(now.getDate() - 7));
+        break;
+      case 'month':
+        startDate = new Date(now.setMonth(now.getMonth() - 1));
+        break;
+      default:
+        startDate = new Date(0);
+    }
+
+    filter.views = { $gte: startDate };
+  }
+
+  const totalAnimes = await Anime.countDocuments(filter);
+  const animes = await Anime.find(filter)
     .populate('season')
     .populate('type')
     .populate('genres')
+    .sort(sortOption)
     .skip(skip)
     .limit(limit);
 
@@ -450,6 +529,37 @@ const getFilteredAnimes = async (tags, broadMatches) => {
   }
 };
 
+const getMovies = async (page = 1, limit = 10) => {
+  try {
+    console.log(`Fetching movies for page: ${page}, limit: ${limit}`);
+
+    const movieType = await Type.findOne({ name: 'Movie' }).select('_id');
+    if (!movieType) {
+      throw new Error('Movie type not found');
+    }
+
+    const movieTypeId = movieType._id; // Extract the _id from the movieType object
+    console.log(`Movie type ID: ${movieTypeId}`);
+
+    const skip = (page - 1) * limit;
+    console.log(`Skip: ${skip}, Limit: ${limit}`);
+
+    const movies = await Anime.find({ type: movieTypeId })
+        .populate('type')
+        .skip(skip)
+        .limit(limit);
+    console.log(`Fetched movies: ${movies.length}`);
+
+    const totalMovies = await Anime.countDocuments({ type: movieTypeId });
+    console.log(`Total movies: ${totalMovies}`);
+
+    return { animes: movies, totalPages: Math.ceil(totalMovies / limit) };
+  } catch (error) {
+    console.error('Error fetching movies:', error.message);
+    throw new Error('Error fetching movies: ' + error.message);
+  }
+};
+
 module.exports = {
   createAnime,
   updateAnime,
@@ -470,5 +580,6 @@ module.exports = {
   getPopularAnimes,
   getPopularEpisodes,
   addToHistory,
-  getFilteredAnimes
+  getFilteredAnimes,
+  getMovies
 };

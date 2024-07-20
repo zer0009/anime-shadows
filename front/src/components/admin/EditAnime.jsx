@@ -13,7 +13,7 @@ const EditAnime = () => {
   const [pictureUrl, setPictureUrl] = useState('');
   const [type, setType] = useState('');
   const [genres, setGenres] = useState([]);
-  const [seasonId, setSeasonId] = useState('');
+  const [season, setSeason] = useState(''); // Change seasonId to season
   const [myAnimeListUrl, setMyAnimeListUrl] = useState('');
   const [numberOfEpisodes, setNumberOfEpisodes] = useState('');
   const [source, setSource] = useState('');
@@ -26,13 +26,12 @@ const EditAnime = () => {
   useEffect(() => {
     const loadAnime = async () => {
       const data = await fetchAnimeById(animeId);
-      console.log(data.genres)
       setAnime(data);
       setTitle(data.title);
       setPictureUrl(data.pictureUrl);
-      setType(data.type);
+      setType(data.type._id); // Ensure type is set correctly
       setGenres(data.genres.map(genre => genre._id)); // Ensure genres are in the correct format
-      setSeasonId(data.seasonId);
+      setSeason(data.season._id); // Ensure season is set correctly
       setMyAnimeListUrl(data.myAnimeListUrl);
       setNumberOfEpisodes(data.numberOfEpisodes);
       setSource(data.source);
@@ -59,13 +58,14 @@ const EditAnime = () => {
         pictureUrl,
         type,
         genres,
-        seasonId,
+        season, // Change seasonId to season
         myAnimeListUrl,
         numberOfEpisodes,
         source,
         duration,
         status
       };
+      console.log('Sending update data:', animeData); // Add this line to log the sent data
       await editAnime(animeId, animeData);
       alert('Anime edited successfully');
       navigate('/admin/manage-anime');
@@ -125,8 +125,8 @@ const EditAnime = () => {
             <FormControl fullWidth margin="normal">
               <InputLabel>Season</InputLabel>
               <Select
-                value={seasonId}
-                onChange={(e) => setSeasonId(e.target.value)}
+                value={season} // Change seasonId to season
+                onChange={(e) => setSeason(e.target.value)} // Change setSeasonId to setSeason
               >
                 {allSeasons.map((season) => (
                   <MenuItem key={season._id} value={season._id}>

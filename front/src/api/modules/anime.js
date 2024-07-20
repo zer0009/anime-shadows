@@ -1,15 +1,26 @@
 import API from '../client';
 import getAuthHeaders from './authHeader';
 
-export const fetchAnime = async (page = 1, limit = 10) => {
+export const fetchAnime = async (page = 1, limit = 10, query = '', tags = [], type = '', season = '', sort = '', popular = '', state = '', broadMatches = false) => {
     try {
-        const response = await API.get(`/anime?page=${page}&limit=${limit}`);
-        const data = response.data; // Access data directly from the response
-        console.log('data', data);
-        return Array.isArray(data.animes) ? data : { animes: [], totalPages: 1 };
+        const response = await API.get('/anime', {
+            params: {
+                page,
+                limit,
+                query,
+                tags: JSON.stringify(tags), // Convert tags array to JSON string
+                type,
+                season,
+                sort,
+                popular,
+                state,
+                broadMatches
+            }
+        });
+        return response.data;
     } catch (error) {
         console.error('Error fetching anime:', error);
-        return { animes: [], totalPages: 1 };
+        throw error;
     }
 };
 
@@ -116,5 +127,18 @@ export const rateAnime = async (animeId,userId, rating) => {
     } catch (error) {
       console.error('Error fetching animes by type ID:', error);
       throw error;
+    }
+  };
+
+
+  export const fetchMovies = async (page = 1, limit = 10) => {
+    try {
+      const response = await API.get(`/anime/movies?page=${page}&limit=${limit}`);
+      const data = response.data;
+      console.log('data', data);
+      return Array.isArray(data.animes) ? data : { animes: [], totalPages: 1 };
+    } catch (error) {
+      console.error('Error fetching movies:', error);
+      return { animes: [], totalPages: 1 };
     }
   };

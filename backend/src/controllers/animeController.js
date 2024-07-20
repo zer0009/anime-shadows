@@ -52,10 +52,19 @@ exports.updateAnime = async (req, res) => {
   const updateData = req.body;
   const file = req.file;
 
+  console.log('Received update data:', updateData); // Add this line to log the received data
+
   try {
     if (updateData.genres) {
       if (!Array.isArray(updateData.genres) || !updateData.genres.every(genre => typeof genre === 'string')) {
         throw new Error('Genres must be an array of strings');
+      }
+    }
+
+    if (updateData.seasonId) {
+      const seasonDoc = await Season.findById(updateData.seasonId);
+      if (!seasonDoc) {
+        throw new Error('Invalid season ID');
       }
     }
 
@@ -92,10 +101,11 @@ exports.addEpisode = async (req, res) => {
 };
 
 exports.getAnimes = async (req, res) => {
-  const { page = 1, limit = 10 } = req.query;
+  const { query = '', tags = '[]', type = '', season = '', sort = '', popular = '', state = '', broadMatches = false, page = 1, limit = 10 } = req.query;
 
   try {
-    const result = await AnimeService.getAnimes(parseInt(page), parseInt(limit));
+    const parsedTags = JSON.parse(tags);
+    const result = await AnimeService.getAnimes(query, parsedTags, type, season, sort, popular, state, broadMatches === 'true', parseInt(page), parseInt(limit));
     res.json(result);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -250,3 +260,12 @@ exports.filterAnimes = async (req, res) => {
   }
 };
 
+exports.getMovies = async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+  try {
+    const movies = await AnimeService.getMovies(parseInt(page), parseInt(limit));
+    res.json(movies);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

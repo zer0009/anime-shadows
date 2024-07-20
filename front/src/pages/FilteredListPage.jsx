@@ -2,11 +2,11 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import ListDisplay from '../components/ListDisplay/ListDisplay';
-import { fetchGenre, fetchTypes, fetchSeasons } from '../api/modules/anime'; // Import functions to fetch relevant data
+import { fetchGenre, fetchTypes, fetchSeasons } from '../api/modules/anime';
 
 const FilteredListPage = () => {
     const { filterType, filterValue } = useParams();
-    const { animeList, loading, error } = useFetchAnimeList();
+    const { animeList, loading, error, handleSearch } = useFetchAnimeList();
     const [filteredList, setFilteredList] = useState([]);
     const [filterName, setFilterName] = useState('');
 
