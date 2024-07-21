@@ -106,8 +106,8 @@ const updateAnime = async (id, updateData, file) => {
     }
   }
 
-  if (updateData.seasonId) {
-    const seasonDoc = await Season.findById(updateData.seasonId);
+  if (updateData.season) {
+    const seasonDoc = await Season.findById(updateData.season);
     if (!seasonDoc) {
       throw new Error('Invalid season ID');
     }
@@ -297,7 +297,11 @@ const getAnime = async (animeId, userId) => {
       anime.viewCount += 1;
       anime.views.push(new Date());
       await anime.save();
-      return { ...anime.toObject(), isFavorite };
+
+      const averageRating = anime.calculateAverageRating();
+      const userCount = anime.getUserCount();
+
+      return { ...anime.toObject(), isFavorite, averageRating, userCount };
     } else {
       throw new Error('Anime not found');
     }
@@ -337,15 +341,23 @@ const rateAnime = async (animeId, userId, rating) => {
 
   const existingRating = anime.ratings.find(r => r.userId.toString() === userId.toString());
 
-  if (existingRating) {
-    existingRating.rating = rating;
+  if (rating === null) {
+    // Remove rating
+    if (existingRating) {
+      anime.ratings = anime.ratings.filter(r => r.userId.toString() !== userId.toString());
+    }
   } else {
-    anime.ratings.push({ userId, rating });
+    // Add or update rating
+    if (existingRating) {
+      existingRating.rating = rating;
+    } else {
+      anime.ratings.push({ userId, rating });
+    }
   }
 
   await anime.save();
   const averageRating = anime.calculateAverageRating();
-  const ratingUsers = anime.ratings.length;
+  const ratingUsers = anime.getUserCount();
   return { status: 200, data: { message: 'Rating updated', rating: averageRating, ratingUsers } };
 };
 

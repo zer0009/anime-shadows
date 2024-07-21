@@ -75,7 +75,6 @@ const Header = () => {
                             {dropdownOpen && (
                                 <div className={styles.dropdownMenu}>
                                     <Link to="/profile">Profile</Link>
-                                    <Link to="/settings">Settings</Link>
                                     <Link to="/history">History</Link>
                                     <Link to="/favorites">Favorites</Link>
                                     {user.role === 'admin' && (

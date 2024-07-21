@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchAnimeById, fetchPopularAnime } from '../api/modules/anime';
-import { saveAnimeToHistory } from '../api/modules/user';
 import Footer from '../components/common/Footer';
 import SearchBar from '../components/SearchBar/SearchBar';
-import ListDisplay from '../components/ListDisplay/ListDisplay';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import useFetchRecentEpisodes from '../hooks/useFetchRecentEpisodes';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -37,13 +35,10 @@ const Home = () => {
 
     const handleAnimeClick = async (animeId) => {
         if (!animeId) {
-            console.error('Anime ID is undefined');
             return;
         }
 
         try {
-            await saveAnimeToHistory(animeId);
-            console.log('Anime saved to history');
             await fetchAnimeById(animeId);
             navigate(`/anime/${animeId}`);
         } catch (error) {
@@ -65,11 +60,20 @@ const Home = () => {
                 </div>
             </div>
             <div className={styles.content}>
-                <h2 className={styles.sectionTitle}>Popular Anime</h2>
+                <div className={styles.sectionHeader}>
+                    <h2 className={styles.sectionTitle}>Popular Anime</h2>
+                    <button className={styles.moreButton} onClick={() => navigate('/popular-anime')}>More</button>
+                </div>
                 <Swiper
                     modules={[Navigation, Pagination, Scrollbar]}
                     spaceBetween={30}
-                    slidesPerView={5}
+                    slidesPerView={1}
+                    breakpoints={{
+                        640: { slidesPerView: 2 },
+                        768: { slidesPerView: 3 },
+                        1024: { slidesPerView: 4 },
+                        1280: { slidesPerView: 5 },
+                    }}
                     navigation
                     pagination={{ clickable: true }}
                     scrollbar={{ draggable: true }}
@@ -79,7 +83,6 @@ const Home = () => {
                             <AnimeCard
                                 anime={anime}
                                 onClick={() => {
-                                    console.log('Anime clicked:', anime); // Debug log
                                     handleAnimeClick(anime._id);
                                 }}
                             />
@@ -87,11 +90,20 @@ const Home = () => {
                     ))}
                 </Swiper>
 
-                <h2 className={styles.sectionTitle}>Anime List</h2>
+                <div className={styles.sectionHeader}>
+                    <h2 className={styles.sectionTitle}>Anime List</h2>
+                    <button className={styles.moreButton} onClick={() => navigate('/anime-list')}>More</button>
+                </div>
                 <Swiper
                     modules={[Navigation, Pagination, Scrollbar]}
                     spaceBetween={30}
-                    slidesPerView={5}
+                    slidesPerView={1}
+                    breakpoints={{
+                        640: { slidesPerView: 2 },
+                        768: { slidesPerView: 3 },
+                        1024: { slidesPerView: 4 },
+                        1280: { slidesPerView: 5 },
+                    }}
                     navigation
                     pagination={{ clickable: true }}
                     scrollbar={{ draggable: true }}
@@ -101,7 +113,6 @@ const Home = () => {
                             <AnimeCard
                                 anime={anime}
                                 onClick={() => {
-                                    console.log('Anime clicked:', anime); // Debug log
                                     handleAnimeClick(anime._id);
                                 }}
                             />
@@ -109,11 +120,20 @@ const Home = () => {
                     ))}
                 </Swiper>
 
-                <h2 className={styles.sectionTitle}>Recently Updated Episodes</h2>
+                <div className={styles.sectionHeader}>
+                    <h2 className={styles.sectionTitle}>Recently Updated Episodes</h2>
+                    <button className={styles.moreButton} onClick={() => navigate('/recent-episodes')}>More</button>
+                </div>
                 <Swiper
                     modules={[Navigation, Pagination, Scrollbar]}
                     spaceBetween={30}
-                    slidesPerView={5}
+                    slidesPerView={1}
+                    breakpoints={{
+                        640: { slidesPerView: 2 },
+                        768: { slidesPerView: 3 },
+                        1024: { slidesPerView: 4 },
+                        1280: { slidesPerView: 5 },
+                    }}
                     navigation
                     pagination={{ clickable: true }}
                     scrollbar={{ draggable: true }}
@@ -124,7 +144,6 @@ const Home = () => {
                                 anime={episode.anime}
                                 episodeNumber={episode.number}
                                 onClick={() => {
-                                    console.log('Episode clicked:', episode); // Debug log
                                     handleAnimeClick(episode.anime._id);
                                 }}
                             />

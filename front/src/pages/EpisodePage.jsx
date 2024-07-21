@@ -24,11 +24,10 @@ const EpisodePage = () => {
 
     const getEpisodes = async () => {
       try {
-        console.log(episode?.anime);
-        const response = await fetchEpisodesByAnimeId(episode?.anime._id);
-        console.log(response);
-        console.log(episode?.anime._id);
-        setEpisodes(response);
+        if (episode?.anime?._id) {
+          const response = await fetchEpisodesByAnimeId(episode.anime._id);
+          setEpisodes(response);
+        }
       } catch (error) {
         console.error(`Error fetching episodes: ${error}`);
       }
@@ -36,7 +35,7 @@ const EpisodePage = () => {
 
     getEpisodeDetails();
     getEpisodes();
-  }, [episodeId, episode?.anime._id]);
+  }, [episodeId, episode?.anime?._id]);
 
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
@@ -46,7 +45,6 @@ const EpisodePage = () => {
   const handleEmbedError = () => {
     setEmbedError(true);
   };
-
 
   const isReactPlayerSupported = (url) => {
     return ReactPlayer.canPlay(url);
@@ -62,7 +60,6 @@ const EpisodePage = () => {
   }
 
   const embedUrl = episode.streamingServers[selectedTab]?.url;
-  console.log('Selected Server URL:', embedUrl); // Debugging
 
   return (
     <div className={styles.episodePage}>
@@ -117,23 +114,23 @@ const EpisodePage = () => {
       </Box>
       <Box className={styles.episodeListSection}>
         <Typography variant="h6" className={styles.episodeListTitle}>
-          جميع حلقات الأنمي
+          All Episodes
         </Typography>
         <List className={styles.episodeList}>
           {episodes.map((ep) => (
             <ListItem key={ep._id} button component={Link} to={`/episode/${ep._id}`}>
-              <ListItemText primary={`الحلقة ${ep.number}`} />
+              <ListItemText primary={`Episode ${ep.number}`} />
             </ListItem>
           ))}
         </List>
       </Box>
       <Box className={styles.downloadSection}>
         <Typography variant="h6" className={styles.downloadTitle}>
-          تحميل الحلقة
+          Download Episode
         </Typography>
         {episode.downloadServers.map((server, index) => (
           <Button key={index} variant="contained" className={styles.downloadButton} href={server.url} download>
-            تحميل {server.serverName} - {server.quality}
+            Download {server.serverName} - {server.quality}
           </Button>
         ))}
       </Box>

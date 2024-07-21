@@ -22,6 +22,8 @@ import EditEpisodes from './components/admin/EditEpisodes.jsx';
 import ManageAnime from './components/admin/ManageAnime.jsx';
 import FilteredListPage from './pages/FilteredListPage.jsx';
 import AddEpisode from './components/admin/AddEpisode.jsx';
+import PopularAnime from './pages/PopularAnime.jsx';
+import RecentEpisodes from './pages/RecentEpisodes.jsx';
 
 
 function App() {
@@ -38,6 +40,8 @@ function App() {
           <Route path="/anime/:id" element={<AnimeDetails />} />
           <Route path="/filter/:filterType/:filterValue" element={<FilteredListPage />} />
           <Route path="/search" element={<SearchPage />} />
+          <Route path="/popular-anime" element={<PopularAnime />} />
+          <Route path="/recent-episodes" element={<RecentEpisodes />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
           <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />

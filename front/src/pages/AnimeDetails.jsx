@@ -5,6 +5,8 @@ import { addFavorite, removeFavorite } from '../api/modules/user';
 import { Container, Grid, Typography, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Box, Rating } from '@mui/material';
 import { Favorite, FavoriteBorder, Star } from '@mui/icons-material';
 import LoadingSpinner from '../components/common/LoadingSpinner.jsx';
+import StarScoreDisplay from '../components/StarScoreDisplay.jsx';
+import ScoreDisplay from '../components/ScoreDisplay.jsx';
 import styles from './AnimeDetails.module.css';
 
 const AnimeDetails = () => {
@@ -23,6 +25,7 @@ const AnimeDetails = () => {
         const getAnimeDetails = async () => {
             try {
                 const response = await fetchAnimeById(id);
+                console.log('Response', response);
                 setAnime(response);
                 const favoriteStatus = localStorage.getItem(`favorite-${id}`);
                 setIsFavorite(favoriteStatus === 'true' || response.isFavorite || false);
@@ -57,10 +60,8 @@ const AnimeDetails = () => {
             }
             if (isFavorite) {
                 await removeFavorite(anime._id);
-                alert('Anime removed from favorites');
             } else {
                 await addFavorite(anime._id);
-                alert('Anime added to favorites');
             }
             setIsFavorite(!isFavorite);
         } catch (error) {
@@ -92,11 +93,27 @@ const AnimeDetails = () => {
             // Update the anime details to reflect the new rating
             const updatedAnime = await fetchAnimeById(id);
             setAnime(updatedAnime);
-            console.log('Anime rated successfully');
         } catch (error) {
             console.error('Error rating anime:', error);
         } finally {
             setRatingDialogOpen(false);
+        }
+    };
+
+    const removeRating = async () => {
+        try {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user) {
+                alert('Please login to remove rating');
+                return;
+            }
+            await rateAnime(id, user._id, null);
+            setUserRating(null);
+            // Update the anime details to reflect the removed rating
+            const updatedAnime = await fetchAnimeById(id);
+            setAnime(updatedAnime);
+        } catch (error) {
+            console.error('Error removing rating:', error);
         }
     };
 
@@ -116,7 +133,12 @@ const AnimeDetails = () => {
         <Container maxWidth="lg" className={styles.animeDetailsContainer}>
             <Grid container spacing={4}>
                 <Grid item xs={12} md={8}>
-                    <Typography variant="h4" className={styles.animeTitle}>{anime.title}</Typography>
+                    <Box className={styles.titleAndScores}>
+                        <Typography variant="h4" className={styles.animeTitle}>{anime.title}</Typography>
+                        <Box className={styles.scoreSection}>
+                            <ScoreDisplay score={anime.myAnimeListRating} userCount={100} label=" MAL" />
+                        </Box>
+                    </Box>
                     <Typography variant="body1" className={styles.animeSubtitle}>{anime.description}</Typography>
                     <Box className={styles.animeTags}>
                         {anime.genres.map(genre => (
@@ -150,6 +172,7 @@ const AnimeDetails = () => {
                     <Box className={styles.animeSidebar}>
                         <img src={`${import.meta.env.VITE_API_URL}${anime.pictureUrl}`} alt={anime.title} className={styles.animeImage} />
                         <Box className={styles.sidebarActions}>
+                            <StarScoreDisplay score={anime.averageRating} />
                             <Button
                                 variant="contained"
                                 color="secondary"
@@ -159,10 +182,15 @@ const AnimeDetails = () => {
                             >
                                 Rate
                             </Button>
-                            <IconButton onClick={handleFavoriteClick} className={styles.favoriteButton}>
-                                {isFavorite ? <Favorite color="error" /> : <FavoriteBorder />} 
-                                <Typography variant="body2"><strong>Favorites</strong></Typography>
-                            </IconButton>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                startIcon={isFavorite ? <Favorite color="error" /> : <FavoriteBorder />}
+                                onClick={handleFavoriteClick}
+                                className={styles.favoriteButton}
+                            >
+                                Fav
+                            </Button>
                         </Box>
                         <Box className={styles.animeMeta}>
                             <Typography variant="body2"><strong>Status:</strong> {anime.status || 'N/A'}</Typography>
@@ -181,12 +209,27 @@ const AnimeDetails = () => {
             <Dialog open={ratingDialogOpen} onClose={() => setRatingDialogOpen(false)}>
                 <DialogTitle>Rate Anime</DialogTitle>
                 <DialogContent>
-                    <Rating
-                        name="rating"
-                        value={selectedRating}
-                        precision={0.5}
-                        onChange={(event, newValue) => setSelectedRating(newValue)}
-                    />
+                    <Box display="flex" flexDirection="column" alignItems="center">
+                        <Rating
+                            name="rating"
+                            value={selectedRating}
+                            max={10}
+                            precision={0.5}
+                            onChange={(event, newValue) => setSelectedRating(newValue)}
+                            size="large"
+                            sx={{
+                                '& .MuiRating-iconFilled': {
+                                    color: '#ff6d75',
+                                },
+                                '& .MuiRating-iconHover': {
+                                    color: '#ff3d47',
+                                },
+                            }}
+                        />
+                        <Typography variant="h6" sx={{ mt: 2 }}>
+                            {selectedRating ? `Your Rating: ${selectedRating}` : 'Select a rating'}
+                        </Typography>
+                    </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setRatingDialogOpen(false)} color="primary">
@@ -195,6 +238,11 @@ const AnimeDetails = () => {
                     <Button onClick={submitRating} color="primary">
                         Submit
                     </Button>
+                    {userRating !== null && (
+                        <Button onClick={removeRating} color="secondary">
+                            Remove Rating
+                        </Button>
+                    )}
                 </DialogActions>
             </Dialog>
         </Container>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { fetchAnime } from '../api/modules/anime';
 
 const useFetchAnimeList = (initialPage = 1, initialLimit = 10) => {
@@ -10,28 +10,26 @@ const useFetchAnimeList = (initialPage = 1, initialLimit = 10) => {
     const [currentPage, setCurrentPage] = useState(initialPage);
     const [limit, setLimit] = useState(initialLimit);
 
+    const fetchAnimeList = useMemo(() => async (page, limit) => {
+        try {
+            setLoading(true);
+            const response = await fetchAnime(page, limit);
+            const data = Array.isArray(response.animes) ? response.animes : [];
+            setAnimeList(data);
+            setSearchResults(data);
+            setTotalPages(response.totalPages);
+        } catch (error) {
+            setError('Error fetching anime list');
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
     useEffect(() => {
-        const fetchAnimeList = async () => {
-            try {
-                setLoading(true);
-                const response = await fetchAnime(currentPage, limit); // Fetch data with pagination
-                const data = Array.isArray(response.animes) ? response.animes : [];
-                setAnimeList(data);
-                setSearchResults(data); // Initialize search results with the full list
-                setTotalPages(response.totalPages);
-                console.log('Fetched anime list:', data);
-            } catch (error) {
-                setError('Error fetching anime list');
-                console.error('Error fetching anime list:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+        fetchAnimeList(currentPage, limit);
+    }, [currentPage, limit, fetchAnimeList]);
 
-        fetchAnimeList();
-    }, [currentPage, limit]);
-
-    const handleSearch = async (query = '', tags = [], type = '', season = '', sort = '', popular = '', state = '', broadMatches = false, page = 1, limit = 10) => {
+    const handleSearch = useCallback(async (query = '', tags = [], type = '', season = '', sort = '', popular = '', state = '', broadMatches = false, page = 1, limit = 10) => {
         try {
             setLoading(true);
             const response = await fetchAnime(page, limit, query, tags, type, season, sort, popular, state, broadMatches);
@@ -41,11 +39,10 @@ const useFetchAnimeList = (initialPage = 1, initialLimit = 10) => {
             setCurrentPage(page);
         } catch (error) {
             setError('Error searching anime list');
-            console.error('Error searching anime list:', error);
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
     return { animeList, searchResults, loading, error, totalPages, handleSearch, currentPage, setCurrentPage, limit, setLimit };
 };

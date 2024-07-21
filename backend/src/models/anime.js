@@ -31,4 +31,8 @@ animeSchema.methods.calculateAverageRating = function() {
   return sum / this.ratings.length;
 };
 
+animeSchema.methods.getUserCount = function() {
+  return this.ratings.length;
+};
+
 module.exports = mongoose.model('Anime', animeSchema);

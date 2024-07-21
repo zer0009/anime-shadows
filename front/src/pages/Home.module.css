@@ -1,11 +1,16 @@
 .home {
     padding: 20px;
+    background-color: var(--primary-dark);
+    color: var(--text-color);
 }
 
 .heroSection {
     position: relative;
-    height: 300px;
-    background: url('/path/to/your/hero-image.jpg') no-repeat center center/cover;
+    height: 400px;
+    background: url('../../public/assets/images/hero-image.jpg') no-repeat center center/cover;
+    border-radius: 10px;
+    margin-bottom: 40px;
+    overflow: hidden;
 }
 
 .heroOverlay {
@@ -20,26 +25,61 @@
     justify-content: center;
     align-items: center;
     color: white;
+    padding: 20px;
 }
 
 .heroTitle {
     font-size: 3rem;
     margin-bottom: 10px;
+    color: var(--highlight-color);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .heroSubtitle {
     font-size: 1.5rem;
     margin-bottom: 20px;
+    color: var(--subtext-color);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
 }
 
 .content {
-    margin-top: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .sectionTitle {
     font-size: 2rem;
-    margin-bottom: 20px;
-    text-align: center;
+    color: var(--highlight-color);
+}
+
+.moreButton {
+    background-color: var(--highlight-color);
+    color: var(--text-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.moreButton:hover {
+    background-color: var(--highlight-color-hover);
+}
+
+.swiper {
+    margin-bottom: 40px;
+}
+
+.swiper-slide {
+    display: flex;
+    justify-content: center;
 }
 
 .animeCard {
@@ -47,6 +87,12 @@
     flex-direction: column;
     align-items: center;
     cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.animeCard:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .animeImage {
@@ -59,4 +105,41 @@
 .animeTitle {
     font-size: 1.2rem;
     text-align: center;
+    color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+    .heroTitle {
+        font-size: 2.5rem;
+    }
+
+    .heroSubtitle {
+        font-size: 1.2rem;
+    }
+
+    .sectionTitle {
+        font-size: 1.8rem;
+    }
+
+    .moreButton {
+        padding: 8px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .heroTitle {
+        font-size: 2rem;
+    }
+
+    .heroSubtitle {
+        font-size: 1rem;
+    }
+
+    .sectionTitle {
+        font-size: 1.5rem;
+    }
+
+    .moreButton {
+        padding: 6px 12px;
+    }
 }
