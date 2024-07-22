@@ -1,1 +1,1 @@
-web: npm install --prefix front && npm run build --prefix front && npm install --prefix backend && npm start --prefix backend
+web: npm install --prefix front --omit=dev && npm run build --prefix front && npm install --prefix backend --omit=dev && npm start --prefix backend
