@@ -9,7 +9,7 @@ const typeRoutes = require('./routes/typeRoutes');
 const genreRoutes = require('./routes/genreRoutes');
 const seasonRoutes = require('./routes/seasonRoutes');
 const episodeRoutes = require('./routes/episodeRoutes');
-require('dotenv').config({ path: `./config/${process.env.NODE_ENV}.env` });
+require('dotenv').config();
 require('./db/mongoose');
 
 const app = express();
@@ -36,9 +36,7 @@ app.use('/api/genres', genreRoutes);
 app.use('/api/seasons', seasonRoutes);
 app.use('/api/episodes', episodeRoutes);
 
-
-app.use('/api/user',userRoutes)
+app.use('/api/user', userRoutes);
 app.use(adminRoutes);
-
 
 module.exports = app
