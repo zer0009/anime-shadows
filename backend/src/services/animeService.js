@@ -3,7 +3,7 @@ const Type = require('../models/type');
 const Genre = require('../models/genre');
 const Season = require('../models/season');
 const User = require('../models/user');
-const { fetchMyAnimeListRating } = require('../utils/myAnimeList');
+const { filterViewsByTimeFrame } = require('../utils/viewUtils');
 const fs = require('fs');
 const path = require('path');
 
@@ -22,19 +22,6 @@ const handleFileUpload = (file, title) => {
   return `/uploads/${newFileName}`;
 };
 
-const findOrCreateGenre = async (genreName) => {
-  let genre = await Genre.findOne({ name: genreName.trim() });
-  if (!genre) {
-    genre = new Genre({ name: genreName.trim() });
-    await genre.save();
-  }
-  return genre._id;
-};
-
-const getGenreIds = async (genres) => {
-  return await Promise.all(genres.map(findOrCreateGenre));
-};
-
 const validateEntityById = async (Model, id, entityName, file) => {
   const entity = await Model.findById(id.trim());
   if (!entity) {
@@ -44,311 +31,265 @@ const validateEntityById = async (Model, id, entityName, file) => {
   return entity;
 };
 
-const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeId, genres, numberOfEpisodes, source, duration, status, file }) => {
+const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeId, genres, numberOfEpisodes, source, duration, status, airingDate, file }) => {
   if (!typeId || !seasonId) {
     throw new Error('Type ID and Season ID are required');
   }
 
+  let genreIds = Array.isArray(genres) ? genres : JSON.parse(genres);
+
   await validateEntityById(Type, typeId, 'Type', file);
   await validateEntityById(Season, seasonId, 'Season', file);
 
-  const genreIds = await getGenreIds(genres);
-
-  let myAnimeListRating = null;
-  if (myAnimeListUrl) {
-    myAnimeListRating = await fetchMyAnimeListRating(myAnimeListUrl);
+  const validGenreIds = [];
+  for (const genreId of genreIds) {
+    try {
+      const genre = await validateEntityById(Genre, genreId, 'Genre', file);
+      validGenreIds.push(genre._id);
+    } catch (error) {
+      console.error(`Invalid genre ID: ${genreId}`, error);
+    }
   }
 
   const newAnime = new Anime({
     title,
     description,
     season: seasonId.trim(),
-    myAnimeListRating,
+    myAnimeListUrl,
     type: typeId.trim(),
-    genres: genreIds,
+    genres: validGenreIds,
     numberOfEpisodes,
     source,
     duration,
     status,
-    pictureUrl: undefined
+    airingDate,
+    pictureUrl: file ? handleFileUpload(file, title) : undefined
   });
 
   await newAnime.save();
-
-  if (file) {
-    newAnime.pictureUrl = handleFileUpload(file, title);
-    await newAnime.save();
-  }
-
   return newAnime;
 };
 
 const updateAnime = async (id, updateData, file) => {
-  if (updateData.typeId) {
-    await validateEntityById(Type, updateData.typeId, 'Type', file);
-  }
+  const anime = await Anime.findById(id);
+  if (!anime) throw new Error('Anime not found');
 
-  if (updateData.seasonId) {
-    await validateEntityById(Season, updateData.seasonId, 'Season', file);
-  }
-
+  if (updateData.type) await validateEntityById(Type, updateData.type, 'Type');
+  if (updateData.season) await validateEntityById(Season, updateData.season, 'Season');
   if (updateData.genres) {
-    updateData.genres = await getGenreIds(updateData.genres);
+    const genreDocs = await Genre.find({ _id: { $in: updateData.genres } });
+    if (genreDocs.length !== updateData.genres.length) throw new Error('Invalid genre IDs');
   }
-
   if (updateData.status && !['ongoing', 'completed', 'upcoming'].includes(updateData.status)) {
     throw new Error('Valid status is required');
   }
 
-  const anime = await Anime.findById(id);
-  if (!anime) {
-    throw new Error('Anime not found');
-  }
-
   if (file) {
-    if (anime.pictureUrl) {
-      handleFileDeletion(path.join(uploadDir, path.basename(anime.pictureUrl)));
-    }
+    if (anime.pictureUrl) handleFileDeletion(path.join(uploadDir, path.basename(anime.pictureUrl)));
     updateData.pictureUrl = handleFileUpload(file, anime.title);
   }
 
   const updatedAnime = await Anime.findByIdAndUpdate(id, { $set: updateData }, { new: true });
-  if (!updatedAnime) {
-    throw new Error('Anime not found');
-  }
+  if (!updatedAnime) throw new Error('Anime not found');
 
   return updatedAnime;
 };
 
 const toggleEpisodeWatched = async (userId, animeId, episodeNumber) => {
   const user = await User.findById(userId);
-  if (!user) {
-    throw new Error('User not found');
-  }
+  if (!user) throw new Error('User not found');
 
   const anime = await Anime.findById(animeId);
-  if (!anime) {
-    throw new Error('Anime not found');
-  }
-
-  if (!user.viewingHistory) {
-    user.viewingHistory = [];
-  }
+  if (!anime) throw new Error('Anime not found');
 
   const watchedIndex = user.viewingHistory.findIndex(
     history => history.animeId.toString() === animeId && history.episodeNumber === episodeNumber
   );
 
-  let message;
   if (watchedIndex !== -1) {
     user.viewingHistory.splice(watchedIndex, 1);
-    message = 'Episode unmarked as watched';
   } else {
     user.viewingHistory.push({ animeId, episodeNumber });
-    message = 'Episode marked as watched';
   }
 
   await user.save();
-  return { message, viewingHistory: user.viewingHistory };
+  return { message: watchedIndex !== -1 ? 'Episode unmarked as watched' : 'Episode marked as watched', viewingHistory: user.viewingHistory };
 };
 
 const addEpisode = async (animeId, { number, title, servers }) => {
   const anime = await Anime.findById(animeId);
-  if (!anime) {
-    throw new Error('Anime not found');
-  }
+  if (!anime) throw new Error('Anime not found');
 
-  const episode = { number, title, servers };
-  anime.episodes.push(episode);
+  anime.episodes.push({ number, title, servers });
   await anime.save();
   return anime;
 };
 
-const getAnimes = async () => {
-  return await Anime.find().populate('season').populate('type').populate('genres');
+const getAnimes = async (query = '', tags = [], type = '', season = '', sort = '', popular = '', state = '', broadMatches = false, page = 1, limit = 10) => {
+  const skip = (page - 1) * limit;
+  const filter = {};
+
+  if (query) filter.title = { $regex: query, $options: 'i' };
+  if (tags.length > 0) {
+    const genres = await Genre.find({ name: { $in: tags } }).select('_id');
+    const genreIds = genres.map(genre => genre._id);
+    filter.genres = broadMatches ? { $in: genreIds } : { $all: genreIds };
+  }
+  if (type) {
+    const typeDoc = await Type.findOne({ name: type }).select('_id');
+    if (typeDoc) filter.type = typeDoc._id;
+    else throw new Error('Invalid type ID');
+  }
+  if (season) {
+    const seasonDoc = await Season.findOne({ name: season }).select('_id');
+    if (seasonDoc) filter.season = seasonDoc._id;
+    else throw new Error('Invalid season ID');
+  }
+  if (state) filter.status = state.toLowerCase();
+
+  const sortOption = {};
+  if (sort) {
+    if (sort === 'title') sortOption.title = 1;
+    else if (sort === 'rating') sortOption.rating = -1;
+    else if (sort === 'releaseDate') sortOption.releaseDate = -1;
+    else if (sort === 'recent') sortOption.createdAt = -1;
+  }
+
+  if (popular) {
+    const now = new Date();
+    let startDate;
+    switch (popular) {
+      case 'today': startDate = new Date(now.setHours(0, 0, 0, 0)); break;
+      case 'week': startDate = new Date(now.setDate(now.getDate() - 7)); break;
+      case 'month': startDate = new Date(now.setMonth(now.getMonth() - 1)); break;
+      default: startDate = new Date(0);
+    }
+    filter.views = { $gte: startDate };
+  }
+
+  const totalAnimes = await Anime.countDocuments(filter);
+  const animes = await Anime.find(filter)
+    .populate('season')
+    .populate('type')
+    .populate('genres')
+    .sort(sortOption)
+    .skip(skip)
+    .limit(limit);
+
+  return {
+    animes,
+    totalPages: Math.ceil(totalAnimes / limit),
+    currentPage: page
+  };
 };
 
-const getAnime = async (id) => {
-  try {
-    const anime = await Anime.findById(id)
-      .populate('season')
-      .populate('type')
-      .populate('genres')
-      .populate({
-        path: 'episodes',
-        options: {
-          sort: { updateAt: -1 },
-        }
-      });
+const getAnime = async (animeId, userId) => {
+  const anime = await Anime.findById(animeId)
+    .populate('season')
+    .populate('type')
+    .populate('genres')
+    .populate({
+      path: 'episodes',
+      options: { sort: { number: 1 } }
+    });
 
-    console.log('Fetched Anime:', anime);
+  if (!anime) throw new Error('Anime not found');
 
-    if (anime) {
-      anime.viewCount += 1;
-      anime.views.push(new Date());
-      await anime.save();
-      console.log('Fetched Anime:', anime); // Log the result
-      return anime;
-    } else {
-      throw new Error('Anime not found');
-    }
-  } catch (error) {
-    console.error('Error fetching anime:', error);
-    throw error;
-  }
+  anime.viewCount += 1;
+  anime.views.push(new Date());
+  await anime.save();
+
+  const isFavorite = userId ? (await User.findById(userId)).favorites.includes(animeId) : false;
+  const averageRating = anime.calculateAverageRating();
+  const userCount = anime.getUserCount();
+
+  const myAnimeListData = anime.myAnimeListUrl ? await anime.fetchMyAnimeListData() : null;
+
+
+  return { 
+    ...anime.toObject(), 
+    isFavorite, 
+    averageRating, 
+    userCount,
+    myAnimeListRating: myAnimeListData ? myAnimeListData.rating : null,
+    myAnimeListUserCount: myAnimeListData ? myAnimeListData.userCount : null
+  };
 };
 
 const getEpisode = async (animeId, episodeId) => {
   const anime = await Anime.findById(animeId);
-  if (anime) {
-    const episode = anime.episodes.id(episodeId);
-    if (episode) {
-      episode.viewCount += 1;
-      episode.views.push(new Date());
-      await anime.save();
-      return episode;
-    } else {
-      throw new Error('Episode not found');
-    }
-  } else {
-    throw new Error('Anime not found');
-  }
+  if (!anime) throw new Error('Anime not found');
+
+  const episode = anime.episodes.id(episodeId);
+  if (!episode) throw new Error('Episode not found');
+
+  episode.viewCount += 1;
+  episode.views.push(new Date());
+  await anime.save();
+  return episode;
 };
 
 const rateAnime = async (animeId, userId, rating) => {
   const user = await User.findById(userId);
-  if (!user) {
-    throw new Error('Please Login');
-  }
+  if (!user) throw new Error('Please Login');
 
   const anime = await Anime.findById(animeId);
-  if (!anime) {
-    throw new Error('Anime not found');
-  }
+  if (!anime) throw new Error('Anime not found');
 
   const existingRating = anime.ratings.find(r => r.userId.toString() === userId.toString());
 
-  if (existingRating) {
-    existingRating.rating = rating;
+  if (rating === null) {
+    if (existingRating) anime.ratings = anime.ratings.filter(r => r.userId.toString() !== userId.toString());
   } else {
-    anime.ratings.push({ userId, rating });
+    if (existingRating) existingRating.rating = rating;
+    else anime.ratings.push({ userId, rating });
   }
 
   await anime.save();
-  return { status: 200, data: { message: 'Rating updated', rating: anime.calculateAverageRating() } };
-};
-
-const addFavorite = async (userId, animeId) => {
-  const user = await User.findById(userId);
-  if (!user) {
-    throw new Error('User not found');
-  }
-
-  if (!user.favorites.includes(animeId)) {
-    user.favorites.push(animeId);
-    await user.save();
-  }
-
-  return { status: 200, data: { message: 'Anime added to favorites' } };
-};
-
-const removeFavorite = async (userId, animeId) => {
-  const user = await User.findById(userId);
-  if (!user) {
-    throw new Error('User not found');
-  }
-
-  const index = user.favorites.indexOf(animeId);
-  if (index > -1) {
-    user.favorites.splice(index, 1);
-    await user.save();
-  }
-
-  return { status: 200, data: { message: 'Anime removed from favorites' } };
+  const averageRating = anime.calculateAverageRating();
+  const ratingUsers = anime.getUserCount();
+  return { status: 200, data: { message: 'Rating updated', rating: averageRating, ratingUsers } };
 };
 
 const deleteAnime = async (id) => {
   const anime = await Anime.findById(id);
-  if (!anime) {
-    throw new Error('Anime not found');
-  }
+  if (!anime) throw new Error('Anime not found');
 
-  await anime.remove();
-  return { message: 'Anime deleted successfully' };
+  await Episode.deleteMany({ animeId: id });
+  await User.updateMany(
+    { $or: [{ 'history.anime': id }, { favorites: id }] },
+    { $pull: { history: { anime: id }, favorites: id } }
+  );
+  await Anime.findByIdAndDelete(id);
+
+  return { message: 'Anime and related episodes deleted successfully' };
 };
 
-const getRecommendations = async (animeId) => {
-  // Implement recommendation logic here
-};
-
-const getAnimeByGenre = async (genre) => {
-  return await Anime.find({ genres: genre });
-};
-
-const searchAnime = async (query) => {
-  console.log('Searching for animes with query:', query);
-  try {
-    const searchRegex = new RegExp(query, 'i');
-    const animes = await Anime.find({
-      $or: [
-        { title: searchRegex },
-        { description: searchRegex },
-        { type: searchRegex },
-        { season: searchRegex },
-        { genres: searchRegex },
-      ]
-    });
-    console.log('Found animes:', animes);
-    return animes;
-  } catch (err) {
-    console.log('Error in searchAnime service:', err.message);
-    throw new Error('Error searching for animes: ' + err.message);
-  }
-};
-
-const getAnimeViewCount = async (animeId) => {
-  const anime = await Anime.findById(animeId);
-  if (anime) {
-    anime.viewCount += 1;
-    anime.views.push(new Date());
-    await anime.save();
-    return { message: 'Anime viewed', viewCount: anime.viewCount };
-  } else {
-    return { message: 'Anime not found' };
-  }
-};
-
-const filterViewsByTimeFrame = (views, timeFrame) => {
-  const now = new Date();
-  let startDate;
-
-  switch (timeFrame) {
-    case 'today':
-      startDate = new Date(now.setHours(0, 0, 0, 0));
-      break;
-    case 'week':
-      startDate = new Date(now.setDate(now.getDate() - 7));
-      break;
-    case 'month':
-      startDate = new Date(now.setMonth(now.getMonth() - 1));
-      break;
-    case 'all':
-    default:
-      return views.length;
-  }
-
-  return views.filter(view => view >= startDate).length;
-};
-
-const getPopularAnimes = async (timeFrame, genre) => {
+const getPopularAnimes = async (timeFrame, genre, page = 1, limit = 10) => {
   const query = genre ? { genres: genre } : {};
-  const animes = await Anime.find(query).populate('season').populate('type').populate('genres');
+  const skip = (page - 1) * limit;
+
+  const animes = await Anime.find(query)
+    .populate('season')
+    .populate('type')
+    .populate('genres')
+    .skip(skip)
+    .limit(limit);
+
+  const totalDocs = await Anime.countDocuments(query);
+
   const sortedAnimes = animes.map(anime => ({
     ...anime.toObject(),
     filteredViewCount: filterViewsByTimeFrame(anime.views, timeFrame)
   })).sort((a, b) => b.filteredViewCount - a.filteredViewCount);
 
-  return sortedAnimes;
+  return {
+    sortedAnimes,
+    total: totalDocs,
+    pages: Math.ceil(totalDocs / limit),
+    page,
+    limit
+  };
 };
 
 const getPopularEpisodes = async (timeFrame, genre) => {
@@ -362,45 +303,51 @@ const getPopularEpisodes = async (timeFrame, genre) => {
     })));
   });
 
-  const sortedEpisodes = episodes.sort((a, b) => b.filteredViewCount - a.filteredViewCount);
-
-  return sortedEpisodes;
+  return episodes.sort((a, b) => b.filteredViewCount - a.filteredViewCount);
 };
 
 const addToHistory = async (userId, animeId) => {
-  try {
-    const user = await User.findById(userId);
-    if (!user) {
-      throw new Error('User not found');
-    }
+  const user = await User.findById(userId);
+  if (!user) throw new Error('User not found');
 
-    const isInHistory = user.history.some(historyItem => historyItem.toString() === animeId);
-    if (!isInHistory) {
-      user.history.push(animeId);
-      await user.save();
-    }
-  } catch (err) {
-    throw new Error('Failed to add anime to history');
+  const historyItem = user.history.find(item => item.anime && item.anime.toString() === animeId);
+  if (historyItem) {
+    historyItem.views.push(new Date());
+  } else {
+    const anime = await Anime.findById(animeId);
+    user.history.push({ anime: animeId, views: [new Date()], pictureUrl: anime.pictureUrl, title: anime.title });
   }
+
+  await User.findByIdAndUpdate(userId, { history: user.history }, { new: true, upsert: true });
+  return { message: 'Anime saved to history' };
 };
 
 const getFilteredAnimes = async (tags, broadMatches) => {
-  try {
-    console.log('Filtering animes with tags:', tags);
-    console.log('Broad matches:', broadMatches);
+  const tagObjectIds = await Genre.find({ name: { $in: tags } }).select('_id');
+  const tagIds = tagObjectIds.map(tag => tag._id);
 
-    const tagObjectIds = await Genre.find({ name: { $in: tags } }).select('_id');
-    const tagIds = tagObjectIds.map(tag => tag._id);
+  const query = broadMatches
+    ? { genres: { $in: tagIds } }
+    : { genres: { $all: tagIds } };
 
-    const query = broadMatches
-      ? { genres: { $in: tagIds } }
-      : { genres: { $all: tagIds } };
+  return await Anime.find(query).populate('season').populate('type').populate('genres');
+};
 
-    return await Anime.find(query).populate('season').populate('type').populate('genres');
-  } catch (error) {
-    console.error('Error in getFilteredAnimes:', error);
-    throw error;
-  }
+const getMovies = async (page = 1, limit = 10) => {
+  const movieType = await Type.findOne({ name: 'Movie' }).select('_id');
+  if (!movieType) throw new Error('Movie type not found');
+
+  const movieTypeId = movieType._id;
+  const skip = (page - 1) * limit;
+
+  const movies = await Anime.find({ type: movieTypeId })
+    .populate('type')
+    .skip(skip)
+    .limit(limit);
+
+  const totalMovies = await Anime.countDocuments({ type: movieTypeId });
+
+  return { animes: movies, totalPages: Math.ceil(totalMovies / limit) };
 };
 
 module.exports = {
@@ -412,16 +359,10 @@ module.exports = {
   getAnime,
   getEpisode,
   rateAnime,
-  addFavorite,
-  removeFavorite,
   deleteAnime,
-  getRecommendations,
-  getAnimeByGenre,
-  searchAnime,
-  handleFileDeletion,
-  getAnimeViewCount,
   getPopularAnimes,
   getPopularEpisodes,
   addToHistory,
-  getFilteredAnimes
+  getFilteredAnimes,
+  getMovies
 };

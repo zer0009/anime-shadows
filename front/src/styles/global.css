@@ -32,11 +32,12 @@ a {
 }
 
 a:hover {
-  text-decoration: underline;
+  color: var(--secondary-light);
 }
 
 .container {
   padding: 20px;
+  color: var(--text-color); /* Ensure text color is applied */
 }
 
 .hero-section {
@@ -49,6 +50,7 @@ a:hover {
   align-items: center;
   text-align: center;
   padding: 20px; /* Added padding */
+  color: var(--text-color); /* Ensure text color is applied */
 }
 
 .hero-overlay {
@@ -62,6 +64,7 @@ a:hover {
   justify-content: center;
   align-items: center;
   text-align: center;
+  color: var(--text-color); /* Ensure text color is applied */
 }
 
 .hero-title {
@@ -83,6 +86,7 @@ a:hover {
   flex-wrap: wrap;
   justify-content: center;
   padding: 2rem;
+  color: var(--text-color); /* Ensure text color is applied */
 }
 
 .anime-card {
@@ -91,4 +95,56 @@ a:hover {
   margin: 1rem;
   width: 200px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Added box-shadow */
+  background-color: var(--primary-dark); /* Ensure background color is applied */
+  color: var(--text-color); /* Ensure text color is applied */
 }
+
+/* input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+  color: var(--text-color);
+  background-color: var(--accent-color);
+  border: 2px solid var(--secondary-dark);
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px 0;
+  font-size: 16px;
+  font-family: 'Arial', sans-serif; 
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--primary-dark);
+  box-shadow: 0 0 10px var(--glow-color);
+} */
+
+label {
+  color: var(--text-color); /* Ensure text color is applied */
+  font-size: 16px; /* Set font size */
+  font-family: 'Arial', sans-serif; /* Set font family */
+  margin-bottom: 5px; /* Add margin bottom */
+}
+
+button[type="submit"],
+button[type="button"] {
+  color: var(--text-color); /* Ensure text color is applied */
+  background-color: var(--primary-dark); /* Set background color */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add border radius */
+  padding: 10px 20px; /* Add padding */
+  font-size: 16px; /* Set font size */
+  font-family: 'Arial', sans-serif; /* Set font family */
+  cursor: pointer; /* Change cursor on hover */
+  transition: background-color 0.3s ease; /* Add transition effect */
+}
+
+button[type="submit"]:hover,
+button[type="button"]:hover {
+  background-color: var(--primary-light); /* Change background color on hover */
+}
+

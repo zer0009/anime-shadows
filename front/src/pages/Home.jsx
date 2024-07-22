@@ -1,32 +1,55 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchAnimeById } from '../api/modules/anime';
-import { saveAnimeToHistory } from '../api/modules/user';
-import AnimeCard from '../components/AnimeCard/AnimeCard.jsx';
-import Footer from '../components/common/Footer.jsx';
-import SearchBar from '../components/SearchBar/SearchBar.jsx';
-import { Grid, Container, Typography } from '@mui/material';
+import { fetchAnimeById, fetchPopularAnime } from '../api/modules/anime';
+import Footer from '../components/common/Footer';
+import SearchBar from '../components/SearchBar/SearchBar';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import useFetchRecentEpisodes from '../hooks/useFetchRecentEpisodes';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import { Navigation, Pagination, Scrollbar } from 'swiper/modules';
+import AnimeCard from '../components/AnimeCard/AnimeCard';
 import styles from './Home.module.css';
 
 const Home = () => {
     const { animeList, searchResults, loading, error, handleSearch } = useFetchAnimeList();
     const { recentEpisodes, loading: recentLoading, error: recentError } = useFetchRecentEpisodes();
+    const [popularAnimes, setPopularAnimes] = useState([]);
     const navigate = useNavigate();
 
-    const handleAnimeClick = async (animeId) => {
-        try {
-            const token = localStorage.getItem('token');
-            if (token) {
-                await saveAnimeToHistory(animeId);
+    useEffect(() => {
+        const fetchPopular = async () => {
+            try {
+                const response = await fetchPopularAnime('all');
+                setPopularAnimes(response.sortedAnimes || []); // Ensure popularAnimes is always an array
+            } catch (error) {
+                console.error('Error fetching popular animes:', error);
+                setPopularAnimes([]); // Set to empty array on error
             }
-            const response = await fetchAnimeById(animeId);
+        };
+
+        fetchPopular();
+    }, []);
+
+    const handleAnimeClick = async (animeId) => {
+        if (!animeId) {
+            return;
+        }
+
+        try {
+            await fetchAnimeById(animeId);
             navigate(`/anime/${animeId}`);
         } catch (error) {
             console.error('Error fetching anime details:', error);
         }
     };
+
+    useEffect(() => {
+        console.log('recentEpisodes:', recentEpisodes);
+    }, [recentEpisodes]);
 
     return (
         <div className={styles.home}>
@@ -37,28 +60,98 @@ const Home = () => {
                     <SearchBar onSearch={handleSearch} />
                 </div>
             </div>
-            <Container>
-                <h2 className={styles.homeTitle}>Anime List</h2>
-                {loading && <div className={styles.loading}>Loading...</div>}
-                {error && <div className={styles.error}>{error}</div>}
-                <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-                    {(searchResults.length > 0 ? searchResults : animeList).map(anime => (
-                        <Grid item xs={12} sm={6} md={4} lg={2.4} key={anime._id}>
-                            <AnimeCard anime={anime} onClick={() => handleAnimeClick(anime._id)} />
-                        </Grid>
+            <div className={styles.content}>
+                <div className={styles.sectionHeader}>
+                    <h2 className={styles.sectionTitle}>Popular Anime</h2>
+                    <button className={styles.moreButton} onClick={() => navigate('/popular-anime')}>More</button>
+                </div>
+                <Swiper
+                    modules={[Navigation, Pagination, Scrollbar]}
+                    spaceBetween={30}
+                    slidesPerView={1}
+                    breakpoints={{
+                        640: { slidesPerView: 2 },
+                        768: { slidesPerView: 3 },
+                        1024: { slidesPerView: 4 },
+                        1280: { slidesPerView: 5 },
+                    }}
+                    navigation
+                    pagination={{ clickable: true }}
+                    scrollbar={{ draggable: true }}
+                >
+                    {popularAnimes.map((anime) => (
+                        <SwiperSlide key={anime._id}>
+                            <AnimeCard
+                                anime={anime}
+                                onClick={() => {
+                                    handleAnimeClick(anime._id);
+                                }}
+                            />
+                        </SwiperSlide>
                     ))}
-                </Grid>
-                <h2 className={styles.homeTitle}>Recently Updated Episodes</h2>
-                {recentLoading && <div className={styles.loading}>Loading...</div>}
-                {recentError && <div className={styles.error}>{recentError}</div>}
-                <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-                    {recentEpisodes.map(episode => (
-                        <Grid item xs={12} sm={6} md={4} lg={2.4} key={episode._id}>
-                            <AnimeCard anime={episode.anime} episodeNumber={episode.number} onClick={() => handleAnimeClick(episode.anime._id)} />
-                        </Grid>
+                </Swiper>
+
+                <div className={styles.sectionHeader}>
+                    <h2 className={styles.sectionTitle}>Anime List</h2>
+                    <button className={styles.moreButton} onClick={() => navigate('/anime-list')}>More</button>
+                </div>
+                <Swiper
+                    modules={[Navigation, Pagination, Scrollbar]}
+                    spaceBetween={30}
+                    slidesPerView={1}
+                    breakpoints={{
+                        640: { slidesPerView: 2 },
+                        768: { slidesPerView: 3 },
+                        1024: { slidesPerView: 4 },
+                        1280: { slidesPerView: 5 },
+                    }}
+                    navigation
+                    pagination={{ clickable: true }}
+                    scrollbar={{ draggable: true }}
+                >
+                    {(searchResults.length > 0 ? searchResults : animeList).map((anime) => (
+                        <SwiperSlide key={anime._id}>
+                            <AnimeCard
+                                anime={anime}
+                                onClick={() => {
+                                    handleAnimeClick(anime._id);
+                                }}
+                            />
+                        </SwiperSlide>
                     ))}
-                </Grid>
-            </Container>
+                </Swiper>
+
+                <div className={styles.sectionHeader}>
+                    <h2 className={styles.sectionTitle}>Recently Updated Episodes</h2>
+                    <button className={styles.moreButton} onClick={() => navigate('/recent-episodes')}>More</button>
+                </div>
+                <Swiper
+                    modules={[Navigation, Pagination, Scrollbar]}
+                    spaceBetween={30}
+                    slidesPerView={1}
+                    breakpoints={{
+                        640: { slidesPerView: 2 },
+                        768: { slidesPerView: 3 },
+                        1024: { slidesPerView: 4 },
+                        1280: { slidesPerView: 5 },
+                    }}
+                    navigation
+                    pagination={{ clickable: true }}
+                    scrollbar={{ draggable: true }}
+                >
+                    {Array.isArray(recentEpisodes) && recentEpisodes.map((episode) => (
+                        <SwiperSlide key={episode._id}>
+                            <AnimeCard
+                                anime={episode.anime}
+                                episodeNumber={episode.number}
+                                onClick={() => {
+                                    handleAnimeClick(episode.anime._id);
+                                }}
+                            />
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+            </div>
             <Footer />
         </div>
     );

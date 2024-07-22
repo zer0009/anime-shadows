@@ -5,11 +5,11 @@ import styles from './ListDisplay.module.css';
 
 const ListDisplay = ({ title, list, loading, error, fields }) => {
     if (loading) {
-        return <CircularProgress />;
+        return <div className={styles.loader}><CircularProgress /></div>;
     }
 
     if (error) {
-        return <Typography variant="h6" color="error">{error}</Typography>;
+        return <Typography variant="h6" color="error" className={styles.errorMessage}>{error}</Typography>;
     }
 
     return (
@@ -21,7 +21,7 @@ const ListDisplay = ({ title, list, loading, error, fields }) => {
                 {list.length > 0 ? (
                     list.map(item => (
                         <Grid item xs={12} sm={6} md={4} lg={2.2} key={item._id}>
-                            <AnimeCard anime={item} fields={fields} />
+                            <AnimeCard anime={item} episodeNumber={item.episodeNumber} onClick={() => fields.onClick(item._id)} />
                         </Grid>
                     ))
                 ) : (

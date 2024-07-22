@@ -1,0 +1,22 @@
+.favoritesContainer {
+    padding: 20px;
+}
+
+.title {
+    margin-bottom: 20px;
+    text-align: center;
+    color: var(--highlight-color);
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+}
+
+.error {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+}

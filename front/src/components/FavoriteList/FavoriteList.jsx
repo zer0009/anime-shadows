@@ -5,12 +5,15 @@ import styles from './FavoriteList.module.css';
 const FavoriteList = ({ favorites }) => {
     return (
         <div className={styles.favoriteList}>
-            <h3>Favorites</h3>
-            <div className={styles.animeGrid}>
-                {favorites.map(favorite => (
-                    <AnimeCard key={favorite._id} anime={favorite} />
-                ))}
-            </div>
+            {favorites.length > 0 ? (
+                <div className={styles.animeGrid}>
+                    {favorites.map(favorite => (
+                        <AnimeCard key={favorite._id} anime={favorite} />
+                    ))}
+                </div>
+            ) : (
+                <p className={styles.noFavorites}>You have no favorite anime yet.</p>
+            )}
         </div>
     );
 };

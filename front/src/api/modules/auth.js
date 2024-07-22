@@ -1,9 +1,8 @@
-import API from '../client'; // Ensure you have the correct path to your API setup
+import API from '../client';
 
 export const loginUser = async (credentials) => {
     try {
         const response = await API.post('/user/login', credentials);
-        console.log('Login response:', response); // Add detailed logging
         return {
             token: response.data.token,
             user: {
@@ -12,16 +11,34 @@ export const loginUser = async (credentials) => {
             },
         };
     } catch (error) {
-        console.error('Error in loginUser:', error); // Add error logging
-        throw error; // Re-throw the error to be handled by the caller
+        console.error('Error in loginUser:', error);
+        throw error;
     }
 };
 
-export const logoutUser = () => {
-    const token = localStorage.getItem('token');
-    return API.post('/user/logout', {}, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
+export const logoutUser = async () => {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await API.post('/user/logout', {}, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        return response.data;
+    } catch (error) {
+        console.error('Error in logoutUser:', error);
+        throw error;
+    }
+};
+
+export const registerUser = async (credentials) => {
+    try {
+        const response = await API.post('/user/register', credentials);
+        return response.data;
+    } catch (error) {
+        console.error('Error in registerUser:', error);
+        throw error;
+    }
 };

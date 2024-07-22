@@ -3,8 +3,13 @@ const { format } = require('date-fns');
 
 const formatDate = (date) => format(new Date(date), 'yyyy-MM-dd');
 
-const createSeason = async (name, startDate, endDate) => {
-  const season = new Season({ name, startDate, endDate });
+const createSeason = async (name, year, startDate, endDate) => {
+  const season = new Season({ 
+    name, 
+    year, 
+    startDate: new Date(startDate), // Ensure dates are parsed correctly
+    endDate: new Date(endDate) 
+  });
   await season.save();
   return {
     ...season.toObject(),
@@ -13,8 +18,18 @@ const createSeason = async (name, startDate, endDate) => {
   };
 };
 
-const updateSeason = async (id, name, startDate, endDate) => {
-  const season = await Season.findByIdAndUpdate(id, { name, startDate, endDate }, { new: true });
+const updateSeason = async (id, name, year, startDate, endDate) => {
+  const season = await Season.findByIdAndUpdate(id, { 
+    name, 
+    year, 
+    startDate: new Date(startDate), // Ensure dates are parsed correctly
+    endDate: new Date(endDate) 
+  }, { new: true });
+  
+  if (!season) {
+    throw new Error('Season not found');
+  }
+
   return {
     ...season.toObject(),
     startDate: formatDate(season.startDate),
@@ -28,6 +43,9 @@ const deleteSeason = async (id) => {
 
 const getSeasonById = async (id) => {
   const season = await Season.findById(id);
+  if (!season) {
+    throw new Error('Season not found');
+  }
   return {
     ...season.toObject(),
     startDate: formatDate(season.startDate),

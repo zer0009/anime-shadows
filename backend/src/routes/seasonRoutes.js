@@ -5,7 +5,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 const authorize = require('../middlewares/roleMiddleware');
 
 router.get('/', seasonController.getSeasons);
-router.post('/', authMiddleware, authorize('admin'), seasonController.createSeason);
+router.post('/', authMiddleware, authorize('admin', 'moderator'), seasonController.createSeason);
 router.put('/:id', authMiddleware, authorize('admin'), seasonController.updateSeason);
 router.delete('/:id', authMiddleware, authorize('admin'), seasonController.deleteSeason);
 

@@ -1,0 +1,34 @@
+.scoreContainer {
+  display: flex;
+  align-items: center;
+  background-color: var(--secondary-dark);
+  padding: 5px 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.scoreLabel {
+  background-color: #3f51b5;
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+
+.scoreDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.scoreValue {
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding-left: 10px;
+}
+
+.userCount {
+  color: #757575;
+  font-size: 0.875rem;
+  padding-left: 10px;
+}

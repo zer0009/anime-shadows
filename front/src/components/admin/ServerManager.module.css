@@ -1,0 +1,29 @@
+/* ServerManager.module.css */
+.serverSection {
+  padding: 20px;
+  margin: 20px 0;
+  background-color: var(--primary-dark);
+  color: var(--text-color);
+}
+
+.title {
+  margin-bottom: 20px;
+  color: var(--text-color);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.subtitle {
+  margin-top: 20px;
+  color: var(--text-color);
+}
+
+.listItem {
+  background-color: var(--secondary-dark);
+  margin-bottom: 10px;
+  border-radius: 5px;
+  padding: 10px;
+}

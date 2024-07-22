@@ -12,28 +12,46 @@ import Register from './pages/Register.jsx';
 import SearchPage from './pages/SearchPage.jsx';
 import Profile from './pages/Profile.jsx';
 import History from './pages/History.jsx';
+import Favorites from './pages/Favorites.jsx';
+import AdminDashboard from './pages/AdminDashboard.jsx';
+import EpisodePage from './pages/EpisodePage.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+import AdminRoute from './components/AdminRoute.jsx';
+import EditAnime from './components/admin/EditAnime.jsx';
+import EditEpisodes from './components/admin/EditEpisodes.jsx';
+import ManageAnime from './components/admin/ManageAnime.jsx';
+import FilteredListPage from './pages/FilteredListPage.jsx';
+import AddEpisode from './components/admin/AddEpisode.jsx';
+import PopularAnime from './pages/PopularAnime.jsx';
+import RecentEpisodes from './pages/RecentEpisodes.jsx';
+
 
 function App() {
   return (
-    <AuthProvider> {/* Wrap the app with AuthProvider */}
-      <div className="App">
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/anime-list" element={<AnimeList />} />
-          <Route path="/movie-list" element={<MovieList />} />
+    <AuthProvider>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/anime-list" element={<AnimeList />} />
+        <Route path="/movie-list" element={<MovieList />} />
           <Route path="/season-anime" element={<SeasonAnime />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/anime/:id" element={<AnimeDetails />} />
+          <Route path="/filter/:filterType/:filterValue" element={<FilteredListPage />} />
           <Route path="/search" element={<SearchPage />} />
-          <Route path="/profile" element={<Profile />} />
-          {/* <Route path="/settings" component={Settings} /> */}
-          <Route path="/history" element={<History />} />
-          {/* <Route path="/favorites" component={Favorites} />
-          <Route path="/admin-dashboard" component={AdminDashboard} /> */}
+          <Route path="/popular-anime" element={<PopularAnime />} />
+          <Route path="/recent-episodes" element={<RecentEpisodes />} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
+          <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
+          <Route path="/admin-dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+          <Route path="/episode/:episodeId" element={<EpisodePage />} />
+          <Route path="/admin/manage-anime" element={<AdminRoute><ManageAnime /></AdminRoute>} />
+          <Route path="/admin/edit-anime/:animeId" element={<AdminRoute><EditAnime /></AdminRoute>} />
+          <Route path="/admin/edit-episodes/:animeId" element={<AdminRoute><EditEpisodes /></AdminRoute>} />
+          <Route path="/admin/add-episode/:animeId" element={<AdminRoute><AddEpisode /></AdminRoute>} />
         </Routes>
-      </div>
     </AuthProvider>
   );
 }

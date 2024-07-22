@@ -6,6 +6,10 @@ const seasonSchema = new mongoose.Schema({
         required: true,
         enum: ['Winter', 'Spring', 'Summer', 'Fall']
     },
+    year: {
+        type: Number,
+        required: true
+    },
     startDate: {
         type: Date,
         required: true

@@ -8,7 +8,7 @@ const SeasonSelect = ({ onChange }) => {
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetchSeasons();
-            setSeasons(response.data);
+            setSeasons(response);
         };
         fetchData();
     }, []);

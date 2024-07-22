@@ -1,0 +1,21 @@
+/* AddEpisode.module.css */
+.addEpisode {
+  padding: 20px;
+  margin: 20px 0;
+  background-color: var(--primary-dark);
+  color: var(--text-color);
+}
+
+.title {
+  margin-bottom: 20px;
+  color: var(--text-color);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.submitButton {
+  margin-top: 20px;
+}

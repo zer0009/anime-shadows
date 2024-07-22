@@ -8,7 +8,7 @@ const TypeSelect = ({ onChange }) => {
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetchTypes();
-            setTypes(response.data);
+            setTypes(response);
         };
         fetchData();
     }, []);

@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginUser, logoutUser } from '../api/modules/auth';
+import { loginUser, logoutUser, registerUser } from '../api/modules/auth';
 import { fetchUserProfile } from '../api/modules/user';
 
 const AuthContext = createContext();
@@ -32,7 +32,9 @@ export const AuthProvider = ({ children }) => {
             if (process.env.NODE_ENV === 'development') {
                 console.log('Login response:', response); // Add detailed logging
             }
-            localStorage.setItem('token', response.token); // Ensure the token is correctly set
+            localStorage.setItem('token', response.token); 
+            localStorage.setItem('user', JSON.stringify(response.user));
+            // Ensure the token is correctly set
             if (process.env.NODE_ENV === 'development') {
                 console.log('Logged in user:', response.user); // Debug log
             }
@@ -40,6 +42,25 @@ export const AuthProvider = ({ children }) => {
             navigate('/profile');
         } catch (error) {
             console.error('Error logging in:', error);
+        }
+    };
+
+    const register = async (credentials) => {
+        try {
+            const response = await registerUser(credentials);
+            if (process.env.NODE_ENV === 'development') {
+                console.log('Register response:', response); // Add detailed logging
+            }
+            localStorage.setItem('token', response.token); 
+            localStorage.setItem('user', JSON.stringify(response.user));
+            // Ensure the token is correctly set
+            if (process.env.NODE_ENV === 'development') {
+                console.log('Registered user:', response.user); // Debug log
+            }
+            setUser(response.user); // Ensure the user state is correctly set
+            navigate('/profile');
+        } catch (error) {
+            console.error('Error registering:', error);
         }
     };
 
@@ -58,7 +79,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     );
@@ -67,3 +88,4 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => {
     return useContext(AuthContext);
 };
+

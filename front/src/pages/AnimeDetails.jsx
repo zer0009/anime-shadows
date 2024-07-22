@@ -1,25 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { fetchAnimeById } from '../api/modules/anime';
-import { saveAnimeToHistory } from '../api/modules/user';
+import { useParams, useNavigate } from 'react-router-dom';
+import { fetchAnimeById, rateAnime } from '../api/modules/anime';
+import { addFavorite, removeFavorite } from '../api/modules/user';
+import { Container, Grid, Typography, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Box, Rating } from '@mui/material';
+import { Favorite, FavoriteBorder, Star } from '@mui/icons-material';
+import LoadingSpinner from '../components/common/LoadingSpinner.jsx';
+import StarScoreDisplay from '../components/StarScoreDisplay.jsx';
+import ScoreDisplay from '../components/ScoreDisplay.jsx';
 import styles from './AnimeDetails.module.css';
 
 const AnimeDetails = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [anime, setAnime] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isFavorite, setIsFavorite] = useState(false);
+    const [userRating, setUserRating] = useState(null);
+    const [hoverRating, setHoverRating] = useState(null);
+    const [ratingDialogOpen, setRatingDialogOpen] = useState(false);
+    const [selectedRating, setSelectedRating] = useState(null);
 
     useEffect(() => {
         const getAnimeDetails = async () => {
             try {
                 const response = await fetchAnimeById(id);
-                console.log('Fetched anime details:', response.data); // Debugging log
-                setAnime(response.data);
-                // Save the anime to the user's history if logged in
-                const token = localStorage.getItem('token');
-                if (token) {
-                    await saveAnimeToHistory(id);
+                console.log('Response', response);
+                setAnime(response);
+                const favoriteStatus = localStorage.getItem(`favorite-${id}`);
+                setIsFavorite(favoriteStatus === 'true' || response.isFavorite || false);
+                // Check if the user has already rated this anime
+                const user = JSON.parse(localStorage.getItem('user'));
+                if (user && response.userRatings) {
+                    const userRating = response.userRatings.find(r => r.userId === user._id);
+                    if (userRating) {
+                        setUserRating(userRating.rating);
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching anime details or saving to history:', error);
@@ -28,100 +44,215 @@ const AnimeDetails = () => {
                 setLoading(false);
             }
         };
-
         getAnimeDetails();
     }, [id]);
 
+    useEffect(() => {
+        localStorage.setItem(`favorite-${id}`, isFavorite);
+    }, [isFavorite, id]);
+
+    const handleFavoriteClick = async () => {
+        try {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user) {
+                alert('Please login to favorite');
+                return;
+            }
+            if (isFavorite) {
+                await removeFavorite(anime._id);
+            } else {
+                await addFavorite(anime._id);
+            }
+            setIsFavorite(!isFavorite);
+        } catch (error) {
+            console.error('Error updating favorite status:', error);
+        }
+    };
+
+    const openModal = (episode) => {
+        navigate(`/episode/${episode._id}`);
+    };
+
+    const handleGenreClick = (genreId) => {
+        navigate(`/filter/genre/${genreId}`);
+    };
+
+    const handleRateAnime = () => {
+        setRatingDialogOpen(true);
+    };
+
+    const submitRating = async () => {
+        try {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user) {
+                alert('Please login to rate');
+                return;
+            }
+            await rateAnime(id, user._id, selectedRating);
+            setUserRating(selectedRating);
+            // Update the anime details to reflect the new rating
+            const updatedAnime = await fetchAnimeById(id);
+            setAnime(updatedAnime);
+        } catch (error) {
+            console.error('Error rating anime:', error);
+        } finally {
+            setRatingDialogOpen(false);
+        }
+    };
+
+    const removeRating = async () => {
+        try {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user) {
+                alert('Please login to remove rating');
+                return;
+            }
+            await rateAnime(id, user._id, null);
+            setUserRating(null);
+            // Update the anime details to reflect the removed rating
+            const updatedAnime = await fetchAnimeById(id);
+            setAnime(updatedAnime);
+        } catch (error) {
+            console.error('Error removing rating:', error);
+        }
+    };
+
+    const getScoreDisplayProps = (anime) => {
+        return {
+            score: anime.myAnimeListRating || 0,
+            userCount: anime.myAnimeListUserCount || 0
+        };
+    };
+
     if (loading) {
-        return <div>Loading...</div>;
+        return <LoadingSpinner />;
     }
 
     if (error) {
-        return <div>{error}</div>;
+        return <Typography color="error">{error}</Typography>;
     }
 
     if (!anime) {
-        return <div>No anime details found.</div>;
+        return <Typography>No anime details found.</Typography>;
     }
 
-    console.log(anime.episodes); // Debugging log
-
     return (
-        <div className={styles.animeDetailsContainer}>
-            <div className={styles.leftSection}>
-                <h1 className={styles.animeTitle}>{anime.title}</h1>
-                <div className={styles.animeRating}>
-                    <div className={styles.ratingStars}>
-                        {/* Render stars based on rating */}
-                        {[...Array(5)].map((star, index) => (
-                            <i key={index} className={`fas fa-star ${index < anime.rating ? 'filled' : ''}`}></i>
-                        ))}
-                    </div>
-                    <div className={styles.ratingScore}>{anime.rating}</div>
-                    <div className={styles.ratingUsers}>{anime.ratingUsers} مستخدم</div>
-                </div>
-                <div className={styles.animeDetailsPage}>
-                    <p className={styles.animeSubtitle}>{anime.description}</p>
-                    <div className={styles.animeTags}>
+        <Container maxWidth="lg" className={styles.animeDetailsContainer}>
+            <Grid container spacing={4}>
+                <Grid item xs={12} md={8}>
+                    <Box className={styles.titleAndScores}>
+                        <Typography variant="h4" className={styles.animeTitle}>{anime.title}</Typography>
+                        <Box className={styles.scoreSection}>
+                            <ScoreDisplay {...getScoreDisplayProps(anime)} />
+                        </Box>
+                    </Box>
+                    <Typography variant="body1" className={styles.animeSubtitle}>{anime.description}</Typography>
+                    <Box className={styles.animeTags}>
                         {anime.genres.map(genre => (
-                            <span key={genre._id} className={styles.animeTag}>{genre.name}</span>
+                            <Button
+                                key={genre._id}
+                                variant="outlined"
+                                color="primary"
+                                onClick={() => handleGenreClick(genre._id)}
+                                className={styles.animeTag}
+                            >
+                                {genre.name}
+                            </Button>
                         ))}
-                    </div>
-                </div>
-                <div className={styles.animeEpisodes}>
-                    <h2>قائمة الحلقات</h2>
-                    <ul>
-                        {anime.episodes && anime.episodes.length > 0 ? (
-                            anime.episodes.map(episode => (
-                                <li key={episode._id} className={styles.episodeItem} onClick={() => openModal(episode)}>
-                                    <div className={styles.episodePlayIcon}>▶</div>
-                                    <div className={styles.episodeInfo}>
-                                        <h3>{episode.title}</h3>
-                                        <p>{anime.title}</p>
-                                    </div>
-                                    <img src={`http://localhost:5000${anime.pictureUrl}`} alt={episode.title} className={styles.episodeThumbnail} />
-                                </li>
-                            ))
-                        ) : (
-                            <li>No episodes available</li>
-                        )}
-                    </ul>
-                </div>
-            </div>
-            <div className={styles.animeSidebar}>
-                <img src={`http://localhost:5000${anime.pictureUrl}`} alt={anime.title} className={styles.animeImage} />
-                <div className={styles.animeMeta}>
-                    <button className={styles.watchNowButton}>يعرض الآن</button>
-                    <button className={styles.malButton}>MAL صفحة</button>
-                    <button className={styles.trailerButton}>العرض التشويقي</button>
-                    <p><strong>النوع:</strong> {anime.type ? anime.type.name : 'N/A'}</p>
-                    <p><strong>سنة العرض:</strong> {anime.startDate ? anime.startDate : 'N/A'}</p>
-                    <p><strong>الموسم:</strong> {anime.season ? anime.season.name : 'N/A'}</p>
-                    <p><strong>المصدر:</strong> {anime.source ? anime.source : 'N/A'}</p>
-                    <p><strong>الأستوديو:</strong> {anime.studio ? anime.studio : 'N/A'}</p>
-                    <p><strong>مدة الحلقة:</strong> {anime.episodeDuration ? `${anime.episodeDuration} دقيقة` : 'N/A'}</p>
-                    <p><strong>التصنيف:</strong> {anime.rating ? anime.rating : 'N/A'}</p>
-                </div>
-            </div>
+                    </Box>
+                    <Box className={styles.animeEpisodes}>
+                        <Typography variant="h5">Episodes List</Typography>
+                        <ul className={styles.episodeList}>
+                            {anime.episodes && anime.episodes.length > 0 ? (
+                                anime.episodes.map(episode => (
+                                    <li key={episode._id} className={styles.episodeItem} onClick={() => openModal(episode)}>
+                                        <Typography variant="body1">{episode.title}</Typography>
+                                    </li>
+                                ))
+                            ) : (
+                                <Typography>No episodes available</Typography>
+                            )}
+                        </ul>
+                    </Box>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                    <Box className={styles.animeSidebar}>
+                        <img src={`${import.meta.env.VITE_API_URL}${anime.pictureUrl}`} alt={anime.title} className={styles.animeImage} />
+                        <Box className={styles.sidebarActions}>
+                            <StarScoreDisplay score={anime.averageRating} />
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                startIcon={<Star />}
+                                onClick={handleRateAnime}
+                                className={styles.rateButton}
+                            >
+                                Rate
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                startIcon={isFavorite ? <Favorite color="error" /> : <FavoriteBorder />}
+                                onClick={handleFavoriteClick}
+                                className={styles.favoriteButton}
+                            >
+                                Fav
+                            </Button>
+                        </Box>
+                        <Box className={styles.animeMeta}>
+                            <Typography variant="body2"><strong>Status:</strong> {anime.status || 'N/A'}</Typography>
+                            <Typography variant="body2"><strong>Type:</strong> {anime.type?.name || 'N/A'}</Typography>
+                            <Typography variant="body2"><strong>Year:</strong> {anime.airingDate?.year || 'N/A'}</Typography>
+                            <Typography variant="body2"><strong>Season:</strong> {anime.season?.name || 'N/A'}</Typography>
+                            <Typography variant="body2"><strong>Source:</strong> {anime.source || 'N/A'}</Typography>
+                            <Typography variant="body2"><strong>Studio:</strong> {anime.studio || 'N/A'}</Typography>
+                            <Typography variant="body2"><strong>Duration:</strong> {anime.duration ? `${anime.duration} minutes` : 'N/A'}</Typography>
+                        </Box>
+                    </Box>
+                </Grid>
+            </Grid>
 
-            {/* Modal for episode details */}
-            {/* <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
-                contentLabel="Episode Details"
-                className={styles.modal}
-                overlayClassName={styles.overlay}
-            >
-                {selectedEpisode && (
-                    <div className="modal-content">
-                        <h2>{selectedEpisode.title}</h2>
-                        <p>Server Details: {selectedEpisode.serverDetails}</p>
-                        <p>URL: <a href={selectedEpisode.url} target="_blank" rel="noopener noreferrer">{selectedEpisode.url}</a></p>
-                        <button onClick={closeModal} className={styles.closeModalButton}>Close</button>
-                    </div>
-                )}
-            </Modal> */}
-        </div>
+            {/* Modal for rating anime */}
+            <Dialog open={ratingDialogOpen} onClose={() => setRatingDialogOpen(false)}>
+                <DialogTitle>Rate Anime</DialogTitle>
+                <DialogContent>
+                    <Box display="flex" flexDirection="column" alignItems="center">
+                        <Rating
+                            name="rating"
+                            value={selectedRating}
+                            max={10}
+                            precision={0.5}
+                            onChange={(event, newValue) => setSelectedRating(newValue)}
+                            size="large"
+                            sx={{
+                                '& .MuiRating-iconFilled': {
+                                    color: '#ff6d75',
+                                },
+                                '& .MuiRating-iconHover': {
+                                    color: '#ff3d47',
+                                },
+                            }}
+                        />
+                        <Typography variant="h6" sx={{ mt: 2 }}>
+                            {selectedRating ? `Your Rating: ${selectedRating}` : 'Select a rating'}
+                        </Typography>
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setRatingDialogOpen(false)} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={submitRating} color="primary">
+                        Submit
+                    </Button>
+                    {userRating !== null && (
+                        <Button onClick={removeRating} color="secondary">
+                            Remove Rating
+                        </Button>
+                    )}
+                </DialogActions>
+            </Dialog>
+        </Container>
     );
 };
 

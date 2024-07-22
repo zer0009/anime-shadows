@@ -1,21 +1,39 @@
-import React from 'react';
-import useFetchAnimeList from '../hooks/useFetchAnimeList';
+import React, { useState, useEffect } from 'react';
+import useFetchMovieList from '../hooks/useFetchMovieList';
 import ListDisplay from '../components/ListDisplay/ListDisplay';
+import PaginationComponent from '../components/Pagination/PaginationComponent';
+import { Box } from '@mui/material';
 
 const MovieList = () => {
-    const { animeList, loading, error } = useFetchAnimeList();
+    const [currentPage, setCurrentPage] = useState(1);
+    const { movieList, loading, error, totalPages } = useFetchMovieList(currentPage);
 
-    // Filter the anime list to include only movies
-    const movieList = animeList.filter(anime => anime.type && anime.type.name.toLowerCase() === 'movie');
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    useEffect(() => {
+        // Ensure currentPage is always defined
+        if (currentPage === undefined) {
+            setCurrentPage(1);
+        }
+    }, [currentPage]);
 
     return (
-        <ListDisplay
-            title="Movie List"
-            list={movieList}
-            loading={loading}
-            error={error}
-            fields={['title', 'genre', 'rating']}
-        />
+        <Box sx={{ padding: '20px' }}>
+            <ListDisplay
+                title="Movie List"
+                list={movieList}
+                loading={loading}
+                error={error}
+                fields={['title', 'genre', 'rating']}
+            />
+            <PaginationComponent
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+            />
+        </Box>
     );
 };
 
