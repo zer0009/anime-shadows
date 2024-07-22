@@ -5,11 +5,9 @@ const createEpisode = async (req, res) => {
     const { animeId, number, title, streamingServers, downloadServers } = req.body;
 
     try {
-        // Create a new episode
         const episode = new Episode({ anime: animeId, number, title, streamingServers, downloadServers });
         await episode.save();
 
-        // Find the anime by ID and update its episodes array
         const anime = await Anime.findById(animeId);
         if (!anime) {
             return res.status(404).json({ message: 'Anime not found' });
@@ -61,7 +59,6 @@ const deleteEpisode = async (req, res) => {
             return res.status(404).json({ message: 'Episode not found' });
         }
 
-        // Remove the episode from the anime's episodes array
         const anime = await Anime.findById(episode.anime);
         if (anime) {
             anime.episodes.pull(episode._id);
@@ -78,7 +75,7 @@ const deleteEpisode = async (req, res) => {
 const getEpisodesByAnimeId = async (req, res) => {
     const { animeId } = req.params;
     try {
-        const episodes = await Episode.find({ anime: animeId }).populate('anime');
+        const episodes = await Episode.find({ anime: animeId }).sort({ number: 1 }).populate('anime');
         res.status(200).json(episodes);
     } catch (error) {
         console.error('Error fetching episodes:', error);
@@ -86,51 +83,28 @@ const getEpisodesByAnimeId = async (req, res) => {
     }
 };
 
-const getRecentEpisodes = async (req, res) => {
-    try {
-        // Fetch the most recent episodes, limit to 10 for example
-        const recentEpisodes = await Episode.find()
-            .sort({ updatedAt: -1 }) // Sort by updatedAt in descending order
-            .limit(10)
-            .populate('anime'); // Populate the anime details
-
-        // Filter out episodes whose anime has been deleted
-        const filteredEpisodes = recentEpisodes.filter(episode => episode.anime !== null);
-
-        res.status(200).json(filteredEpisodes);
-    } catch (error) {
-        console.error('Error fetching recent episodes:', error);
-        res.status(500).json({ message: 'Error fetching recent episodes' });
-    }
-};
-
 const getRecentlyUpdatedEpisodes = async (req, res) => {
+    const { page = 1, limit = 10 } = req.query;
     try {
         const recentEpisodes = await Episode.aggregate([
-            {
-                $sort: { updatedAt: -1 } // Sort episodes by updatedAt in descending order
-            },
-            {
-                $group: {
-                    _id: "$anime", // Group by anime
-                    latestEpisode: { $first: "$$ROOT" } // Get the most recent episode for each anime
-                }
-            },
-            {
-                $replaceRoot: { newRoot: "$latestEpisode" } // Replace the root with the latest episode
-            },
-            {
-                $limit: 10 // Limit to 10 episodes
-            }
-        ]).exec();
+            { $sort: { updatedAt: -1 } },
+            { $group: { _id: "$anime", latestEpisode: { $first: "$$ROOT" } } },
+            { $replaceRoot: { newRoot: "$latestEpisode" } },
+            { $skip: (page - 1) * limit },
+            { $limit: parseInt(limit) }
+        ]);
 
-        // Populate the anime details
         const populatedEpisodes = await Episode.populate(recentEpisodes, { path: 'anime' });
-
-        // Filter out episodes whose anime has been deleted
         const filteredEpisodes = populatedEpisodes.filter(episode => episode.anime !== null);
 
-        res.status(200).json(filteredEpisodes);
+        // Calculate the total number of unique animes
+        const totalAnimes = await Episode.distinct('anime').then(animes => animes.length);
+
+        res.status(200).json({
+            episodes: filteredEpisodes,
+            totalPages: Math.ceil(totalAnimes / limit),
+            currentPage: parseInt(page)
+        });
     } catch (error) {
         console.error('Error fetching recently updated episodes:', error);
         res.status(500).json({ message: 'Error fetching recently updated episodes' });
@@ -143,6 +117,5 @@ module.exports = {
     updateEpisode,
     deleteEpisode,
     getEpisodesByAnimeId,
-    getRecentEpisodes,
     getRecentlyUpdatedEpisodes
 };

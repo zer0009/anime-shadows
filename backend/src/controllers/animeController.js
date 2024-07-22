@@ -51,9 +51,6 @@ exports.updateAnime = async (req, res) => {
   const { id } = req.params;
   const updateData = req.body;
   const file = req.file;
-
-  console.log('Received update data:', updateData); // Add this line to log the received data
-
   try {
     if (updateData.genres) {
       if (!Array.isArray(updateData.genres) || !updateData.genres.every(genre => typeof genre === 'string')) {
@@ -227,10 +224,10 @@ exports.getAnimeViewCount = async (req, res) => {
 };
 
 exports.getPopularAnimes = async (req, res) => {
-  const { timeFrame, genre } = req.query;
+  const { timeFrame, genre, page = 1, limit = 10 } = req.query;
 
   try {
-    const popularAnimes = await AnimeService.getPopularAnimes(timeFrame, genre);
+    const popularAnimes = await AnimeService.getPopularAnimes(timeFrame, genre, parseInt(page), parseInt(limit));
     res.json(popularAnimes);
   } catch (err) {
     res.status(400).json({ error: err.message });

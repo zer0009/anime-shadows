@@ -1,32 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { fetchRecentEpisodes } from '../api/modules/episode';
-import ListDisplay from '../components/ListDisplay/ListDisplay';
+import React, { useState } from 'react';
+import { Box, Typography, Grid } from '@mui/material';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
-import { Box, Typography } from '@mui/material';
+import useFetchRecentEpisodes from '../hooks/useFetchRecentEpisodes';
+import AnimeCard from '../components/AnimeCard/AnimeCard';
+import styles from './RecentEpisodes.module.css'; // Assuming you have a CSS module for styling
 
 const RecentEpisodes = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [episodeList, setEpisodeList] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [totalPages, setTotalPages] = useState(1);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await fetchRecentEpisodes(currentPage);
-        setEpisodeList(response.episodes);
-        setTotalPages(response.totalPages);
-      } catch (error) {
-        setError('Error fetching recent episodes');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [currentPage]);
+  const { recentEpisodes, loading, error, totalPages } = useFetchRecentEpisodes(currentPage);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -37,13 +18,23 @@ const RecentEpisodes = () => {
       <Typography variant="h4" sx={{ marginBottom: '20px' }}>
         Recently Updated Episodes
       </Typography>
-      <ListDisplay
-        title="Recently Updated Episodes"
-        list={episodeList}
-        loading={loading}
-        error={error}
-        fields={['title', 'genre', 'rating']}
-      />
+      {loading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
+      {!loading && !error && (
+        <Grid container spacing={1} className={styles.grid}>
+          {Array.isArray(recentEpisodes) && recentEpisodes.map((episode) => (
+            <Grid item xs={12} sm={6} md={4} lg={2.2} key={episode._id}>
+              <AnimeCard
+                anime={episode.anime}
+                episodeNumber={episode.number}
+                onClick={() => {
+                  console.log(`Clicked on episode with id: ${episode.anime._id}`);
+                }}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      )}
       <PaginationComponent
         currentPage={currentPage}
         totalPages={totalPages}

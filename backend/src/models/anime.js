@@ -11,7 +11,7 @@ const animeSchema = new mongoose.Schema({
   season: { type: mongoose.Schema.Types.ObjectId, ref: 'Season' },
   episodes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Episode' }],
   pictureUrl: { type: String },
-  myAnimeListRating: { type: Number },
+  myAnimeListUrl: { type: String }, // Add this line
   type: { type: mongoose.Schema.Types.ObjectId, ref: 'Type' },
   genres: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' }],
   ratings: [ratingSchema],
@@ -33,6 +33,12 @@ animeSchema.methods.calculateAverageRating = function() {
 
 animeSchema.methods.getUserCount = function() {
   return this.ratings.length;
+};
+
+animeSchema.methods.fetchMyAnimeListData = async function() {
+  const { fetchMyAnimeListRating } = require('../utils/myAnimeList');
+  const { rating, userCount } = await fetchMyAnimeListRating(this.myAnimeListUrl);
+  return { rating, userCount };
 };
 
 module.exports = mongoose.model('Anime', animeSchema);

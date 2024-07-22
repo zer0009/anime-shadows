@@ -16,7 +16,8 @@ const PopularAnime = () => {
       try {
         setLoading(true);
         const response = await fetchPopularAnime(currentPage);
-        setAnimeList(response.animes);
+        console.log(response);
+        setAnimeList(response.sortedAnimes || []); // Ensure animeList is always an array
         setTotalPages(response.totalPages);
       } catch (error) {
         setError('Error fetching popular anime');

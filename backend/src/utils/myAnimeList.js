@@ -6,7 +6,12 @@ const fetchMyAnimeListRating = async (url) => {
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
     const rating = $('span[itemprop="ratingValue"]').text().trim();
-    return parseFloat(rating);
+    const userCount = $('span[itemprop="ratingCount"]').text().trim().replace(/,/g, ''); // Remove commas for parsing
+
+    return {
+      rating: parseFloat(rating),
+      userCount: parseInt(userCount, 10) // Parse user count as integer
+    };
   } catch (error) {
     console.error('Error fetching MyAnimeList rating:', error);
     throw error;

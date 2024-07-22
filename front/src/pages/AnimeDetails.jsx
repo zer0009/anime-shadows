@@ -117,6 +117,13 @@ const AnimeDetails = () => {
         }
     };
 
+    const getScoreDisplayProps = (anime) => {
+        return {
+            score: anime.myAnimeListRating || 0,
+            userCount: anime.myAnimeListUserCount || 0
+        };
+    };
+
     if (loading) {
         return <LoadingSpinner />;
     }
@@ -136,7 +143,7 @@ const AnimeDetails = () => {
                     <Box className={styles.titleAndScores}>
                         <Typography variant="h4" className={styles.animeTitle}>{anime.title}</Typography>
                         <Box className={styles.scoreSection}>
-                            <ScoreDisplay score={anime.myAnimeListRating} userCount={100} label=" MAL" />
+                            <ScoreDisplay {...getScoreDisplayProps(anime)} />
                         </Box>
                     </Box>
                     <Typography variant="body1" className={styles.animeSubtitle}>{anime.description}</Typography>

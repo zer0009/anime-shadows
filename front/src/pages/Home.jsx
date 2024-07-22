@@ -24,9 +24,10 @@ const Home = () => {
         const fetchPopular = async () => {
             try {
                 const response = await fetchPopularAnime('all');
-                setPopularAnimes(response);
+                setPopularAnimes(response.sortedAnimes || []); // Ensure popularAnimes is always an array
             } catch (error) {
                 console.error('Error fetching popular animes:', error);
+                setPopularAnimes([]); // Set to empty array on error
             }
         };
 
@@ -138,7 +139,7 @@ const Home = () => {
                     pagination={{ clickable: true }}
                     scrollbar={{ draggable: true }}
                 >
-                    {recentEpisodes.map((episode) => (
+                    {Array.isArray(recentEpisodes) && recentEpisodes.map((episode) => (
                         <SwiperSlide key={episode._id}>
                             <AnimeCard
                                 anime={episode.anime}

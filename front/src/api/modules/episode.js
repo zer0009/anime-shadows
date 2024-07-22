@@ -22,13 +22,8 @@ export const fetchEpisodeById = async (episodeId) => {
 
 export const fetchRecentEpisodes = async (page = 1, limit = 10) => {
     try {
-        const response = await API.get('/episodes/recent', {
-            params: {
-                page,
-                limit
-            }
-        });
-        return response.data;
+        const response = await API.get(`/episodes/recent?page=${page}&limit=${limit}`);
+        return response.data; // Ensure the correct data is returned
     } catch (error) {
         console.error('Error fetching recent episodes:', error);
         throw error;
