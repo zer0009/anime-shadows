@@ -3,13 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "npm start --prefix backend",
-    "build": "npm run build --prefix front",
-    "vite": "vite",
-    "server": "nodemon backend/server.js",
-    "dev": "concurrently \"npm run server\" \"npm run vite\"",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "heroku-postbuild": "npm run build"
+    "build": "npm run build --prefix front"
   },
   "engines": {
     "node": "20.x"
