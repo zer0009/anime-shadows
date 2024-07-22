@@ -1,7 +1,7 @@
 # example netlify.toml
    [build]
-     command = "npm run build"
-     publish = "build"
+     command = "npm run build --prefix front"
+     publish = "front/build"
 
    [[redirects]]
      from = "/*"
