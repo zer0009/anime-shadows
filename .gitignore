@@ -3,3 +3,5 @@ config
 uploads
 frontend1
 .env
+# Local Netlify folder
+.netlify
