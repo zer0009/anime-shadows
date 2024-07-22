@@ -4,8 +4,5 @@
     "scripts": {
       "start": "npm start --prefix backend",
       "build": "npm run build --prefix front"
-    },
-    "engines": {
-      "node": "21.x"
     }
   }
