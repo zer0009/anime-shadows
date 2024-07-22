@@ -21,7 +21,7 @@ app.use(express.json()); // Parse JSON bodies
 
 // Configure CORS
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' ? 'https://your-production-url.com' : 'http://localhost:5173',
+  origin: process.env.NODE_ENV === 'production' ? 'https://anime-shadows-front.netlify.app' : 'http://localhost:5173',
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
@@ -39,4 +39,4 @@ app.use('/api/episodes', episodeRoutes);
 app.use('/api/user', userRoutes);
 app.use(adminRoutes);
 
-module.exports = app
+module.exports = app;
