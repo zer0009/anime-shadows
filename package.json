@@ -6,6 +6,6 @@
       "build": "npm run build --prefix front"
     },
     "engines": {
-      "node": "20.x"
+      "node": "21.x"
     }
   }
