@@ -1,8 +1,11 @@
 {
-    "name": "anime-shadows-root",
-    "version": "1.0.0",
-    "scripts": {
-      "start": "npm start --prefix backend",
-      "build": "npm run build --prefix front"
-    }
+  "name": "anime-shadows-root",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npm start --prefix backend",
+    "build": "npm run build --prefix front"
+  },
+  "engines": {
+    "node": "20.x"
   }
+}
