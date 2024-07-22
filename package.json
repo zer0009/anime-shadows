@@ -1,7 +1,7 @@
 {
   "name": "anime-shadows",
   "version": "1.0.0",
-  "main": "backend/src/server.js",
+  "main": "server.js",
   "scripts": {
     "start": "node backend/src/server.js",
     "dev": "env-cmd -f ./config/dev.env nodemon backend/src/server.js"
