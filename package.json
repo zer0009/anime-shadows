@@ -2,30 +2,9 @@
   "name": "anime-shadows-root",
   "version": "1.0.0",
   "scripts": {
-    "start": "npm start --prefix backend",
-    "build": "npm run build --prefix front"
+    "start": "npm start --prefix backend"
   },
   "engines": {
     "node": "20.x"
-  },
-  "dependencies": {
-    "vite": "^5.3.1",
-    "@vitejs/plugin-react": "^4.3.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
-    "react-icons": "^5.2.1",
-    "react-modal": "^3.16.1",
-    "react-player": "^2.16.0",
-    "react-router-dom": "^6.24.1",
-    "@fortawesome/fontawesome-free": "^6.5.2",
-    "swiper": "^11.1.5",
-    "@mui/icons-material": "^5.16.0",
-    "@mui/joy": "^5.0.0-beta.47",
-    "@mui/material": "^5.16.1",
-    "@mui/x-date-pickers": "^7.11.0",
-    "yup": "^1.4.0",
-    "formik": "^2.4.6"
   }
 }
