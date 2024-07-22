@@ -39,4 +39,10 @@ app.use('/api/episodes', episodeRoutes);
 app.use('/api/user', userRoutes);
 app.use(adminRoutes);
 
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send({ error: 'Something went wrong!' });
+});
+
 module.exports = app;
