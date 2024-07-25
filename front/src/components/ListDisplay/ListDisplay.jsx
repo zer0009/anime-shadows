@@ -3,7 +3,7 @@ import { CircularProgress, Typography, Grid } from '@mui/material';
 import AnimeCard from '../AnimeCard/AnimeCard';
 import styles from './ListDisplay.module.css';
 
-const ListDisplay = ({ title, list, loading, error, fields }) => {
+const ListDisplay = React.memo(({ title, list, loading, error, fields }) => {
     if (loading) {
         return <div className={styles.loader}><CircularProgress /></div>;
     }
@@ -21,7 +21,11 @@ const ListDisplay = ({ title, list, loading, error, fields }) => {
                 {list.length > 0 ? (
                     list.map(item => (
                         <Grid item xs={12} sm={6} md={4} lg={2.2} key={item._id}>
-                            <AnimeCard anime={item} episodeNumber={item.episodeNumber} onClick={() => fields.onClick(item._id)} />
+                            <AnimeCard 
+                                anime={item} 
+                                episodeNumber={item.episodeNumber} 
+                                onClick={() => fields.onClick(item._id)} 
+                            />
                         </Grid>
                     ))
                 ) : (
@@ -32,6 +36,6 @@ const ListDisplay = ({ title, list, loading, error, fields }) => {
             </Grid>
         </div>
     );
-};
+});
 
 export default ListDisplay;

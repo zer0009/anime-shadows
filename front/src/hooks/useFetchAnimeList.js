@@ -10,7 +10,7 @@ const useFetchAnimeList = (initialPage = 1, initialLimit = 10) => {
     const [currentPage, setCurrentPage] = useState(initialPage);
     const [limit, setLimit] = useState(initialLimit);
 
-    const fetchAnimeList = useMemo(() => async (page, limit) => {
+    const fetchAnimeList = useCallback(async (page, limit) => {
         try {
             setLoading(true);
             const response = await fetchAnime(page, limit);
@@ -44,7 +44,18 @@ const useFetchAnimeList = (initialPage = 1, initialLimit = 10) => {
         }
     }, []);
 
-    return { animeList, searchResults, loading, error, totalPages, handleSearch, currentPage, setCurrentPage, limit, setLimit };
+    return useMemo(() => ({
+        animeList,
+        searchResults,
+        loading,
+        error,
+        totalPages,
+        handleSearch,
+        currentPage,
+        setCurrentPage,
+        limit,
+        setLimit
+    }), [animeList, searchResults, loading, error, totalPages, handleSearch, currentPage, limit]);
 };
 
 export default useFetchAnimeList;

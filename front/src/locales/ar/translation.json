@@ -1,0 +1,27 @@
+{
+  "header": {
+    "home": "الرئيسية",
+    "animeList": "قائمة الأنمي",
+    "movieList": "قائمة الأفلام",
+    "seasonAnime": "أنمي الموسم",
+    "login": "تسجيل الدخول",
+    "register": "تسجيل",
+    "profile": "الملف الشخصي",
+    "history": "التاريخ",
+    "favorites": "المفضلة",
+    "adminDashboard": "لوحة التحكم",
+    "logout": "تسجيل الخروج"
+  },
+    "animeDetails": {
+      "title": "العنوان",
+      "description": "الوصف",
+      "episodes": "الحلقات",
+      "status": "الحالة",
+      "type": "النوع",
+      "year": "السنة",
+      "season": "الموسم",
+      "source": "المصدر",
+      "studio": "الاستوديو",
+      "duration": "المدة"
+    }
+  }

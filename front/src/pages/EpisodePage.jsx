@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { fetchEpisodeById, fetchEpisodesByAnimeId } from '../api/modules/episode'; // Assume you have these API functions
+import { fetchEpisodeById, fetchEpisodesByAnimeId } from '../api/modules/episode';
 import { Typography, Box, Tabs, Tab, Paper, Button, List, ListItem, ListItemText } from '@mui/material';
 import ReactPlayer from 'react-player';
 import styles from './EpisodePage.module.css';
@@ -39,7 +39,7 @@ const EpisodePage = () => {
 
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
-    setEmbedError(false); // Reset embed error when changing tabs
+    setEmbedError(false);
   };
 
   const handleEmbedError = () => {

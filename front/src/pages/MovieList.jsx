@@ -1,23 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import useFetchMovieList from '../hooks/useFetchMovieList';
 import ListDisplay from '../components/ListDisplay/ListDisplay';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
 import { Box } from '@mui/material';
 
 const MovieList = () => {
-    const [currentPage, setCurrentPage] = useState(1);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const currentPage = parseInt(searchParams.get('page')) || 1;
     const { movieList, loading, error, totalPages } = useFetchMovieList(currentPage);
 
-    const handlePageChange = (page) => {
-        setCurrentPage(page);
-    };
+    const handlePageChange = useCallback((page) => {
+        setSearchParams({ page });
+    }, [setSearchParams]);
 
     useEffect(() => {
         // Ensure currentPage is always defined
         if (currentPage === undefined) {
-            setCurrentPage(1);
+            setSearchParams({ page: 1 });
         }
-    }, [currentPage]);
+    }, [currentPage, setSearchParams]);
 
     return (
         <Box sx={{ padding: '20px' }}>

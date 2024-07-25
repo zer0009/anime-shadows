@@ -111,3 +111,14 @@ export const deleteAnime = async (animeId) => {
         throw error;
     }
 };
+
+export const fetchUsers = async () => {
+    const response = await API.get('admin/users', getAuthHeaders());
+    return response.data;
+};
+
+
+export const updateUserRole = async (userId, role) => {
+    const response = await API.put(`admin/users/${userId}/role`, { role }, getAuthHeaders());
+    return response.data;
+};

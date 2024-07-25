@@ -17,9 +17,8 @@
   padding: 0 20px;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
+.logo img {
+  height: 50px;
 }
 
 .headerTitle {
@@ -90,15 +89,9 @@
   transform: scale(1.1);
 }
 
-.searchContainer {
+.searchIconButton {
   display: flex;
   align-items: center;
-  position: relative;
-}
-
-.searchOpen .searchInput {
-  width: 200px;
-  opacity: 1;
 }
 
 .userProfile {
@@ -154,10 +147,31 @@
   cursor: pointer;
   font-size: 16px;
   padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
   transition: background-color 0.3s, color 0.3s;
 }
 
 .dropdownMenu a:hover, .dropdownMenu button:hover {
   background-color: var(--secondary-light);
   color: var(--highlight-color);
+}
+
+.languageSwitcher {
+  display: flex;
+  gap: 10px;
+}
+
+.languageSwitcher button {
+  background: none;
+  border: none;
+  color: var(--highlight-color);
+  cursor: pointer;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+.languageSwitcher button:hover {
+  color: var(--glow-color);
 }

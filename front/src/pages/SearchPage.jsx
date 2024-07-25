@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import AnimeCard from '../components/AnimeCard/AnimeCard.jsx';
 import TagsModal from '../components/TagsModal/TagsModal.jsx';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
@@ -7,7 +8,9 @@ import PaginationComponent from '../components/Pagination/PaginationComponent';
 import styles from './SearchPage.module.css';
 
 const SearchPage = () => {
-    const { searchResults, loading, error, handleSearch, totalPages, currentPage, setCurrentPage, limit, setLimit } = useFetchAnimeList();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const currentPage = parseInt(searchParams.get('page')) || 1;
+    const { searchResults, loading, error, handleSearch, totalPages, setCurrentPage, limit, setLimit } = useFetchAnimeList();
     const [isTagsModalOpen, setIsTagsModalOpen] = useState(false);
     const [selectedTags, setSelectedTags] = useState([]);
     const [selectedType, setSelectedType] = useState('');
@@ -19,40 +22,40 @@ const SearchPage = () => {
 
     useEffect(() => {
         handleSearch('', selectedTags, selectedType, selectedSeason, selectedSort, selectedPopular, selectedState, broadMatches, currentPage, limit);
-    }, [currentPage, limit]);
+    }, [currentPage, limit, handleSearch]);
 
-    const handleTagsApply = (tags, broadMatches) => {
+    const handleTagsApply = useCallback((tags, broadMatches) => {
         setSelectedTags(tags);
         setBroadMatches(broadMatches);
         handleSearch('', tags, selectedType, selectedSeason, selectedSort, selectedPopular, selectedState, broadMatches, 1, limit);
-    };
+    }, [handleSearch, selectedType, selectedSeason, selectedSort, selectedPopular, selectedState, limit]);
 
-    const handleTypeChange = (type) => {
+    const handleTypeChange = useCallback((type) => {
         setSelectedType(type);
         handleSearch('', selectedTags, type, selectedSeason, selectedSort, selectedPopular, selectedState, broadMatches, 1, limit);
-    };
+    }, [handleSearch, selectedTags, selectedSeason, selectedSort, selectedPopular, selectedState, broadMatches, limit]);
 
-    const handleSeasonChange = (season) => {
+    const handleSeasonChange = useCallback((season) => {
         setSelectedSeason(season);
         handleSearch('', selectedTags, selectedType, season, selectedSort, selectedPopular, selectedState, broadMatches, 1, limit);
-    };
+    }, [handleSearch, selectedTags, selectedType, selectedSort, selectedPopular, selectedState, broadMatches, limit]);
 
-    const handleSortChange = (sort) => {
+    const handleSortChange = useCallback((sort) => {
         setSelectedSort(sort);
         handleSearch('', selectedTags, selectedType, selectedSeason, sort, selectedPopular, selectedState, broadMatches, 1, limit);
-    };
+    }, [handleSearch, selectedTags, selectedType, selectedSeason, selectedPopular, selectedState, broadMatches, limit]);
 
-    const handlePopularChange = (popular) => {
+    const handlePopularChange = useCallback((popular) => {
         setSelectedPopular(popular);
         handleSearch('', selectedTags, selectedType, selectedSeason, selectedSort, popular, selectedState, broadMatches, 1, limit);
-    };
+    }, [handleSearch, selectedTags, selectedType, selectedSeason, selectedSort, selectedState, broadMatches, limit]);
 
-    const handleStateChange = (state) => {
+    const handleStateChange = useCallback((state) => {
         setSelectedState(state);
         handleSearch('', selectedTags, selectedType, selectedSeason, selectedSort, selectedPopular, state, broadMatches, 1, limit);
-    };
+    }, [handleSearch, selectedTags, selectedType, selectedSeason, selectedSort, selectedPopular, broadMatches, limit]);
 
-    const handleReset = () => {
+    const handleReset = useCallback(() => {
         setSelectedTags([]);
         setSelectedType('');
         setSelectedSeason('');
@@ -61,11 +64,11 @@ const SearchPage = () => {
         setBroadMatches(false);
         setSelectedState('');
         handleSearch('', [], '', '', '', '', '', false, 1, limit);
-    };
+    }, [handleSearch, limit]);
 
-    const handlePageChange = (page) => {
-        setCurrentPage(page);
-    };
+    const handlePageChange = useCallback((page) => {
+        setSearchParams({ page });
+    }, [setSearchParams]);
 
     console.log('searchResults:', searchResults);
 

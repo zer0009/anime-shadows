@@ -3,44 +3,52 @@ const AnimeService = require('../services/animeService');
 const User = require('../models/user');
 const Anime = require('../models/anime');
 const Genre = require('../models/genre');
+const mongoose = require('mongoose');
+const { deleteImage } = require('../middlewares/fileUpload');
 
-exports.uploadAnime = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    if (req.file) AnimeService.handleFileDeletion(req.file.path);
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  const { title, description, seasonId, myAnimeListUrl, typeId, genres, numberOfEpisodes, source, duration, status, airingDate } = req.body;
-  const file = req.file;
-
-  try {
-    const genresArray = JSON.parse(genres);
-    if (!Array.isArray(genresArray) || !genresArray.every(genre => typeof genre === 'string')) {
-      throw new Error('Genres must be an array of strings');
+exports.uploadAnime = [
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
 
-    const newAnime = await AnimeService.createAnime({
-      title,
-      description,
-      seasonId,
-      myAnimeListUrl,
-      typeId,
-      genres: genresArray,
-      numberOfEpisodes,
-      source,
-      duration,
-      status,
-      airingDate,
-      file
-    });
+    const { title, description, seasonId, myAnimeListUrl, typeId, genres, numberOfEpisodes, source, duration, status, airingDate } = req.body;
+    const file = req.file;
 
-    res.status(201).json(newAnime);
-  } catch (err) {
-    if (file) AnimeService.handleFileDeletion(file.path);
-    res.status(400).json({ error: err.message });
+    try {
+      const genresArray = JSON.parse(genres);
+      if (!Array.isArray(genresArray) || !genresArray.every(genre => mongoose.Types.ObjectId.isValid(genre))) {
+        throw new Error('Genres must be an array of valid ObjectId strings');
+      }
+
+      let pictureUrl;
+      if (file) {
+        pictureUrl = file.path; // Cloudinary returns the URL in the `path` property
+      }
+
+      const newAnime = await AnimeService.createAnime({
+        title,
+        description,
+        seasonId,
+        myAnimeListUrl,
+        typeId,
+        genres: genresArray.map(genre => new mongoose.Types.ObjectId(genre)),
+        numberOfEpisodes,
+        source,
+        duration,
+        status,
+        airingDate,
+        pictureUrl
+      });
+
+      res.status(201).json(newAnime);
+    } catch (err) {
+      if (file) deleteImage(file.path); // Delete the uploaded image if there is an error
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
   }
-};
+];
 
 exports.updateAnime = async (req, res) => {
   const errors = validationResult(req);
@@ -53,13 +61,15 @@ exports.updateAnime = async (req, res) => {
   const file = req.file;
   try {
     if (updateData.genres) {
-      if (!Array.isArray(updateData.genres) || !updateData.genres.every(genre => typeof genre === 'string')) {
-        throw new Error('Genres must be an array of strings');
+      const genresArray = JSON.parse(updateData.genres);
+      if (!Array.isArray(genresArray) || !genresArray.every(genre => mongoose.Types.ObjectId.isValid(genre))) {
+        throw new Error('Genres must be an array of valid ObjectId strings');
       }
+      updateData.genres = genresArray.map(genre => new mongoose.Types.ObjectId(genre));
     }
 
     if (updateData.seasonId) {
-      const seasonDoc = await Season.findById(updateData.seasonId);
+      const seasonDoc = await Season.findById(updateData.seasonId).lean();
       if (!seasonDoc) {
         throw new Error('Invalid season ID');
       }
@@ -68,7 +78,7 @@ exports.updateAnime = async (req, res) => {
     const updatedAnime = await AnimeService.updateAnime(id, updateData, file);
     res.status(200).json(updatedAnime);
   } catch (err) {
-    if (file) AnimeService.handleFileDeletion(file.path);
+    if (file) deleteImage(file.path); // Delete the uploaded image if there is an error
     res.status(400).json({ error: err.message });
   }
 };
@@ -195,7 +205,7 @@ exports.searchAnime = async (req, res) => {
 
   if (tags) {
     const tagsArray = tags.split(',');
-    const tagObjectIds = await Genre.find({ name: { $in: tagsArray } }).select('_id');
+    const tagObjectIds = await Genre.find({ name: { $in: tagsArray } }).select('_id').lean();
     const tagIds = tagObjectIds.map(tag => tag._id);
 
     const filterQuery = broadMatches === 'true'
@@ -206,7 +216,7 @@ exports.searchAnime = async (req, res) => {
   }
 
   try {
-    const animes = await Anime.find(query).populate('season').populate('type').populate('genres');
+    const animes = await Anime.find(query).populate('season').populate('type').populate('genres').lean();
     res.json(animes);
   } catch (error) {
     res.status(500).json({ message: error.message });

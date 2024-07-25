@@ -1,0 +1,31 @@
+{
+    "header": {
+        "home": "Home",
+        "animeList": "Anime List",
+        "movieList": "Movie List",
+        "seasonAnime": "Season Anime",
+        "login": "Login",
+        "register": "Register",
+        "profile": "Profile",
+        "history": "History",
+        "favorites": "Favorites",
+        "adminDashboard": "Admin Dashboard",
+        "logout": "Logout"
+      },
+    "animeDetails": {
+      "title": "Title",
+      "description": "Description",
+      "episodes": "Episodes",
+      "status": "Status",
+      "type": "Type",
+      "year": "Year",
+      "season": "Season",
+      "source": "Source",
+      "studio": "Studio",
+      "duration": "Duration",
+      "rating": "Rating",
+      "favorite": "Fav",
+      "rate": "Rate"
+
+    }
+  }

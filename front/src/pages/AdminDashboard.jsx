@@ -5,6 +5,7 @@ import AddType from '../components/admin/AddType';
 import AddGenre from '../components/admin/AddGenre';
 import ManageAnime from '../components/admin/ManageAnime';
 import AddSeason from '../components/admin/AddSeason';
+import ManageUsers from '../components/admin/ManageUsers';
 import styles from './AdminDashboard.module.css';
 
 const AdminDashboard = () => {
@@ -38,6 +39,7 @@ const AdminDashboard = () => {
           <Tab label="Add Genre" style={{ color: 'white' }} />
           <Tab label="Manage Anime" style={{ color: 'white' }} />
           <Tab label="Add Season" style={{ color: 'white' }} />
+          <Tab label="Manage Users" style={{ color: 'white' }} />
         </Tabs>
       </Box>
       <Grid container spacing={3} className={styles.tabContent}>
@@ -73,6 +75,13 @@ const AdminDashboard = () => {
           <Grid item xs={12}>
             <Paper className={styles.paper}>
               <AddSeason />
+            </Paper>
+          </Grid>
+        )}
+        {tabIndex === 5 && ( 
+          <Grid item xs={12}>
+            <Paper className={styles.paper}>
+              <ManageUsers />
             </Paper>
           </Grid>
         )}

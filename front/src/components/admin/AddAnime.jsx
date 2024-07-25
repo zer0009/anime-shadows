@@ -56,7 +56,10 @@ const AddAnime = () => {
       formData.append('file', image);
     }
 
-    console.log('Form Data:', Object.fromEntries(formData.entries()));
+    // Debugging line to log form data
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
 
     try {
       await addAnime(formData);

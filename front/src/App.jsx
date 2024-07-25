@@ -1,6 +1,8 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext'; // Import AuthProvider
+import { AuthProvider } from './context/AuthContext';
+import { I18nextProvider } from 'react-i18next';
+import i18n from './i18n';
 import Header from './components/common/Header.jsx';
 import Home from './pages/Home.jsx';
 import AnimeList from './pages/AnimeList.jsx';
@@ -24,22 +26,26 @@ import FilteredListPage from './pages/FilteredListPage.jsx';
 import AddEpisode from './components/admin/AddEpisode.jsx';
 import PopularAnime from './pages/PopularAnime.jsx';
 import RecentEpisodes from './pages/RecentEpisodes.jsx';
+import AdminRegister from './pages/AdminRegister.jsx';
+import Footer from './components/common/Footer.jsx';
 
 
 function App() {
   return (
-    <AuthProvider>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/anime-list" element={<AnimeList />} />
-        <Route path="/movie-list" element={<MovieList />} />
+    <I18nextProvider i18n={i18n}>
+      <AuthProvider>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/anime-list" element={<AnimeList />} />
+          <Route path="/movie-list" element={<MovieList />} />
           <Route path="/season-anime" element={<SeasonAnime />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/anime/:id" element={<AnimeDetails />} />
           <Route path="/filter/:filterType/:filterValue" element={<FilteredListPage />} />
           <Route path="/search" element={<SearchPage />} />
+          <Route path="/admin-register" element={<AdminRegister />} />
           <Route path="/popular-anime" element={<PopularAnime />} />
           <Route path="/recent-episodes" element={<RecentEpisodes />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
@@ -52,7 +58,9 @@ function App() {
           <Route path="/admin/edit-episodes/:animeId" element={<AdminRoute><EditEpisodes /></AdminRoute>} />
           <Route path="/admin/add-episode/:animeId" element={<AdminRoute><AddEpisode /></AdminRoute>} />
         </Routes>
-    </AuthProvider>
+        <Footer />
+      </AuthProvider>
+    </I18nextProvider>
   );
 }
 

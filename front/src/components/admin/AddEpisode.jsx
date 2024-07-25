@@ -35,6 +35,12 @@ const AddEpisode = () => {
     }
   }, [animeId]);
 
+  useEffect(() => {
+    if (animeName && number) {
+      setTitle(`${animeName} Episode ${number}`);
+    }
+  }, [animeName, number]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -90,14 +96,6 @@ const AddEpisode = () => {
         />
         {!episodeId && (
           <>
-            <TextField
-              label="Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              fullWidth
-              margin="normal"
-              placeholder="Enter episode title"
-            />
             <TextField
               label="Number"
               value={number}

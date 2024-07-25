@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import ListDisplay from '../components/ListDisplay/ListDisplay';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
 import { Box } from '@mui/material';
 
 const AnimeList = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = parseInt(searchParams.get('page')) || 1;
   const { animeList, loading, error, totalPages, handleSearch } = useFetchAnimeList();
 
   useEffect(() => {
     handleSearch('', [], '', '', '', '', '', false, currentPage);
-  }, [currentPage]);
+  }, [currentPage, handleSearch]);
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  const handlePageChange = useCallback((page) => {
+    setSearchParams({ page });
+  }, [setSearchParams]);
 
   return (
     <Box sx={{ padding: '20px' }}>

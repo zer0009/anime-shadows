@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const animeController = require('../controllers/animeController');
-const upload = require('../middlewares/fileUpload');
 const { validateAnimeUpload, validateAnimeUpdate } = require('../middlewares/validation');
 const authMiddleware = require('../middlewares/authMiddleware');
 const authorize = require('../middlewares/roleMiddleware');
 const optionalAuth = require('../middlewares/optionalAuth');
+const { upload } = require('../middlewares/fileUpload');
 
 // Public Routes
 router.get('/', animeController.getAnimes);
@@ -24,8 +24,10 @@ router.post('/toggleEpisodeWatched', authMiddleware, animeController.toggleEpiso
 router.post('/:id/rate', authMiddleware, animeController.rateAnime);
 
 // Admin Routes
-router.post('/upload', upload.single('file'), authMiddleware, authorize('moderator', 'admin'), validateAnimeUpload, animeController.uploadAnime);
-router.put('/update/:id', upload.single('file'), authMiddleware, authorize('moderator', 'admin'), validateAnimeUpdate, animeController.updateAnime);
+router.post('/upload',upload.single('file'), authMiddleware, authorize('moderator', 'admin'), validateAnimeUpload, animeController.uploadAnime);
+
+router.put('/update/:id',upload.single('file'), authMiddleware, authorize('moderator', 'admin'), validateAnimeUpdate, animeController.updateAnime);
+
 router.post('/:animeId/episodes', authMiddleware, authorize('moderator', 'admin'), animeController.addEpisode);
 router.delete('/:id', authMiddleware, authorize('admin'), animeController.deleteAnime);
 

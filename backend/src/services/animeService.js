@@ -3,24 +3,11 @@ const Type = require('../models/type');
 const Genre = require('../models/genre');
 const Season = require('../models/season');
 const User = require('../models/user');
+const Episode = require('../models/episode');
 const { filterViewsByTimeFrame } = require('../utils/viewUtils');
-const fs = require('fs');
-const path = require('path');
+const { deleteImage } = require('../middlewares/fileUpload');
 
-const uploadDir = 'uploads';
 
-const handleFileDeletion = (filePath) => {
-  if (fs.existsSync(filePath)) {
-    fs.unlinkSync(filePath);
-  }
-};
-
-const handleFileUpload = (file, title) => {
-  const newFileName = `${title.replace(/\s+/g, '_')}${path.extname(file.originalname)}`;
-  const newFilePath = path.join(uploadDir, newFileName);
-  fs.renameSync(file.path, newFilePath);
-  return `/uploads/${newFileName}`;
-};
 
 const validateEntityById = async (Model, id, entityName, file) => {
   const entity = await Model.findById(id.trim());
@@ -31,20 +18,20 @@ const validateEntityById = async (Model, id, entityName, file) => {
   return entity;
 };
 
-const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeId, genres, numberOfEpisodes, source, duration, status, airingDate, file }) => {
+const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeId, genres, numberOfEpisodes, source, duration, status, airingDate, pictureUrl }) => {
   if (!typeId || !seasonId) {
     throw new Error('Type ID and Season ID are required');
   }
 
   let genreIds = Array.isArray(genres) ? genres : JSON.parse(genres);
 
-  await validateEntityById(Type, typeId, 'Type', file);
-  await validateEntityById(Season, seasonId, 'Season', file);
+  await validateEntityById(Type, typeId, 'Type');
+  await validateEntityById(Season, seasonId, 'Season');
 
   const validGenreIds = [];
   for (const genreId of genreIds) {
     try {
-      const genre = await validateEntityById(Genre, genreId, 'Genre', file);
+      const genre = await validateEntityById(Genre, genreId, 'Genre');
       validGenreIds.push(genre._id);
     } catch (error) {
       console.error(`Invalid genre ID: ${genreId}`, error);
@@ -63,7 +50,7 @@ const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeI
     duration,
     status,
     airingDate,
-    pictureUrl: file ? handleFileUpload(file, title) : undefined
+    pictureUrl,
   });
 
   await newAnime.save();
@@ -85,8 +72,8 @@ const updateAnime = async (id, updateData, file) => {
   }
 
   if (file) {
-    if (anime.pictureUrl) handleFileDeletion(path.join(uploadDir, path.basename(anime.pictureUrl)));
-    updateData.pictureUrl = handleFileUpload(file, anime.title);
+    await deleteImage(anime.pictureUrl); // Delete the old image if a new one is uploaded
+    updateData.pictureUrl = file.path;
   }
 
   const updatedAnime = await Anime.findByIdAndUpdate(id, { $set: updateData }, { new: true });
@@ -147,7 +134,7 @@ const getAnimes = async (query = '', tags = [], type = '', season = '', sort = '
   }
   if (state) filter.status = state.toLowerCase();
 
-  const sortOption = {};
+  const sortOption = { createdAt: -1 };
   if (sort) {
     if (sort === 'title') sortOption.title = 1;
     else if (sort === 'rating') sortOption.rating = -1;
@@ -255,7 +242,11 @@ const deleteAnime = async (id) => {
   const anime = await Anime.findById(id);
   if (!anime) throw new Error('Anime not found');
 
-  await Episode.deleteMany({ animeId: id });
+  const episodes = await Episode.find({ animeId: id });
+  if (episodes.length > 0) {
+    await Episode.deleteMany({ animeId: id });
+  }
+
   await User.updateMany(
     { $or: [{ 'history.anime': id }, { favorites: id }] },
     { $pull: { history: { anime: id }, favorites: id } }
@@ -343,7 +334,8 @@ const getMovies = async (page = 1, limit = 10) => {
   const movies = await Anime.find({ type: movieTypeId })
     .populate('type')
     .skip(skip)
-    .limit(limit);
+    .limit(limit)
+    .sort({ createdAt: -1 });
 
   const totalMovies = await Anime.countDocuments({ type: movieTypeId });
 

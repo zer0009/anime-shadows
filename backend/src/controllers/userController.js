@@ -1,16 +1,13 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const Anime = require('../models/anime');
 
 exports.register = async (req, res) => {
   const { username, email, password } = req.body;
   try {
-    // const hashedPassword = await bcrypt.hash(password, 8);
     const newUser = new User({ username, email, password});
     await newUser.save();
     await newUser.generateAuthToken()
-    // res.status(201).send({user,token })
     res.status(201).json({ message: 'User created'});
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -28,10 +25,7 @@ exports.login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ error: 'Invalid email or password' });
     }
-    // const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     const token = await user.generateAuthToken()
-    // const username = user.username
-    // const role = user.role
     res.json({ token, username: user.username, role: user.role});
   } catch (err) {
     res.status(400).json({ error: err.message });

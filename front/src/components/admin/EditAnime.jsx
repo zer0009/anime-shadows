@@ -22,6 +22,7 @@ const EditAnime = () => {
   const [allGenres, setAllGenres] = useState([]);
   const [allTypes, setAllTypes] = useState([]);
   const [allSeasons, setAllSeasons] = useState([]);
+  const [file, setFile] = useState(null); // New state for file
 
   useEffect(() => {
     const loadAnime = async () => {
@@ -53,20 +54,24 @@ const EditAnime = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const animeData = {
-        title,
-        pictureUrl,
-        type,
-        genres,
-        season, // Change seasonId to season
-        myAnimeListUrl,
-        numberOfEpisodes,
-        source,
-        duration,
-        status
-      };
-      console.log('Sending update data:', animeData); // Add this line to log the sent data
-      await editAnime(animeId, animeData);
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('type', type);
+      formData.append('genres', JSON.stringify(genres));
+      formData.append('season', season); // Change seasonId to season
+      formData.append('myAnimeListUrl', myAnimeListUrl);
+      formData.append('numberOfEpisodes', numberOfEpisodes);
+      formData.append('source', source);
+      formData.append('duration', duration);
+      formData.append('status', status);
+      if (file) {
+        formData.append('file', file); // Append file if it exists
+      } else {
+        formData.append('pictureUrl', pictureUrl); // Append existing pictureUrl if no new file
+      }
+
+      console.log('Sending update data:', formData); // Add this line to log the sent data
+      await editAnime(animeId, formData);
       alert('Anime edited successfully');
       navigate('/admin/manage-anime');
     } catch (error) {
@@ -79,7 +84,7 @@ const EditAnime = () => {
       <Typography variant="h6">Edit Anime</Typography>
       {anime && (
         <Paper className={styles.paper}>
-          <form onSubmit={handleSubmit} className={styles.form}>
+          <form onSubmit={handleSubmit} className={styles.form} encType="multipart/form-data">
             <TextField
               label="Title"
               value={title}
@@ -93,6 +98,13 @@ const EditAnime = () => {
               onChange={(e) => setPictureUrl(e.target.value)}
               fullWidth
               margin="normal"
+              disabled={!!file} // Disable if a new file is selected
+            />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFile(e.target.files[0])}
+              style={{ margin: '16px 0' }}
             />
             <FormControl fullWidth margin="normal">
               <InputLabel>Type</InputLabel>

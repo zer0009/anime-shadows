@@ -55,7 +55,7 @@ const Home = () => {
         <div className={styles.home}>
             <div className={styles.heroSection}>
                 <div className={styles.heroOverlay}>
-                    <h1 className={styles.heroTitle}>Welcome to Anime World</h1>
+                    <h1 className={styles.heroTitle}>Welcome to Anime Shadows</h1>
                     <p className={styles.heroSubtitle}>Discover your favorite anime</p>
                     <SearchBar onSearch={handleSearch} />
                 </div>
@@ -152,7 +152,6 @@ const Home = () => {
                     ))}
                 </Swiper>
             </div>
-            <Footer />
         </div>
     );
 };

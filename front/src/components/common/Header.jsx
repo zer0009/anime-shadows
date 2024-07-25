@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaUser, FaSearch, FaUserPlus } from 'react-icons/fa';
+import { Search, Person, PersonAdd, ExitToApp, AccountCircle, History, Favorite, Dashboard } from '@mui/icons-material';
 import { useAuth } from '../../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 import styles from './Header.module.css';
 
 const Header = () => {
+    const { t, i18n } = useTranslation();
     const { user, logout } = useAuth();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
@@ -39,28 +41,35 @@ const Header = () => {
         };
     }, [dropdownOpen]);
 
+    const changeLanguage = (lng) => {
+        i18n.changeLanguage(lng);
+        document.documentElement.dir = lng === 'ar' ? 'rtl' : 'ltr';
+    };
+
     const defaultProfilePicture = '/assets/images/default-profile-picture.jpg';
 
     return (
         <header className={styles.header}>
             <div className={styles.container}>
+                <Link to="/">
                 <h1 className={styles.headerTitle}>Anime Shadows</h1>
+                </Link>
                 <nav className={styles.headerNav}>
                     <ul>
-                        <li><Link to="/">Home</Link></li>
-                        <li><Link to="/anime-list">Anime List</Link></li>
-                        <li><Link to="/movie-list">Movie List</Link></li>
-                        <li><Link to="/season-anime">Season Anime</Link></li>
+                        <li><Link to="/">{t('header.home')}</Link></li>
+                        <li><Link to="/anime-list">{t('header.animeList')}</Link></li>
+                        <li><Link to="/movie-list">{t('header.movieList')}</Link></li>
+                        <li><Link to="/season-anime">{t('header.seasonAnime')}</Link></li>
                     </ul>
                 </nav>
                 <div className={styles.headerIcons}>
                     <Link to="/search" className={styles.searchIconButton}>
-                        <FaSearch className={styles.icon} />
+                        <Search className={styles.icon} />
                     </Link>
                     {!user ? (
                         <>
-                            <Link to="/login"><FaUser className={styles.icon} /></Link>
-                            <Link to="/register"><FaUserPlus className={styles.icon} /></Link>
+                            <Link to="/login"><Person className={styles.icon} /></Link>
+                            <Link to="/register"><PersonAdd className={styles.icon} /></Link>
                         </>
                     ) : (
                         <div className={styles.userProfile} ref={dropdownRef}>
@@ -74,17 +83,21 @@ const Header = () => {
                             <span className={styles.username} onClick={toggleDropdown}>{user.username}</span>
                             {dropdownOpen && (
                                 <div className={styles.dropdownMenu}>
-                                    <Link to="/profile">Profile</Link>
-                                    <Link to="/history">History</Link>
-                                    <Link to="/favorites">Favorites</Link>
+                                    <Link to="/profile"><AccountCircle /> {t('header.profile')}</Link>
+                                    <Link to="/history"><History /> {t('header.history')}</Link>
+                                    <Link to="/favorites"><Favorite /> {t('header.favorites')}</Link>
                                     {user.role === 'admin' && (
-                                        <Link to="/admin-dashboard">Admin Dashboard</Link>
+                                        <Link to="/admin-dashboard"><Dashboard /> {t('header.adminDashboard')}</Link>
                                     )}
-                                    <button onClick={handleLogout}>Logout</button>
+                                    <button onClick={handleLogout}><ExitToApp /> {t('header.logout')}</button>
                                 </div>
                             )}
                         </div>
                     )}
+                    <div className={styles.languageSwitcher}>
+                        <button onClick={() => changeLanguage('en')}>EN</button>
+                        <button onClick={() => changeLanguage('ar')}>AR</button>
+                    </div>
                 </div>
             </div>
         </header>
