@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchAnimeById, fetchPopularAnime } from '../api/modules/anime';
-import Footer from '../components/common/Footer';
 import SearchBar from '../components/SearchBar/SearchBar';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import useFetchRecentEpisodes from '../hooks/useFetchRecentEpisodes';
