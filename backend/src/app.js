@@ -15,25 +15,19 @@ require('./db/mongoose');
 const app = express();
 
 // Middleware
-// app.use(helmet()); // Security headers
-// app.use(morgan('combined')); // Logging
+app.use(helmet()); // Security headers
+app.use(morgan('combined')); // Logging
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 // Configure CORS
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' ? 'https://anime-shadows-front.netlify.app' : 'http://localhost:5173',
+  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
 
-// Middleware to set CORS headers for static files
-// app.use('/api/uploads', (req, res, next) => {
-//   res.header('Access-Control-Allow-Origin', '*');
-//   res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
-//   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-//   next();
-// });
+// Serve static files
 app.use('/api/uploads', express.static('uploads'));
 
 // Routes
@@ -42,14 +36,19 @@ app.use('/api/types', typeRoutes);
 app.use('/api/genres', genreRoutes);
 app.use('/api/seasons', seasonRoutes);
 app.use('/api/episodes', episodeRoutes);
-
 app.use('/api/user', userRoutes);
 app.use('/api/admin', adminRoutes);
 
 // Global error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send({ error: 'Something went wrong!' });
+  res.status(err.status || 500).send({
+    error: {
+      message: err.message || 'Something went wrong!',
+      // Optionally include stack trace in development
+      ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    }
+  });
 });
 
 module.exports = app;
