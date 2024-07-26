@@ -51,8 +51,9 @@ const Header = () => {
     return (
         <header className={styles.header}>
             <div className={styles.container}>
-                <Link to="/">
-                <h1 className={styles.headerTitle}>Anime Shadows</h1>
+                <Link to="/" className={styles.logo}>
+                {/* <h1 className={styles.headerTitle}>Anime Shadows</h1> */}
+                <img src="/assets/images/anime-shadows-logo.png" alt="Anime Shadows" className={styles.headerLogo} />
                 </Link>
                 <nav className={styles.headerNav}>
                     <ul>
