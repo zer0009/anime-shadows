@@ -8,6 +8,8 @@ const ratingSchema = new mongoose.Schema({
 
 const animeSchema = new mongoose.Schema({
   title: { type: String, required: true, trim: true, unique: true, index: true },
+  subTitle: { type: String, trim: true },
+  studio: { type: String, trim: true },
   description: { type: String, required: true, trim: true },
   season: { type: mongoose.Schema.Types.ObjectId, ref: 'Season', index: true },
   episodes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Episode' }],

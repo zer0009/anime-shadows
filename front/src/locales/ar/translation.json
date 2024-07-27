@@ -12,16 +12,38 @@
     "adminDashboard": "لوحة التحكم",
     "logout": "تسجيل الخروج"
   },
-    "animeDetails": {
-      "title": "العنوان",
-      "description": "الوصف",
-      "episodes": "الحلقات",
-      "status": "الحالة",
-      "type": "النوع",
-      "year": "السنة",
-      "season": "الموسم",
-      "source": "المصدر",
-      "studio": "الاستوديو",
-      "duration": "المدة"
-    }
+  "animeDetails": {
+    "rateAnime": "تقييم الأنمي",
+    "yourRating": "تقييمك",
+    "selectRating": "اختر التقييم",
+    "cancel": "إلغاء",
+    "submit": "إرسال",
+    "removeRating": "إزالة التقييم",
+    "episodes": "الحلقات",
+    "noEpisodes": "لا توجد حلقات",
+    "status": "الحالة",
+    "type": "النوع",
+    "year": "السنة",
+    "season": "الموسم",
+    "source": "المصدر",
+    "studio": "الاستوديو",
+    "duration": "المدة",
+    "rate": "تقييم",
+    "favorite": "مفضل"
+  },
+    "home": {
+      "popularAnime": "أنمي شائع",
+      "animeList": "قائمة الأنمي",
+      "recentEpisodes": "الحلقات المحدثة حديثًا",
+    "more": "المزيد"
+  },
+  "episodePage": {
+    "loading": "جار التحميل...",
+    "noServers": "لا توجد خوادم متاحة لهذه الحلقة.",
+    "watchVideo": "مشاهدة الفيديو",
+    "allEpisodes": "جميع الحلقات",
+    "downloadEpisode": "تحميل الحلقة",
+    "download": "تحميل",
+    "episode": "الحلقة"
   }
+}

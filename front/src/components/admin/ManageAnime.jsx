@@ -81,7 +81,7 @@ const ManageAnime = () => {
               <TableRow key={anime._id}>
                 <TableCell>
                   <Box display="flex" alignItems="center">
-                    <img src={`${import.meta.env.VITE_API_URL}${anime.pictureUrl}`} alt={anime.title} className={styles.coverImage} />
+                    <img src={anime.pictureUrl} alt={anime.title} className={styles.coverImage} />
                     <Typography variant="body1" className={styles.titleText}>{anime.title}</Typography>
                   </Box>
                 </TableCell>

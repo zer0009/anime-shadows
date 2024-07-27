@@ -33,7 +33,7 @@ exports.uploadAnime = [
         seasonId,
         myAnimeListUrl,
         typeId,
-        genres: genresArray.map(genre => new mongoose.Types.ObjectId(genre)),
+        genres: genresArray,
         numberOfEpisodes,
         source,
         duration,

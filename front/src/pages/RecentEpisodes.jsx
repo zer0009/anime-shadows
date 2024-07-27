@@ -26,7 +26,7 @@ const RecentEpisodes = () => {
             <Grid item xs={12} sm={6} md={4} lg={2.2} key={episode._id}>
               <AnimeCard
                 anime={episode.anime}
-                episodeNumber={episode.number}
+                episodeTitle={episode.title}
                 onClick={() => {
                   console.log(`Clicked on episode with id: ${episode.anime._id}`);
                 }}

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { fetchEpisodeById, fetchEpisodesByAnimeId } from '../api/modules/episode';
+import { fetchEpisodeById, fetchEpisodesByAnimeId } from '../api/modules/episode'; // Assume you have these API functions
 import { Typography, Box, Tabs, Tab, Paper, Button, List, ListItem, ListItemText } from '@mui/material';
 import ReactPlayer from 'react-player';
+import { useTranslation } from 'react-i18next';
 import styles from './EpisodePage.module.css';
 
 const EpisodePage = () => {
   const { episodeId } = useParams();
+  const { t, i18n } = useTranslation();
   const [episode, setEpisode] = useState(null);
   const [episodes, setEpisodes] = useState([]);
   const [selectedTab, setSelectedTab] = useState(0);
@@ -26,6 +28,7 @@ const EpisodePage = () => {
       try {
         if (episode?.anime?._id) {
           const response = await fetchEpisodesByAnimeId(episode.anime._id);
+          console.log(response);
           setEpisodes(response);
         }
       } catch (error) {
@@ -39,7 +42,7 @@ const EpisodePage = () => {
 
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
-    setEmbedError(false);
+    setEmbedError(false); // Reset embed error when changing tabs
   };
 
   const handleEmbedError = () => {
@@ -51,24 +54,24 @@ const EpisodePage = () => {
   };
 
   if (!episode) {
-    return <div>Loading...</div>;
+    return <div>{t('episodePage.loading')}</div>;
   }
 
   if ((!episode.streamingServers || episode.streamingServers.length === 0) &&
       (!episode.downloadServers || episode.downloadServers.length === 0)) {
-    return <div>No servers available for this episode.</div>;
+    return <div>{t('episodePage.noServers')}</div>;
   }
 
   const embedUrl = episode.streamingServers[selectedTab]?.url;
 
   return (
-    <div className={styles.episodePage}>
+    <div className={styles.episodePage} style={{ direction: i18n.language === 'ar' ? 'ltr' : 'rtl' }}>
       <Box className={styles.headerSection}>
-        <Typography variant="h4" className={styles.animeTitle}>
-          {episode.animeTitle}
+        <Typography variant="h5" className={styles.animeTitle}>
+          {episode.anime.title}
         </Typography>
         <Typography variant="h6" className={styles.episodeNumber}>
-          Episode {episode.number}
+          {t('episodePage.episode')} {episode.number}
         </Typography>
       </Box>
       <Box className={styles.streamingSection}>
@@ -107,30 +110,30 @@ const EpisodePage = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Watch Video
+              {t('episodePage.watchVideo')}
             </Button>
           )}
         </Paper>
       </Box>
       <Box className={styles.episodeListSection}>
         <Typography variant="h6" className={styles.episodeListTitle}>
-          All Episodes
+          {t('episodePage.allEpisodes')}
         </Typography>
-        <List className={styles.episodeList}>
+        <List className={styles.episodeList} style={{ direction: i18n.language === 'ar' ? 'rtl' : 'ltr' }}>
           {episodes.map((ep) => (
             <ListItem key={ep._id} button component={Link} to={`/episode/${ep._id}`}>
-              <ListItemText primary={`Episode ${ep.number}`} />
+              <ListItemText primary={`${t('episodePage.episode')} ${ep.number}`} />
             </ListItem>
           ))}
         </List>
       </Box>
       <Box className={styles.downloadSection}>
         <Typography variant="h6" className={styles.downloadTitle}>
-          Download Episode
+          {t('episodePage.downloadEpisode')}
         </Typography>
         {episode.downloadServers.map((server, index) => (
           <Button key={index} variant="contained" className={styles.downloadButton} href={server.url} download>
-            Download {server.serverName} - {server.quality}
+            {t('episodePage.download')} {server.serverName} - {server.quality}
           </Button>
         ))}
       </Box>

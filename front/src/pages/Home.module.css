@@ -1,62 +1,49 @@
 .home {
     padding: 20px;
-    background-color: var(--primary-dark);
     color: var(--text-color);
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--primary-dark);
 }
 
-.heroSection {
-    position: relative;
+.heroSwiper {
+    width: 100%;
     height: 400px;
-    background: url('/assets/images/hero-image.png') no-repeat center center/cover;
-    border-radius: 10px;
-    margin-bottom: 40px;
-    overflow: hidden;
-}
-
-.heroOverlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    padding: 20px;
-}
-
-.heroTitle {
-    font-size: 3rem;
-    margin-bottom: 10px;
-    color: var(--highlight-color);
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-}
-
-.heroSubtitle {
-    font-size: 1.5rem;
     margin-bottom: 20px;
-    color: var(--subtext-color);
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.heroImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.heroImage:hover {
+    transform: scale(1.05);
 }
 
 .content {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .sectionHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 
 .sectionTitle {
     font-size: 2rem;
     color: var(--highlight-color);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .moreButton {
@@ -66,15 +53,17 @@
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.3s;
 }
 
 .moreButton:hover {
-    background-color: var(--highlight-color-hover);
+    background-color: var(--secondary-light);
+    transform: scale(1.05);
 }
 
 .swiper {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+    background: var(--secondary-light);
 }
 
 .swiper-slide {
@@ -109,14 +98,6 @@
 }
 
 @media (max-width: 768px) {
-    .heroTitle {
-        font-size: 2.5rem;
-    }
-
-    .heroSubtitle {
-        font-size: 1.2rem;
-    }
-
     .sectionTitle {
         font-size: 1.8rem;
     }
@@ -127,14 +108,6 @@
 }
 
 @media (max-width: 480px) {
-    .heroTitle {
-        font-size: 2rem;
-    }
-
-    .heroSubtitle {
-        font-size: 1rem;
-    }
-
     .sectionTitle {
         font-size: 1.5rem;
     }

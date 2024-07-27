@@ -12,7 +12,7 @@
   color: white;
   padding: 5px;
   border-radius: 3px;
-  margin-right: 10px;
+  margin-inline-end: 10px; /* Use logical property for margin */
 }
 
 .scoreDetails {
@@ -24,11 +24,11 @@
 .scoreValue {
   font-size: 1.5rem;
   font-weight: bold;
-  padding-left: 10px;
+  padding-inline-end: 10px; /* Use logical property for padding */
 }
 
 .userCount {
   color: #757575;
   font-size: 0.875rem;
-  padding-left: 10px;
+  padding-inline-end: 10px; /* Use logical property for padding */
 }

@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { CardMedia, CardContent, Typography, Box } from '@mui/material';
+import { Card, Badge } from 'react-bootstrap';
 import styles from './AnimeCard.module.css';
 
-const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeNumber, onClick }) => {
+const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeTitle, onClick }) => {
     const [imageError, setImageError] = useState(false);
 
     if (!anime) {
@@ -17,43 +17,59 @@ const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeNumber
         setImageError(true);
     }, []);
 
+    const getStatusBadgeClass = (status) => {
+        switch (status) {
+            case 'completed':
+                return styles.statusBadgeCompleted;
+            case 'ongoing':
+                return styles.statusBadgeOngoing;
+            case 'upcoming':
+                return styles.statusBadgeUpcoming;
+            default:
+                return '';
+        }
+    };
+
     return (
-        <div className={styles.animeCard} onClick={onClick}>
+        <Card className={styles.animeCard} onClick={onClick}>
             <Link to={`/anime/${anime._id}`} className={styles.animeCardLink}>
-                <CardMedia
-                    component="div"
-                    className={styles.cardCover}
-                    image={imageError ? defaultPictureUrl : imageUrl}
-                    title={anime.title}
+                <Card.Img
+                    variant="top"
+                    src={imageError ? defaultPictureUrl : imageUrl}
                     onError={handleError}
-                    loading="lazy" // Lazy load the image
-                >
-                    <Box className={`${styles.statusBadge} ${styles[`statusBadge${anime.status.charAt(0).toUpperCase() + anime.status.slice(1)}`]}`}>
+                    className={styles.cardCover}
+                    alt={anime.title}
+                />
+                <Card.ImgOverlay>
+                    <Badge
+                        pill
+                        className={`${styles.statusBadge} ${getStatusBadgeClass(anime.status)}`}
+                    >
                         {anime.status === 'completed' ? 'مكتمل' : anime.status === 'ongoing' ? 'يعرض الآن' : 'قادم قريبا'}
-                    </Box>
-                </CardMedia>
-                <CardContent className={styles.cardContent}>
-                    <Typography variant="body2" className={styles.title}>
-                        {anime.title}
-                    </Typography>
+                    </Badge>
+                </Card.ImgOverlay>
+                <Card.Body className={styles.cardContent}>
+                    <Card.Title className={styles.title}>{anime.title}</Card.Title>
                     {showLastViewed && lastViewed && (
-                        <Typography variant="body2" className={styles.lastViewed}>
+                        <Card.Text className={styles.lastViewed}>
                             Last viewed: {new Date(lastViewed).toLocaleDateString()}
-                        </Typography>
+                        </Card.Text>
                     )}
-                    {anime.type?.name && (
-                        <Box className={styles.typeBadge}>
-                            {anime.type.name}
-                        </Box>
-                    )}
-                    {episodeNumber && (
-                        <Box className={styles.episodeBadge}>
-                            {`Episode ${episodeNumber}`}
-                        </Box>
-                    )}
-                </CardContent>
+                    <div className={styles.badgesContainer}>
+                        {anime.type?.name && (
+                            <Badge pill bg="info" className={styles.typeBadge}>
+                                {anime.type.name}
+                            </Badge>
+                        )}
+                        {episodeTitle && (
+                            <Badge pill bg="primary" className={styles.episodeBadge}>
+                                {episodeTitle}
+                            </Badge>
+                        )}
+                    </div>
+                </Card.Body>
             </Link>
-        </div>
+        </Card>
     );
 });
 

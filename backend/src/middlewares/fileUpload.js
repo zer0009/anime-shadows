@@ -8,7 +8,7 @@ const storage = new CloudinaryStorage({
     folder: 'anime_uploads',
     format: async (req, file) => 'jpg', // supports promises as well
     public_id: (req, file) => `${req.body.title ? req.body.title.replace(/\s+/g, '_') : 'file'}_${Date.now()}`,
-    transformation: [{ width: 600, height: 800, crop: 'limit', quality: 'auto' }], // Optimize image size and quality
+    // transformation: [{ width: 600, height: 800, crop: 'limit', quality: 'auto' }], // Optimize image size and quality
   },
 });
 

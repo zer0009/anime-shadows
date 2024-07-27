@@ -8,6 +8,15 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
+.animeDetailsGrid {
+  display: flex;
+  flex-direction: row;
+}
+
+.animeDetailsGrid.rtl {
+  flex-direction: row-reverse;
+}
+
 .animeTitle {
   font-size: 36px;
   color: var(--highlight-color);
@@ -95,6 +104,12 @@
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   text-align: center;
+  width: 300px;
+}
+
+.animeImageContainer {
+  position: relative;
+  width: 100%;
 }
 
 .animeImage {
@@ -104,11 +119,20 @@
   margin-bottom: 20px;
 }
 
+.scoreBadge {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  display: flex;
+  align-items: center;
+}
+
 .sidebarActions {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  gap: 10px; /* Add space between buttons */
 }
 
 .rateButton,
@@ -116,7 +140,7 @@
   background-color: var(--highlight-color);
   color: var(--text-color);
   flex: 1;
-  margin-right: 10px;
+  margin-right: 20px; /* Increased margin-right for space between buttons */
   padding: 10px;
   border-radius: 5px;
   display: flex;
@@ -135,7 +159,8 @@
 .animeMeta {
   margin-top: 20px;
   width: 100%;
-  text-align: left;
+  text-align: right;
+  direction: rtl;
 }
 
 .animeMeta p {
@@ -178,7 +203,6 @@
   .rateButton,
   .favoriteButton {
     width: 100%;
-    margin-bottom: 10px;
   }
 }
 

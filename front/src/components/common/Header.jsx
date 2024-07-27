@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Person, PersonAdd, ExitToApp, AccountCircle, History, Favorite, Dashboard } from '@mui/icons-material';
+import { Search, Person, PersonAdd, ExitToApp, AccountCircle, History, Favorite, Dashboard, Menu } from '@mui/icons-material';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import styles from './Header.module.css';
@@ -9,10 +9,15 @@ const Header = () => {
     const { t, i18n } = useTranslation();
     const { user, logout } = useAuth();
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
     const dropdownRef = useRef(null);
 
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
+    };
+
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
     };
 
     const handleLogout = async () => {
@@ -52,10 +57,10 @@ const Header = () => {
         <header className={styles.header}>
             <div className={styles.container}>
                 <Link to="/" className={styles.logo}>
-                {/* <h1 className={styles.headerTitle}>Anime Shadows</h1> */}
-                <img src="/assets/images/anime-shadows-logo.png" alt="Anime Shadows" className={styles.headerLogo} />
+                    <h1 className={styles.headerTitle}>Anime Shadows</h1>
+                    {/* <img src="/assets/images/anime-shadows-logo.png" alt="Anime Shadows" className={styles.headerLogo} /> */}
                 </Link>
-                <nav className={styles.headerNav}>
+                <nav className={`${styles.headerNav} ${menuOpen ? styles.open : ''}`}>
                     <ul>
                         <li><Link to="/">{t('header.home')}</Link></li>
                         <li><Link to="/anime-list">{t('header.animeList')}</Link></li>
@@ -64,9 +69,6 @@ const Header = () => {
                     </ul>
                 </nav>
                 <div className={styles.headerIcons}>
-                    <Link to="/search" className={styles.searchIconButton}>
-                        <Search className={styles.icon} />
-                    </Link>
                     {!user ? (
                         <>
                             <Link to="/login"><Person className={styles.icon} /></Link>
@@ -95,10 +97,16 @@ const Header = () => {
                             )}
                         </div>
                     )}
-                    <div className={styles.languageSwitcher}>
+                    {/* <div className={styles.languageSwitcher}>
                         <button onClick={() => changeLanguage('en')}>EN</button>
                         <button onClick={() => changeLanguage('ar')}>AR</button>
-                    </div>
+                    </div> */}
+                    <Link to="/search" className={styles.searchIconButton}>
+                        <Search className={styles.icon} />
+                    </Link>
+                    <button className={styles.menuIcon} onClick={toggleMenu}>
+                        <Menu />
+                    </button>
                 </div>
             </div>
         </header>

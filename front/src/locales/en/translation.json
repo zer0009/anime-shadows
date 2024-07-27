@@ -26,6 +26,20 @@
       "rating": "Rating",
       "favorite": "Fav",
       "rate": "Rate"
-
+    },
+    "home": {
+      "popularAnime": "Popular Anime",
+      "animeList": "Anime List",
+      "recentEpisodes": "Recently Updated Episodes",
+      "more": "More"
+    },
+    "episodePage": {
+      "loading": "Loading...",
+      "noServers": "No servers available for this episode.",
+      "watchVideo": "Watch Video",
+      "allEpisodes": "All Episodes",
+      "downloadEpisode": "Download Episode",
+      "download": "Download",
+      "episode": "Episode"
     }
   }

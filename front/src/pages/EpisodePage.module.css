@@ -13,7 +13,7 @@
 .headerSection {
   grid-column: span 2;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .streamingSection {
@@ -30,11 +30,15 @@
   overflow-y: auto;
   max-height: 600px; /* Adjust as needed */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+
 }
 
 .episodeListTitle {
   margin-bottom: 10px;
   color: var(--highlight-color);
+  direction: rtl;
+  white-space: pre-wrap; /* Ensures text wraps and respects line breaks */
+  word-break: break-word; /* Ensures long words break to fit within the container */
 }
 
 .episodeList {
@@ -48,12 +52,12 @@
 }
 
 .episodeNumber {
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   color: var(--highlight-color);
 }
 
 .serverTabs {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .serverTab {

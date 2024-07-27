@@ -11,7 +11,7 @@ import ScoreDisplay from '../components/ScoreDisplay.jsx';
 import styles from './AnimeDetails.module.css';
 
 const AnimeDetails = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const [anime, setAnime] = useState(null);
@@ -135,7 +135,7 @@ const AnimeDetails = () => {
 
   return (
     <Container maxWidth="lg" className={styles.animeDetailsContainer}>
-      <Grid container spacing={4}>
+      <Grid container spacing={4} className={`${styles.animeDetailsGrid} ${i18n.language === 'ar' ? styles.rtl : ''}`}>
         <Grid item xs={12} md={8}>
           <Box className={styles.titleAndScores}>
             <Typography variant="h4" className={styles.animeTitle}>{anime.title}</Typography>
@@ -174,9 +174,13 @@ const AnimeDetails = () => {
         </Grid>
         <Grid item xs={12} md={4}>
           <Box className={styles.animeSidebar}>
-            <img src={anime.pictureUrl} alt={anime.title} className={styles.animeImage} />
+            <Box className={styles.animeImageContainer}>
+              <img src={anime.pictureUrl} alt={anime.title} className={styles.animeImage} />
+              <Box className={styles.scoreBadge}>
+                <StarScoreDisplay score={anime.averageRating} />
+              </Box>
+            </Box>
             <Box className={styles.sidebarActions}>
-              <StarScoreDisplay score={anime.averageRating} />
               <Button
                 variant="contained"
                 color="secondary"

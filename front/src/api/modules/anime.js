@@ -36,6 +36,17 @@ export const fetchAnimeById = async (id) => {
     return response.data;
 };
 
+// export const fetchAnimeByName = async (name) => {
+//     const token = localStorage.getItem('token');
+//     const config = {
+//         headers: {
+//             Authorization: `Bearer ${token}`
+//         }
+//     };
+//     const response = await API.get(`/anime/name/${name}`, config);
+//     return response.data;
+// };
+
 export const searchAnime = async (query) => {
     try {
         const response = await API.get(`/anime/search?q=${query}`);

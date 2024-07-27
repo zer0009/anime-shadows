@@ -6,17 +6,18 @@
   margin-bottom: 20px;
 }
 
-.cardTitle {
+/* .cardTitle {
   margin-bottom: 20px;
   color: var(--highlight-color);
   text-align: center;
   font-size: 1.5rem;
   font-weight: bold;
-}
+} */
 
-.animeGrid {
+/* .animeGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
   justify-items: center;
-}
+  align-items: start;
+} */

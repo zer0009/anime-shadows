@@ -36,10 +36,10 @@ const AddEpisode = () => {
   }, [animeId]);
 
   useEffect(() => {
-    if (animeName && number) {
-      setTitle(`${animeName} Episode ${number}`);
+    if (number) {
+      setTitle(`الحلقة ${number}`);
     }
-  }, [animeName, number]);
+  }, [number]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

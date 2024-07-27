@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
+const { body, validationResult } = require('express-validator');
 const userRoutes = require('./routes/user');
 const adminRoutes = require('./routes/admin');
 const animeRoutes = require('./routes/animeRoutes');
@@ -15,10 +17,36 @@ require('./db/mongoose');
 const app = express();
 
 // Middleware
-app.use(helmet()); // Security headers
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "https://trusted.cdn.com"],
+      styleSrc: ["'self'", "https://trusted.cdn.com"],
+      imgSrc: ["'self'", "data:", "https://trusted.cdn.com"],
+      connectSrc: ["'self'", "https://api.trusted.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      objectSrc: ["'none'"],
+      frameSrc: ["'self'", "https://trusted.frame.com"]
+    }
+  },
+  referrerPolicy: { policy: 'no-referrer' },
+  frameguard: { action: 'deny' },
+  hsts: { maxAge: 31536000, includeSubDomains: true, preload: true },
+  noSniff: true,
+  xssFilter: true
+})); // Security headers
+
 app.use(morgan('combined')); // Logging
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+
+// Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+app.use(limiter);
 
 // Configure CORS
 const corsOptions = {
@@ -38,6 +66,18 @@ app.use('/api/seasons', seasonRoutes);
 app.use('/api/episodes', episodeRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/admin', adminRoutes);
+
+// Input Validation Example
+app.post('/api/example', [
+  body('email').isEmail().normalizeEmail(),
+  body('password').isLength({ min: 5 }).trim().escape()
+], (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  // Handle valid input
+});
 
 // Global error handler
 app.use((err, req, res, next) => {

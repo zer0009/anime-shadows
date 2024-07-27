@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { fetchAnimeById, fetchPopularAnime } from '../api/modules/anime';
 import SearchBar from '../components/SearchBar/SearchBar';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
@@ -14,6 +15,7 @@ import AnimeCard from '../components/AnimeCard/AnimeCard';
 import styles from './Home.module.css';
 
 const Home = () => {
+    const { t, i18n } = useTranslation();
     const { animeList, searchResults, loading, error, handleSearch } = useFetchAnimeList();
     const { recentEpisodes, loading: recentLoading, error: recentError } = useFetchRecentEpisodes();
     const [popularAnimes, setPopularAnimes] = useState([]);
@@ -52,17 +54,30 @@ const Home = () => {
 
     return (
         <div className={styles.home}>
-            <div className={styles.heroSection}>
-                <div className={styles.heroOverlay}>
-                    <h1 className={styles.heroTitle}>Welcome to Anime Shadows</h1>
-                    <p className={styles.heroSubtitle}>Discover your favorite anime</p>
-                    <SearchBar onSearch={handleSearch} />
-                </div>
-            </div>
+            <Swiper
+                modules={[Navigation, Pagination, Scrollbar]}
+                spaceBetween={30}
+                slidesPerView={1}
+                navigation
+                pagination={{ clickable: true }}
+                scrollbar={{ draggable: true }}
+                className={styles.heroSwiper}
+            >
+                <SwiperSlide>
+                    <img src="/assets/images/hero1.jpg" alt="Hero 1" className={styles.heroImage} />
+                </SwiperSlide>
+                <SwiperSlide>
+                    <img src="/assets/images/hero2.jpg" alt="Hero 2" className={styles.heroImage} />
+                </SwiperSlide>
+                <SwiperSlide>
+                    <img src="/assets/images/hero3.jpg" alt="Hero 3" className={styles.heroImage} />
+                </SwiperSlide>
+            </Swiper>
+
             <div className={styles.content}>
                 <div className={styles.sectionHeader}>
-                    <h2 className={styles.sectionTitle}>Popular Anime</h2>
-                    <button className={styles.moreButton} onClick={() => navigate('/popular-anime')}>More</button>
+                    <h2 className={styles.sectionTitle}>{t('home.popularAnime')}</h2>
+                    <button className={styles.moreButton} onClick={() => navigate('/popular-anime')}>{t('home.more')}</button>
                 </div>
                 <Swiper
                     modules={[Navigation, Pagination, Scrollbar]}
@@ -91,8 +106,8 @@ const Home = () => {
                 </Swiper>
 
                 <div className={styles.sectionHeader}>
-                    <h2 className={styles.sectionTitle}>Anime List</h2>
-                    <button className={styles.moreButton} onClick={() => navigate('/anime-list')}>More</button>
+                    <h2 className={styles.sectionTitle}>{t('home.animeList')}</h2>
+                    <button className={styles.moreButton} onClick={() => navigate('/anime-list')}>{t('home.more')}</button>
                 </div>
                 <Swiper
                     modules={[Navigation, Pagination, Scrollbar]}
@@ -121,8 +136,8 @@ const Home = () => {
                 </Swiper>
 
                 <div className={styles.sectionHeader}>
-                    <h2 className={styles.sectionTitle}>Recently Updated Episodes</h2>
-                    <button className={styles.moreButton} onClick={() => navigate('/recent-episodes')}>More</button>
+                    <h2 className={styles.sectionTitle}>{t('home.recentEpisodes')}</h2>
+                    <button className={styles.moreButton} onClick={() => navigate('/recent-episodes')}>{t('home.more')}</button>
                 </div>
                 <Swiper
                     modules={[Navigation, Pagination, Scrollbar]}
@@ -142,7 +157,7 @@ const Home = () => {
                         <SwiperSlide key={episode._id}>
                             <AnimeCard
                                 anime={episode.anime}
-                                episodeNumber={episode.number}
+                                episodeTitle={episode.title}
                                 onClick={() => {
                                     handleAnimeClick(episode.anime._id);
                                 }}

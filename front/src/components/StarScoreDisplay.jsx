@@ -6,11 +6,11 @@ import styles from './StarScoreDisplay.module.css';
 const StarScoreDisplay = ({ score, label }) => {
   return (
     <Box className={styles.scoreContainer}>
-      <Star className={styles.starIcon} />
       <Box className={styles.scoreDetails}>
         <Typography variant="h6" className={styles.scoreValue}>{score.toFixed(2)}</Typography>
         {label && <Typography variant="body2" className={styles.scoreLabel}>{label}</Typography>}
       </Box>
+      <Star className={styles.starIcon} />
     </Box>
   );
 };

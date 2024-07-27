@@ -1,16 +1,10 @@
 .footer {
-    position: fixed;
-    bottom: -100px; /* Hide the footer initially */
-    left: 0;
-    width: 100%;
-    background-color: var(--secondary-dark);
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 50%, var(--tertiary-dark) 100%);
     color: var(--text-color);
-    transition: bottom 0.3s ease;
-    z-index: 1000; /* Ensure the footer is above other content */
-}
-
-.footer.visible {
-    bottom: 0; /* Show the footer when visible */
+    width: 100%;
+    padding: 5px 0;
+    position: relative;
+    direction: ltr;
 }
 
 .container {
@@ -20,6 +14,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap; /* Ensure the content wraps on smaller screens */
 }
 
 .footerNav ul {
@@ -38,4 +33,17 @@
 
 .footerNav a:hover {
     color: var(--highlight-color);
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footerNav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
 }

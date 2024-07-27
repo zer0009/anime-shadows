@@ -1,31 +1,32 @@
 .scoreContainer {
-    display: flex;
-    align-items: center;
-    background-color: var(--highlight-color);
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    color: var(--text-color);
-    margin-right: 10px;
-  }
-  
-  .starIcon {
-    color: var(--text-color);
-    margin-right: 5px;
-  }
-  
-  .scoreDetails {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .scoreValue {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
-  .scoreLabel {
-    color: var(--text-color);
-    font-size: 0.875rem;
-  }
+  display: flex;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 8px 12px; /* Adjusted padding */
+  border-radius: 8px; /* More rounded corners */
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); */
+  color: var(--highlight-color); /* Highlight color for text */
+  margin-inline-end: 10px; /* Use logical property for margin */
+}
+
+.starIcon {
+  color: yellow; /* Highlight color for star icon */
+  margin-inline-start: 8px; /* Adjusted margin */
+  font-size: 1.5rem; /* Larger star icon */
+}
+
+.scoreDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.scoreValue {
+  font-size: 1.25rem; /* Slightly smaller font size */
+  font-weight: bold;
+}
+
+.scoreLabel {
+  color: var(--highlight-color); /* Highlight color for label */
+  font-size: 0.75rem; /* Smaller font size */
+}
