@@ -4,6 +4,7 @@ import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import ListDisplay from '../components/ListDisplay/ListDisplay';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
 import { Box } from '@mui/material';
+import styles from './AnimeList.module.css';
 
 const AnimeList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -19,7 +20,7 @@ const AnimeList = () => {
   }, [setSearchParams]);
 
   return (
-    <Box sx={{ padding: '20px' }}>
+    <Box sx={{ padding: '20px', backgroundColor: 'var(--primary-dark)', color: 'var(--text-color)' }}>
       <ListDisplay
         title="Anime List"
         list={animeList}

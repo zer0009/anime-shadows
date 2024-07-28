@@ -113,9 +113,9 @@ a:hover {
   border-radius: 10px;
   margin: 1rem;
   width: 250px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Added box-shadow */
-  background-color: var(--background-light); /* Ensure background color is applied */
-  color: var(--text-color); /* Ensure text color is applied */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: var(--background-light); 
+  color: var(--text-color); 
   transition: transform 0.3s, box-shadow 0.3s;
 }
 

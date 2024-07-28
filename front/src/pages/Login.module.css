@@ -4,62 +4,67 @@
     align-items: center;
     padding: 2rem;
     margin-top: 20px;
-  }
-  
-  .paper {
+    direction: ltr; /* Ensure the container is LTR */
+}
+
+.paper {
     padding: 2rem;
-    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);    backdrop-filter: blur(10px);
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+    backdrop-filter: blur(10px);
     border-radius: 10px;
     box-shadow: 0 4px 30px var(--shadow-color);
-  }
-  
-  .title {
+    direction: ltr; /* Ensure the paper is LTR */
+}
+
+.title {
     color: #ffffff;
     margin-bottom: 0.5rem;
-  }
-  
-  .subtitle {
+    text-align: left; /* Ensure the title is left-aligned */
+}
+
+.subtitle {
     color: #b0b0b0;
     margin-bottom: 1.5rem;
-  }
-  
-  .textField {
+    text-align: left; /* Ensure the subtitle is left-aligned */
+}
+
+.textField {
     .MuiInputBase-root {
-      color: #ffffff;
+        color: #ffffff;
     }
     .MuiInputLabel-root {
-      color: #b0b0b0;
+        color: #b0b0b0;
     }
     .MuiOutlinedInput-root {
-      fieldset {
-        border-color: #b0b0b0;
-      }
-      &:hover fieldset {
-        border-color: #ffffff;
-      }
-      &.Mui-focused fieldset {
-        border-color: #ffffff;
-      }
+        fieldset {
+            border-color: #b0b0b0;
+        }
+        &:hover fieldset {
+            border-color: #ffffff;
+        }
+        &.Mui-focused fieldset {
+            border-color: #ffffff;
+        }
     }
-  }
-  
-  .forgotPassword {
+}
+
+.forgotPassword {
     color: #b0b0b0;
     text-align: right;
     margin-top: 0.5rem;
     cursor: pointer;
-  }
-  
-  .submitButton {
+}
+
+.submitButton {
     margin-top: 1.5rem;
     background: linear-gradient(135deg, #6a1b9a 0%, #8e24aa 100%);
     color: #ffffff;
     &:hover {
-      background: linear-gradient(135deg, #8e24aa 0%, #6a1b9a 100%);
+        background: linear-gradient(135deg, #8e24aa 0%, #6a1b9a 100%);
     }
-  }
-  
-  .error {
+}
+
+.error {
     margin-top: 1rem;
     text-align: center;
-  }
+}

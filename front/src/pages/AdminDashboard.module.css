@@ -1,19 +1,23 @@
 /* AdminDashboard.module.css */
 .adminDashboard {
   padding: 20px;
+  direction: ltr; /* Ensure the admin dashboard is LTR */
 }
 
 .title {
   margin-bottom: 20px;
   text-align: center;
   color: #1976d2;
+  direction: ltr; /* Ensure the title is LTR */
 }
 
 .paper {
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  direction: ltr; /* Ensure the paper is LTR */
 }
 
 .tabContent {
   margin-top: 20px;
+  direction: ltr; /* Ensure the tab content is LTR */
 }

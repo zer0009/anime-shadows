@@ -8,6 +8,7 @@
 
 .animeCard {
   width: 100%;
+  max-width: 320px; /* Ensure a maximum width */
   height: 320px;
   margin: 8px;
   border-radius: 12px;
@@ -85,7 +86,7 @@
 .lastViewed {
   font-size: 0.9rem;
   color: var(--subtext-color);
-  margin-top: 5px;
+  margin-bottom: 0%;
 }
 
 .badgesContainer {
@@ -109,7 +110,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 30px;
 }
 
 .episodeBadge {
@@ -123,5 +124,5 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 30px;
 }

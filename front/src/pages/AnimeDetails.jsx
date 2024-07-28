@@ -26,6 +26,7 @@ const AnimeDetails = () => {
     try {
       setLoading(true);
       const response = await fetchAnimeById(id);
+      console.log(response);
       setAnime(response);
       const favoriteStatus = localStorage.getItem(`favorite-${id}`);
       setIsFavorite(favoriteStatus === 'true' || response.isFavorite || false);
@@ -133,6 +134,8 @@ const AnimeDetails = () => {
     return <Typography>No anime details found.</Typography>;
   }
 
+  const airingYear = anime.airingDate ? new Date(anime.airingDate).getFullYear() : 'N/A';
+
   return (
     <Container maxWidth="lg" className={styles.animeDetailsContainer}>
       <Grid container spacing={4} className={`${styles.animeDetailsGrid} ${i18n.language === 'ar' ? styles.rtl : ''}`}>
@@ -203,11 +206,11 @@ const AnimeDetails = () => {
             <Box className={styles.animeMeta}>
               <Typography variant="body2"><strong>{t('animeDetails.status')}:</strong> {anime.status || 'N/A'}</Typography>
               <Typography variant="body2"><strong>{t('animeDetails.type')}:</strong> {anime.type?.name || 'N/A'}</Typography>
-              <Typography variant="body2"><strong>{t('animeDetails.year')}:</strong> {anime.airingDate?.year || 'N/A'}</Typography>
+              <Typography variant="body2"><strong>{t('animeDetails.year')}:</strong> {airingYear}</Typography>
               <Typography variant="body2"><strong>{t('animeDetails.season')}:</strong> {anime.season?.name || 'N/A'}</Typography>
               <Typography variant="body2"><strong>{t('animeDetails.source')}:</strong> {anime.source || 'N/A'}</Typography>
               <Typography variant="body2"><strong>{t('animeDetails.studio')}:</strong> {anime.studio || 'N/A'}</Typography>
-              <Typography variant="body2"><strong>{t('animeDetails.duration')}:</strong> {anime.duration ? `${anime.duration} minutes` : 'N/A'}</Typography>
+              <Typography variant="body2"><strong>{t('animeDetails.duration')}:</strong> {anime.duration ? `${anime.duration} دقيقة` : 'N/A'}</Typography>
             </Box>
           </Box>
         </Grid>

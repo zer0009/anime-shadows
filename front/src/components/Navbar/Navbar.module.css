@@ -5,6 +5,7 @@
     padding: 10px;
     background-color: var(--primary-dark);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Added box-shadow */
+    direction: ltr; /* Ensure the navbar is LTR */
 }
 
 .navButton {
