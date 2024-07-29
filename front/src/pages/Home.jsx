@@ -56,7 +56,7 @@ const Home = () => {
     return (
         <HelmetProvider>
             <Helmet>
-                <title>{t('home.title')} - {t('home.subtitle')}</title>
+                <title>{t('home.title')}</title>
                 <meta name="description" content={t('home.description')} />
                 <meta name="keywords" content={t('home.keywords')} />
                 <script type="application/ld+json">
