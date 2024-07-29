@@ -17,7 +17,7 @@ const SeasonSelect = ({ onChange }) => {
         <select className={styles.select} onChange={(e) => onChange(e.target.value)}>
             <option value="">Season</option>
             {seasons.map(season => (
-                <option key={season._id} value={season.name}>{season.name}</option>
+                <option key={season._id} value={season.name}>{season.name} {season.year}</option>
             ))}
         </select>
     );

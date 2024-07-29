@@ -13,7 +13,7 @@ exports.uploadAnime = [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { title, description, seasonId, myAnimeListUrl, typeId, genres, numberOfEpisodes, source, duration, status, airingDate } = req.body;
+    const { title, subTitle, studio, description, seasonId, myAnimeListUrl, typeId, genres, numberOfEpisodes, source, duration, status, airingDate } = req.body;
     const file = req.file;
 
     try {
@@ -29,6 +29,8 @@ exports.uploadAnime = [
 
       const newAnime = await AnimeService.createAnime({
         title,
+        subTitle, // Added subTitle
+        studio, // Added studio
         description,
         seasonId,
         myAnimeListUrl,

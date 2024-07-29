@@ -10,6 +10,8 @@ import styles from './AddAnime.module.css';
 
 const AddAnime = () => {
   const [title, setTitle] = useState('');
+  const [subTitle, setSubTitle] = useState(''); // New state for subTitle
+  const [studio, setStudio] = useState(''); // New state for studio
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
   const [type, setType] = useState('');
@@ -42,6 +44,8 @@ const AddAnime = () => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('title', title);
+    formData.append('subTitle', subTitle); // Append subTitle
+    formData.append('studio', studio); // Append studio
     formData.append('description', description);
     formData.append('typeId', type);
     formData.append('genres', JSON.stringify(genres)); // Ensure genres is a JSON string
@@ -82,6 +86,22 @@ const AddAnime = () => {
           fullWidth
           margin="normal"
           placeholder="Enter anime title"
+        />
+        <TextField
+          label="Sub Title" // New input for subTitle
+          value={subTitle}
+          onChange={(e) => setSubTitle(e.target.value)}
+          fullWidth
+          margin="normal"
+          placeholder="Enter anime sub title"
+        />
+        <TextField
+          label="Studio" // New input for studio
+          value={studio}
+          onChange={(e) => setStudio(e.target.value)}
+          fullWidth
+          margin="normal"
+          placeholder="Enter anime studio"
         />
         <TextField
           label="Description"

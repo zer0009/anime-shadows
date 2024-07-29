@@ -42,11 +42,11 @@ app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 // Rate Limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
-});
-app.use(limiter);
+// const limiter = rateLimit({
+//   windowMs: 15 * 60 * 1000, // 15 minutes
+//   max: 100 // limit each IP to 100 requests per windowMs
+// });
+// app.use(limiter);
 
 // Configure CORS
 const corsOptions = {
@@ -67,17 +67,6 @@ app.use('/api/episodes', episodeRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/admin', adminRoutes);
 
-// Input Validation Example
-app.post('/api/example', [
-  body('email').isEmail().normalizeEmail(),
-  body('password').isLength({ min: 5 }).trim().escape()
-], (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-  // Handle valid input
-});
 
 // Global error handler
 app.use((err, req, res, next) => {

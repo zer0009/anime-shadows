@@ -31,11 +31,15 @@
     "rate": "تقييم",
     "favorite": "مفضل"
   },
-    "home": {
-      "popularAnime": "أنمي شائع",
-      "animeList": "قائمة الأنمي",
-      "recentEpisodes": "الحلقات المحدثة حديثًا",
-    "more": "المزيد"
+  "home": {
+    "popularAnime": "أنمي شائع",
+    "animeList": "قائمة الأنمي",
+    "recentEpisodes": "الحلقات المحدثة حديثًا",
+    "more": "المزيد",
+    "watch": "مشاهدة",
+    "download": "تحميل",
+    "title": "Anime Shadows Arabic",
+    "description": "انمى شادوز Anime Shadows أنمي شادوز لمشاهدة جميع الانميات اون لاين وافلام الانمي مترجم جودة عالية اون لاين."
   },
   "episodePage": {
     "loading": "جار التحميل...",
@@ -44,6 +48,7 @@
     "allEpisodes": "جميع الحلقات",
     "downloadEpisode": "تحميل الحلقة",
     "download": "تحميل",
-    "episode": "الحلقة"
+    "episode": "الحلقة",
+    "title": "مترجمه، تحميل، مشاهده"
   }
 }

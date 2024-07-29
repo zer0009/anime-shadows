@@ -24,6 +24,7 @@ const AddEpisode = () => {
     if (animeId) {
       const fetchEpisodes = async () => {
         const episodesData = await fetchEpisodesByAnimeId(animeId);
+        console.log("Fetched episodes data:", episodesData);
         setAllEpisodes(episodesData);
       };
       fetchEpisodes();
@@ -41,6 +42,23 @@ const AddEpisode = () => {
     }
   }, [number]);
 
+  const handleEpisodeSelect = (selectedEpisodeId) => {
+    const selectedEpisode = allEpisodes.find(ep => ep._id === selectedEpisodeId);
+    if (selectedEpisode) {
+      setEpisodeId(selectedEpisode._id);
+      setTitle(selectedEpisode.title);
+      setNumber(selectedEpisode.number);
+      setStreamingServers(selectedEpisode.streamingServers);
+      setDownloadServers(selectedEpisode.downloadServers);
+    } else {
+      setEpisodeId('');
+      setTitle('');
+      setNumber('');
+      setStreamingServers([]);
+      setDownloadServers([]);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -51,6 +69,8 @@ const AddEpisode = () => {
         await addEpisode({ animeId, title, number, streamingServers, downloadServers });
         alert('Episode added successfully');
       }
+      const episodesData = await fetchEpisodesByAnimeId(animeId);
+      setAllEpisodes(episodesData);
     } catch (error) {
       console.error('Error saving episode:', error);
     }
@@ -87,7 +107,7 @@ const AddEpisode = () => {
       <form onSubmit={handleSubmit} className={styles.form}>
         <EpisodeSelector
           episodeId={episodeId}
-          setEpisodeId={setEpisodeId}
+          setEpisodeId={handleEpisodeSelect}
           title={title}
           setTitle={setTitle}
           number={number}
@@ -101,7 +121,7 @@ const AddEpisode = () => {
               value={number}
               onChange={(e) => setNumber(e.target.value)}
               fullWidth
-              margin="normal"
+              margin="dense"
               placeholder="Enter episode number"
             />
           </>
@@ -159,7 +179,7 @@ const AddEpisode = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               fullWidth
-              margin="normal"
+              margin="dense"
               placeholder="Enter episode title"
             />
             <TextField
@@ -167,7 +187,7 @@ const AddEpisode = () => {
               value={number}
               onChange={(e) => setNumber(e.target.value)}
               fullWidth
-              margin="normal"
+              margin="dense"
               placeholder="Enter episode number"
             />
             <ServerManager

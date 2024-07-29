@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Typography, Box, Paper, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { TextField, Button, Typography, Box, Paper, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, List, ListItem, ListItemText } from '@mui/material';
 import { Add, Edit, Delete } from '@mui/icons-material';
-import {addEpisode, editEpisode, deleteEpisode } from '../../api/modules/admin';
+import { addEpisode, editEpisode, deleteEpisode } from '../../api/modules/admin';
 import { fetchEpisodesByAnimeId } from '../../api/modules/episode';
 import { useParams } from 'react-router-dom';
+import ServerManager from './ServerManager'; // Import ServerManager component
 import styles from './EditEpisodes.module.css';
 
 const EditEpisodes = () => {
@@ -11,24 +12,33 @@ const EditEpisodes = () => {
   const [episodes, setEpisodes] = useState([]);
   const [episodeNumber, setEpisodeNumber] = useState('');
   const [episodeTitle, setEpisodeTitle] = useState('');
-  const [servers, setServers] = useState([]);
+  const [streamingServers, setStreamingServers] = useState([]);
+  const [downloadServers, setDownloadServers] = useState([]);
   const [selectedEpisode, setSelectedEpisode] = useState(null);
 
   useEffect(() => {
+    console.log("useEffect triggered with animeId:", animeId);
     const loadEpisodes = async () => {
-      const data = await fetchEpisodesByAnimeId(animeId);
-      setEpisodes(data);
+      try {
+        const data = await fetchEpisodesByAnimeId(animeId);
+        console.log("Fetched episodes data:", data);
+        setEpisodes(data);
+      } catch (error) {
+        console.error("Error fetching episodes:", error);
+      }
     };
     loadEpisodes();
   }, [animeId]);
 
   const handleAddEpisode = async () => {
     try {
-      const newEpisode = await addEpisode(animeId, { number: episodeNumber, title: episodeTitle, servers });
+      const newEpisode = await addEpisode(animeId, { number: episodeNumber, title: episodeTitle, streamingServers, downloadServers });
+      console.log("Added new episode:", newEpisode);
       setEpisodes([...episodes, newEpisode]);
       setEpisodeNumber('');
       setEpisodeTitle('');
-      setServers([]);
+      setStreamingServers([]);
+      setDownloadServers([]);
     } catch (error) {
       console.error('Error adding episode:', error);
     }
@@ -36,12 +46,14 @@ const EditEpisodes = () => {
 
   const handleEditEpisode = async () => {
     try {
-      const updatedEpisode = await editEpisode(animeId, selectedEpisode._id, { number: episodeNumber, title: episodeTitle, servers });
+      const updatedEpisode = await editEpisode(animeId, selectedEpisode._id, { number: episodeNumber, title: episodeTitle, streamingServers, downloadServers });
+      console.log("Edited episode:", updatedEpisode);
       setEpisodes(episodes.map(ep => ep._id === selectedEpisode._id ? updatedEpisode : ep));
       setSelectedEpisode(null);
       setEpisodeNumber('');
       setEpisodeTitle('');
-      setServers([]);
+      setStreamingServers([]);
+      setDownloadServers([]);
     } catch (error) {
       console.error('Error editing episode:', error);
     }
@@ -50,6 +62,7 @@ const EditEpisodes = () => {
   const handleDeleteEpisode = async (episodeId) => {
     try {
       await deleteEpisode(animeId, episodeId);
+      console.log("Deleted episode with ID:", episodeId);
       setEpisodes(episodes.filter(ep => ep._id !== episodeId));
     } catch (error) {
       console.error('Error deleting episode:', error);
@@ -57,10 +70,12 @@ const EditEpisodes = () => {
   };
 
   const handleEditClick = (episode) => {
+    console.log("Editing episode:", episode);
     setSelectedEpisode(episode);
     setEpisodeNumber(episode.number);
     setEpisodeTitle(episode.title);
-    setServers(episode.servers);
+    setStreamingServers(episode.streamingServers);
+    setDownloadServers(episode.downloadServers);
   };
 
   return (
@@ -73,22 +88,20 @@ const EditEpisodes = () => {
             value={episodeNumber}
             onChange={(e) => setEpisodeNumber(e.target.value)}
             fullWidth
-            margin="normal"
+            margin="dense"
           />
           <TextField
             label="Episode Title"
             value={episodeTitle}
             onChange={(e) => setEpisodeTitle(e.target.value)}
             fullWidth
-            margin="normal"
+            margin="dense"
           />
-          <TextField
-            label="Servers"
-            value={servers.join(', ')}
-            onChange={(e) => setServers(e.target.value.split(', '))}
-            fullWidth
-            margin="normal"
-            placeholder="Enter server URLs separated by commas"
+          <ServerManager
+            streamingServers={streamingServers}
+            setStreamingServers={setStreamingServers}
+            downloadServers={downloadServers}
+            setDownloadServers={setDownloadServers}
           />
           {selectedEpisode ? (
             <Button onClick={handleEditEpisode} variant="contained" color="primary" fullWidth className={styles.submitButton}>
@@ -107,7 +120,8 @@ const EditEpisodes = () => {
             <TableRow>
               <TableCell>Number</TableCell>
               <TableCell>Title</TableCell>
-              <TableCell>Servers</TableCell>
+              <TableCell>Streaming Servers</TableCell>
+              <TableCell>Download Servers</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -116,7 +130,8 @@ const EditEpisodes = () => {
               <TableRow key={episode._id}>
                 <TableCell>{episode.number}</TableCell>
                 <TableCell>{episode.title}</TableCell>
-                <TableCell>{episode.servers.join(', ')}</TableCell>
+                <TableCell>{episode.streamingServers.map(server => server.url).join(', ')}</TableCell>
+                <TableCell>{episode.downloadServers.map(server => server.url).join(', ')}</TableCell>
                 <TableCell>
                   <IconButton onClick={() => handleEditClick(episode)}>
                     <Edit />
@@ -130,6 +145,38 @@ const EditEpisodes = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      {selectedEpisode && (
+        <Box mt={2}>
+          <Typography variant="h6">Streaming Servers</Typography>
+          <List>
+            {streamingServers.length > 0 ? (
+              streamingServers.map((server, index) => (
+                <ListItem key={index}>
+                  <ListItemText primary={`${server.serverName} - ${server.quality}`} secondary={server.url} />
+                </ListItem>
+              ))
+            ) : (
+              <ListItem>
+                <ListItemText primary="No streaming servers available" />
+              </ListItem>
+            )}
+          </List>
+          <Typography variant="h6">Download Servers</Typography>
+          <List>
+            {downloadServers.length > 0 ? (
+              downloadServers.map((server, index) => (
+                <ListItem key={index}>
+                  <ListItemText primary={`${server.serverName} - ${server.quality}`} secondary={server.url} />
+                </ListItem>
+              ))
+            ) : (
+              <ListItem>
+                <ListItemText primary="No download servers available" />
+              </ListItem>
+            )}
+          </List>
+        </Box>
+      )}
     </div>
   );
 };

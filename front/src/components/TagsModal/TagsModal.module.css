@@ -1,7 +1,3 @@
-:root {
-  --accent-light: #ffcc80; /* Example color, adjust as needed */
-}
-
 .modal {
   display: flex;
   justify-content: center;
@@ -11,7 +7,7 @@
   .modalDialog {
     padding: 2rem;
     background: var(--accent-color);
-    color: #ffffff; /* Changed text color to white for better contrast */
+    color: var(--text-color); /* Changed text color to global text color */
     border-radius: 10px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   }
@@ -20,11 +16,11 @@
     position: absolute;
     top: 1rem;
     right: 1rem;
-    color: #ffffff; /* Changed color to white for better visibility */
+    color: var(--text-color); /* Changed color to global text color */
   }
   
   .modalTitle {
-    color: #ffffff; /* Kept color white for title */
+    color: var(--text-color); /* Kept color to global text color */
     margin-bottom: 1rem;
   }
   
@@ -35,7 +31,7 @@
   }
   
   .switchLabel {
-    color: #ffffff; /* Kept color white for switch label */
+    color: var(--text-color); /* Kept color to global text color */
     margin-bottom: 1rem;
   }
   
@@ -48,17 +44,17 @@
   
   .tagChip {
     cursor: pointer;
-    background: var(--accent-light); /* Changed background color to accent-light */
-    color: #ffffff; /* Changed text color to white for better contrast */
+    background: var(--primary-light); /* Changed background color to global primary-light */
+    color: var(--text-color); /* Changed text color to global text color */
   }
   
   .tagChip:hover {
-    background: #2e2e2e; /* Changed hover background to a lighter shade */
+    background: var(--primary-dark); /* Changed hover background to global primary-dark */
   }
   
   .tagChip.MuiChip-colorPrimary {
-    background: #6200ea; /* Kept primary color for selected tags */
-    color: #ffffff; /* Kept text color white for primary tags */
+    background: var(--highlight-color); /* Kept primary color to global highlight color */
+    color: var(--text-color); /* Kept text color to global text color */
   }
   
   .dialogActions {
@@ -73,10 +69,10 @@
   }
   
   .dialogActions button.MuiButton-outlined {
-    color: #ffffff; /* Kept color white for outlined buttons */
+    color: var(--text-color); /* Kept color to global text color */
   }
   
   .dialogActions button.MuiButton-contained {
-    background: #6200ea; /* Kept primary color for contained buttons */
-    color: #ffffff; /* Kept text color white for contained buttons */
+    background: var(--highlight-color); /* Kept primary color to global highlight color */
+    color: var(--text-color); /* Kept text color to global text color */
   }

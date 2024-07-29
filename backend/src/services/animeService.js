@@ -40,6 +40,8 @@ const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeI
 
   const newAnime = new Anime({
     title,
+    subTitle,
+    studio,
     description,
     season: seasonId.trim(),
     myAnimeListUrl,

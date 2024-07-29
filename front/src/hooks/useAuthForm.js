@@ -15,7 +15,6 @@ const useAuthForm = (initialState) => {
 
   const handleRegister = async (values) => {
     try {
-    console.log(values)
       await register(values);
     } catch (error) {
       setError('Registration failed');

@@ -10,6 +10,9 @@ const EditAnime = () => {
   const navigate = useNavigate();
   const [anime, setAnime] = useState(null);
   const [title, setTitle] = useState('');
+  const [subTitle, setSubTitle] = useState(''); // New state for subTitle
+  const [studio, setStudio] = useState(''); // New state for studio
+  const [description, setDescription] = useState(''); // New state for description
   const [pictureUrl, setPictureUrl] = useState('');
   const [type, setType] = useState('');
   const [genres, setGenres] = useState([]);
@@ -29,6 +32,9 @@ const EditAnime = () => {
       const data = await fetchAnimeById(animeId);
       setAnime(data);
       setTitle(data.title);
+      setSubTitle(data.subTitle); // Set subTitle
+      setStudio(data.studio); // Set studio
+      setDescription(data.description); // Set description
       setPictureUrl(data.pictureUrl);
       setType(data.type._id); // Ensure type is set correctly
       setGenres(data.genres.map(genre => genre._id)); // Ensure genres are in the correct format
@@ -56,6 +62,9 @@ const EditAnime = () => {
     try {
       const formData = new FormData();
       formData.append('title', title);
+      formData.append('subTitle', subTitle); // Append subTitle
+      formData.append('studio', studio); // Append studio
+      formData.append('description', description); // Append description
       formData.append('type', type);
       formData.append('genres', JSON.stringify(genres));
       formData.append('season', season); // Change seasonId to season
@@ -89,6 +98,27 @@ const EditAnime = () => {
               label="Title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Sub Title" // New input for subTitle
+              value={subTitle}
+              onChange={(e) => setSubTitle(e.target.value)}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Studio" // New input for studio
+              value={studio}
+              onChange={(e) => setStudio(e.target.value)}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               fullWidth
               margin="normal"
             />

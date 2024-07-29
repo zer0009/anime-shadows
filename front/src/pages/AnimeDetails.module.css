@@ -6,15 +6,24 @@
   background-color: var(--primary-dark);
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .animeDetailsGrid {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* Sidebar and main content */
+  gap: clamp(0px, 2.5rem, 50px); /* Dynamic gap between 0px and 50px based on viewport width */
 }
 
-.animeDetailsGrid.rtl {
-  flex-direction: row-reverse;
+.mainContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.animeSidebar {
+  display: flex;
+  flex-direction: column;
 }
 
 .animeTitle {
@@ -104,7 +113,11 @@
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   text-align: center;
-  width: 300px;
+  width: 100%;
+  max-width: 300px;
+  position: sticky;
+  top: 20px; /* Adjust as needed */
+  height: fit-content; /* Ensure the sidebar height fits its content */
 }
 
 .animeImageContainer {
@@ -140,16 +153,12 @@
   background-color: var(--highlight-color);
   color: var(--text-color);
   flex: 1;
-  margin-right: 20px; /* Increased margin-right for space between buttons */
   padding: 10px;
   border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.favoriteButton {
-  margin-right: 10px;
+  gap: 8px; /* Adjust the gap between icon and text */
 }
 
 .favoriteButton:hover {
@@ -178,6 +187,18 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+}
+
+@media (max-width: 1024px) {
+  .animeDetailsGrid {
+    grid-template-columns: 1fr; /* Single column layout */
+  }
+
+  .animeSidebar {
+    max-width: 100%;
+    margin-top: 20px;
+    position: static; /* Remove sticky positioning */
+  }
 }
 
 @media (max-width: 768px) {
