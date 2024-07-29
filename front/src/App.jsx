@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
@@ -28,6 +28,8 @@ import PopularAnime from './pages/PopularAnime.jsx';
 import RecentEpisodes from './pages/RecentEpisodes.jsx';
 import AdminRegister from './pages/AdminRegister.jsx';
 import Footer from './components/common/Footer.jsx';
+import usePageTracking from './hooks/usePageTracking';
+import { initGA } from './analytics';
 
 const setDirection = (language) => {
   const dir = language === 'ar' ? 'rtl' : 'ltr';
@@ -40,39 +42,51 @@ i18n.on('languageChanged', (language) => {
 
 setDirection(i18n.language); // Set initial direction
 
+function AppContent() {
+  usePageTracking(); // Use the custom hook here
+
+  return (
+    <div className="app-container">
+      <Header />
+      <div className="content-wrap">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/anime-list" element={<AnimeList />} />
+          <Route path="/movie-list" element={<MovieList />} />
+          <Route path="/season-anime" element={<SeasonAnime />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/anime/:id" element={<AnimeDetails />} />
+          <Route path="/filter/:filterType/:filterValue" element={<FilteredListPage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/admin-register" element={<AdminRegister />} />
+          <Route path="/popular-anime" element={<PopularAnime />} />
+          <Route path="/recent-episodes" element={<RecentEpisodes />} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
+          <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
+          <Route path="/admin-dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+          <Route path="/episode/:episodeId" element={<EpisodePage />} />
+          <Route path="/admin/manage-anime" element={<AdminRoute><ManageAnime /></AdminRoute>} />
+          <Route path="/admin/edit-anime/:animeId" element={<AdminRoute><EditAnime /></AdminRoute>} />
+          <Route path="/admin/edit-episodes/:animeId" element={<AdminRoute><EditEpisodes /></AdminRoute>} />
+          <Route path="/admin/add-episode/:animeId" element={<AdminRoute><AddEpisode /></AdminRoute>} />
+        </Routes>
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
 function App() {
+  useEffect(() => {
+    initGA(import.meta.env.VITE_REACT_APP_GA_MEASUREMENT_ID);
+  }, []);
+
   return (
     <I18nextProvider i18n={i18n}>
       <AuthProvider>
-        <div className="app-container">
-          <Header />
-          <div className="content-wrap">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/anime-list" element={<AnimeList />} />
-              <Route path="/movie-list" element={<MovieList />} />
-              <Route path="/season-anime" element={<SeasonAnime />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/anime/:id" element={<AnimeDetails />} />
-              <Route path="/filter/:filterType/:filterValue" element={<FilteredListPage />} />
-              <Route path="/search" element={<SearchPage />} />
-              <Route path="/admin-register" element={<AdminRegister />} />
-              <Route path="/popular-anime" element={<PopularAnime />} />
-              <Route path="/recent-episodes" element={<RecentEpisodes />} />
-              <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-              <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
-              <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
-              <Route path="/admin-dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-              <Route path="/episode/:episodeId" element={<EpisodePage />} />
-              <Route path="/admin/manage-anime" element={<AdminRoute><ManageAnime /></AdminRoute>} />
-              <Route path="/admin/edit-anime/:animeId" element={<AdminRoute><EditAnime /></AdminRoute>} />
-              <Route path="/admin/edit-episodes/:animeId" element={<AdminRoute><EditEpisodes /></AdminRoute>} />
-              <Route path="/admin/add-episode/:animeId" element={<AdminRoute><AddEpisode /></AdminRoute>} />
-            </Routes>
-          </div>
-          <Footer />
-        </div>
+        <AppContent />
       </AuthProvider>
     </I18nextProvider>
   );
