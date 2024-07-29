@@ -18,7 +18,7 @@ const validateEntityById = async (Model, id, entityName, file) => {
   return entity;
 };
 
-const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeId, genres, numberOfEpisodes, source, duration, status, airingDate, pictureUrl }) => {
+const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeId, genres, numberOfEpisodes, source, duration, status, airingDate, pictureUrl,subTitle, studio }) => {
   if (!typeId || !seasonId) {
     throw new Error('Type ID and Season ID are required');
   }
