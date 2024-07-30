@@ -1,14 +1,47 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Container, Box, IconButton, InputAdornment, Paper } from '@mui/material';
+import { TextField, Button, Typography, Container, Box, IconButton, InputAdornment, Paper, Alert } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import useAuthForm from '../hooks/useAuthForm';
 import styles from './Register.module.css';
+import { styled } from '@mui/material/styles';
+
+// Create a styled TextField component
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  '& .MuiInputBase-root': {
+    color: '#e0e0e0',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: theme.shape.borderRadius,
+    '&:hover': {
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    },
+  },
+  '& .MuiInputLabel-root': {
+    color: '#9e9e9e',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: '#7e57c2',
+    },
+    '&:hover fieldset': {
+      borderColor: '#b39ddb',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#d1c4e9',
+    },
+  },
+  '& .MuiFormHelperText-root': {
+    color: '#ffcdd2',
+  },
+}));
 
 const validationSchema = yup.object({
   username: yup
     .string('Enter your username')
+    .min(3, 'Username should be at least 3 characters')
+    .max(20, 'Username should not exceed 20 characters')
+    .matches(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores')
     .required('Username is required'),
   email: yup
     .string('Enter your email')
@@ -16,7 +49,9 @@ const validationSchema = yup.object({
     .required('Email is required'),
   password: yup
     .string('Enter your password')
-    .min(6, 'Password should be of minimum 6 characters length')
+    .min(8, 'Password should be at least 8 characters')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, 
+      'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character')
     .required('Password is required'),
   confirmPassword: yup
     .string('Confirm your password')
@@ -25,7 +60,7 @@ const validationSchema = yup.object({
 });
 
 const Register = () => {
-  const { handleRegister, error } = useAuthForm();
+  const { handleRegister, error: authError } = useAuthForm();
   const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik({
@@ -36,9 +71,9 @@ const Register = () => {
       confirmPassword: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      const { confirmPassword, ...registerValues } = values; // Exclude confirmPassword
-      handleRegister(registerValues);
+    onSubmit: async (values) => {
+      const { confirmPassword, ...registerValues } = values;
+      await handleRegister(registerValues);
     },
   });
 
@@ -59,8 +94,13 @@ const Register = () => {
           <Typography component="h1" variant="h5" className={styles.title}>
             Register
           </Typography>
-          <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
-            <TextField
+          {authError && (
+            <Alert severity="error" sx={{ width: '100%', mb: 2 }}>
+              {authError}
+            </Alert>
+          )}
+          <Box component="form" onSubmit={formik.handleSubmit} noValidate sx={{ mt: 1 }}>
+            <StyledTextField
               variant="outlined"
               margin="normal"
               required
@@ -74,9 +114,8 @@ const Register = () => {
               onChange={formik.handleChange}
               error={formik.touched.username && Boolean(formik.errors.username)}
               helperText={formik.touched.username && formik.errors.username}
-              className={styles.textField}
             />
-            <TextField
+            <StyledTextField
               variant="outlined"
               margin="normal"
               required
@@ -89,9 +128,8 @@ const Register = () => {
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
-              className={styles.textField}
             />
-            <TextField
+            <StyledTextField
               variant="outlined"
               margin="normal"
               required
@@ -100,12 +138,11 @@ const Register = () => {
               label="Password"
               type={showPassword ? 'text' : 'password'}
               id="password"
-              autoComplete="current-password"
+              autoComplete="new-password"
               value={formik.values.password}
               onChange={formik.handleChange}
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
-              className={styles.textField}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -113,6 +150,7 @@ const Register = () => {
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
                       edge="end"
+                      sx={{ color: '#9e9e9e' }}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -120,7 +158,7 @@ const Register = () => {
                 ),
               }}
             />
-            <TextField
+            <StyledTextField
               variant="outlined"
               margin="normal"
               required
@@ -129,12 +167,11 @@ const Register = () => {
               label="Confirm Password"
               type={showPassword ? 'text' : 'password'}
               id="confirmPassword"
-              autoComplete="current-password"
+              autoComplete="new-password"
               value={formik.values.confirmPassword}
               onChange={formik.handleChange}
               error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
               helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
-              className={styles.textField}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -142,6 +179,7 @@ const Register = () => {
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
                       edge="end"
+                      sx={{ color: '#9e9e9e' }}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -158,11 +196,6 @@ const Register = () => {
             >
               Register
             </Button>
-            {error && (
-              <Typography color="error" variant="body2" className={styles.error}>
-                {error}
-              </Typography>
-            )}
           </Box>
         </Box>
       </Paper>

@@ -4,7 +4,6 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
-const { body, validationResult } = require('express-validator');
 const userRoutes = require('./routes/user');
 const adminRoutes = require('./routes/admin');
 const animeRoutes = require('./routes/animeRoutes');
@@ -23,8 +22,8 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", "https://trusted.cdn.com"],
       styleSrc: ["'self'", "https://trusted.cdn.com"],
-      imgSrc: ["'self'", "data:", "https://trusted.cdn.com"],
-      connectSrc: ["'self'", "https://api.trusted.com"],
+      imgSrc: ["'self'", "data:", "https://trusted.cdn.com", "https://res.cloudinary.com"],
+      connectSrc: ["'self'", "https://www.google-analytics.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       objectSrc: ["'none'"],
       frameSrc: ["'self'", "https://trusted.frame.com"]

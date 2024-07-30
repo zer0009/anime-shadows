@@ -43,7 +43,8 @@ const TagsModal = ({ open, onClose, onApply }) => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = fetchGenre();
+        const response = await fetchGenre();
+        console.log(response);
         setTags(response);
       } catch (error) {
         setError('Error fetching tags');

@@ -24,7 +24,6 @@ const AddEpisode = () => {
     if (animeId) {
       const fetchEpisodes = async () => {
         const episodesData = await fetchEpisodesByAnimeId(animeId);
-        console.log("Fetched episodes data:", episodesData);
         setAllEpisodes(episodesData);
       };
       fetchEpisodes();

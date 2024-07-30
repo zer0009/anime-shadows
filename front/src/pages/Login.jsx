@@ -1,11 +1,12 @@
 // src/pages/Login.jsx
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Container, Box, IconButton, InputAdornment, Paper } from '@mui/material';
+import { TextField, Button, Typography, Container, Box, IconButton, InputAdornment, Paper, Alert } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import useAuthForm from '../hooks/useAuthForm';
 import styles from './Login.module.css';
+import { styled } from '@mui/material/styles';
 
 const validationSchema = yup.object({
   email: yup
@@ -18,8 +19,36 @@ const validationSchema = yup.object({
     .required('Password is required'),
 });
 
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  '& .MuiInputBase-root': {
+    color: '#e0e0e0',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: theme.shape.borderRadius,
+    '&:hover': {
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    },
+  },
+  '& .MuiInputLabel-root': {
+    color: '#9e9e9e',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: '#7e57c2',
+    },
+    '&:hover fieldset': {
+      borderColor: '#b39ddb',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#d1c4e9',
+    },
+  },
+  '& .MuiFormHelperText-root': {
+    color: '#ffcdd2',
+  },
+}));
+
 const Login = () => {
-  const { handleLogin, error } = useAuthForm();
+  const { handleLogin, error: authError } = useAuthForm();
   const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik({
@@ -28,8 +57,8 @@ const Login = () => {
       password: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      handleLogin(values);
+    onSubmit: async (values) => {
+      await handleLogin(values);
     },
   });
 
@@ -53,8 +82,13 @@ const Login = () => {
           <Typography variant="body2" className={styles.subtitle}>
             Keep it all together and you'll be fine
           </Typography>
+          {authError && (
+            <Alert severity="error" sx={{ width: '100%', mb: 2 }}>
+              {authError}
+            </Alert>
+          )}
           <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
-            <TextField
+            <StyledTextField
               variant="outlined"
               margin="normal"
               required
@@ -68,9 +102,8 @@ const Login = () => {
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
-              className={styles.textField}
             />
-            <TextField
+            <StyledTextField
               variant="outlined"
               margin="normal"
               required
@@ -84,7 +117,6 @@ const Login = () => {
               onChange={formik.handleChange}
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
-              className={styles.textField}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -92,6 +124,7 @@ const Login = () => {
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
                       edge="end"
+                      sx={{ color: '#9e9e9e' }}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -111,11 +144,6 @@ const Login = () => {
             >
               Sign in
             </Button>
-            {error && (
-              <Typography color="error" variant="body2" className={styles.error}>
-                {error}
-              </Typography>
-            )}
           </Box>
         </Box>
       </Paper>

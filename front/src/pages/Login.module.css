@@ -28,26 +28,6 @@
     text-align: left; /* Ensure the subtitle is left-aligned */
 }
 
-.textField {
-    .MuiInputBase-root {
-        color: #ffffff;
-    }
-    .MuiInputLabel-root {
-        color: #b0b0b0;
-    }
-    .MuiOutlinedInput-root {
-        fieldset {
-            border-color: #b0b0b0;
-        }
-        &:hover fieldset {
-            border-color: #ffffff;
-        }
-        &.Mui-focused fieldset {
-            border-color: #ffffff;
-        }
-    }
-}
-
 .forgotPassword {
     color: #b0b0b0;
     text-align: right;
@@ -67,4 +47,5 @@
 .error {
     margin-top: 1rem;
     text-align: center;
+    color: #ffcdd2;
 }

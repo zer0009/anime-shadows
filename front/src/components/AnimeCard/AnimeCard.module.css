@@ -8,8 +8,8 @@
 
 .animeCard {
   width: 100%;
-  max-width: 320px; /* Ensure a maximum width */
-  height: auto; /* Allow height to adjust based on content */
+  max-width: 320px;
+  height: 300px; /* Set a fixed height */
   margin: 8px;
   border-radius: 12px;
   overflow: hidden;
@@ -44,7 +44,7 @@
   border-radius: 8px;
   font-size: 12px;
   font-weight: bold;
-  z-index: 1; /* Ensure badge is on top */
+  z-index: 2;
 }
 
 .statusBadgeCompleted {
@@ -63,17 +63,17 @@
   padding: 12px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-between;
   background: linear-gradient(180deg, transparent, var(--secondary-dark));
   position: absolute;
   bottom: 0;
   width: 100%;
   color: var(--text-color);
-  z-index: 0; /* Ensure content is below the badge */
+  z-index: 1;
 }
 
 .title {
-  margin-inline-start: 20px; /* Add left margin for space */
+  margin-inline-start: 20px;
   font-size: 1.1rem;
   font-weight: bold;
   white-space: nowrap;
@@ -97,10 +97,11 @@
   position: absolute;
   bottom: 10px;
   right: 10px;
-  z-index: 1; /* Ensure badges are on top */
+  z-index: 2;
 }
 
-.typeBadge {
+.typeBadge,
+.episodeBadge {
   background-color: var(--highlight-color);
   color: var(--text-color);
   padding: 5px 12px;
@@ -108,58 +109,48 @@
   font-size: 12px;
   font-weight: bold;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 30px;
-}
-
-.episodeBadge {
-  background-color: var(--highlight-color);
-  color: white;
-  padding: 5px 12px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: bold;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 26px;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .animeCard {
-    max-width: 100%; /* Allow card to take full width on smaller screens */
-    height: auto; /* Adjust height based on content */
+    max-width: 100%;
+    height: 280px; /* Slightly reduce height for medium screens */
   }
 
   .cardContent {
-    position: relative; /* Make content position relative */
-    background: none; /* Remove background gradient */
+    height: auto;
+    min-height: 30%;
+    position: absolute;
   }
 
   .badgesContainer {
-    position: relative; /* Make badges position relative */
-    bottom: auto;
-    right: auto;
-    margin-top: 10px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
   }
 }
 
 @media (max-width: 480px) {
+  .animeCard {
+    height: 260px; /* Further reduce height for smaller screens */
+  }
+
   .title {
-    font-size: 1rem; /* Adjust title font size for smaller screens */
+    font-size: 1rem;
   }
 
   .lastViewed {
-    font-size: 0.8rem; /* Adjust last viewed font size for smaller screens */
+    font-size: 0.8rem;
   }
 
   .typeBadge,
   .episodeBadge {
-    font-size: 10px; /* Adjust badge font size for smaller screens */
-    padding: 3px 8px; /* Adjust badge padding for smaller screens */
+    font-size: 10px;
+    padding: 3px 8px;
   }
 }

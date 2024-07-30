@@ -2,16 +2,13 @@ const Episode = require('../models/episode');
 const Anime = require('../models/anime');
 
 const createEpisode = async (req, res) => {
-    const { animeId, number, streamingServers, downloadServers } = req.body;
+    const { animeId,title, number, streamingServers, downloadServers } = req.body;
 
     try {
         const anime = await Anime.findById(animeId);
         if (!anime) {
             return res.status(404).json({ message: 'Anime not found' });
         }
-
-        // Construct the title using the anime name and episode number
-        const title = `Episode ${number}`;
 
         const episode = new Episode({ anime: animeId, number, title, streamingServers, downloadServers });
         await episode.save();

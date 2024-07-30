@@ -42,6 +42,7 @@ export const AuthProvider = ({ children }) => {
             navigate('/profile');
         } catch (error) {
             console.error('Error logging in:', error);
+            throw error; // Throw the error so it can be caught in useAuthForm
         }
     };
 
@@ -61,6 +62,7 @@ export const AuthProvider = ({ children }) => {
             navigate('/profile');
         } catch (error) {
             console.error('Error registering:', error);
+            throw error; // Throw the error so it can be caught in useAuthForm
         }
     };
 
@@ -88,4 +90,3 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => {
     return useContext(AuthContext);
 };
-
