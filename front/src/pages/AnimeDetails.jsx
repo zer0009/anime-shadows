@@ -9,6 +9,7 @@ import LoadingSpinner from '../components/common/LoadingSpinner.jsx';
 import StarScoreDisplay from '../components/StarScoreDisplay.jsx';
 import ScoreDisplay from '../components/ScoreDisplay.jsx';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { JsonLd } from 'react-schemaorg';
 import styles from './AnimeDetails.module.css';
 
 const AnimeDetails = () => {
@@ -141,30 +142,52 @@ const AnimeDetails = () => {
     <HelmetProvider>
       <Container maxWidth="lg" className={styles.animeDetailsContainer}>
         <Helmet>
-        <title>{anime.title} - {anime.subTitle} - {t('animeDetails.title')} مترجمه، تحميل، حلقة</title>
-          <meta name="description" content={`${anime.title} - ${anime.subTitle} - ${anime.description} مترجمه، تحميل، حلقة`} />
-          <meta name="keywords" content={`${anime.title}, ${anime.subTitle}, ${anime.genres.map(genre => genre.name).join(', ')}, مترجمه، تحميل، حلقة, ${t('animeDetails.keywords')}`} />
-          <script type="application/ld+json">
-            {JSON.stringify({
-              "@context": "http://schema.org",
-              "@type": "TVSeries",
-              "name": anime.title,
-              "description": anime.description,
-              "image": anime.pictureUrl,
-              "genre": anime.genres.map(genre => genre.name),
-              "datePublished": anime.airingDate,
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": anime.averageRating,
-                "reviewCount": anime.myAnimeListUserCount
-              }
-            })}
-          </script>
+          <title>{`${anime.title} - ${anime.subTitle} | أنمي شادوز - Anime Shadows`}</title>
+          <meta name="description" content={`شاهد ${anime.title} - ${anime.subTitle} اون لاين على أنمي شادوز (Anime Shadows). ${anime.description.substring(0, 150)}...`} />
+          <meta name="keywords" content={`${anime.title}, ${anime.subTitle}, ${anime.genres.map(genre => genre.name).join(', ')}, أنمي, مشاهدة اون لاين, Anime Shadows`} />
+          <link rel="canonical" href={`https://animeshadows.xyz/anime/${anime._id}`} />
+          <meta property="og:title" content={`${anime.title} - ${anime.subTitle} | أنمي شادوز - Anime Shadows`} />
+          <meta property="og:description" content={`شاهد ${anime.title} اون لاين على أنمي شادوز (Anime Shadows). ${anime.description.substring(0, 150)}...`} />
+          <meta property="og:image" content={anime.pictureUrl} />
+          <meta property="og:url" content={`https://animeshadows.xyz/anime/${anime._id}`} />
+          <meta property="og:type" content="video.tv_show" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={`${anime.title} - ${anime.subTitle} | أنمي شادوز - Anime Shadows`} />
+          <meta name="twitter:description" content={`شاهد ${anime.title} اون لاين على أنمي شادوز (Anime Shadows). ${anime.description.substring(0, 150)}...`} />
+          <meta name="twitter:image" content={anime.pictureUrl} />
         </Helmet>
+        <JsonLd
+          item={{
+            "@context": "https://schema.org",
+            "@type": "TVSeries",
+            "name": anime.title,
+            "alternateName": anime.subTitle,
+            "description": anime.description,
+            "image": anime.pictureUrl,
+            "genre": anime.genres.map(genre => genre.name),
+            "datePublished": anime.airingDate,
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": anime.averageRating,
+              "reviewCount": anime.myAnimeListUserCount
+            },
+            "numberOfEpisodes": anime.episodes?.length || 0,
+            "actor": anime.characters?.map(character => ({
+              "@type": "Person",
+              "name": character.name
+            })),
+            "inLanguage": "ar",
+            "publisher": {
+              "@type": "Organization",
+              "name": "Anime Shadows",
+              "alternateName": "أنمي شادوز"
+            }
+          }}
+        />
         <div className={styles.animeDetailsGrid}>
           <div className={styles.animeSidebar}>
             <Box className={styles.animeImageContainer}>
-              <img src={anime.pictureUrl} alt={`Poster of ${anime.title}`} className={styles.animeImage} />
+              <img src={anime.pictureUrl} alt={`Poster of ${anime.title}`} className={styles.animeImage} loading="lazy"/>
               <Box className={styles.scoreBadge}>
                 <StarScoreDisplay score={anime.averageRating} />
               </Box>

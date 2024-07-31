@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { I18nextProvider } from 'react-i18next';
@@ -29,7 +29,9 @@ import RecentEpisodes from './pages/RecentEpisodes.jsx';
 import AdminRegister from './pages/AdminRegister.jsx';
 import Footer from './components/common/Footer.jsx';
 import usePageTracking from './hooks/usePageTracking';
-import { initGA } from './analytics';
+import { initGA, logPageView, setConsent } from './analytics';
+import CookieConsent from 'react-cookie-consent';
+import { HelmetProvider } from 'react-helmet-async';
 
 const setDirection = (language) => {
   const dir = language === 'ar' ? 'rtl' : 'ltr';
@@ -43,7 +45,11 @@ i18n.on('languageChanged', (language) => {
 setDirection(i18n.language); // Set initial direction
 
 function AppContent() {
-  usePageTracking(); // Use the custom hook here
+  const location = useLocation();
+
+  useEffect(() => {
+    logPageView(location.pathname);
+  }, [location]);
 
   return (
     <div className="app-container">
@@ -74,6 +80,19 @@ function AppContent() {
         </Routes>
       </div>
       <Footer />
+      <CookieConsent
+        location="bottom"
+        buttonText="Accept"
+        cookieName="ga_consent"
+        style={{ background: "#2B373B" }}
+        buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
+        expires={150}
+        onAccept={() => {
+          setConsent(true);
+        }}
+      >
+        This website uses cookies to enhance the user experience.
+      </CookieConsent>
     </div>
   );
 }
@@ -86,7 +105,9 @@ function App() {
   return (
     <I18nextProvider i18n={i18n}>
       <AuthProvider>
-        <AppContent />
+        <HelmetProvider>
+          <AppContent />
+        </HelmetProvider>
       </AuthProvider>
     </I18nextProvider>
   );

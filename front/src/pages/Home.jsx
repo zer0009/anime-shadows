@@ -10,10 +10,13 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import { Navigation, Pagination, Scrollbar,Autoplay } from 'swiper/modules';
+import { Navigation, Pagination, Scrollbar, Autoplay } from 'swiper/modules';
 import AnimeCard from '../components/AnimeCard/AnimeCard';
-import { Helmet, HelmetProvider } from 'react-helmet-async'; // Import Helmet for SEO
+import { Helmet } from 'react-helmet-async';
+import { JsonLd } from 'react-schemaorg';
+import { useSEO } from '../hooks/useSEO';
 import styles from './Home.module.css';
+import { Box, Typography, Container } from '@mui/material';
 
 const Home = () => {
     const { t, i18n } = useTranslation();
@@ -26,10 +29,10 @@ const Home = () => {
         const fetchPopular = async () => {
             try {
                 const response = await fetchPopularAnime('all');
-                setPopularAnimes(response.sortedAnimes || []); // Ensure popularAnimes is always an array
+                setPopularAnimes(response.sortedAnimes || []);
             } catch (error) {
                 console.error('Error fetching popular animes:', error);
-                setPopularAnimes([]); // Set to empty array on error
+                setPopularAnimes([]);
             }
         };
 
@@ -37,10 +40,7 @@ const Home = () => {
     }, []);
 
     const handleAnimeClick = async (animeId) => {
-        if (!animeId) {
-            return;
-        }
-
+        if (!animeId) return;
         try {
             await fetchAnimeById(animeId);
             navigate(`/anime/${animeId}`);
@@ -49,61 +49,126 @@ const Home = () => {
         }
     };
 
-    useEffect(() => {
-        console.log('recentEpisodes:', recentEpisodes);
-    }, [recentEpisodes]);
+    const seoProps = {
+        title: t('home.title'),
+        description: t('home.description'),
+        keywords: t('home.keywords'),
+        canonicalUrl: 'https://animeshadows.xyz',
+        ogType: 'website',
+        jsonLd: [
+            {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": "Anime Shadows",
+                "alternateName": "أنمي شادوز",
+                "url": "https://animeshadows.xyz",
+                "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": "https://animeshadows.xyz/search?q={search_term_string}",
+                    "query-input": "required name=search_term_string"
+                }
+            },
+            {
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                "itemListElement": popularAnimes.map((anime, index) => ({
+                    "@type": "ListItem",
+                    "position": index + 1,
+                    "url": `https://animeshadows.xyz/anime/${anime._id}`,
+                    "name": anime.title
+                }))
+            },
+            {
+                "@context": "https://schema.org",
+                "@type": "CollectionPage",
+                "name": t('home.title'),
+                "description": t('home.description'),
+                "url": "https://animeshadows.xyz",
+                "hasPart": [
+                    {
+                        "@type": "ItemList",
+                        "name": t('home.popularAnime'),
+                        "itemListElement": popularAnimes.map((anime, index) => ({
+                            "@type": "ListItem",
+                            "position": index + 1,
+                            "url": `https://animeshadows.xyz/anime/${anime._id}`,
+                            "name": anime.title
+                        }))
+                    },
+                    {
+                        "@type": "ItemList",
+                        "name": t('home.recentEpisodes'),
+                        "itemListElement": recentEpisodes.map((episode, index) => ({
+                            "@type": "ListItem",
+                            "position": index + 1,
+                            "url": `https://animeshadows.xyz/episode/${episode._id}`,
+                            "name": `${episode.anime.title} - ${episode.title}`
+                        }))
+                    }
+                ]
+            }
+        ]
+    };
+
+    const seo = useSEO(seoProps);
 
     return (
-        <HelmetProvider>
+        <>
             <Helmet>
-                <title>{t('home.title')}</title>
-                <meta name="description" content={t('home.description')} />
-                <meta name="keywords" content={t('home.keywords')} />
-                <script type="application/ld+json">
-                    {JSON.stringify({
-                        "@context": "http://schema.org",
-                        "@type": "WebPage",
-                        "name": t('home.title'),
-                        "description": t('home.description'),
-                        "url": window.location.href,
-                        "mainEntity": {
-                            "@type": "ItemList",
-                            "itemListElement": popularAnimes.map((anime, index) => ({
-                                "@type": "ListItem",
-                                "position": index + 1,
-                                "url": `${window.location.origin}/anime/${anime._id}`,
-                                "name": anime.title
-                            }))
-                        }
-                    })}
-                </script>
+                {seo.helmet.title && <title>{seo.helmet.title}</title>}
+                {seo.helmet.meta.map((meta, index) => (
+                    <meta key={index} {...meta} />
+                ))}
+                {seo.helmet.link.map((link, index) => (
+                    <link key={index} {...link} />
+                ))}
             </Helmet>
-            <div className={styles.home}>
-            <Swiper
-                    modules={[Navigation, Pagination, Scrollbar, Autoplay]} // Include Autoplay module
+            {seo.jsonLd && seo.jsonLd.map((item, index) => (
+                <JsonLd key={index} item={item} />
+            ))}
+            
+            <Box className={styles.heroSection}>
+                <Container maxWidth="lg">
+                    <Box className={styles.heroContent}>
+                        <Typography variant="h1" className={styles.mainHeading}>
+                            {t('home.mainHeading', 'أنمي شادوز')}
+                        </Typography>
+                        <Typography variant="h2" className={styles.subHeading}>
+                            {t('home.subHeading', 'موقعك الأول لمشاهدة الأنمي')}
+                        </Typography>
+                        <Typography variant="body1" className={styles.introText}>
+                            {t('home.introText', 'مرحبًا بك في أنمي شادوز، وجهتك الأولى لمشاهدة أحدث وأفضل الأنميات. استمتع بمجموعة واسعة من الأنميات المترجمة بجودة عالية.')}
+                        </Typography>
+                    </Box>
+                </Container>
+                <Swiper
+                    modules={[Navigation, Pagination, Scrollbar, Autoplay]}
                     spaceBetween={30}
                     slidesPerView={1}
                     navigation
                     pagination={{ clickable: true }}
                     scrollbar={{ draggable: true }}
-                    autoplay={{ delay: 3000, disableOnInteraction: false }} // Add autoplay settings
+                    autoplay={{ delay: 3000, disableOnInteraction: false }}
                     className={styles.heroSwiper}
                 >
                     <SwiperSlide>
-                        <img src="/assets/images/hero1.jpg" alt="Hero 1" className={styles.heroImage} />
+                        <img src="/assets/images/hero1.jpg" alt={t('home.featuredAnime1')} className={styles.heroImage} loading="lazy" />
                     </SwiperSlide>
                     <SwiperSlide>
-                        <img src="/assets/images/hero2.jpg" alt="Hero 2" className={styles.heroImage} />
+                        <img src="/assets/images/hero2.jpg" alt={t('home.featuredAnime2')} className={styles.heroImage} loading="lazy" />
                     </SwiperSlide>
                     <SwiperSlide>
-                        <img src="/assets/images/hero3.jpg" alt="Hero 3" className={styles.heroImage} />
+                        <img src="/assets/images/hero3.jpg" alt={t('home.featuredAnime3')} className={styles.heroImage} loading="lazy" />
                     </SwiperSlide>
                 </Swiper>
+            </Box>
 
-                <div className={styles.content}>
+            <div className={styles.content}>
+                {/* Popular Anime Section */}
+                <section aria-labelledby="popular-anime-heading">
                     <div className={styles.sectionHeader}>
-                        <h2 className={styles.sectionTitle}>{t('home.popularAnime')}</h2>
-                        <button className={styles.moreButton} onClick={() => navigate('/popular-anime')}>{t('home.more')}</button>
+                        <h2 id="popular-anime-heading" className={styles.sectionTitle}>{t('home.popularAnime')}</h2>
+                        <button className={styles.moreButton} onClick={() => navigate('/popular-anime')} aria-label={t('home.morePopularAnime', 'عرض المزيد من الأنميات الشائعة')}>{t('home.more')}</button>
                     </div>
                     <Swiper
                         modules={[Navigation, Pagination, Scrollbar]}
@@ -123,17 +188,18 @@ const Home = () => {
                             <SwiperSlide key={anime._id}>
                                 <AnimeCard
                                     anime={anime}
-                                    onClick={() => {
-                                        handleAnimeClick(anime._id);
-                                    }}
+                                    onClick={() => handleAnimeClick(anime._id)}
                                 />
                             </SwiperSlide>
                         ))}
                     </Swiper>
+                </section>
 
+                {/* Anime List Section */}
+                <section aria-labelledby="anime-list-heading">
                     <div className={styles.sectionHeader}>
-                        <h2 className={styles.sectionTitle}>{t('home.animeList')}</h2>
-                        <button className={styles.moreButton} onClick={() => navigate('/anime-list')}>{t('home.more')}</button>
+                        <h2 id="anime-list-heading" className={styles.sectionTitle}>{t('home.animeList')}</h2>
+                        <button className={styles.moreButton} onClick={() => navigate('/anime-list')} aria-label={t('home.moreAnimeList', 'عرض القائمة الكاملة للأنميات')}>{t('home.more')}</button>
                     </div>
                     <Swiper
                         modules={[Navigation, Pagination, Scrollbar]}
@@ -153,17 +219,18 @@ const Home = () => {
                             <SwiperSlide key={anime._id}>
                                 <AnimeCard
                                     anime={anime}
-                                    onClick={() => {
-                                        handleAnimeClick(anime._id);
-                                    }}
+                                    onClick={() => handleAnimeClick(anime._id)}
                                 />
                             </SwiperSlide>
                         ))}
                     </Swiper>
+                </section>
 
+                {/* Recent Episodes Section */}
+                <section aria-labelledby="recent-episodes-heading">
                     <div className={styles.sectionHeader}>
-                        <h2 className={styles.sectionTitle}>{t('home.recentEpisodes')}</h2>
-                        <button className={styles.moreButton} onClick={() => navigate('/recent-episodes')}>{t('home.more')}</button>
+                        <h2 id="recent-episodes-heading" className={styles.sectionTitle}>{t('home.recentEpisodes')}</h2>
+                        <button className={styles.moreButton} onClick={() => navigate('/recent-episodes')} aria-label={t('home.moreRecentEpisodes', 'عرض المزيد من الحلقات الحديثة')}>{t('home.more')}</button>
                     </div>
                     <Swiper
                         modules={[Navigation, Pagination, Scrollbar]}
@@ -184,16 +251,14 @@ const Home = () => {
                                 <AnimeCard
                                     anime={episode.anime}
                                     episodeTitle={episode.title}
-                                    onClick={() => {
-                                        handleAnimeClick(episode.anime._id);
-                                    }}
+                                    onClick={() => handleAnimeClick(episode.anime._id)}
                                 />
                             </SwiperSlide>
                         ))}
                     </Swiper>
-                </div>
+                </section>
             </div>
-        </HelmetProvider>
+        </>
     );
 };
 

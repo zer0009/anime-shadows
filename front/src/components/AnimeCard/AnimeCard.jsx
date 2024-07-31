@@ -1,17 +1,19 @@
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Badge } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import styles from './AnimeCard.module.css';
 
 const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeTitle, onClick }) => {
+    const { t } = useTranslation();
     const [imageError, setImageError] = useState(false);
 
     if (!anime) {
-        return null; // Return null if anime is not defined
+        return null;
     }
 
     const imageUrl = `${anime.pictureUrl}?t=${new Date().getTime()}`;
-    const defaultPictureUrl = 'public/assets/images/default-anime-picture.jpg'; // Ensure this path is correct
+    const defaultPictureUrl = '/assets/images/default-anime-picture.jpg';
 
     const handleError = useCallback(() => {
         setImageError(true);
@@ -30,6 +32,19 @@ const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeTitle,
         }
     };
 
+    const getStatusText = (status) => {
+        switch (status) {
+            case 'completed':
+                return t('animeCard.statusCompleted', 'مكتمل');
+            case 'ongoing':
+                return t('animeCard.statusOngoing', 'يعرض الآن');
+            case 'upcoming':
+                return t('animeCard.statusUpcoming', 'قادم قريبا');
+            default:
+                return '';
+        }
+    };
+
     return (
         <Card className={styles.animeCard} onClick={onClick}>
             <Link to={`/anime/${anime._id}`} className={styles.animeCardLink}>
@@ -38,21 +53,22 @@ const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeTitle,
                     src={imageError ? defaultPictureUrl : imageUrl}
                     onError={handleError}
                     className={styles.cardCover}
-                    alt={anime.title}
+                    alt={t('animeCard.coverAlt', 'غلاف {{title}}', { title: anime.title })}
+                    loading="lazy"
                 />
                 <Card.ImgOverlay>
                     <Badge
                         pill
                         className={`${styles.statusBadge} ${getStatusBadgeClass(anime.status)}`}
                     >
-                        {anime.status === 'completed' ? 'مكتمل' : anime.status === 'ongoing' ? 'يعرض الآن' : 'قادم قريبا'}
+                        {getStatusText(anime.status)}
                     </Badge>
                 </Card.ImgOverlay>
                 <Card.Body className={styles.cardContent}>
                     <Card.Title className={styles.title}>{anime.title}</Card.Title>
                     {showLastViewed && lastViewed && (
                         <Card.Text className={styles.lastViewed}>
-                            Last viewed: {new Date(lastViewed).toLocaleDateString()}
+                            {t('animeCard.lastViewed', 'آخر مشاهدة: {{date}}', { date: new Date(lastViewed).toLocaleDateString() })}
                         </Card.Text>
                     )}
                     <div className={styles.badgesContainer}>
