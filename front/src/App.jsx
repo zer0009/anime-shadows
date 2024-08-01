@@ -28,7 +28,7 @@ import PopularAnime from './pages/PopularAnime.jsx';
 import RecentEpisodes from './pages/RecentEpisodes.jsx';
 import AdminRegister from './pages/AdminRegister.jsx';
 import Footer from './components/common/Footer.jsx';
-import usePageTracking from './hooks/usePageTracking';
+import NotFound from './pages/NotFound.jsx';
 import { initGA, logPageView, setConsent } from './analytics';
 import CookieConsent from 'react-cookie-consent';
 import { HelmetProvider } from 'react-helmet-async';
@@ -77,6 +77,7 @@ function AppContent() {
           <Route path="/admin/edit-anime/:animeId" element={<AdminRoute><EditAnime /></AdminRoute>} />
           <Route path="/admin/edit-episodes/:animeId" element={<AdminRoute><EditEpisodes /></AdminRoute>} />
           <Route path="/admin/add-episode/:animeId" element={<AdminRoute><AddEpisode /></AdminRoute>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
       <Footer />

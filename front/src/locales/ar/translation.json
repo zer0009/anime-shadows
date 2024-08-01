@@ -10,7 +10,15 @@
     "history": "التاريخ",
     "favorites": "المفضلة",
     "adminDashboard": "لوحة التحكم",
-    "logout": "تسجيل الخروج"
+    "logout": "تسجيل الخروج",
+    "openMenu": "افتح القائمة",
+    "closeMenu": "إغلاق القائمة",
+    "search": "ابحث",
+    "homeLink": "الرئيسية",
+    "loginLink": "تسجيل الدخول",
+    "registerLink": "تسجيل",
+    "profileLink": "الملف الشخصي",
+    "favoritesLink": "المفضلة"
   },
   "animeDetails": {
     "rateAnime": "تقييم الأنمي",

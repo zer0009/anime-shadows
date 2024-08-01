@@ -2,18 +2,18 @@
 
 .header {
   background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 50%, var(--tertiary-dark) 100%);
-  padding: 18px 0; /* Increased padding for a larger header */
-  text-align: center;
+  padding: 15px 0;
   box-shadow: 0 4px 12px var(--shadow-color);
   border-bottom: 1px solid var(--secondary-dark);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
 }
 
-.headerTitle {
-  margin: 0;
-  font-size: 30px; /* Increased font size */
-  font-weight: bolder; /* Made the text bolder */
-  color: var(--text-color);
-  text-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color), 0 0 30px var(--glow-color);
+.header.scrolled {
+  padding: 10px 0;
+  background: var(--primary-dark);
 }
 
 .container {
@@ -25,8 +25,19 @@
   padding: 0 20px;
 }
 
-.logo img {
-  height: 50px; /* Increased logo size */
+.logo {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.headerTitle {
+  margin: 0;
+  font-size: 30px;
+  font-weight: bold;
+  color: var(--text-color);
+  text-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color);
+  transition: all 0.3s ease;
 }
 
 .headerNav {
@@ -39,38 +50,31 @@
   padding: 0;
   margin: 0;
   display: flex;
-  gap: 20px;
-}
-
-.headerNav li {
-  margin: 0;
+  gap: 30px;
 }
 
 .headerNav a {
   color: var(--highlight-color);
   text-decoration: none;
-  font-size: 20px; /* Increased font size */
-  font-weight: bold; /* Made the text bold */
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease;
   position: relative;
-  padding: 5px 0;
-  transition: color 0.3s, transform 0.3s;
 }
 
 .headerNav a::after {
   content: '';
-  display: block;
+  position: absolute;
   width: 0;
   height: 2px;
-  background: var(--highlight-color);
-  transition: width 0.3s;
-  position: absolute;
   bottom: -5px;
   left: 0;
+  background-color: var(--glow-color);
+  transition: width 0.3s ease;
 }
 
 .headerNav a:hover {
   color: var(--glow-color);
-  transform: scale(1.05);
 }
 
 .headerNav a:hover::after {
@@ -80,14 +84,14 @@
 .headerIcons {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 20px;
 }
 
 .icon {
   color: var(--highlight-color);
-  font-size: 28px; /* Increased icon size */
+  font-size: 24px;
   cursor: pointer;
-  transition: color 0.3s, transform 0.3s;
+  transition: all 0.3s ease;
 }
 
 .icon:hover {
@@ -98,55 +102,96 @@
 .searchIconButton {
   display: flex;
   align-items: center;
-  margin-right: auto;
+  background: none;
+  border: none;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.searchIconButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.authLink {
+  display: flex;
+  align-items: center;
+  color: var(--highlight-color);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+.authLink:hover {
+  color: var(--glow-color);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.authText {
+  margin-left: 5px;
 }
 
 .userProfile {
+  position: relative;
+}
+
+.profileButton {
   display: flex;
   align-items: center;
-  position: relative;
+  background: none;
+  border: none;
   cursor: pointer;
-  margin-right: auto;
+  padding: 5px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.profileButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .profilePicture {
-  width: 40px; /* Increased profile picture size */
-  height: 40px; /* Increased profile picture size */
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: 2px solid var(--highlight-color);
   margin-right: 10px;
-  transition: transform 0.3s;
-  margin-right: auto;
+  transition: all 0.3s ease;
 }
 
-.profilePicture:hover {
-  transform: scale(1.1);
+.profileButton:hover .profilePicture {
+  border-color: var(--glow-color);
 }
 
 .username {
   color: var(--text-color);
-  font-size: 20px; /* Increased font size */
-  font-weight: bold; /* Made the text bold */
-  transition: color 0.3s;
-  margin-right: 10px;
-}
-
-.username:hover {
-  color: var(--highlight-color);
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .dropdownMenu {
   position: absolute;
-  top: 50px;
+  top: 100%;
   right: 0;
   background-color: var(--secondary-dark);
-  border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
   z-index: 1000;
+  min-width: 200px;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.dropdownMenu.open {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .dropdownMenu a, .dropdownMenu button {
@@ -155,37 +200,18 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px; /* Increased font size */
-  font-weight: bold; /* Made the text bold */
-  padding: 5px 10px;
+  font-size: 14px;
+  padding: 8px 12px;
   display: flex;
   align-items: center;
-  gap: 5px;
-  transition: background-color 0.3s, color 0.3s;
+  gap: 10px;
+  transition: all 0.3s ease;
+  border-radius: 4px;
 }
 
 .dropdownMenu a:hover, .dropdownMenu button:hover {
   background-color: var(--secondary-light);
   color: var(--highlight-color);
-}
-
-.languageSwitcher {
-  display: flex;
-  gap: 10px;
-}
-
-.languageSwitcher button {
-  background: none;
-  border: none;
-  color: var(--highlight-color);
-  cursor: pointer;
-  font-size: 18px; /* Increased font size */
-  font-weight: bold; /* Made the text bold */
-  transition: color 0.3s;
-}
-
-.languageSwitcher button:hover {
-  color: var(--glow-color);
 }
 
 .menuIcon {
@@ -194,36 +220,104 @@
   border: none;
   color: var(--highlight-color);
   cursor: pointer;
-  font-size: 28px; /* Increased icon size */
+  font-size: 28px;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.menuIcon:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.closeMenuButton {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--highlight-color);
+  cursor: pointer;
+  font-size: 28px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.closeMenuButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 @media (max-width: 768px) {
   .container {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-wrap: wrap;
   }
 
   .headerNav {
     display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--primary-dark);
     flex-direction: column;
-    width: 100%;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+    opacity: 0;
+    transition: all 0.3s ease;
   }
 
   .headerNav.open {
     display: flex;
+    opacity: 1;
   }
 
   .headerNav ul {
     flex-direction: column;
-    gap: 10px;
+    align-items: center;
+    gap: 30px;
   }
 
-  .headerIcons {
-    width: 100%;
-    justify-content: space-between;
+  .headerNav a {
+    font-size: 24px;
+    padding: 10px 0;
+  }
+
+  .closeMenuButton {
+    display: block;
   }
 
   .menuIcon {
     display: block;
+  }
+
+  .headerIcons {
+    margin-left: auto;
+  }
+
+  .authText {
+    display: none;
+  }
+
+  .username {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .headerTitle {
+    font-size: 22px;
+  }
+
+  .icon {
+    font-size: 22px;
+  }
+
+  .profilePicture {
+    width: 28px;
+    height: 28px;
   }
 }

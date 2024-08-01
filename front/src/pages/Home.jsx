@@ -17,9 +17,12 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import hero1 from '/assets/images/hero1_optimized.jpg';
-import hero2 from '/assets/images/hero2_optimized.jpg';
-import hero3 from '/assets/images/hero3_optimized.jpg';
+import hero1Webp from '/assets/images/hero1_optimized.webp';
+import hero2Webp from '/assets/images/hero2_optimized.webp';
+import hero3Webp from '/assets/images/hero3_optimized.webp';
+import hero1Jpg from '/assets/images/hero1_optimized.jpg';
+import hero2Jpg from '/assets/images/hero2_optimized.jpg';
+import hero3Jpg from '/assets/images/hero3_optimized.jpg';
 
 
 
@@ -71,9 +74,9 @@ const Home = () => {
 
 
     const heroImages = [
-        { src: hero1, alt: t('home.featuredAnime1') },
-        { src: hero2, alt: t('home.featuredAnime2') },
-        { src: hero3, alt: t('home.featuredAnime3') },
+        { webp: hero1Webp, jpg: hero1Jpg, alt: t('home.featuredAnime1') },
+        { webp: hero2Webp, jpg: hero2Jpg, alt: t('home.featuredAnime2') },
+        { webp: hero3Webp, jpg: hero3Jpg, alt: t('home.featuredAnime3') },
     ];
 
     const seoProps = useMemo(() => ({
@@ -197,6 +200,13 @@ const Home = () => {
         </section>
     ), [t, navigate, handleAnimeClick, loading]);
 
+    const OptimizedImage = ({ webp, jpg, alt, ...props }) => (
+        <picture>
+            <source srcSet={webp} type="image/webp" />
+            <img src={jpg} alt={alt} {...props} />
+        </picture>
+    );
+
     return (
         <>
             <Helmet>
@@ -238,9 +248,10 @@ const Home = () => {
                 >
                     {heroImages.map((image, index) => (
                         <SwiperSlide key={index} className={styles.heroSlide}>
-                            <img 
-                                src={image.src} 
-                                alt={image.alt} 
+                            <OptimizedImage
+                                webp={image.webp}
+                                jpg={image.jpg}
+                                alt={image.alt}
                                 className={styles.heroImage}
                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             />
