@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Badge } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import styles from './AnimeCard.module.css';
 
 const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeTitle, onClick }) => {
@@ -48,15 +49,17 @@ const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeTitle,
     return (
         <Card className={styles.animeCard} onClick={onClick}>
             <Link to={`/anime/${anime._id}`} className={styles.animeCardLink}>
-                <Card.Img
-                    variant="top"
-                    src={imageError ? defaultPictureUrl : imageUrl}
-                    onError={handleError}
-                    className={styles.cardCover}
-                    alt={t('animeCard.coverAlt', 'غلاف {{title}}', { title: anime.title })}
-                    loading="lazy"
-                />
-                <Card.ImgOverlay>
+                <div className={styles.imageWrapper}>
+                    <Card.Img
+                        variant="top"
+                        src={imageError ? defaultPictureUrl : imageUrl}
+                        onError={handleError}
+                        className={styles.cardCover}
+                        alt={t('animeCard.coverAlt', 'غلاف {{title}}', { title: anime.title })}
+                        loading="lazy"
+                    />
+                </div>
+                <Card.ImgOverlay className={styles.cardOverlay}>
                     <Badge
                         pill
                         className={`${styles.statusBadge} ${getStatusBadgeClass(anime.status)}`}
@@ -73,12 +76,13 @@ const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeTitle,
                     )}
                     <div className={styles.badgesContainer}>
                         {anime.type?.name && (
-                            <Badge pill bg="info" className={styles.typeBadge}>
+                            <Badge pill className={styles.typeBadge}>
                                 {anime.type.name}
                             </Badge>
                         )}
                         {episodeTitle && (
-                            <Badge pill bg="primary" className={styles.episodeBadge}>
+                            <Badge pill className={styles.episodeBadge}>
+                                <PlayArrowIcon className={styles.playIcon} />
                                 {episodeTitle}
                             </Badge>
                         )}

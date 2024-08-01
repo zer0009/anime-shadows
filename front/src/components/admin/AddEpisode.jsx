@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Typography, Button, Box, Paper, TextField, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import { Delete, Edit } from '@mui/icons-material';
+import { Typography, Button, Box, Paper, TextField, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Alert } from '@mui/material';
+import { Delete, Edit, Add } from '@mui/icons-material';
 import { addEpisode, updateEpisode, deleteEpisode } from '../../api/modules/admin';
 import { fetchEpisodesByAnimeId } from '../../api/modules/anime';
 import EpisodeSelector from './EpisodeSelector';
@@ -19,27 +19,40 @@ const AddEpisode = () => {
   const [downloadServers, setDownloadServers] = useState([]);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
 
   useEffect(() => {
     if (animeId) {
-      const fetchEpisodes = async () => {
-        const episodesData = await fetchEpisodesByAnimeId(animeId);
-        setAllEpisodes(episodesData);
-      };
       fetchEpisodes();
     } else {
-      setAllEpisodes([]);
-      setEpisodeId('');
-      setTitle('');
-      setNumber('');
+      resetForm();
     }
   }, [animeId]);
 
   useEffect(() => {
-    if (number) {
+    if (number && !title) {
       setTitle(`الحلقة ${number}`);
     }
-  }, [number]);
+  }, [number, title]);
+
+  const fetchEpisodes = async () => {
+    try {
+      const episodesData = await fetchEpisodesByAnimeId(animeId);
+      setAllEpisodes(episodesData);
+    } catch (error) {
+      console.error('Error fetching episodes:', error);
+      showSnackbar('Failed to fetch episodes', 'error');
+    }
+  };
+
+  const resetForm = () => {
+    setAllEpisodes([]);
+    setEpisodeId('');
+    setTitle('');
+    setNumber('');
+    setStreamingServers([]);
+    setDownloadServers([]);
+  };
 
   const handleEpisodeSelect = (selectedEpisodeId) => {
     const selectedEpisode = allEpisodes.find(ep => ep._id === selectedEpisodeId);
@@ -50,81 +63,107 @@ const AddEpisode = () => {
       setStreamingServers(selectedEpisode.streamingServers);
       setDownloadServers(selectedEpisode.downloadServers);
     } else {
-      setEpisodeId('');
-      setTitle('');
-      setNumber('');
-      setStreamingServers([]);
-      setDownloadServers([]);
+      resetForm();
     }
+  };
+
+  const handleQuickAdd = async () => {
+    const nextEpisodeNumber = allEpisodes.length + 1;
+    setNumber(nextEpisodeNumber.toString());
+    setTitle(`الحلقة ${nextEpisodeNumber}`);
+    setStreamingServers([]);
+    setDownloadServers([]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const episodeData = {
+        animeId,
+        title,
+        number,
+        streamingServers: streamingServers.map(server => ({
+          serverName: server.serverName,
+          type: server.type,
+          quality: server.quality,
+          url: server.url
+        })),
+        downloadServers: downloadServers.map(server => ({
+          serverName: server.serverName,
+          type: server.type,
+          quality: server.quality,
+          url: server.url
+        }))
+      };
+
       if (episodeId) {
-        await updateEpisode(episodeId, { animeId, title, number, streamingServers, downloadServers });
-        alert('Episode updated successfully');
+        await updateEpisode(episodeId, episodeData);
+        showSnackbar('Episode updated successfully', 'success');
       } else {
-        await addEpisode({ animeId, title, number, streamingServers, downloadServers });
-        alert('Episode added successfully');
+        await addEpisode(episodeData);
+        showSnackbar('Episode added successfully', 'success');
       }
-      const episodesData = await fetchEpisodesByAnimeId(animeId);
-      setAllEpisodes(episodesData);
+      await fetchEpisodes();
+      resetForm();
     } catch (error) {
       console.error('Error saving episode:', error);
+      console.error('Error response:', error.response);
+      showSnackbar('Error saving episode', 'error');
     }
   };
 
   const handleDelete = async () => {
     try {
       await deleteEpisode(episodeId);
-      alert('Episode deleted successfully');
-      setEpisodeId('');
-      setTitle('');
-      setNumber('');
-      setStreamingServers([]);
-      setDownloadServers([]);
+      showSnackbar('Episode deleted successfully', 'success');
+      resetForm();
       setOpenDeleteDialog(false);
-      const episodesData = await fetchEpisodesByAnimeId(animeId);
-      setAllEpisodes(episodesData);
+      await fetchEpisodes();
     } catch (error) {
       console.error('Error deleting episode:', error);
+      showSnackbar('Error deleting episode', 'error');
     }
   };
 
-  const handleEditOpen = () => {
-    setOpenEditDialog(true);
-  };
-
-  const handleEditClose = () => {
-    setOpenEditDialog(false);
+  const showSnackbar = (message, severity) => {
+    setSnackbar({ open: true, message, severity });
   };
 
   return (
     <Paper className={styles.addEpisode}>
       <Typography variant="h6" className={styles.title}>Add, Edit, or Delete Episode</Typography>
       <form onSubmit={handleSubmit} className={styles.form}>
-        <EpisodeSelector
-          episodeId={episodeId}
-          setEpisodeId={handleEpisodeSelect}
-          title={title}
-          setTitle={setTitle}
-          number={number}
-          setNumber={setNumber}
-          allEpisodes={allEpisodes}
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+          <EpisodeSelector
+            episodeId={episodeId}
+            setEpisodeId={handleEpisodeSelect}
+            allEpisodes={allEpisodes}
+          />
+          <Button
+            startIcon={<Add />}
+            variant="contained"
+            color="secondary"
+            onClick={handleQuickAdd}
+          >
+            Quick Add
+          </Button>
+        </Box>
+        <TextField
+          label="Number"
+          value={number}
+          onChange={(e) => setNumber(e.target.value)}
+          fullWidth
+          margin="dense"
+          placeholder="Enter episode number"
         />
-        {!episodeId && (
-          <>
-            <TextField
-              label="Number"
-              value={number}
-              onChange={(e) => setNumber(e.target.value)}
-              fullWidth
-              margin="dense"
-              placeholder="Enter episode number"
-            />
-          </>
-        )}
+        <TextField
+          label="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          fullWidth
+          margin="dense"
+          placeholder="Enter episode title"
+        />
         <ServerManager
           streamingServers={streamingServers}
           setStreamingServers={setStreamingServers}
@@ -133,14 +172,14 @@ const AddEpisode = () => {
         />
         <Box mt={2} display="flex" justifyContent="space-between">
           <Button type="submit" variant="contained" color="primary" fullWidth>
-            Save Episode
+            {episodeId ? 'Update Episode' : 'Add Episode'}
           </Button>
           {episodeId && (
             <>
               <IconButton color="secondary" onClick={() => setOpenDeleteDialog(true)}>
                 <Delete />
               </IconButton>
-              <IconButton color="primary" onClick={handleEditOpen}>
+              <IconButton color="primary" onClick={() => setOpenEditDialog(true)}>
                 <Edit />
               </IconButton>
             </>
@@ -168,7 +207,7 @@ const AddEpisode = () => {
       </Dialog>
       <Dialog
         open={openEditDialog}
-        onClose={handleEditClose}
+        onClose={() => setOpenEditDialog(false)}
       >
         <DialogTitle>Edit Episode</DialogTitle>
         <DialogContent>
@@ -196,7 +235,7 @@ const AddEpisode = () => {
               setDownloadServers={setDownloadServers}
             />
             <DialogActions>
-              <Button onClick={handleEditClose} color="primary">
+              <Button onClick={() => setOpenEditDialog(false)} color="primary">
                 Cancel
               </Button>
               <Button type="submit" variant="contained" color="primary">
@@ -206,6 +245,15 @@ const AddEpisode = () => {
           </form>
         </DialogContent>
       </Dialog>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      >
+        <Alert onClose={() => setSnackbar({ ...snackbar, open: false })} severity={snackbar.severity}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Paper>
   );
 };

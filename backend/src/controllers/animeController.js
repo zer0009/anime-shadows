@@ -5,52 +5,86 @@ const Anime = require('../models/anime');
 const Genre = require('../models/genre');
 const mongoose = require('mongoose');
 const { deleteImage } = require('../middlewares/fileUpload');
+const { scrapeAnimeFromMAL } = require('../utils/myAnimeList');
+const { scrapeAnimeFromLiveChart } = require('../utils/liveChartScraper');
 
-exports.uploadAnime = [
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+
+const Type = require('../models/type');
+
+exports.uploadAnime = async (req, res) => {
+  try {
+    const { 
+      title, 
+      subTitle, 
+      description, 
+      typeId, 
+      seasonId,
+      numberOfEpisodes, 
+      status, 
+      airingDate, 
+      studio, 
+      source, 
+      genres, 
+      duration, 
+      pictureUrl,
+      myAnimeListUrl
+    } = req.body;
+
+    let animeData = {
+      title, 
+      subTitle, 
+      description, 
+      typeId,
+      seasonId,
+      numberOfEpisodes, 
+      status, 
+      airingDate, 
+      studio, 
+      source, 
+      genres, 
+      duration, 
+      pictureUrl,
+      myAnimeListUrl
+    };
+
+    // Handle file upload if present
+    if (req.file) {
+      animeData.pictureUrl = req.file.path;
     }
 
-    const { title, subTitle, studio, description, seasonId, myAnimeListUrl, typeId, genres, numberOfEpisodes, source, duration, status, airingDate } = req.body;
-    const file = req.file;
-
-    try {
-      const genresArray = JSON.parse(genres);
-      if (!Array.isArray(genresArray) || !genresArray.every(genre => mongoose.Types.ObjectId.isValid(genre))) {
-        throw new Error('Genres must be an array of valid ObjectId strings');
-      }
-
-      let pictureUrl;
-      if (file) {
-        pictureUrl = file.path; // Cloudinary returns the URL in the `path` property
-      }
-
-      const newAnime = await AnimeService.createAnime({
-        title,
-        subTitle, // Added subTitle
-        studio, // Added studio
-        description,
-        seasonId,
-        myAnimeListUrl,
-        typeId,
-        genres: genresArray,
-        numberOfEpisodes,
-        source,
-        duration,
-        status,
-        airingDate,
-        pictureUrl
-      });
-
-      res.status(201).json(newAnime);
-    } catch (err) {
-      if (file) deleteImage(file.path); // Delete the uploaded image if there is an error
-      res.status(500).json({ error: 'Internal Server Error' });
+    // Ensure pictureUrl is a string
+    if (Array.isArray(animeData.pictureUrl)) {
+      animeData.pictureUrl = animeData.pictureUrl[0];
     }
+
+    // If no file was uploaded and no pictureUrl provided, use a default image
+    if (!animeData.pictureUrl) {
+      animeData.pictureUrl = 'path/to/default/image.jpg';
+    }
+
+    // Validate and process genres
+    if (typeof animeData.genres === 'string') {
+      animeData.genres = JSON.parse(animeData.genres);
+    }
+    if (!Array.isArray(animeData.genres)) {
+      throw new Error('Genres must be an array');
+    }
+
+    // Validate typeId and seasonId
+    if (!animeData.typeId || !animeData.seasonId) {
+      throw new Error('Type ID and Season ID are required');
+    }
+
+    // Create the anime
+    const newAnime = await AnimeService.createAnime(animeData);
+
+    res.status(201).json(newAnime);
+  } catch (error) {
+    console.error('Error uploading anime:', error);
+    if (req.file) deleteImage(req.file.path); // Delete the uploaded image if there is an error
+    res.status(500).json({ error: error.message });
   }
-];
+};
 
 exports.updateAnime = async (req, res) => {
   const errors = validationResult(req);
@@ -276,5 +310,29 @@ exports.getMovies = async (req, res) => {
     res.json(movies);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+exports.scrapeMal = async (req, res) => {
+  try {
+    const { url } = req.body;
+    const scrapedData = await scrapeAnimeFromMAL(url);
+    console.log(scrapedData);
+    res.json(scrapedData);
+  } catch (error) {
+    console.error('Error scraping MAL:', error);
+    res.status(500).json({ error: 'Failed to scrape data from MyAnimeList' });
+  }
+};
+
+exports.scrapeLivechart = async (req, res) => {
+  try {
+    const { url } = req.body;
+    const scrapedData = await scrapeAnimeFromLiveChart(url);
+    console.log(scrapedData);
+    res.json(scrapedData);
+  } catch (error) {
+    console.error('Error scraping LiveChart:', error);
+    res.status(500).json({ error: 'Failed to scrape data from LiveChart' });
   }
 };

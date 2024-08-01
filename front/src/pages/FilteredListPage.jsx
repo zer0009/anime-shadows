@@ -1,14 +1,77 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import ListDisplay from '../components/ListDisplay/ListDisplay';
 import { fetchGenre, fetchTypes, fetchSeasons } from '../api/modules/anime';
+import { Box, Typography, Breadcrumbs, Container, Skeleton, Grid, Chip, ThemeProvider, createTheme, CssBaseline } from '@mui/material';
+import { styled } from '@mui/system';
+import PaginationComponent from '../components/Pagination/PaginationComponent';
+import FilterListIcon from '@mui/icons-material/FilterList';
+
+// Create a theme instance using your color palette
+const theme = createTheme({
+  direction: 'rtl',
+  palette: {
+    primary: {
+      main: '#c34cbb', // --highlight-color
+    },
+    secondary: {
+      main: '#5e4da5', // --accent-color
+    },
+    background: {
+      default: '#110720', // --primary-dark
+      paper: '#1e1e2e', // --background-light
+    },
+    text: {
+      primary: '#d6b2ef', // --text-color
+      secondary: '#9f94ec', // --subtext-color
+    },
+  },
+  typography: {
+    fontFamily: 'Roboto, Arial, sans-serif',
+    allVariants: {
+      color: '#d6b2ef', // --text-color
+    },
+  },
+  components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#1e1e2e', // --background-light
+          color: '#d6b2ef', // --text-color
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#2a0f47', // --secondary-dark
+          color: '#d6b2ef', // --text-color
+        },
+      },
+    },
+  },
+});
+
+// Styled components
+const StyledLink = styled(Link)({
+  textDecoration: 'none',
+  color: 'inherit',
+  '&:hover': {
+    color: '#3b1a5a', // --secondary-light
+  },
+});
 
 const FilteredListPage = () => {
+    const { t } = useTranslation();
     const { filterType, filterValue } = useParams();
     const { animeList, loading, error, handleSearch } = useFetchAnimeList();
     const [filteredList, setFilteredList] = useState([]);
     const [filterName, setFilterName] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 20;
 
     const fetchData = useCallback(async () => {
         let name = filterValue;
@@ -31,9 +94,9 @@ const FilteredListPage = () => {
                 break;
             case 'state':
                 const states = [
-                    { _id: 'ongoing', name: 'Ongoing' },
-                    { _id: 'completed', name: 'Completed' },
-                    { _id: 'upcoming', name: 'Upcoming' },
+                    { _id: 'ongoing', name: t('animeStatus.ongoing', 'Ongoing') },
+                    { _id: 'completed', name: t('animeStatus.completed', 'Completed') },
+                    { _id: 'upcoming', name: t('animeStatus.upcoming', 'Upcoming') },
                 ];
                 const state = states.find(s => s._id === filterValue);
                 name = state ? state.name : filterValue;
@@ -43,7 +106,7 @@ const FilteredListPage = () => {
         }
 
         setFilterName(name);
-    }, [filterType, filterValue]);
+    }, [filterType, filterValue, t]);
 
     useEffect(() => {
         fetchData();
@@ -72,14 +135,131 @@ const FilteredListPage = () => {
         setFilteredList(filtered);
     }, [filterType, filterValue, animeList]);
 
+    const paginatedList = useMemo(() => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        return filteredList.slice(startIndex, startIndex + itemsPerPage);
+    }, [filteredList, currentPage]);
+
+    const totalPages = Math.ceil(filteredList.length / itemsPerPage);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const pageTitle = `${t(`filterTypes.${filterType}`, filterType)}: ${filterName} | أنمي شادوز`;
+    const pageDescription = t('filteredList.description', 'استكشف أنمي {{filterName}} في فئة {{filterType}}. اعثر على أفضل العروض واكتشف مفضلات جديدة.', { filterName, filterType });
+
+
     return (
-        <ListDisplay
-            title={`${filterType.charAt(0).toUpperCase() + filterType.slice(1)}: ${filterName}`}
-            list={filteredList}
-            loading={loading}
-            error={error}
-            fields={['title', 'genre', 'rating']}
-        />
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Container maxWidth="lg">
+                <Helmet>
+                    <title>{pageTitle}</title>
+                    <meta name="description" content={pageDescription} />
+                    <link rel="canonical" href={`https://animeshows.com/${filterType}/${filterValue}`} />
+                    <meta property="og:title" content={pageTitle} />
+                    <meta property="og:description" content={pageDescription} />
+                    <meta property="og:type" content="website" />
+                    <meta property="og:url" content={`https://animeshows.com/${filterType}/${filterValue}`} />
+                    <script type="application/ld+json">
+                        {JSON.stringify({
+                            "@context": "https://schema.org",
+                            "@type": "CollectionPage",
+                            "name": pageTitle,
+                            "description": pageDescription,
+                            "url": `https://animeshows.com/${filterType}/${filterValue}`,
+                            "numberOfItems": filteredList.length,
+                        })}
+                    </script>
+                </Helmet>
+
+                <Box sx={{ padding: '20px 0' }}>
+                    <Box sx={{ 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        alignItems: 'flex-start', 
+                        marginBottom: '20px',
+                        borderBottom: '2px solid #3e3e5e',
+                        paddingBottom: '20px'
+                    }}>
+                        <Breadcrumbs 
+                            aria-label="breadcrumb" 
+                            sx={{ 
+                                marginBottom: '10px',
+                                '& .MuiBreadcrumbs-separator': {
+                                    color: 'text.secondary'
+                                }
+                            }}
+                        >
+                            <StyledLink to="/"> {t('common.home', 'الرئيسية')} </StyledLink>
+                            <StyledLink to={`/${filterType}s`}> {t(`filterTypes.${filterType}Plural`, `${filterType}s`)} </StyledLink>
+                            <Typography color="text.secondary">{filterName}</Typography>
+                        </Breadcrumbs>
+
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                            <Typography 
+                                variant="h1" 
+                                sx={{ 
+                                    fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' }, 
+                                    fontWeight: 'bold',
+                                    color: 'primary.main',
+                                    marginRight: '20px'
+                                }}
+                            >
+                                {t('filteredList.title', '{{filterType}}: {{filterName}}', { filterType: t(`filterTypes.${filterType}`, filterType), filterName })}
+                            </Typography>
+
+                            <Chip
+                                icon={<FilterListIcon />}
+                                label={`${filteredList.length} ${t('filteredList.results', 'نتيجة')}`}
+                                color="secondary"
+                                sx={{ 
+                                    fontWeight: 'bold',
+                                    padding: '10px',
+                                    '& .MuiChip-icon': {
+                                        color: 'inherit'
+                                    }
+                                }}
+                            />
+                        </Box>
+                    </Box>
+
+                    {loading ? (
+                        <Grid container spacing={3}>
+                            {[...Array(6)].map((_, index) => (
+                                <Grid item xs={12} sm={6} md={4} key={index}>
+                                    <Skeleton variant="rectangular" width="100%" height={200} />
+                                    <Skeleton width="60%" />
+                                    <Skeleton width="40%" />
+                                </Grid>
+                            ))}
+                        </Grid>
+                    ) : error ? (
+                        <Paper elevation={3} sx={{ padding: '20px', backgroundColor: 'error.main', color: 'error.contrastText' }}>
+                            <Typography>{error}</Typography>
+                        </Paper>
+                    ) : (
+                        <>
+                            <ListDisplay
+                                list={paginatedList}
+                                loading={loading}
+                                error={error}
+                                fields={['title', 'genre', 'rating']}
+                            />
+                            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+                                <PaginationComponent
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    onPageChange={handlePageChange}
+                                />
+                            </Box>
+                        </>
+                    )}
+                </Box>
+            </Container>
+        </ThemeProvider>
     );
 };
 

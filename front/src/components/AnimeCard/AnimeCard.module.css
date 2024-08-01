@@ -1,11 +1,3 @@
-.animeCardLink {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
 .animeCard {
   width: 100%;
   max-width: 320px;
@@ -19,32 +11,43 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .animeCard:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .cardCover {
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: cover;
   border-radius: 12px 12px 0 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.cardOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.6) 100%);
+  z-index: 1;
 }
 
 .statusBadge {
   position: absolute;
   top: 10px;
   left: 10px;
-  background-color: var(--highlight-color);
   color: white;
   padding: 5px 12px;
-  border-radius: 8px;
+  border-radius: 20px;
   font-size: 12px;
   font-weight: bold;
-  z-index: 2;
+  z-index: 3;
 }
 
 .statusBadgeCompleted {
@@ -63,13 +66,15 @@
   padding: 12px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  background: linear-gradient(180deg, transparent, var(--secondary-dark));
+  justify-content: flex-end;
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,0.8));
   position: absolute;
   bottom: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   color: var(--text-color);
-  z-index: 1;
+  z-index: 2;
 }
 
 .title {
@@ -104,8 +109,8 @@
 .episodeBadge {
   background-color: var(--highlight-color);
   color: var(--text-color);
-  padding: 5px 12px;
-  border-radius: 8px;
+  padding: 4px 8px;
+  border-radius: 16px;
   font-size: 12px;
   font-weight: bold;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -115,7 +120,11 @@
   margin-bottom: 26px;
 }
 
-/* Responsive adjustments */
+.playIcon {
+  font-size: 16px;
+  margin-right: 4px;
+}
+
 @media (max-width: 768px) {
   .animeCard {
     max-width: 100%;
@@ -151,6 +160,6 @@
   .typeBadge,
   .episodeBadge {
     font-size: 10px;
-    padding: 3px 8px;
+    padding: 3px 6px;
   }
 }

@@ -1,23 +1,115 @@
 .seasonAnimePage {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+    background-color: var(--primary-dark);
+    color: var(--text-color);
+    min-height: 100vh;
+    padding: 40px 0;
 }
 
-.pageTitle {
-    margin-bottom: 20px;
+.breadcrumbs {
+    margin-bottom: 30px;
+}
+
+.breadcrumbSeparator {
+    color: var(--subtext-color);
+}
+
+.breadcrumbLink {
+    display: flex;
+    align-items: center;
+    color: var(--subtext-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.breadcrumbLink:hover {
     color: var(--highlight-color);
 }
 
-.animeGrid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center; /* Center the grid items */
+.breadcrumbIcon {
+    margin-right: 8px;
+    font-size: 1.2rem;
 }
 
-.noAnimeMessage {
+.breadcrumbCurrent {
+    color: var(--text-color);
+}
+
+.headerPaper {
+    padding: 30px;
+    background-color: var(--secondary-dark);
+    margin-bottom: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pageTitle {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: var(--highlight-color);
+    font-weight: bold;
+}
+
+.pageDescription {
     color: var(--subtext-color);
-    text-align: center;
-    margin-top: 20px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.chipContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.seasonChip {
+    background-color: var(--primary-dark);
+    color: var(--text-color);
+    font-size: 1rem;
+    padding: 8px 12px;
+}
+
+.seasonChip .MuiChip-icon {
+    color: var(--highlight-color);
+}
+
+.trendingChip {
+    background-color: var(--highlight-color);
+    color: var(--text-color);
+    font-size: 1rem;
+    padding: 8px 12px;
+}
+
+.trendingChip .MuiChip-icon {
+    color: var(--text-color);
+}
+
+.divider {
+    background-color: var(--border-color);
+    margin: 30px 0;
+}
+
+.paginationContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+@media (max-width: 600px) {
+    .seasonAnimePage {
+        padding: 20px 0;
+    }
+
+    .headerPaper {
+        padding: 20px;
+    }
+
+    .pageTitle {
+        font-size: 2rem;
+    }
+
+    .chipContainer {
+        align-items: flex-start;
+        margin-top: 20px;
+    }
 }

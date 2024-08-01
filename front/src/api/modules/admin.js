@@ -122,3 +122,9 @@ export const updateUserRole = async (userId, role) => {
     const response = await API.put(`admin/users/${userId}/role`, { role }, getAuthHeaders());
     return response.data;
 };
+
+
+export const scrapeAnime = async (url) => {
+    const response = await API.post('/anime/scrape-mal', { url });
+    return response;
+};

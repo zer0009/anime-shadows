@@ -67,7 +67,6 @@ const MovieList = () => {
             {seo.jsonLd && <JsonLd item={seo.jsonLd} />}
             
             <Box sx={{ padding: '20px' }}>
-                <h1>{t('movieList.heading', 'قائمة الأفلام')}</h1>
                 <ListDisplay
                     title={t('movieList.listTitle', 'قائمة الأفلام')}
                     list={movieList}

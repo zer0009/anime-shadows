@@ -44,7 +44,10 @@
     "introText": "مرحبًا بك في أنمي شادوز، وجهتك الأولى لمشاهدة أحدث وأفضل الأنميات. استمتع بمجموعة واسعة من الأنميات المترجمة بجودة عالية.",
     "morePopularAnime": "عرض المزيد من الأنميات الشائعة",
     "moreAnimeList": "عرض القائمة الكاملة للأنميات",
-    "moreRecentEpisodes": "عرض المزيد من الحلقات الحديثة"
+    "moreRecentEpisodes": "عرض المزيد من الحلقات الحديثة",
+    "featuredAnime1": "الأنمي المميز 1",
+    "featuredAnime2": "الأنمي المميز 2",
+    "featuredAnime3": "الأنمي المميز 3"
   },
   "episodePage": {
     "loading": "جار التحميل...",
@@ -71,5 +74,61 @@
     "description": "اكتشف أشهر وأفضل الأنميات على موقعنا. هذه القائمة تضم الأنميات الأكثر شعبية ومشاهدة من قبل مستخدمينا.",
     "listTitle": "قائمة الأنميات الشائعة",
     "fetchError": "خطأ في جلب الأنميات الشائعة"
+  },
+  "filteredList": {
+    "title": "{{filterType}}: {{filterName}}",
+    "description": "استكشف أنمي {{filterName}} في فئة {{filterType}}. اعثر على أفضل العروض واكتشف مفضلات جديدة.",
+    "results": "نتيجة"
+  },
+  "filterTypes": {
+    "genre": "النوع",
+    "genrePlural": "الأنواع",
+    "type": "النمط",
+    "typePlural": "الأنماط",
+    "season": "الموسم",
+    "seasonPlural": "المواسم",
+    "state": "الحالة",
+    "statePlural": "الحالات"
+  },
+  "common": {
+    "home": "الرئيسية",
+    "loading": "جار التحميل...",
+    "error": "حدث خطأ",
+    "noResults": "لا توجد نتائج",
+    "genres": "الأنواع",
+    "types": "الأنماط",
+    "seasons": "المواسم",
+    "states": "الحالات"
+  },
+  "pagination": {
+    "previous": "السابق",
+    "next": "التالي",
+    "page": "الصفحة {{page}} من {{totalPages}}"
+  },
+  "search": {
+    "placeholder": "ابحث عن أنمي...",
+    "button": "بحث",
+    "noResults": "لم يتم العثور على نتائج للبحث عن '{{query}}'"
+  },
+  "footer": {
+    "copyright": "جميع الحقوق محفوظة © {{year}} أنمي شادوز",
+    "termsOfService": "شروط الخدمة",
+    "privacyPolicy": "سياسة الخصوصية",
+    "contactUs": "اتصل بنا"
+  },
+  "seasonAnime": {
+    "pageTitle": "أنمي موسم {{season}} | أنمي شادوز",
+    "pageDescription": "اكتشف أحدث إصدارات الأنمي لموسم {{season}}. شاهد الأنميات الجديدة والمثيرة على أنمي شادوز.",
+    "pageKeywords": "أنمي الموسم, {{season}}, أنميات جديدة, Anime Shadows",
+    "breadcrumb": "أنمي الموسم",
+    "heading": "أنمي موسم {{season}}",
+    "description": "اكتشف أحدث إصدارات الأنمي لهذا الموسم. استمتع بمشاهدة الأنميات الجديدة والمثيرة.",
+    "listTitle": "قائمة أنمي الموسم"
+  },
+  "seasons": {
+    "winter": "الشتاء",
+    "spring": "الربيع",
+    "summer": "الصيف",
+    "fall": "الخريف"
   }
 }

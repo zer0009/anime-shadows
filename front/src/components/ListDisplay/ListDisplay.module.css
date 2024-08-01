@@ -17,11 +17,6 @@
     justify-content: center; /* Center the grid items */
 }
 
-.noItemsMessage {
-    color: var(--subtext-color);
-    text-align: center;
-    margin-top: 20px;
-}
 
 .loader {
     display: flex;
@@ -30,7 +25,12 @@
     height: 100vh; /* Full viewport height */
 }
 
-.errorMessage {
+.errorMessage,
+.noItemsMessage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
     text-align: center;
-    margin-top: 20px;
 }

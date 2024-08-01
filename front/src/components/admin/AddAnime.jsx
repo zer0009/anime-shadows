@@ -1,232 +1,364 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Typography, MenuItem, Select, InputLabel, FormControl, Checkbox, ListItemText, Box, Paper } from '@mui/material';
-import { addAnime } from '../../api/modules/admin';
+import { TextField, Button, Checkbox, FormControlLabel, Select, MenuItem, InputLabel, FormControl, Box, Typography, CircularProgress, Snackbar, Grid, Paper } from '@mui/material';
+import { addAnime, scrapeAnime } from '../../api/modules/admin';
 import { fetchGenre, fetchTypes, fetchSeasons } from '../../api/modules/anime';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-import styles from './AddAnime.module.css';
 
 const AddAnime = () => {
-  const [title, setTitle] = useState('');
-  const [subTitle, setSubTitle] = useState(''); // New state for subTitle
-  const [studio, setStudio] = useState(''); // New state for studio
-  const [description, setDescription] = useState('');
-  const [image, setImage] = useState(null);
-  const [type, setType] = useState('');
+  const [animeData, setAnimeData] = useState({
+    title: '', subTitle: '', studio: '', description: '', seasonId: '',
+    myAnimeListUrl: '', typeId: '', genres: [], numberOfEpisodes: '',
+    source: '', duration: '', status: '', airingDate: null, pictureUrl: ''
+  });
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [genres, setGenres] = useState([]);
-  const [seasonId, setSeasonId] = useState('');
-  const [myAnimeListUrl, setMyAnimeListUrl] = useState('');
-  const [numberOfEpisodes, setNumberOfEpisodes] = useState('');
-  const [source, setSource] = useState('');
-  const [duration, setDuration] = useState('');
-  const [status, setStatus] = useState('');
-  const [airingDate, setAiringDate] = useState(null);
-  const [allGenres, setAllGenres] = useState([]);
-  const [allTypes, setAllTypes] = useState([]);
-  const [allSeasons, setAllSeasons] = useState([]);
-  const [error, setError] = useState('');
+  const [types, setTypes] = useState([]);
+  const [seasons, setSeasons] = useState([]);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
 
   useEffect(() => {
     const fetchData = async () => {
-      const genresData = await fetchGenre();
-      const typesData = await fetchTypes();
-      const seasonsData = await fetchSeasons();
-      setAllGenres(genresData);
-      setAllTypes(typesData);
-      setAllSeasons(seasonsData);
+      try {
+        const [genresData, typesData, seasonsData] = await Promise.all([
+          fetchGenre(),
+          fetchTypes(),
+          fetchSeasons()
+        ]);
+        setGenres(genresData);
+        setTypes(typesData);
+        setSeasons(seasonsData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setSnackbar({ open: true, message: 'Failed to load form data', severity: 'error' });
+      }
     };
     fetchData();
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('subTitle', subTitle); // Append subTitle
-    formData.append('studio', studio); // Append studio
-    formData.append('description', description);
-    formData.append('typeId', type);
-    formData.append('genres', JSON.stringify(genres)); // Ensure genres is a JSON string
-    formData.append('seasonId', seasonId);
-    formData.append('myAnimeListUrl', myAnimeListUrl);
-    formData.append('numberOfEpisodes', numberOfEpisodes);
-    formData.append('source', source);
-    formData.append('duration', duration);
-    formData.append('status', status);
-    formData.append('airingDate', airingDate ? airingDate.toISOString() : null);
-    if (image) {
-      formData.append('file', image);
-    }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setAnimeData(prev => ({ ...prev, [name]: value }));
+  };
 
-    // Debugging line to log form data
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+  const handleDateChange = (date) => {
+    setAnimeData(prev => ({ ...prev, airingDate: date }));
+  };
 
-    try {
-      await addAnime(formData);
-      alert('Anime added successfully');
-      setError('');
-    } catch (error) {
-      setError('Error adding anime');
-      console.error('Error adding anime:', error);
+  const handleGenreChange = (event) => {
+    setAnimeData(prev => ({ ...prev, genres: event.target.value }));
+  };
+
+  const mapStatus = (status) => {
+    if (!status) return ''; // Return empty string if status is null or undefined
+    if (status.includes('Finished Airing')) return 'completed';
+    if (status.includes('Currently Airing')) return 'ongoing';
+    if (status.includes('Not yet aired')) return 'upcoming';
+    return ''; // Return empty string for any other status
+  };
+
+  const handleFetchFromMAL = async () => {
+    if (animeData.myAnimeListUrl) {
+      setLoading(true);
+      try {
+        const response = await scrapeAnime(animeData.myAnimeListUrl);
+        const scrapedData = response.data;
+        console.log(scrapedData);
+
+        setAnimeData(prev => ({
+          ...prev,
+          title: scrapedData.title || '',
+          subTitle: scrapedData.subTitle || '',
+          description: scrapedData.synopsis || '',
+          numberOfEpisodes: scrapedData.numberOfEpisodes || '',
+          status: mapStatus(scrapedData.status || ''),
+          airingDate: scrapedData.airingDate && scrapedData.airingDate.start ? dayjs(scrapedData.airingDate.start) : null,
+          studio: scrapedData.studio || '',
+          source: scrapedData.source || '',
+          duration: scrapedData.duration || '',
+          pictureUrl: scrapedData.pictureUrl || '',
+          genres: (scrapedData.genres || []).map(genre => {
+            const foundGenre = genres.find(g => g.name.toLowerCase() === genre.toLowerCase());
+            return foundGenre ? foundGenre._id : null;
+          }).filter(id => id !== null)
+        }));
+
+        setSnackbar({ open: true, message: 'Data fetched successfully', severity: 'success' });
+      } catch (error) {
+        console.error('Error fetching from MAL:', error);
+        setSnackbar({ open: true, message: 'Failed to fetch data from MyAnimeList', severity: 'error' });
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      for (const key in animeData) {
+        if (key === 'genres') {
+          formData.append(key, JSON.stringify(animeData[key]));
+        } else if (key === 'airingDate' && animeData[key]) {
+          formData.append(key, animeData[key].toISOString());
+        } else if (key === 'pictureUrl') {
+          // Ensure pictureUrl is a string, not an array
+          formData.append(key, Array.isArray(animeData[key]) ? animeData[key][0] : animeData[key]);
+        } else {
+          formData.append(key, animeData[key]);
+        }
+      }
+      if (file) {
+        formData.append('image', file);
+      }
+      await addAnime(formData);
+      setSnackbar({ open: true, message: 'Anime added successfully', severity: 'success' });
+      setAnimeData({
+        title: '', subTitle: '', studio: '', description: '', seasonId: '',
+        myAnimeListUrl: '', typeId: '', genres: [], numberOfEpisodes: '',
+        source: '', duration: '', status: '', airingDate: null, pictureUrl: ''
+      });
+      setFile(null);
+    } catch (error) {
+      console.error('Error adding anime:', error);
+      setSnackbar({ open: true, message: 'Failed to add anime', severity: 'error' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getGenreNames = (selectedIds) => {
+    return selectedIds.map(id => {
+      const genre = genres.find(g => g._id === id);
+      return genre ? genre.name : '';
+    }).filter(Boolean).join(', ');
+  };
+
   return (
-    <Paper className={styles.paper}>
-      <Typography variant="h6" className={styles.title}>Add Anime</Typography>
-      <form onSubmit={handleSubmit} className={styles.form}>
+    <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 800, margin: 'auto', padding: 2 }}>
+      <Typography variant="h4" gutterBottom>Add New Anime</Typography>
+
+      <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
+        <Typography variant="h6" gutterBottom>Fetch from MyAnimeList</Typography>
         <TextField
-          label="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          fullWidth
-          margin="normal"
-          placeholder="Enter anime title"
-        />
-        <TextField
-          label="Sub Title" // New input for subTitle
-          value={subTitle}
-          onChange={(e) => setSubTitle(e.target.value)}
-          fullWidth
-          margin="normal"
-          placeholder="Enter anime sub title"
-        />
-        <TextField
-          label="Studio" // New input for studio
-          value={studio}
-          onChange={(e) => setStudio(e.target.value)}
-          fullWidth
-          margin="normal"
-          placeholder="Enter anime studio"
-        />
-        <TextField
-          label="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          fullWidth
-          margin="normal"
-          multiline
-          rows={4}
-          placeholder="Enter anime description"
-        />
-        <Box margin="normal">
-          <Button
-            variant="contained"
-            component="label"
-            fullWidth
-          >
-            Upload Image
-            <input
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={(e) => setImage(e.target.files[0])}
-            />
-          </Button>
-        </Box>
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Type</InputLabel>
-          <Select
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-          >
-            {allTypes.map((type) => (
-              <MenuItem key={type._id} value={type._id}>
-                {type.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Genres</InputLabel>
-          <Select
-            multiple
-            value={genres}
-            onChange={(e) => setGenres(e.target.value)}
-            renderValue={(selected) => selected.map(id => allGenres.find(genre => genre._id === id)?.name).join(', ')}
-          >
-            {allGenres.map((genre) => (
-              <MenuItem key={genre._id} value={genre._id}>
-                <Checkbox checked={genres.indexOf(genre._id) > -1} />
-                <ListItemText primary={genre.name} />
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Season</InputLabel>
-          <Select
-            value={seasonId}
-            onChange={(e) => setSeasonId(e.target.value)}
-          >
-            {allSeasons.map((season) => (
-              <MenuItem key={season._id} value={season._id}>
-                {season.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <TextField
+          name="myAnimeListUrl"
           label="MyAnimeList URL"
-          value={myAnimeListUrl}
-          onChange={(e) => setMyAnimeListUrl(e.target.value)}
+          value={animeData.myAnimeListUrl}
+          onChange={handleInputChange}
           fullWidth
           margin="normal"
-          placeholder="Enter MyAnimeList URL"
         />
-        <TextField
-          label="Number of Episodes"
-          value={numberOfEpisodes}
-          onChange={(e) => setNumberOfEpisodes(e.target.value)}
-          fullWidth
-          margin="normal"
-          placeholder="Enter number of episodes"
-        />
-        <TextField
-          label="Source"
-          value={source}
-          onChange={(e) => setSource(e.target.value)}
-          fullWidth
-          margin="normal"
-          placeholder="Enter source"
-        />
-        <TextField
-          label="Duration"
-          value={duration}
-          onChange={(e) => setDuration(e.target.value)}
-          fullWidth
-          margin="normal"
-          placeholder="Enter duration in minutes"
-        />
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="Airing Date"
-            value={airingDate}
-            onChange={(date) => setAiringDate(date ? dayjs(date) : null)}
-            renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
-          />
-        </LocalizationProvider>
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Status</InputLabel>
-          <Select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-          >
-            <MenuItem value="ongoing">Ongoing</MenuItem>
-            <MenuItem value="completed">Completed</MenuItem>
-            <MenuItem value="upcoming">Upcoming</MenuItem>
-          </Select>
-        </FormControl>
-        {error && <Typography color="error">{error}</Typography>}
-        <Button type="submit" variant="contained" color="primary" fullWidth className={styles.submitButton}>
-          Add Anime
+        <Button onClick={handleFetchFromMAL} disabled={loading} variant="contained" color="primary">
+          {loading ? <CircularProgress size={24} /> : 'Fetch Data'}
         </Button>
-      </form>
-    </Paper>
+      </Paper>
+
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            name="title"
+            label="Title"
+            value={animeData.title}
+            onChange={handleInputChange}
+            required
+            fullWidth
+            margin="normal"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            name="subTitle"
+            label="Sub Title"
+            value={animeData.subTitle}
+            onChange={handleInputChange}
+            fullWidth
+            margin="normal"
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            name="description"
+            label="Description"
+            value={animeData.description}
+            onChange={handleInputChange}
+            multiline
+            rows={4}
+            required
+            fullWidth
+            margin="normal"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Season</InputLabel>
+            <Select
+              name="seasonId"
+              value={animeData.seasonId}
+              onChange={handleInputChange}
+              required
+            >
+              <MenuItem value="">Select a season</MenuItem>
+              {seasons.map((season) => (
+                <MenuItem key={season._id} value={season._id}>{season.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Type</InputLabel>
+            <Select
+              name="typeId"
+              value={animeData.typeId}
+              onChange={handleInputChange}
+              required
+            >
+              <MenuItem value="">Select a type</MenuItem>
+              {types.map((type) => (
+                <MenuItem key={type._id} value={type._id}>{type.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Genres</InputLabel>
+            <Select
+              multiple
+              name="genres"
+              value={animeData.genres}
+              onChange={handleGenreChange}
+              renderValue={(selected) => getGenreNames(selected)}
+            >
+              {genres.map(genre => (
+                <MenuItem key={genre._id} value={genre._id}>
+                  <Checkbox checked={animeData.genres.indexOf(genre._id) > -1} />
+                  {genre.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            name="numberOfEpisodes"
+            label="Number of Episodes"
+            type="number"
+            value={animeData.numberOfEpisodes}
+            onChange={handleInputChange}
+            fullWidth
+            margin="normal"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            name="duration"
+            label="Duration"
+            value={animeData.duration}
+            onChange={handleInputChange}
+            fullWidth
+            margin="normal"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            name="studio"
+            label="Studio"
+            value={animeData.studio}
+            onChange={handleInputChange}
+            fullWidth
+            margin="normal"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            name="source"
+            label="Source"
+            value={animeData.source}
+            onChange={handleInputChange}
+            fullWidth
+            margin="normal"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Status</InputLabel>
+            <Select
+              name="status"
+              value={animeData.status}
+              onChange={handleInputChange}
+              required
+            >
+              <MenuItem value="">Select a status</MenuItem>
+              <MenuItem value="ongoing">Ongoing</MenuItem>
+              <MenuItem value="completed">Completed</MenuItem>
+              <MenuItem value="upcoming">Upcoming</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="Airing Date"
+              value={animeData.airingDate}
+              onChange={handleDateChange}
+              renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
+            />
+          </LocalizationProvider>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            name="pictureUrl"
+            label="Picture URL"
+            value={animeData.pictureUrl}
+            onChange={handleInputChange}
+            fullWidth
+            margin="normal"
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <input
+            accept="image/*"
+            type="file"
+            onChange={(e) => setFile(e.target.files[0])}
+            style={{ display: 'none' }}
+            id="raised-button-file"
+          />
+          <label htmlFor="raised-button-file">
+            <Button variant="contained" component="span">
+              Upload Image
+            </Button>
+          </label>
+          {file && <Typography variant="body2">{file.name}</Typography>}
+        </Grid>
+        {(animeData.pictureUrl || file) && (
+          <Grid item xs={12}>
+            <img 
+              src={file ? URL.createObjectURL(file) : animeData.pictureUrl} 
+              alt="Anime preview" 
+              style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }} 
+            />
+          </Grid>
+        )}
+      </Grid>
+
+      <Button type="submit" variant="contained" color="primary" disabled={loading} sx={{ marginTop: 2 }}>
+        {loading ? <CircularProgress size={24} /> : 'Add Anime'}
+      </Button>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        message={snackbar.message}
+        severity={snackbar.severity}
+      />
+    </Box>
   );
 };
 

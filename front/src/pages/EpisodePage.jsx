@@ -87,7 +87,7 @@ const EpisodePage = () => {
   const seoProps = episode ? {
     title: `${episode.anime.title} - الحلقة ${episode.number} | أنمي شادوز - Anime Shadows`,
     description: `شاهد ${episode.anime.title} الحلقة ${episode.number} اون لاين على أنمي شادوز (Anime Shadows). ${episode.description?.substring(0, 150) || ''}`,
-    keywords: `${episode.anime.title}, الحلقة ${episode.number}, مشاهدة اون لاين, أنمي, Anime Shadows`,
+    keywords: `${episode.anime.title}, الحلقة ${episode.number}, مشاهدة اون لاين, تحميل, مترجم, أنمي, Anime Shadows, انمي, حلقة, ستريم, بث مباشر, جودة عالية, HD, مترجم عربي, بدون إعلانات, مجاناً, ${episode.anime.genres?.join(', ')}`,
     canonicalUrl: `https://animeshadows.xyz/episode/${episodeId}`,
     ogType: 'video.episode',
     jsonLd: {
@@ -197,7 +197,16 @@ const EpisodePage = () => {
                 style={{ direction: i18n.language === 'ar' ? 'rtl' : 'ltr' }}
               >
                 <ListItemText 
-                  primary={`${t('episodePage.episode')} ${ep.number}`} 
+                  primary={
+                    <React.Fragment>
+                      <Typography component="span" className={styles.episodeNumber}>
+                        {t('episodePage.episode')} {ep.number}
+                      </Typography>
+                      {/* <Typography component="span" className={styles.episodeTitle}>
+                        {ep.title || `${episode.anime.title} - ${t('episodePage.episode')} ${ep.number}`}
+                      </Typography> */}
+                    </React.Fragment>
+                  }
                   className={styles.episodeItemText}
                 />
               </ListItem>

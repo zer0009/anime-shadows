@@ -15,6 +15,10 @@ router.get('/movies', animeController.getMovies);
 router.get('/genre/:genre', animeController.getAnimeByGenre);
 router.get('/popular/anime', animeController.getPopularAnimes);
 router.get('/popular/episodes', animeController.getPopularEpisodes);
+
+router.post('/scrape-mal', animeController.scrapeMal);
+router.post('/scrape-livechart', animeController.scrapeLivechart)
+
 router.get('/:id', optionalAuth, animeController.getAnime);
 router.get('/anime/:animeId/episode/:episodeId', animeController.getEpisode);
 router.get('/:animeId/recommendations', animeController.getRecommendations);
