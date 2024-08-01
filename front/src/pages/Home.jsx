@@ -223,27 +223,14 @@ const Home = () => {
             ))}
             
             <Box className={styles.heroSection}>
-                <Container maxWidth="lg">
-                    <Box className={styles.heroContent}>
-                        <Typography variant="h1" className={styles.mainHeading}>
-                            {t('home.mainHeading', 'أنمي شادوز')}
-                        </Typography>
-                        <Typography variant="h2" className={styles.subHeading}>
-                            {t('home.subHeading', 'موقعك الأول لمشاهدة الأنمي')}
-                        </Typography>
-                        <Typography variant="body1" className={styles.introText}>
-                            {t('home.introText', 'مرحبًا بك في أنمي شادوز، وجهتك الأولى لمشاهدة أحدث وأفضل الأنميات. استمتع بمجموعة واسعة من الأنميات المترجمة بجودة عالية.')}
-                        </Typography>
-                    </Box>
-                </Container>
                 <Swiper
                     modules={[Navigation, Pagination, Scrollbar, Autoplay]}
-                    spaceBetween={30}
+                    spaceBetween={0}
                     slidesPerView={1}
                     navigation
                     pagination={{ clickable: true }}
                     scrollbar={{ draggable: true }}
-                    autoplay={{ delay: 3000, disableOnInteraction: false }}
+                    autoplay={{ delay: 5000, disableOnInteraction: false }}
                     className={styles.heroSwiper}
                 >
                     {heroImages.map((image, index) => (
@@ -253,11 +240,23 @@ const Home = () => {
                                 jpg={image.jpg}
                                 alt={image.alt}
                                 className={styles.heroImage}
-                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             />
                         </SwiperSlide>
                     ))}
                 </Swiper>
+                <Box className={styles.heroContent}>
+                    <Container maxWidth="lg">
+                        <Typography variant="h1" className={styles.mainHeading}>
+                            {t('home.mainHeading', 'أنمي شادوز')}
+                        </Typography>
+                        <Typography variant="h2" className={styles.subHeading}>
+                            {t('home.subHeading', 'موقعك الأول لمشاهدة الأنمي')}
+                        </Typography>
+                        <Typography variant="body1" className={styles.introText}>
+                            {t('home.introText', 'مرحبًا بك في أنمي شادوز، وجهتك الأولى لمشاهدة أحدث وأفضل الأنميات. استمتع بمجموعة واسعة من الأنميات المترجمة بجودة عالية.')}
+                        </Typography>
+                    </Container>
+                </Box>
             </Box>
 
             <Container maxWidth="lg" className={styles.mainContent}>

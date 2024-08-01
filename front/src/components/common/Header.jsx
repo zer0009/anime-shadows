@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Person, PersonAdd, ExitToApp, AccountCircle, History, Favorite, Dashboard, Menu, Close } from '@mui/icons-material';
+import { Search, Person, PersonAdd, ExitToApp, AccountCircle, History, Favorite, Dashboard, Menu, Close, Home, List, Movie, Tv } from '@mui/icons-material';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import styles from './Header.module.css';
@@ -77,11 +77,31 @@ const Header = () => {
                     >
                         <Close />
                     </button>
-                    <ul>
-                        <li><Link to="/" onClick={() => setMenuOpen(false)}>{t('header.home')}</Link></li>
-                        <li><Link to="/anime-list" onClick={() => setMenuOpen(false)}>{t('header.animeList')}</Link></li>
-                        <li><Link to="/movie-list" onClick={() => setMenuOpen(false)}>{t('header.movieList')}</Link></li>
-                        <li><Link to="/season-anime" onClick={() => setMenuOpen(false)}>{t('header.seasonAnime')}</Link></li>
+                    <ul className={styles.navList}>
+                        <li>
+                            <Link to="/" onClick={() => setMenuOpen(false)} className={styles.navLink}>
+                                <Home className={styles.navIcon} />
+                                <span>{t('header.home')}</span>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/anime-list" onClick={() => setMenuOpen(false)} className={styles.navLink}>
+                                <List className={styles.navIcon} />
+                                <span>{t('header.animeList')}</span>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/movie-list" onClick={() => setMenuOpen(false)} className={styles.navLink}>
+                                <Movie className={styles.navIcon} />
+                                <span>{t('header.movieList')}</span>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/season-anime" onClick={() => setMenuOpen(false)} className={styles.navLink}>
+                                <Tv className={styles.navIcon} />
+                                <span>{t('header.seasonAnime')}</span>
+                            </Link>
+                        </li>
                     </ul>
                 </nav>
                 <div className={styles.headerIcons}>

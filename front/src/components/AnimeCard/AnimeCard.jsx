@@ -82,8 +82,8 @@ const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeTitle,
                         )}
                         {episodeTitle && (
                             <Badge pill className={styles.episodeBadge}>
-                                <PlayArrowIcon className={styles.playIcon} />
                                 {episodeTitle}
+                                <PlayArrowIcon className={styles.playIcon} />
                             </Badge>
                         )}
                     </div>

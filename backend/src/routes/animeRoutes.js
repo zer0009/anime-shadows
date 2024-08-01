@@ -16,6 +16,8 @@ router.get('/genre/:genre', animeController.getAnimeByGenre);
 router.get('/popular/anime', animeController.getPopularAnimes);
 router.get('/popular/episodes', animeController.getPopularEpisodes);
 
+router.get('/sitemap-data', animeController.getSitemapData);
+
 router.post('/scrape-mal', animeController.scrapeMal);
 router.post('/scrape-livechart', animeController.scrapeLivechart)
 

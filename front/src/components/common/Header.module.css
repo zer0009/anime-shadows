@@ -45,6 +45,33 @@
   align-items: center;
 }
 
+.navList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 5px; /* Reduced space between nav items */
+}
+
+.navLink {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px; /* Further reduced padding */
+    font-size: 1rem; /* Slightly smaller font size */
+    color: var(--text-color);
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.navLink:hover {
+    background-color: var(--secondary-light);
+}
+
+.navIcon {
+    font-size: 1.2rem; /* Slightly smaller icon size */
+    margin-right: 8px; /* Reduced space between icon and text */
+}
+
 .headerNav ul {
   list-style: none;
   padding: 0;
@@ -320,4 +347,56 @@
     width: 28px;
     height: 28px;
   }
+}
+
+@media (max-width: 768px) {
+    .headerNav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--primary-dark);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .headerNav.open {
+        transform: translateX(0);
+    }
+
+    .navList {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px; /* Increased space between items for mobile */
+        padding: 0;
+    }
+
+    .navLink {
+        padding: 12px 15px;
+        font-size: 1.1rem;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .navIcon {
+        font-size: 1.3rem;
+        margin-right: 10px;
+    }
+}
+
+@media (min-width: 769px) {
+    .navList {
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px; /* Adjust space between items for desktop */
+    }
+
+    .navLink {
+        padding: 8px 12px;
+    }
 }

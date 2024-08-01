@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://animeshadows.xyz/sitemap.xml
+
+Disallow: /admin/
+Disallow: /private/
+Disallow: /api/

@@ -43,23 +43,26 @@
   top: 10px;
   left: 10px;
   color: white;
-  padding: 5px 12px;
+  padding: 5px 11px;
   border-radius: 20px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
   z-index: 3;
 }
 
 .statusBadgeCompleted {
-  background-color: red;
+  background-color: var(--badge-completed);
+  color: var(--badge-text-light);
 }
 
 .statusBadgeOngoing {
-  background-color: green;
+  background-color: var(--badge-ongoing);
+  color: var(--badge-text-light);
 }
 
 .statusBadgeUpcoming {
-  background-color: orange;
+  background-color: var(--badge-upcoming);
+  color: var(--badge-text-light);
 }
 
 .cardContent {
@@ -79,6 +82,7 @@
 
 .title {
   margin-inline-start: 20px;
+  text-align: center;
   font-size: 1.1rem;
   font-weight: bold;
   white-space: nowrap;
@@ -107,21 +111,25 @@
 
 .typeBadge,
 .episodeBadge {
-  background-color: var(--highlight-color);
-  color: var(--text-color);
-  padding: 4px 8px;
+  background-color: var(--tertiary-dark);
+  color: var(--badge-text-light);
+  padding: 6px 14px;
   border-radius: 16px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 26px;
+  margin-bottom: 27px;
+}
+
+.episodeBadge {
+  padding: 5px 10px;
 }
 
 .playIcon {
-  font-size: 16px;
+  font-size: 14px;
   margin-right: 4px;
 }
 

@@ -13,6 +13,12 @@
   --primary-light: #4a3b6a; /* New color for button hover */
   --background-light: #1e1e2e; /* New background color */
   --border-color: #3e3e5e; /* New border color */
+  --badge-completed: #d32f2f;
+  --badge-ongoing: #388e3c;
+  /* --badge-upcoming: #f57c00; */
+  --badge-upcoming: #FFAA00;
+  --badge-text-light: #ffffff;
+  --badge-text-dark: #000000;
 }
 
 html, body {
