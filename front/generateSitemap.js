@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const BASE_URL = 'https://animeshadows.xyz'; // Replace with your actual domain
-const API_URL = import.meta.env.VITE_API_URL; // Replace with your actual API URL
+const API_URL = 'https://app.animeshadows.xyz/api'; // Replace with your actual API URL
 
 async function fetchSitemapData() {
     try {
