@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import { Favorite, FavoriteBorder, Star } from '@mui/icons-material';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import StarScoreDisplay from '../ScoreDisplay.jsx';
+import StarScoreDisplay from '../StarScoreDisplay.jsx';
 import styles from './AnimeSidebar.module.css';
 
 const AnimeSidebar = ({ anime, isFavorite, handleFavoriteClick, handleRateAnime, t }) => {

@@ -92,9 +92,10 @@ const getRecentlyUpdatedEpisodes = async (req, res) => {
     const { page = 1, limit = 10 } = req.query;
     try {
         const recentEpisodes = await Episode.aggregate([
-            { $sort: { updatedAt: -1 } }, // Sort by updatedAt in descending order
+            { $sort: { updatedAt: -1, _id: -1 } }, // Sort by updatedAt and then by _id in descending order
             { $group: { _id: "$anime", latestEpisode: { $first: "$$ROOT" } } }, // Group by anime and get the latest episode
             { $replaceRoot: { newRoot: "$latestEpisode" } }, // Replace root with the latest episode
+            { $sort: { updatedAt: -1, _id: -1 } }, // Sort again to ensure consistent order
             { $skip: (page - 1) * limit }, // Skip for pagination
             { $limit: parseInt(limit) } // Limit the number of results
         ]);

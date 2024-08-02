@@ -163,7 +163,8 @@ const getAnimes = async (query = '', tags = [], type = '', season = '', sort = '
     .populate('genres')
     .sort(sortOption)
     .skip(skip)
-    .limit(limit);
+    .limit(limit)
+    .lean();
 
   return {
     animes,
@@ -267,7 +268,8 @@ const getPopularAnimes = async (timeFrame, genre, page = 1, limit = 10) => {
     .populate('type')
     .populate('genres')
     .skip(skip)
-    .limit(limit);
+    .limit(limit)
+    .lean();
 
   const totalDocs = await Anime.countDocuments(query);
 
@@ -337,7 +339,8 @@ const getMovies = async (page = 1, limit = 10) => {
     .populate('type')
     .skip(skip)
     .limit(limit)
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .lean();
 
   const totalMovies = await Anime.countDocuments({ type: movieTypeId });
 
