@@ -19,4 +19,18 @@ const episodeSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now }
 });
 
+// Middleware to update the updatedAt field on save
+episodeSchema.pre('save', function(next) {
+  if (this.isModified()) {
+    this.updatedAt = Date.now();
+  }
+  next();
+});
+
+// Middleware to update the updatedAt field on update
+episodeSchema.pre('findOneAndUpdate', function(next) {
+  this.set({ updatedAt: Date.now() });
+  next();
+});
+
 module.exports = mongoose.model('Episode', episodeSchema);

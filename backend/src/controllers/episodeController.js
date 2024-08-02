@@ -2,7 +2,7 @@ const Episode = require('../models/episode');
 const Anime = require('../models/anime');
 
 const createEpisode = async (req, res) => {
-    const { animeId,title, number, streamingServers, downloadServers } = req.body;
+    const { animeId, title, number, streamingServers, downloadServers } = req.body;
 
     try {
         const anime = await Anime.findById(animeId);
@@ -41,11 +41,15 @@ const updateEpisode = async (req, res) => {
     const { id } = req.params;
     const { animeId, number, title, streamingServers, downloadServers } = req.body;
     try {
-        const episode = await Episode.findByIdAndUpdate(id, { anime: animeId, number, title, streamingServers, downloadServers }, { new: true });
-        if (!episode) {
+        const updatedEpisode = await Episode.findByIdAndUpdate(
+            id,
+            { anime: animeId, number, title, streamingServers, downloadServers, updatedAt: Date.now() },
+            { new: true }
+        );
+        if (!updatedEpisode) {
             return res.status(404).json({ message: 'Episode not found' });
         }
-        res.status(200).json(episode);
+        res.status(200).json(updatedEpisode);
     } catch (error) {
         console.error('Error updating episode:', error);
         res.status(500).json({ message: 'Error updating episode' });
@@ -88,11 +92,11 @@ const getRecentlyUpdatedEpisodes = async (req, res) => {
     const { page = 1, limit = 10 } = req.query;
     try {
         const recentEpisodes = await Episode.aggregate([
-            { $sort: { updatedAt: -1 } },
-            { $group: { _id: "$anime", latestEpisode: { $first: "$$ROOT" } } },
-            { $replaceRoot: { newRoot: "$latestEpisode" } },
-            { $skip: (page - 1) * limit },
-            { $limit: parseInt(limit) }
+            { $sort: { updatedAt: -1 } }, // Sort by updatedAt in descending order
+            { $group: { _id: "$anime", latestEpisode: { $first: "$$ROOT" } } }, // Group by anime and get the latest episode
+            { $replaceRoot: { newRoot: "$latestEpisode" } }, // Replace root with the latest episode
+            { $skip: (page - 1) * limit }, // Skip for pagination
+            { $limit: parseInt(limit) } // Limit the number of results
         ]);
 
         const populatedEpisodes = await Episode.populate(recentEpisodes, { path: 'anime' });
@@ -112,11 +116,30 @@ const getRecentlyUpdatedEpisodes = async (req, res) => {
     }
 };
 
+// Update view count without modifying updatedAt
+const updateViewCount = async (req, res) => {
+    const { episodeId } = req.params;
+    try {
+        const episode = await Episode.findById(episodeId);
+        if (!episode) {
+            return res.status(404).json({ message: 'Episode not found' });
+        }
+        episode.viewCount += 1;
+        episode.views.push(Date.now());
+        await episode.save({ timestamps: false }); // Disable automatic timestamp updates
+        res.status(200).json(episode);
+    } catch (error) {
+        console.error('Error updating view count:', error);
+        res.status(500).json({ message: 'Error updating view count' });
+    }
+};
+
 module.exports = {
     createEpisode,
     getEpisodeById,
     updateEpisode,
     deleteEpisode,
     getEpisodesByAnimeId,
-    getRecentlyUpdatedEpisodes
+    getRecentlyUpdatedEpisodes,
+    updateViewCount
 };

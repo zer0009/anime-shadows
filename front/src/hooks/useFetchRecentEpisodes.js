@@ -11,12 +11,13 @@ const useFetchRecentEpisodes = (page = 1) => {
         const fetchEpisodes = async () => {
             try {
                 setLoading(true);
+                setError(null); // Reset error state before fetching
                 const response = await fetchRecentEpisodes(page);
                 setRecentEpisodes(response.episodes || []); // Ensure recentEpisodes is always an array
                 setTotalPages(response.totalPages || 1); // Ensure totalPages is always a number
-            } catch (error) {
+            } catch (err) {
                 setError('Error fetching recent episodes');
-                console.error('Error fetching recent episodes:', error);
+                console.error('Error fetching recent episodes:', err);
             } finally {
                 setLoading(false);
             }

@@ -88,6 +88,7 @@ app.use('/api', routes);
 
 // 404 handler
 app.use((req, res, next) => {
+  res.setHeader('X-Robots-Tag', 'noindex');
   res.status(404).json({
     error: {
       message: 'Not Found'
@@ -98,6 +99,7 @@ app.use((req, res, next) => {
 // Global error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
+  res.setHeader('X-Robots-Tag', 'noindex');
   res.status(err.status || 500).json({
     error: {
       message: err.message || 'Something went wrong!',
