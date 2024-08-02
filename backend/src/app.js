@@ -77,6 +77,12 @@ app.use('/api/uploads', express.static('uploads', {
   etag: false
 }));
 
+// Set x-robots-tag header to allow indexing
+app.use((req, res, next) => {
+  res.setHeader('X-Robots-Tag', 'index, follow');
+  next();
+});
+
 // Routes
 app.use('/api', routes);
 
