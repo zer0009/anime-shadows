@@ -14,24 +14,36 @@ const AnimeTabs = ({ anime, isFavorite, handleFavoriteClick, handleRateAnime, ha
 
   return (
     <Box className={styles.tabsContainer}>
-      <Tabs value={value} onChange={handleChange} variant="fullWidth">
-        <Tab label={t('animeDetails.details')} />
-        <Tab label={t('animeDetails.episodes')} />
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        variant="fullWidth"
+        className={styles.tabs}
+        TabIndicatorProps={{ style: { backgroundColor: 'var(--highlight-color)' } }}
+      >
+        <Tab
+          label={t('animeDetails.details')}
+          className={`${styles.tab} ${value !== 0 ? styles.tabNotSelected : ''}`}
+        />
+        <Tab
+          label={t('animeDetails.episodes')}
+          className={`${styles.tab} ${value !== 1 ? styles.tabNotSelected : ''}`}
+        />
       </Tabs>
       {value === 0 && (
         <Box className={styles.tabContent}>
           <div className={styles.detailsContainer}>
+            <AnimeMainContent
+              anime={anime}
+              handleGenreClick={handleGenreClick}
+              getScoreDisplayProps={getScoreDisplayProps}
+              t={t}
+            />
             <AnimeSidebar
               anime={anime}
               isFavorite={isFavorite}
               handleFavoriteClick={handleFavoriteClick}
               handleRateAnime={handleRateAnime}
-              t={t}
-            />
-            <AnimeMainContent
-              anime={anime}
-              handleGenreClick={handleGenreClick}
-              getScoreDisplayProps={getScoreDisplayProps}
               t={t}
             />
           </div>

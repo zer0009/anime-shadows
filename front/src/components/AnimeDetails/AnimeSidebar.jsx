@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import { Favorite, FavoriteBorder, Star } from '@mui/icons-material';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
@@ -7,6 +7,20 @@ import styles from './AnimeSidebar.module.css';
 
 const AnimeSidebar = ({ anime, isFavorite, handleFavoriteClick, handleRateAnime, t }) => {
   const airingYear = anime.airingDate ? new Date(anime.airingDate).getFullYear() : 'N/A';
+
+  useEffect(() => {
+    if (anime.pictureUrl) {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = anime.pictureUrl;
+      document.head.appendChild(link);
+
+      return () => {
+        document.head.removeChild(link);
+      };
+    }
+  }, [anime.pictureUrl]);
 
   return (
     <div className={styles.animeSidebar}>
@@ -18,6 +32,8 @@ const AnimeSidebar = ({ anime, isFavorite, handleFavoriteClick, handleRateAnime,
           className={styles.animeImage}
           threshold={300}
           placeholderSrc="/path/to/placeholder-image.jpg"
+          width={300} // Set explicit width
+          height={450} // Set explicit height
         />
         <Box className={styles.scoreBadge}>
           <StarScoreDisplay score={anime.averageRating} />

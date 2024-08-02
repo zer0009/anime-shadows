@@ -25,6 +25,10 @@
   flex: 1;
 }
 
+.animeEpisodes {
+  margin-top: 20px;
+}
+
 @media (max-width: 1024px) {
   .animeDetailsGrid {
     flex-direction: column;
@@ -33,5 +37,14 @@
   .animeSidebar {
     position: relative;
     top: 0;
+    order: 2; /* Sidebar appears second */
+  }
+
+  .animeMainContent {
+    order: 1; /* Main content appears first */
+  }
+
+  .animeEpisodes {
+    order: 3; /* Episodes appear last */
   }
 }

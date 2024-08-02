@@ -7,6 +7,7 @@ import styles from './AddGenre.module.css';
 
 const AddGenre = () => {
   const [name, setName] = useState('');
+  const [nameAr, setNameAr] = useState(''); // Add state for name_ar
   const [genres, setGenres] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const [currentGenreId, setCurrentGenreId] = useState(null);
@@ -25,13 +26,14 @@ const AddGenre = () => {
     e.preventDefault();
     try {
       if (editMode) {
-        await editGenre(currentGenreId, { name });
+        await editGenre(currentGenreId, { name, name_ar: nameAr }); // Include name_ar
         alert('Genre updated successfully');
       } else {
-        await addGenre({ name });
+        await addGenre({ name, name_ar: nameAr }); // Include name_ar
         alert('Genre added successfully');
       }
       setName('');
+      setNameAr(''); // Reset name_ar
       setEditMode(false);
       setCurrentGenreId(null);
       const genresData = await fetchGenre();
@@ -43,6 +45,7 @@ const AddGenre = () => {
 
   const handleEdit = (genre) => {
     setName(genre.name);
+    setNameAr(genre.name_ar); // Set name_ar
     setEditMode(true);
     setCurrentGenreId(genre._id);
   };
@@ -75,6 +78,13 @@ const AddGenre = () => {
           fullWidth
           margin="normal"
         />
+        <TextField
+          label="Name (Arabic)"
+          value={nameAr}
+          onChange={(e) => setNameAr(e.target.value)}
+          fullWidth
+          margin="normal"
+        />
         <Button type="submit" variant="contained" color="primary">
           {editMode ? 'Update Genre' : 'Add Genre'}
         </Button>
@@ -84,6 +94,7 @@ const AddGenre = () => {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
+              <TableCell>Name (Arabic)</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -91,6 +102,7 @@ const AddGenre = () => {
             {genres.map((genre) => (
               <TableRow key={genre._id}>
                 <TableCell>{genre.name}</TableCell>
+                <TableCell>{genre.name_ar}</TableCell>
                 <TableCell>
                   <IconButton onClick={() => handleEdit(genre)}>
                     <Edit />

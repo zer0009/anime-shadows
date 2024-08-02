@@ -268,8 +268,7 @@ const getPopularAnimes = async (timeFrame, genre, page = 1, limit = 10) => {
     .populate('type')
     .populate('genres')
     .skip(skip)
-    .limit(limit)
-    .lean();
+    .limit(limit);
 
   const totalDocs = await Anime.countDocuments(query);
 

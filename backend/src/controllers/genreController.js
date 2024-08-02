@@ -1,10 +1,10 @@
 const GenreService = require('../services/genreService');
 
 exports.createGenre = async (req, res) => {
-  const { name } = req.body;
+  const { name, name_ar } = req.body;
 
   try {
-    const newGenre = await GenreService.createGenre(name);
+    const newGenre = await GenreService.createGenre(name, name_ar);
     res.status(201).json(newGenre);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -31,14 +31,14 @@ exports.getGenreById = async (req, res) => {
 };
 
 exports.updateGenre = async (req, res) => {
-  const { name } = req.body;
+  const { name, name_ar } = req.body;
   const { id } = req.params;
   try {
-    const updatedGenre = await GenreService.updateGenre(id, name);
+    const updatedGenre = await GenreService.updateGenre(id, name, name_ar);
     console.log(updatedGenre);
     res.json(updatedGenre);
   } catch (err) {
-    res.status(4000).json({ error: err.message });
+    res.status(400).json({ error: err.message });
   }
 };
 
