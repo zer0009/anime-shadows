@@ -65,7 +65,11 @@ const limiter = rateLimit({
 
 // CORS configuration
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  origin: [
+     process.env.CORS_ORIGIN,
+    'https://66ad53b9591aec0008404096--anime-shadows-front.netlify.app', // Add your Netlify preview URL here
+    'http://localhost:5173' // Add your local development URL here
+  ],
   optionsSuccessStatus: 200,
   credentials: true
 };
@@ -88,7 +92,6 @@ app.use('/api', routes);
 
 // 404 handler
 app.use((req, res, next) => {
-  res.setHeader('X-Robots-Tag', 'noindex');
   res.status(404).json({
     error: {
       message: 'Not Found'
@@ -99,7 +102,6 @@ app.use((req, res, next) => {
 // Global error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.setHeader('X-Robots-Tag', 'noindex');
   res.status(err.status || 500).json({
     error: {
       message: err.message || 'Something went wrong!',
