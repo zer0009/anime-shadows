@@ -1,0 +1,22 @@
+.animeReviews {
+    margin-top: 20px;
+  }
+  
+  .reviewList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .reviewItem {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: var(--secondary-dark);
+    border-radius: 5px;
+  }
+  
+  .reviewAuthor {
+    margin-top: 5px;
+    font-size: 14px;
+    color: var(--subtext-color);
+  }

@@ -1,0 +1,76 @@
+.animeSidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--secondary-dark);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    width: 100%;
+    max-width: 300px;
+    height: fit-content;
+}
+
+.animeImageContainer {
+    position: relative;
+    width: 100%;
+}
+
+.animeImage {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.scoreBadge {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.sidebarActions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+}
+
+.rateButton,
+.favoriteButton {
+    background-color: var(--highlight-color);
+    color: var(--text-color);
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.favoriteButton:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.animeMeta {
+    margin-top: 20px;
+    width: 100%;
+    text-align: right;
+    direction: rtl;
+}
+
+.animeMeta p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.animeMeta p strong {
+    font-weight: bold;
+    color: var(--highlight-color);
+}

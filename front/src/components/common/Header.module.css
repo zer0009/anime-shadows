@@ -27,10 +27,17 @@
   padding: 0 20px;
 }
 
+.leftSection {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
 .logo {
   text-decoration: none;
   display: flex;
   align-items: center;
+  margin-left: auto;
 }
 
 .headerTitle {
@@ -85,44 +92,21 @@
   gap: 20px;
 }
 
-.searchBar {
+.searchIconButton {
   display: flex;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.3s ease;
   border-radius: 20px;
-  padding: 5px 15px;
-  transition: all 0.3s ease;
+  padding: 8px 15px;
 }
 
-.searchBar:focus-within {
-  background-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 0 0 2px var(--highlight-color);
-}
-
-.searchInput {
-  background: none;
-  border: none;
-  color: var(--text-color);
-  font-size: 0.9rem;
-  padding: 5px;
-  width: 150px;
-  transition: all 0.3s ease;
-}
-
-.searchInput:focus {
-  outline: none;
-  width: 180px;
-}
-
-.searchIcon {
-  color: var(--text-color);
-  font-size: 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.searchIcon:hover {
+.searchIconButton:hover {
   color: var(--highlight-color);
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
 }
 
 .authLink {
@@ -143,10 +127,6 @@
   transform: translateY(-2px);
 }
 
-.authText {
-  margin-left: 8px;
-}
-
 .userProfile {
   position: relative;
 }
@@ -157,7 +137,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 5px;
+  padding: 8px 15px;
   border-radius: 20px;
   transition: all 0.3s ease;
 }
@@ -167,42 +147,29 @@
 }
 
 .profilePicture {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  border: 2px solid var(--highlight-color);
   margin-right: 10px;
-  transition: all 0.3s ease;
-  object-fit: cover;
-}
-
-.profileButton:hover .profilePicture {
-  border-color: var(--glow-color);
-  transform: scale(1.05);
 }
 
 .username {
+  font-size: 1rem;
   color: var(--text-color);
-  font-size: 0.9rem;
-  font-weight: 600;
 }
 
 .dropdownMenu {
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: var(--secondary-dark);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  z-index: 1000;
-  min-width: 200px;
+  background-color: var(--primary-dark);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
   opacity: 0;
   transform: translateY(-10px);
   transition: all 0.3s ease;
+  z-index: 1000;
 }
 
 .dropdownMenu.open {
@@ -281,6 +248,16 @@
 
   .searchInput:focus {
     width: 150px;
+  }
+}
+
+@media (max-width: 1005px) {
+  .headerNav {
+    display: none;
+  }
+
+  .menuIcon {
+    display: block;
   }
 }
 

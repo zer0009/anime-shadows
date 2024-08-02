@@ -11,236 +11,27 @@
 }
 
 .animeDetailsGrid {
-  display: grid;
-  grid-template-columns: 1fr 2fr; /* Sidebar and main content */
-  gap: clamp(0px, 2.5rem, 50px); /* Dynamic gap between 0px and 50px based on viewport width */
-}
-
-.mainContent {
   display: flex;
-  flex-direction: column;
+  gap: 20px;
 }
 
 .animeSidebar {
-  display: flex;
-  flex-direction: column;
-}
-
-.animeTitle {
-  font-size: 36px;
-  color: var(--highlight-color);
-  margin-bottom: 10px;
-  font-weight: bold;
-}
-
-.titleAndScores {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.animeRating {
-  display: flex;
-  align-items: center;
-  margin: 10px 0;
-}
-
-.ratingScore {
-  font-size: 24px;
-  margin-left: 10px;
-  color: var(--highlight-color);
-}
-
-.ratingUsers {
-  font-size: 14px;
-  color: var(--subtext-color);
-  margin-left: 10px;
-}
-
-.animeSubtitle {
-  font-size: 18px;
-  color: var(--subtext-color);
-  margin: 20px 0;
-}
-
-.animeTags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.animeTag {
-  font-size: 14px;
-  background-color: var(--secondary-dark);
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--text-color);
-  margin-right: 10px;
-  margin-bottom: 10px;
-}
-
-.animeEpisodes {
-  margin-top: 20px;
-}
-
-.episodeList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.episodeItem {
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: var(--secondary-dark);
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.episodeItem:hover {
-  background-color: var(--highlight-color);
-}
-
-.animeSidebar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: var(--secondary-dark);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  text-align: center;
-  width: 100%;
-  max-width: 300px;
+  flex: 0 0 300px;
   position: sticky;
-  top: 20px; /* Adjust as needed */
-  height: fit-content; /* Ensure the sidebar height fits its content */
+  top: 20px;
 }
 
-.animeImageContainer {
-  position: relative;
-  width: 100%;
-}
-
-.animeImage {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-.scoreBadge {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  display: flex;
-  align-items: center;
-}
-
-.sidebarActions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  gap: 10px; /* Add space between buttons */
-}
-
-.rateButton,
-.favoriteButton {
-  background-color: var(--highlight-color);
-  color: var(--text-color);
+.animeMainContent {
   flex: 1;
-  padding: 10px;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px; /* Adjust the gap between icon and text */
-}
-
-.favoriteButton:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-}
-
-.animeMeta {
-  margin-top: 20px;
-  width: 100%;
-  text-align: right;
-  direction: rtl;
-}
-
-.animeMeta p {
-  margin: 10px 0;
-  font-size: 16px;
-  color: var(--text-color);
-}
-
-.animeMeta p strong {
-  font-weight: bold;
-  color: var(--highlight-color);
-}
-
-.scoreSection {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
 }
 
 @media (max-width: 1024px) {
   .animeDetailsGrid {
-    grid-template-columns: 1fr; /* Single column layout */
+    flex-direction: column;
   }
 
   .animeSidebar {
-    max-width: 100%;
-    margin-top: 20px;
-    position: static; /* Remove sticky positioning */
-  }
-}
-
-@media (max-width: 768px) {
-  .titleAndScores {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .animeTitle {
-    font-size: 28px;
-  }
-
-  .scoreSection {
-    align-items: flex-start;
-    margin-top: 10px;
-  }
-
-  .sidebarActions {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .rateButton,
-  .favoriteButton {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .animeTitle {
-    font-size: 24px;
-  }
-
-  .animeSubtitle {
-    font-size: 16px;
-  }
-
-  .animeTag {
-    font-size: 12px;
-  }
-
-  .animeMeta p {
-    font-size: 14px;
+    position: relative;
+    top: 0;
   }
 }

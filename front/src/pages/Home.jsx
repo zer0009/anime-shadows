@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo, lazy, Suspense } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { fetchAnimeById, fetchPopularAnime } from '../api/modules/anime';
@@ -78,7 +78,6 @@ const Home = () => {
             console.error('Error fetching anime details:', error);
         }
     }, [navigate]);
-
 
     const heroImages = useMemo(() => [
         { webp: hero1Webp, jpg: hero1Jpg, alt: t('home.featuredAnime1') },
@@ -164,21 +163,21 @@ const Home = () => {
             </div>
             {loading ? (
                 <Grid container spacing={1}>
-    {[...Array(10)].map((_, index) => (
-        <Grid item xs={6} sm={4} md={3} lg={2} xl={1.5} key={index}>
-            <Box sx={{ aspectRatio: '2/3', width: '100%', display: 'flex', flexDirection: 'column' }}>
-                <Skeleton 
-                    variant="rectangular" 
-                    width="100%" 
-                    height="100%" 
-                    sx={{ flexGrow: 1, minHeight: 200 }}
-                />
-                <Skeleton width="80%" sx={{ mt: 1 }} />
-                <Skeleton width="60%" />
-            </Box>
-        </Grid>
-    ))}
-</Grid>
+                    {[...Array(16)].map((_, index) => (
+                        <Grid item xs={6} sm={4} md={3} lg={2} xl={1.5} key={index}>
+                            <Box sx={{ aspectRatio: '2/3', width: '100%', display: 'flex', flexDirection: 'column' }}>
+                                <Skeleton 
+                                    variant="rectangular" 
+                                    width="100%" 
+                                    height="100%" 
+                                    sx={{ flexGrow: 1, minHeight: 200 }}
+                                />
+                                <Skeleton width="80%" sx={{ mt: 1 }} />
+                                <Skeleton width="60%" />
+                            </Box>
+                        </Grid>
+                    ))}
+                </Grid>
             ) : (
                 <Swiper
                     modules={[Navigation, Pagination, Scrollbar]}

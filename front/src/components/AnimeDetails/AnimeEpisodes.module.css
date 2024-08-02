@@ -1,0 +1,22 @@
+.animeEpisodes {
+    margin-top: 20px;
+  }
+  
+  .episodeList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .episodeItem {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: var(--secondary-dark);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .episodeItem:hover {
+    background-color: var(--highlight-color);
+  }
