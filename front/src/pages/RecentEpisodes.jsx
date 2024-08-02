@@ -74,6 +74,7 @@ const RecentEpisodes = () => {
           {seo.helmet.link.map((link, index) => (
             <link key={index} {...link} />
           ))}
+          <meta name="robots" content="index, follow" />
         </Helmet>
         {seo.jsonLd && <JsonLd item={seo.jsonLd} />}
         

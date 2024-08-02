@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Typography, Container, Breadcrumbs, Link, Chip, Paper, Grid, Divider } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
@@ -36,13 +36,44 @@ const SeasonAnime = () => {
     anime.season.name.toLowerCase() === currentSeason.toLowerCase()
   );
 
-  const seoProps = {
+  const seoProps = useMemo(() => ({
     title: t('seasonAnime.pageTitle', `أنمي موسم {{season}} {{year}} | أنمي شادوز`, { season: t(`seasons.${currentSeason}`, currentSeason), year: currentYear }),
     description: t('seasonAnime.pageDescription', `اكتشف أحدث إصدارات الأنمي لموسم {{season}} {{year}}. شاهد الأنميات الجديدة والمثيرة على أنمي شادوز.`, { season: t(`seasons.${currentSeason}`, currentSeason), year: currentYear }),
     keywords: t('seasonAnime.pageKeywords', `أنمي الموسم, {{season}}, {{year}}, أنميات جديدة, Anime Shadows, تحميل, مترجم, انمي, حلقة, ستريم, بث مباشر, جودة عالية, HD, مترجم عربي, دبلجة عربية, بدون إعلانات, مجاناً`, { season: t(`seasons.${currentSeason}`, currentSeason), year: currentYear }),
     canonicalUrl: `https://animeshadows.xyz/season-anime?page=${currentPage}`,
     ogType: "website",
-  };
+    jsonLd: [
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Anime Shadows",
+        "alternateName": "أنمي شادوز",
+        "url": "https://animeshadows.xyz",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://animeshadows.xyz/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": seasonAnimeList.map((anime, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "url": `https://animeshadows.xyz/anime/${anime._id}`,
+          "name": anime.title
+        }))
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": t('seasonAnime.pageTitle', `أنمي موسم {{season}} {{year}} | أنمي شادوز`, { season: t(`seasons.${currentSeason}`, currentSeason), year: currentYear }),
+        "description": t('seasonAnime.pageDescription', `اكتشف أحدث إصدارات الأنمي لموسم {{season}} {{year}}. شاهد الأنميات الجديدة والمثيرة على أنمي شادوز.`, { season: t(`seasons.${currentSeason}`, currentSeason), year: currentYear }),
+        "url": `https://animeshadows.xyz/season-anime?page=${currentPage}`
+      }
+    ]
+  }), [t, currentSeason, currentYear, currentPage, seasonAnimeList]);
 
   const seo = useSEO(seoProps);
 
@@ -57,8 +88,11 @@ const SeasonAnime = () => {
           {seo.helmet.link.map((link, index) => (
             <link key={index} {...link} />
           ))}
+          <meta name="robots" content="index, follow" />
         </Helmet>
-        {seo.jsonLd && <JsonLd item={seo.jsonLd} />}
+        {seo.jsonLd && seo.jsonLd.map((item, index) => (
+          <JsonLd key={index} item={item} />
+        ))}
         
         <Breadcrumbs 
           separator={<NavigateNextIcon fontSize="small" className={styles.breadcrumbSeparator} />}

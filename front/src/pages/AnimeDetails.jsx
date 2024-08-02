@@ -156,6 +156,7 @@ const AnimeDetails = () => {
           <meta name="twitter:title" content={`${anime.title} - ${anime.subTitle} | أنمي شادوز - Anime Shadows`} />
           <meta name="twitter:description" content={`شاهد ${anime.title} اون لاين على أنمي شادوز (Anime Shadows). ${anime.description.substring(0, 150)}...`} />
           <meta name="twitter:image" content={anime.pictureUrl} />
+          <meta name="robots" content="index, follow" />
         </Helmet>
         <JsonLd
           item={{

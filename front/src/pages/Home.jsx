@@ -232,6 +232,7 @@ const Home = () => {
                 {seo.helmet.link.map((link, index) => (
                     <link key={index} {...link} />
                 ))}
+                <meta name="robots" content="index, follow" />
             </Helmet>
             {seo.jsonLd && seo.jsonLd.map((item, index) => (
                 <JsonLd key={index} item={item} />

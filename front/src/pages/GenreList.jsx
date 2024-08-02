@@ -73,6 +73,7 @@ const GenreList = () => {
             })}
           </script>
         )}
+        <meta name="robots" content="index, follow" />
       </Helmet>
 
       <Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: '20px' }}>

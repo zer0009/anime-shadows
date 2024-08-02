@@ -1,21 +1,33 @@
 {
-    "name": "Anime Shadows",
-    "short_name": "AnimeShadows",
-    "description": "انمى شادوز Anime Shadows أنمي شادوز لمشاهدة جميع الانميات والافلام الانمي مترجمه، بجودات عالية اون لاين.",
-    "start_url": "/",
-    "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#000000",
-    "icons": [
-      {
-        "src": "/assets/images/anime-shadows-favicon-color.png",
-        "sizes": "192x192",
-        "type": "image/png"
-      },
-      {
-        "src": "/assets/images/anime-shadows-favicon-color.png",
-        "sizes": "512x512",
-        "type": "image/png"
-      }
-    ]
-  }
+  "name": "Anime Shadows",
+  "short_name": "AnimeShadows",
+  "description": "انمى شادوز Anime Shadows أنمي شادوز لمشاهدة جميع الانميات والافلام الانمي مترجمه، بجودات عالية اون لاين.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/assets/images/anime-shadows-favicon-color.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/images/anime-shadows-favicon-color.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/images/anime-shadows-favicon-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/assets/images/anime-shadows-favicon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
