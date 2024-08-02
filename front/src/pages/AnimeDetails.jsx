@@ -10,6 +10,8 @@ import StarScoreDisplay from '../components/StarScoreDisplay.jsx';
 import ScoreDisplay from '../components/ScoreDisplay.jsx';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { JsonLd } from 'react-schemaorg';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 import styles from './AnimeDetails.module.css';
 
 const AnimeDetails = () => {
@@ -187,7 +189,14 @@ const AnimeDetails = () => {
         <div className={styles.animeDetailsGrid}>
           <div className={styles.animeSidebar}>
             <Box className={styles.animeImageContainer}>
-              <img src={anime.pictureUrl} alt={`Poster of ${anime.title}`} className={styles.animeImage} loading="lazy"/>
+              <LazyLoadImage
+                src={anime.pictureUrl}
+                alt={`Poster of ${anime.title}`}
+                effect="blur"
+                className={styles.animeImage}
+                threshold={300}
+                placeholderSrc="/path/to/placeholder-image.jpg" // Add a placeholder image path
+              />
               <Box className={styles.scoreBadge}>
                 <StarScoreDisplay score={anime.averageRating} />
               </Box>

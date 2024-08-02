@@ -78,7 +78,7 @@ const SeasonAnime = () => {
           </Typography>
         </Breadcrumbs>
 
-        <Paper elevation={3} className={styles.headerPaper}>
+        {/* <Paper elevation={3} className={styles.headerPaper}>
           <Grid container spacing={3} alignItems="center">
             <Grid item xs={12} md={8}>
               <Typography variant="h1" className={styles.pageTitle}>
@@ -105,7 +105,7 @@ const SeasonAnime = () => {
           </Grid>
         </Paper>
 
-        <Divider className={styles.divider} />
+        <Divider className={styles.divider} /> */}
 
         <ListDisplay
           title={t('seasonAnime.listTitle', 'قائمة أنمي الموسم')}

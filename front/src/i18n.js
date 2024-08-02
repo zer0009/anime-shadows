@@ -23,4 +23,14 @@ i18n
     }
   });
 
+// Set the initial direction
+document.documentElement.dir = i18n.dir();
+document.documentElement.lang = i18n.language;
+
+// Listen for language changes
+i18n.on('languageChanged', (lng) => {
+  document.documentElement.dir = i18n.dir();
+  document.documentElement.lang = lng;
+});
+
 export default i18n;

@@ -154,48 +154,105 @@ footer {
   background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 50%, var(--tertiary-dark) 100%);
   color: var(--text-color);
   width: 100%;
-  padding: 5px 0;
+  padding: 10px 0;
   position: relative;
   bottom: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
 }
 
 footer .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap; /* Ensure the content wraps on smaller screens */
 }
 
-footer .footerNav ul {
-  list-style: none;
+footer .footerContent {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+footer .footerLeft, footer .footerRight {
+  flex: 1;
+}
+
+footer .footerLeft {
+  text-align: left;
+}
+
+footer .footerRight {
+  text-align: right;
+}
+
+footer .footerNav {
+  display: flex;
+  justify-content: center;
   gap: 20px;
-  padding: 0;
-  margin: 0;
+  flex-wrap: wrap;
 }
 
 footer .footerNav a {
   color: var(--text-color);
   text-decoration: none;
   transition: color 0.3s ease;
+  padding: 5px;
 }
 
 footer .footerNav a:hover {
   color: var(--highlight-color);
 }
 
+footer .socialIcons {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+}
+
+footer .socialIcons a {
+  color: var(--text-color);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+footer .socialIcons a:hover {
+  color: var(--highlight-color);
+  transform: translateY(-2px);
+}
+
 @media (max-width: 768px) {
-  footer .container {
+  footer .footerContent {
     flex-direction: column;
-    align-items: center;
+    gap: 10px;
+  }
+
+  footer .footerLeft, footer .footerRight {
+    flex: none;
+    width: 100%;
     text-align: center;
   }
 
-  footer .footerNav ul {
+  footer .footerNav {
+    order: -1;
+    margin-bottom: 10px;
+  }
+
+  footer .socialIcons {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  footer .footerNav {
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
+  }
+
+  footer .socialIcons {
+    margin-top: 10px;
   }
 }

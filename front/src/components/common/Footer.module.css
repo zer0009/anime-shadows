@@ -1,49 +1,101 @@
+@import '../../styles/global.css';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
 .footer {
     background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 50%, var(--tertiary-dark) 100%);
     color: var(--text-color);
     width: 100%;
-    padding: 5px 0;
-    position: relative;
-    direction: ltr;
+    padding: 20px 0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 0 20px;
+}
+
+.footerContent {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap; /* Ensure the content wraps on smaller screens */
+    flex-wrap: wrap;
+    margin-bottom: 10px;
 }
 
-.footerNav ul {
-    list-style: none;
+.footerNav {
     display: flex;
+    justify-content: center;
     gap: 20px;
-    padding: 0;
-    margin: 0;
+    flex-wrap: wrap;
 }
 
 .footerNav a {
     color: var(--text-color);
     text-decoration: none;
     transition: color 0.3s ease;
+    padding: 5px;
 }
 
 .footerNav a:hover {
     color: var(--highlight-color);
 }
 
-@media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
+.socialIcons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
 
-    .footerNav ul {
+.socialIcons a {
+    color: var(--text-color);
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.socialIcons a:hover {
+    color: var(--highlight-color);
+    transform: translateY(-2px);
+}
+
+.footerBottom {
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 10px;
+    font-size: 12px;
+}
+
+.copyright {
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .footerContent {
         flex-direction: column;
         gap: 10px;
+    }
+
+    .footerNav {
+        order: -1;
+        margin-bottom: 10px;
+    }
+
+    .socialIcons {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer {
+        font-size: 12px;
+    }
+
+    .footerNav {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .socialIcons {
+        margin-top: 10px;
     }
 }

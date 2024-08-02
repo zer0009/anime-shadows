@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { fetchAnimeById, fetchPopularAnime } from '../api/modules/anime';
@@ -6,6 +6,8 @@ import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import useFetchRecentEpisodes from '../hooks/useFetchRecentEpisodes';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, Autoplay } from 'swiper/modules';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 import AnimeCard from '../components/AnimeCard/AnimeCard';
 import { Helmet } from 'react-helmet-async';
 import { JsonLd } from 'react-schemaorg';
@@ -17,6 +19,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+
 import hero1Webp from '/assets/images/hero1_optimized.webp';
 import hero2Webp from '/assets/images/hero2_optimized.webp';
 import hero3Webp from '/assets/images/hero3_optimized.webp';
@@ -24,7 +27,11 @@ import hero1Jpg from '/assets/images/hero1_optimized.jpg';
 import hero2Jpg from '/assets/images/hero2_optimized.jpg';
 import hero3Jpg from '/assets/images/hero3_optimized.jpg';
 
-
+const heroImages = [
+    { webp: hero1Webp, jpg: hero1Jpg, alt: 'Featured Anime 1' },
+    { webp: hero2Webp, jpg: hero2Jpg, alt: 'Featured Anime 2' },
+    { webp: hero3Webp, jpg: hero3Jpg, alt: 'Featured Anime 3' },
+];
 
 const Home = () => {
     const { t } = useTranslation();
@@ -73,11 +80,11 @@ const Home = () => {
     }, [navigate]);
 
 
-    const heroImages = [
+    const heroImages = useMemo(() => [
         { webp: hero1Webp, jpg: hero1Jpg, alt: t('home.featuredAnime1') },
         { webp: hero2Webp, jpg: hero2Jpg, alt: t('home.featuredAnime2') },
         { webp: hero3Webp, jpg: hero3Jpg, alt: t('home.featuredAnime3') },
-    ];
+    ], [t]);
 
     const seoProps = useMemo(() => ({
         title: t('home.title', 'أنمي شادوز - موقعك الأول لمشاهدة الأنمي | Anime Shadows'),
@@ -142,7 +149,7 @@ const Home = () => {
 
     const seo = useSEO(seoProps);
 
-    const renderSwiperSection = useCallback((title, items, navigateTo, ariaLabel) => (
+    const renderSwiperSection = useMemo(() => (title, items, navigateTo, ariaLabel) => (
         <section aria-labelledby={`${title}-heading`} className={styles.swiperSection}>
             <div className={styles.sectionHeader}>
                 <h2 id={`${title}-heading`} className={styles.sectionTitle}>{t(`home.${title}`)}</h2>
@@ -200,12 +207,21 @@ const Home = () => {
         </section>
     ), [t, navigate, handleAnimeClick, loading]);
 
-    const OptimizedImage = ({ webp, jpg, alt, ...props }) => (
-        <picture>
-            <source srcSet={webp} type="image/webp" />
-            <img src={jpg} alt={alt} {...props} />
-        </picture>
-    );
+    const OptimizedImage = ({ webp, jpg, alt, ...props }) => {
+        return (
+            <picture className={styles.lazyImageWrapper}>
+                <source srcSet={webp} type="image/webp" />
+                <LazyLoadImage
+                    src={jpg}
+                    alt={alt}
+                    effect="blur"
+                    threshold={300}
+                    wrapperClassName={styles.lazyImageWrapper}
+                    {...props}
+                />
+            </picture>
+        );
+    };
 
     return (
         <>
@@ -232,6 +248,7 @@ const Home = () => {
                     scrollbar={{ draggable: true }}
                     autoplay={{ delay: 5000, disableOnInteraction: false }}
                     className={styles.heroSwiper}
+                    style={{ height: '100%', width: '100%' }}
                 >
                     {heroImages.map((image, index) => (
                         <SwiperSlide key={index} className={styles.heroSlide}>

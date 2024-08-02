@@ -11,6 +11,7 @@
     height: 70vh;
     min-height: 400px;
     overflow: hidden;
+    width: 100%;
 }
 
 .heroContent {
@@ -50,17 +51,32 @@
 }
 
 .heroSwiper {
-    height: 100%;
+    height: 100% !important;
+    width: 100% !important;
 }
 
 .heroSlide {
-    height: 100%;
+    height: 100% !important;
+    width: 100% !important;
 }
 
 .heroImage {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
+}
+
+.lazyImageWrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.lazyImageWrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
 .mainContent {

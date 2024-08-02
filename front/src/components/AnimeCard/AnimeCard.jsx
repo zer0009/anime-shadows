@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Card, Badge } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 import styles from './AnimeCard.module.css';
 
 const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeTitle, onClick }) => {
@@ -49,16 +51,15 @@ const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeTitle,
     return (
         <Card className={styles.animeCard} onClick={onClick}>
             <Link to={`/anime/${anime._id}`} className={styles.animeCardLink}>
-                <div className={styles.imageWrapper}>
-                    <Card.Img
-                        variant="top"
-                        src={imageError ? defaultPictureUrl : imageUrl}
-                        onError={handleError}
-                        className={styles.cardCover}
-                        alt={t('animeCard.coverAlt', 'غلاف {{title}}', { title: anime.title })}
-                        loading="lazy"
-                    />
-                </div>
+                <LazyLoadImage
+                    src={imageError ? defaultPictureUrl : imageUrl}
+                    alt={t('animeCard.coverAlt', 'غلاف {{title}}', { title: anime.title })}
+                    onError={handleError}
+                    effect="blur"
+                    threshold={300}
+                    className={styles.cardCover}
+                    wrapperClassName={styles.imageWrapper}
+                />
                 <Card.ImgOverlay className={styles.cardOverlay}>
                     <Badge
                         pill
