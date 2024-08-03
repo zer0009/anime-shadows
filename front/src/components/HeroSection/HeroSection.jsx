@@ -26,7 +26,6 @@ const HeroSection = ({ heroImages, t }) => {
                             jpg={image.jpg}
                             alt={image.alt}
                             className={styles.heroImage}
-                            loading="lazy" // Lazy load images
                         />
                     </SwiperSlide>
                 ))}
