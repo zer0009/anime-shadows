@@ -19,39 +19,37 @@
     text-align: center;
     color: #ffffff;
     background-color: rgba(0, 0, 0, 0.5);
-    padding: 20px; /* Add padding for better spacing */
-    box-sizing: border-box; /* Ensure padding is included in the element's total width and height */
 }
 
 .mainHeading {
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
+    font-size: 3rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.5rem !important;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .subHeading {
-    font-size: 1.8rem;
-    font-weight: 500;
-    margin-bottom: 1rem;
+    font-size: 1.8rem !important;
+    font-weight: 500 !important;
+    margin-bottom: 1rem !important;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .introText {
-    font-size: 1rem;
+    font-size: 1rem !important;
     max-width: 800px;
-    margin: 0 auto;
+    margin: 0 auto !important;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .heroSwiper {
-    height: 100%;
-    width: 100%;
+    height: 100% !important;
+    width: 100% !important;
 }
 
 .heroSlide {
-    height: 100%;
-    width: 100%;
+    height: 100% !important;
+    width: 100% !important;
 }
 
 .heroImage {
@@ -63,28 +61,14 @@
 
 @media (min-width: 960px) {
     .mainHeading {
-        font-size: 3.5rem;
+        font-size: 3.5rem !important;
     }
 
     .subHeading {
-        font-size: 2rem;
+        font-size: 2rem !important;
     }
 
     .introText {
-        font-size: 1.1rem;
-    }
-}
-
-@media (max-width: 600px) {
-    .mainHeading {
-        font-size: 2.5rem;
-    }
-
-    .subHeading {
-        font-size: 1.5rem;
-    }
-
-    .introText {
-        font-size: 0.9rem;
+        font-size: 1.1rem !important;
     }
 }
