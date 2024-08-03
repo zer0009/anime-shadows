@@ -6,66 +6,6 @@
     background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
 }
 
-.heroSection {
-    position: relative;
-    height: 70vh;
-    min-height: 400px;
-    overflow: hidden;
-    width: 100%;
-}
-
-.heroContent {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: #ffffff;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.mainHeading {
-    font-size: 3rem !important;
-    font-weight: 700 !important;
-    margin-bottom: 0.5rem !important;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.subHeading {
-    font-size: 1.8rem !important;
-    font-weight: 500 !important;
-    margin-bottom: 1rem !important;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-.introText {
-    font-size: 1rem !important;
-    max-width: 800px;
-    margin: 0 auto !important;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-.heroSwiper {
-    height: 100% !important;
-    width: 100% !important;
-}
-
-.heroSlide {
-    height: 100% !important;
-    width: 100% !important;
-}
-
-.heroImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-}
 
 .lazyImageWrapper {
     width: 100%;
@@ -109,26 +49,26 @@
 }
 
 .moreButton {
-    background-color: var(--highlight-color) !important;
-    color: var(--text-color) !important;
-    padding: 8px 16px !important;
-    border-radius: 5px !important;
-    transition: background-color 0.3s, transform 0.3s !important;
-    font-size: 0.9rem !important;
+    background-color: var(--highlight-color);
+    color: var(--text-color);
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+    font-size: 0.9rem;
 }
 
 .moreButton:hover {
-    background-color: var(--secondary-light) !important;
+    background-color: var(--secondary-light);
     transform: scale(1.05);
 }
 
 .scrollTopButton {
-    position: fixed !important;
+    position: fixed;
     bottom: 20px;
     right: 20px;
     z-index: 1000;
     opacity: 0.7;
-    transition: opacity 0.3s !important;
+    transition: opacity 0.3s;
 }
 
 .scrollTopButton:hover {
@@ -146,21 +86,21 @@
     }
 
     .moreButton {
-        padding: 10px 20px !important;
-        font-size: 1rem !important;
+        padding: 10px 20px;
+        font-size: 1rem;
     }
 }
 
 @media (min-width: 960px) {
     .mainHeading {
-        font-size: 3.5rem !important;
+        font-size: 3.5rem;
     }
 
     .subHeading {
-        font-size: 2rem !important;
+        font-size: 2rem;
     }
 
     .introText {
-        font-size: 1.1rem !important;
+        font-size: 1.1rem;
     }
 }

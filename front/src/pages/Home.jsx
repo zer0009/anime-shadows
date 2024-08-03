@@ -154,6 +154,7 @@ const Home = () => {
                     <link key={index} {...link} />
                 ))}
                 <meta name="robots" content="index, follow" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Helmet>
             {seo.jsonLd && seo.jsonLd.map((item, index) => (
                 <JsonLd key={index} item={item} />
