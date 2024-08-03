@@ -90,17 +90,3 @@
         font-size: 1rem;
     }
 }
-
-@media (min-width: 960px) {
-    .mainHeading {
-        font-size: 3.5rem;
-    }
-
-    .subHeading {
-        font-size: 2rem;
-    }
-
-    .introText {
-        font-size: 1.1rem;
-    }
-}

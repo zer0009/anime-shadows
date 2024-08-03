@@ -19,8 +19,6 @@
     text-align: center;
     color: #ffffff;
     background-color: rgba(0, 0, 0, 0.5);
-    padding: 20px; /* Add padding for better spacing */
-    box-sizing: border-box; /* Ensure padding is included in the element's total width and height */
 }
 
 .mainHeading {
@@ -38,7 +36,7 @@
 }
 
 .introText {
-    font-size: 1rem;
+    font-size: 1rem !important;
     max-width: 800px;
     margin: 0 auto !important;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
@@ -71,20 +69,6 @@
     }
 
     .introText {
-        font-size: 1.1rem;
-    }
-}
-
-@media (max-width: 600px) {
-    .mainHeading {
-        font-size: 2.5rem;
-    }
-
-    .subHeading {
-        font-size: 1.5rem;
-    }
-
-    .introText {
-        font-size: 0.9rem;
+        font-size: 1.1rem !important;
     }
 }
