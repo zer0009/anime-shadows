@@ -3,7 +3,6 @@ const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/assets/main-DUNWoirc.css',
   '/assets/images/anime-shadows-favicon-color.png',
   // Add other assets you want to cache
 ];
@@ -21,6 +20,7 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
       .then(response => {
+        // Return the cached response if found, otherwise fetch from network
         return response || fetch(event.request);
       })
   );

@@ -4,6 +4,7 @@ import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
+// Register the Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/service-worker.js')
@@ -16,6 +17,7 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+// Render the React application
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
       <BrowserRouter>
