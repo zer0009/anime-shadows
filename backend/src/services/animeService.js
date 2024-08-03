@@ -174,17 +174,23 @@ const getAnimes = async (query = '', tags = [], type = '', season = '', sort = '
 };
 
 const getAnime = async (animeId, userId) => {
-  const anime = await Anime.findById(animeId)
+  // Fetch anime details without views and viewCount fields
+  const animeDetails = await Anime.findById(animeId)
+    .select('-views -viewCount')
     .populate('season')
     .populate('type')
     .populate('genres')
     .populate({
       path: 'episodes',
-      options: { sort: { number: 1 } }
-    });
+      options: { sort: { number: 1 } },
+      select: '-streamingServers -downloadServers' // Exclude streamingServers and downloadServers
+    })
+    .lean();
 
-  if (!anime) throw new Error('Anime not found');
+  if (!animeDetails) throw new Error('Anime not found');
 
+  // Fetch anime details with views and viewCount fields for updating
+  const anime = await Anime.findById(animeId);
   anime.viewCount += 1;
   anime.views.push(new Date());
   await anime.save();
@@ -195,9 +201,8 @@ const getAnime = async (animeId, userId) => {
 
   const myAnimeListData = anime.myAnimeListUrl ? await anime.fetchMyAnimeListData() : null;
 
-
   return { 
-    ...anime.toObject(), 
+    ...animeDetails, 
     isFavorite, 
     averageRating, 
     userCount,

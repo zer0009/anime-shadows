@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import styles from './AnimeEpisodes.module.css';
 
-const AnimeEpisodes = ({ anime, openModal, t }) => {
+const AnimeEpisodes = React.memo(({ anime, openModal, t }) => {
   return (
     <Box className={styles.animeEpisodes}>
       <Typography variant="h5">{t('animeDetails.episodes')}</Typography>
@@ -19,6 +19,6 @@ const AnimeEpisodes = ({ anime, openModal, t }) => {
       </ul>
     </Box>
   );
-};
+});
 
 export default AnimeEpisodes;

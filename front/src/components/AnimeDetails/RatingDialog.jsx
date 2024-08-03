@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Box, Button, Typography, Rating } from '@mui/material';
 
-const RatingDialog = ({ ratingDialogOpen, setRatingDialogOpen, selectedRating, setSelectedRating, submitRating, removeRating, userRating, t }) => {
+const RatingDialog = React.memo(({ ratingDialogOpen, setRatingDialogOpen, selectedRating, setSelectedRating, submitRating, removeRating, userRating, t }) => {
   return (
     <Dialog open={ratingDialogOpen} onClose={() => setRatingDialogOpen(false)}>
       <DialogTitle>{t('animeDetails.rateAnime')}</DialogTitle>
@@ -43,6 +43,6 @@ const RatingDialog = ({ ratingDialogOpen, setRatingDialogOpen, selectedRating, s
       </DialogActions>
     </Dialog>
   );
-};
+});
 
 export default RatingDialog;

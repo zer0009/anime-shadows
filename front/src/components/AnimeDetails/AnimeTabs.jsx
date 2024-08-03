@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Tabs, Tab, Box } from '@mui/material';
 import AnimeSidebar from './AnimeSidebar.jsx';
 import AnimeMainContent from './AnimeMainContent.jsx';
 import AnimeEpisodes from './AnimeEpisodes.jsx';
 import styles from './AnimeTabs.module.css';
 
-const AnimeTabs = ({ anime, isFavorite, handleFavoriteClick, handleRateAnime, handleGenreClick, openModal, getScoreDisplayProps, t }) => {
+const AnimeTabs = React.memo(({ anime, isFavorite, handleFavoriteClick, handleRateAnime, handleGenreClick, openModal, getScoreDisplayProps, t }) => {
   const [value, setValue] = useState(0);
 
-  const handleChange = (event, newValue) => {
+  const handleChange = useCallback((event, newValue) => {
     setValue(newValue);
-  };
+  }, []);
 
   return (
     <Box className={styles.tabsContainer}>
@@ -60,6 +60,6 @@ const AnimeTabs = ({ anime, isFavorite, handleFavoriteClick, handleRateAnime, ha
       )}
     </Box>
   );
-};
+});
 
 export default AnimeTabs;

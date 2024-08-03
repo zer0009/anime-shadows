@@ -51,4 +51,6 @@ animeSchema.statics.findLean = function(query) {
   return this.find(query).lean().exec();
 };
 
+
+
 module.exports = mongoose.model('Anime', animeSchema);

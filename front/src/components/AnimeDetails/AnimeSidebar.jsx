@@ -5,7 +5,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import StarScoreDisplay from '../StarScoreDisplay.jsx';
 import styles from './AnimeSidebar.module.css';
 
-const AnimeSidebar = ({ anime, isFavorite, handleFavoriteClick, handleRateAnime, t }) => {
+const AnimeSidebar = React.memo(({ anime, isFavorite, handleFavoriteClick, handleRateAnime, t }) => {
   const airingYear = anime.airingDate ? new Date(anime.airingDate).getFullYear() : 'N/A';
 
   useEffect(() => {
@@ -70,6 +70,6 @@ const AnimeSidebar = ({ anime, isFavorite, handleFavoriteClick, handleRateAnime,
       </Box>
     </div>
   );
-};
+});
 
 export default AnimeSidebar;

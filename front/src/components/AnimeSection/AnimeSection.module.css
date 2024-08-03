@@ -1,0 +1,50 @@
+.swiperSection {
+    margin-bottom: 2rem;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--highlight-color);
+    padding-bottom: 0.5rem;
+}
+
+.sectionTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--highlight-color);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.moreButton {
+    background-color: var(--highlight-color) !important;
+    color: var(--text-color) !important;
+    padding: 8px 16px !important;
+    border-radius: 5px !important;
+    transition: background-color 0.3s, transform 0.3s !important;
+    font-size: 0.9rem !important;
+}
+
+.moreButton:hover {
+    background-color: var(--secondary-light) !important;
+    transform: scale(1.05);
+}
+
+@media (min-width: 600px) {
+    .swiperSection {
+        padding: 2rem;
+    }
+
+    .sectionTitle {
+        font-size: 2rem;
+    }
+
+    .moreButton {
+        padding: 10px 20px !important;
+        font-size: 1rem !important;
+    }
+}

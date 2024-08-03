@@ -3,7 +3,7 @@ import { Box, Button, Typography } from '@mui/material';
 import ScoreDisplay from '../ScoreDisplay.jsx';
 import styles from './AnimeMainContent.module.css';
 
-const AnimeMainContent = ({ anime, handleGenreClick, getScoreDisplayProps, t }) => {
+const AnimeMainContent = React.memo(({ anime, handleGenreClick, getScoreDisplayProps, t }) => {
   return (
     <div className={styles.mainContent}>
       <Box className={styles.titleAndScores}>
@@ -28,6 +28,6 @@ const AnimeMainContent = ({ anime, handleGenreClick, getScoreDisplayProps, t }) 
       </Box>
     </div>
   );
-};
+});
 
 export default AnimeMainContent;

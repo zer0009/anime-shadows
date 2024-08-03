@@ -15,7 +15,7 @@ import AnimeEpisodes from '../components/AnimeDetails/AnimeEpisodes.jsx';
 import styles from './AnimeDetails.module.css';
 
 const AnimeDetails = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const [anime, setAnime] = useState(null);
@@ -31,7 +31,6 @@ const AnimeDetails = () => {
     try {
       setLoading(true);
       const response = await fetchAnimeById(id);
-      console.log(response);
       setAnime(response);
       const favoriteStatus = localStorage.getItem(`favorite-${id}`);
       setIsFavorite(favoriteStatus === 'true' || response.isFavorite || false);
@@ -43,7 +42,7 @@ const AnimeDetails = () => {
         }
       }
     } catch (error) {
-      console.error('Error fetching anime details or saving to history:', error);
+      console.error('Error fetching anime details:', error);
       setError('Error fetching anime details');
     } finally {
       setLoading(false);
