@@ -81,13 +81,23 @@
       }
     </style>
     
-    <!-- Defer Google Analytics -->
+    <!-- Defer Google Tag Manager -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-74G0PCFWNB" defer></script>
     <script defer>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-74G0PCFWNB');
+    </script>
+    
+    <!-- Defer Google Analytics -->
+    <script async src="https://www.google-analytics.com/analytics.js" defer></script>
+    <script defer>
+        window.ga = window.ga || function() {
+            (ga.q = ga.q || []).push(arguments);
+        };
+        ga('create', 'UA-123456789-1', 'auto');
+        ga('send', 'pageview');
     </script>
 </head>
 <body>
