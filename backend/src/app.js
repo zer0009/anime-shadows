@@ -8,6 +8,7 @@ const compression = require('compression');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const path = require('path');
 const routes = require('./routes');
 require('./db/mongoose');
 
@@ -81,6 +82,9 @@ app.use('/api/uploads', express.static('uploads', {
   etag: false
 }));
 
+// Serve static files for the frontend
+app.use(express.static(path.join(__dirname, '../../front/public')));
+
 // Set x-robots-tag header to allow indexing
 app.use((req, res, next) => {
   res.setHeader('X-Robots-Tag', 'index, follow');
@@ -89,6 +93,11 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/api', routes);
+
+// Serve the frontend application
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../front/public', 'index.html'));
+});
 
 // 404 handler
 app.use((req, res, next) => {
