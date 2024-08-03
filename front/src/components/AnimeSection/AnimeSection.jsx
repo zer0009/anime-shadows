@@ -1,9 +1,10 @@
-import React from 'react';
-import { Box, Button, Grid, Skeleton, Typography } from '@mui/material';
+import React, { Suspense } from 'react';
+import { Box, Button, Grid, Skeleton } from '@mui/material';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar } from 'swiper/modules';
-import AnimeCard from '../AnimeCard/AnimeCard';
 import styles from './AnimeSection.module.css';
+
+const AnimeCard = React.lazy(() => import('../AnimeCard/AnimeCard'));
 
 const AnimeSection = ({ title, items, loading, navigate, handleAnimeClick, t }) => {
     return (
@@ -53,10 +54,12 @@ const AnimeSection = ({ title, items, loading, navigate, handleAnimeClick, t }) 
                 >
                     {items.map((item) => (
                         <SwiperSlide key={item._id}>
-                            <AnimeCard
-                                anime={item}
-                                onClick={() => handleAnimeClick(item._id)}
-                            />
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <AnimeCard
+                                    anime={item}
+                                    onClick={() => handleAnimeClick(item._id)}
+                                />
+                            </Suspense>
                         </SwiperSlide>
                     ))}
                 </Swiper>
