@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, Badge } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -7,9 +7,10 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import styles from './AnimeCard.module.css';
 
-const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeTitle, onClick }) => {
+const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeTitle, episodeId, onClick }) => {
     const { t } = useTranslation();
     const [imageError, setImageError] = useState(false);
+    const navigate = useNavigate();
 
     if (!anime) {
         return null;
@@ -48,6 +49,12 @@ const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeTitle,
         }
     };
 
+    const handleEpisodeClick = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        navigate(`/episode/${episodeId}`);
+    };
+
     return (
         <Card className={styles.animeCard} onClick={onClick}>
             <Link to={`/anime/${anime._id}`} className={styles.animeCardLink}>
@@ -82,7 +89,7 @@ const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeTitle,
                             </Badge>
                         )}
                         {episodeTitle && (
-                            <Badge pill className={styles.episodeBadge}>
+                            <Badge pill className={styles.episodeBadge} onClick={handleEpisodeClick}>
                                 {episodeTitle}
                                 <PlayArrowIcon className={styles.playIcon} />
                             </Badge>

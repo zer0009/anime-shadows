@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { fetchAnimeById, fetchPopularAnime } from '../api/modules/anime';
@@ -8,14 +8,16 @@ import { Helmet } from 'react-helmet-async';
 import { JsonLd } from 'react-schemaorg';
 import { useSEO } from '../hooks/useSEO';
 import styles from './Home.module.css';
-import { Box, Container, Fab, Grid, Skeleton, Button } from '@mui/material';
-import AnimeCard from '../components/AnimeCard/AnimeCard';
+import { Box, Container, Fab, Grid, Skeleton, Button, useMediaQuery, useTheme } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
+const HeroSection = lazy(() => import('../components/HeroSection/HeroSection'));
+const AnimeSection = lazy(() => import('../components/AnimeSection/AnimeSection'));
+const AnimeCard = lazy(() => import('../components/AnimeCard/AnimeCard'));
 
 import hero1Webp from '/assets/images/hero1_optimized.webp';
 import hero2Webp from '/assets/images/hero2_optimized.webp';
@@ -24,16 +26,14 @@ import hero1Jpg from '/assets/images/hero1_optimized.jpg';
 import hero2Jpg from '/assets/images/hero2_optimized.jpg';
 import hero3Jpg from '/assets/images/hero3_optimized.jpg';
 
-import HeroSection from '../components/HeroSection/HeroSection';
-import AnimeSection from '../components/AnimeSection/AnimeSection';
-
-
 const Home = () => {
     const { t } = useTranslation();
     const { animeList, searchResults, loading, error, handleSearch } = useFetchAnimeList();
     const { recentEpisodes, loading: recentLoading, error: recentError } = useFetchRecentEpisodes();
     const [popularAnimes, setPopularAnimes] = useState([]);
     const navigate = useNavigate();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -83,7 +83,7 @@ const Home = () => {
     const seoProps = useMemo(() => ({
         title: t('home.title', 'أنمي شادوز - موقعك الأول لمشاهدة الأنمي | Anime Shadows'),
         description: t('home.description', 'استمتع بمشاهدة أحدث وأفضل الأنميات المترجمة بجودة عالية على أنمي شادوز. اكتشف مجموعة واسعة من الأنمي، من الكلاسيكيات إلى الإصدارات الجديدة.'),
-        keywords: t('home.keywords', 'أنمي شادوز, مشاهدة أنمي, أنمي مترجم, أنمي اون لاين, أحدث الأنميات, أفضل الأنميات, أنمي عربي, Anime Shadows, anime online, anime streaming, مسلسلات أنمي, أفلام أنمي, مانجا, حلقات أنمي جديدة, تحميل أنمي, أنمي بدون إعلانات'),
+        keywords: t('home.keywords', 'anime ar, anime arabic, anime مترجم, تحميل, anime shadows ar, arabic anime, أنمي عربي, مشاهدة أنمي, أنمي مترجم, أنمي اون لاين, أحدث الأنميات, أفضل الأنميات, أنمي شادوز, Anime Shadows, anime online, anime streaming, مسلسلات أنمي, أفلام أنمي, مانجا, حلقات أنمي جديدة, تحميل أنمي, أنمي بدون إعلانات'),
         canonicalUrl: 'https://animeshadows.xyz',
         ogType: 'website',
         jsonLd: [
@@ -154,64 +154,66 @@ const Home = () => {
                     <link key={index} {...link} />
                 ))}
                 <meta name="robots" content="index, follow" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Helmet>
             {seo.jsonLd && seo.jsonLd.map((item, index) => (
                 <JsonLd key={index} item={item} />
             ))}
-            <HeroSection heroImages={heroImages} t={t} />
-            <Container maxWidth="lg" className={styles.mainContent}>
-                <AnimeSection
-                    title="popularAnime"
-                    items={popularAnimes}
-                    loading={loading}
-                    navigate={navigate}
-                    handleAnimeClick={handleAnimeClick}
-                    t={t}
-                />
-                <section aria-labelledby="recent-episodes-heading" className={styles.recentEpisodesSection}>
-                    <div className={styles.sectionHeader}>
-                        <h2 id="recent-episodes-heading" className={styles.sectionTitle}>{t('home.recentEpisodes')}</h2>
-                        <Button 
-                            variant="contained"
-                            onClick={() => navigate('/recent-episodes')} 
-                            aria-label={t('home.moreRecentEpisodes')}
-                            className={styles.moreButton}
-                        >
-                            {t('home.more')}
-                        </Button>
-                    </div>
-                    <Grid container spacing={2}>
-                        {recentLoading ? (
-                            [...Array(8)].map((_, index) => (
-                                <Grid item xs={12} sm={6} md={4} lg={2} key={index}>
-                                    <Skeleton variant="rectangular" width="100%" height={200} />
-                                    <Skeleton width="60%" />
-                                    <Skeleton width="40%" />
-                                </Grid>
-                            ))
-                        ) : (
-                            Array.isArray(recentEpisodes) && recentEpisodes.map((episode) => (
-                                <Grid item xs={12} sm={6} md={4} lg={2.4} key={episode._id}>
-                                    <AnimeCard
-                                        anime={episode.anime}
-                                        episodeTitle={episode.title}
-                                        onClick={() => handleAnimeClick(episode.anime._id)}
-                                    />
-                                </Grid>
-                            ))
-                        )}
-                    </Grid>
-                </section>
-                <AnimeSection
-                    title="animeList"
-                    items={searchResults.length > 0 ? searchResults : animeList}
-                    loading={loading}
-                    navigate={navigate}
-                    handleAnimeClick={handleAnimeClick}
-                    t={t}
-                />
-            </Container>
+            <Suspense fallback={<div>Loading...</div>}>
+                <HeroSection heroImages={heroImages} t={t} />
+                <Container maxWidth="lg" className={styles.mainContent}>
+                    <AnimeSection
+                        title="popularAnime"
+                        items={popularAnimes}
+                        loading={loading}
+                        navigate={navigate}
+                        handleAnimeClick={handleAnimeClick}
+                        t={t}
+                    />
+                    <section aria-labelledby="recent-episodes-heading" className={styles.recentEpisodesSection}>
+                        <div className={styles.sectionHeader}>
+                            <h2 id="recent-episodes-heading" className={styles.sectionTitle}>{t('home.recentEpisodes')}</h2>
+                            <Button 
+                                variant="contained"
+                                onClick={() => navigate('/recent-episodes')} 
+                                aria-label={t('home.moreRecentEpisodes')}
+                                className={styles.moreButton}
+                            >
+                                {t('home.more')}
+                            </Button>
+                        </div>
+                        <Grid container spacing={1}>
+                            {recentLoading ? (
+                                [...Array(10)].map((_, index) => (
+                                    <Grid item xs={12} sm={6} md={4} lg={2} key={index}>
+                                        <Skeleton variant="rectangular" width="100%" height={200} />
+                                        <Skeleton width="60%" />
+                                        <Skeleton width="40%" />
+                                    </Grid>
+                                ))
+                            ) : (
+                                Array.isArray(recentEpisodes) && recentEpisodes.map((episode) => (
+                                    <Grid item xs={12} sm={6} md={4} lg={isMobile ? 6 : 2.4} key={episode._id}>
+                                        <AnimeCard
+                                            anime={episode.anime}
+                                            episodeTitle={episode.title}
+                                            episodeId={episode._id}
+                                            onClick={() => handleAnimeClick(episode.anime._id)}
+                                        />
+                                    </Grid>
+                                ))
+                            )}
+                        </Grid>
+                    </section>
+                    <AnimeSection
+                        title="animeList"
+                        items={searchResults.length > 0 ? searchResults : animeList}
+                        loading={loading}
+                        navigate={navigate}
+                        handleAnimeClick={handleAnimeClick}
+                        t={t}
+                    />
+                </Container>
+            </Suspense>
             {showScrollTop && (
                 <Fab color="primary" size="small" aria-label="scroll back to top" className={styles.scrollTopButton} onClick={scrollToTop}>
                     <KeyboardArrowUpIcon />
