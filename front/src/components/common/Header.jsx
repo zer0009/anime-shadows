@@ -82,10 +82,10 @@ const Header = () => {
                     </Typography>
                     {!isMobile && (
                         <Box display="flex" alignItems="center" gap={2}>
-                            <Button component={Link} to="/" color="inherit" startIcon={<Home />} sx={{ color: 'white', fontSize: '1.2rem', fontWeight: 'bold', '&:hover': { color: 'var(--highlight-color)' }, '& .MuiButton-startIcon': { marginLeft: '8px' } }}>{t('header.home')}</Button>
-                            <Button component={Link} to="/anime-list" color="inherit" startIcon={<Theaters />} sx={{ color: 'white', fontSize: '1.2rem', fontWeight: 'bold', '&:hover': { color: 'var(--highlight-color)' }, '& .MuiButton-startIcon': { marginLeft: '8px' } }}>{t('header.animeList')}</Button>
-                            <Button component={Link} to="/movie-list" color="inherit" startIcon={<Movie />} sx={{ color: 'white', fontSize: '1.2rem', fontWeight: 'bold', '&:hover': { color: 'var(--highlight-color)' }, '& .MuiButton-startIcon': { marginLeft: '8px' } }}>{t('header.movieList')}</Button>
-                            <Button component={Link} to="/season-anime" color="inherit" startIcon={<Tv />} sx={{ color: 'white', fontSize: '1.2rem', fontWeight: 'bold', '&:hover': { color: 'var(--highlight-color)' }, '& .MuiButton-startIcon': { marginLeft: '8px' } }}>{t('header.seasonAnime')}</Button>
+                            <Button component={Link} to="/" color="inherit" startIcon={<Home />} sx={{ color: 'white', fontSize: '1.2rem', fontWeight: 'bold', '&:hover': { color: 'var(--highlight-color)' }, '& .MuiButton-startIcon': { marginLeft: '8px' } }} aria-label={t('header.home')}>{t('header.home')}</Button>
+                            <Button component={Link} to="/anime-list" color="inherit" startIcon={<Theaters />} sx={{ color: 'white', fontSize: '1.2rem', fontWeight: 'bold', '&:hover': { color: 'var(--highlight-color)' }, '& .MuiButton-startIcon': { marginLeft: '8px' } }} aria-label={t('header.animeList')}>{t('header.animeList')}</Button>
+                            <Button component={Link} to="/movie-list" color="inherit" startIcon={<Movie />} sx={{ color: 'white', fontSize: '1.2rem', fontWeight: 'bold', '&:hover': { color: 'var(--highlight-color)' }, '& .MuiButton-startIcon': { marginLeft: '8px' } }} aria-label={t('header.movieList')}>{t('header.movieList')}</Button>
+                            <Button component={Link} to="/season-anime" color="inherit" startIcon={<Tv />} sx={{ color: 'white', fontSize: '1.2rem', fontWeight: 'bold', '&:hover': { color: 'var(--highlight-color)' }, '& .MuiButton-startIcon': { marginLeft: '8px' } }} aria-label={t('header.seasonAnime')}>{t('header.seasonAnime')}</Button>
                         </Box>
                     )}
                     <Box display="flex" alignItems="center" gap={2}>
@@ -94,12 +94,12 @@ const Header = () => {
                         </IconButton>
                         {!user ? (
                             <>
-                                <Button component={Link} to="/login" color="inherit" startIcon={<Person />} sx={{ color: 'white', '&:hover': { color: 'var(--highlight-color)' } }}>{t('header.login')}</Button>
-                                <Button component={Link} to="/register" color="inherit" startIcon={<PersonAdd />} sx={{ color: 'white', '&:hover': { color: 'var(--highlight-color)' } }}>{t('header.register')}</Button>
+                                <Button component={Link} to="/login" color="inherit" startIcon={<Person />} sx={{ color: 'white', '&:hover': { color: 'var(--highlight-color)' } }} aria-label={t('header.login')}>{t('header.login')}</Button>
+                                <Button component={Link} to="/register" color="inherit" startIcon={<PersonAdd />} sx={{ color: 'white', '&:hover': { color: 'var(--highlight-color)' } }} aria-label={t('header.register')}>{t('header.register')}</Button>
                             </>
                         ) : (
                             <Box display="flex" alignItems="center">
-                                <IconButton onClick={toggleDropdown} ref={menuRef} color="inherit" sx={{ color: 'white', '&:hover': { color: 'var(--highlight-color)' } }}>
+                                <IconButton onClick={toggleDropdown} ref={menuRef} color="inherit" sx={{ color: 'white', '&:hover': { color: 'var(--highlight-color)' } }} aria-label={t('header.profileMenu')}>
                                     <Avatar src={user.profilePicture || defaultProfilePicture} alt="" />
                                 </IconButton>
                                 <Popover
@@ -116,25 +116,25 @@ const Header = () => {
                                     }}
                                 >
                                     <List sx={{ p: 2, backgroundColor: 'var(--primary-dark)', color: 'white' }}>
-                                        <ListItem button component={Link} to="/profile" onClick={() => setDropdownOpen(false)}>
+                                        <ListItem button component={Link} to="/profile" onClick={() => setDropdownOpen(false)} aria-label={t('header.profile')}>
                                             <ListItemIcon sx={{ color: 'white' }}><AccountCircle /></ListItemIcon>
                                             <ListItemText primary={t('header.profile')} />
                                         </ListItem>
-                                        <ListItem button component={Link} to="/history" onClick={() => setDropdownOpen(false)}>
+                                        <ListItem button component={Link} to="/history" onClick={() => setDropdownOpen(false)} aria-label={t('header.history')}>
                                             <ListItemIcon sx={{ color: 'white' }}><History /></ListItemIcon>
                                             <ListItemText primary={t('header.history')} />
                                         </ListItem>
-                                        <ListItem button component={Link} to="/favorites" onClick={() => setDropdownOpen(false)}>
+                                        <ListItem button component={Link} to="/favorites" onClick={() => setDropdownOpen(false)} aria-label={t('header.favorites')}>
                                             <ListItemIcon sx={{ color: 'white' }}><Favorite /></ListItemIcon>
                                             <ListItemText primary={t('header.favorites')} />
                                         </ListItem>
                                         {user.role === 'admin' && (
-                                            <ListItem button component={Link} to="/admin-dashboard" onClick={() => setDropdownOpen(false)}>
+                                            <ListItem button component={Link} to="/admin-dashboard" onClick={() => setDropdownOpen(false)} aria-label={t('header.adminDashboard')}>
                                                 <ListItemIcon sx={{ color: 'white' }}><Dashboard /></ListItemIcon>
                                                 <ListItemText primary={t('header.adminDashboard')} />
                                             </ListItem>
                                         )}
-                                        <ListItem button onClick={handleLogout}>
+                                        <ListItem button onClick={handleLogout} aria-label={t('header.logout')}>
                                             <ListItemIcon sx={{ color: 'white' }}><ExitToApp /></ListItemIcon>
                                             <ListItemText primary={loading ? <CircularProgress size={24} /> : t('header.logout')} />
                                         </ListItem>
@@ -142,7 +142,7 @@ const Header = () => {
                                 </Popover>
                             </Box>
                         )}
-                        <IconButton edge="end" color="inherit" onClick={toggleMenu} sx={{ display: { md: 'none' }, color: 'white', '&:hover': { color: 'var(--highlight-color)' } }}>
+                        <IconButton edge="end" color="inherit" onClick={toggleMenu} sx={{ display: { md: 'none' }, color: 'white', '&:hover': { color: 'var(--highlight-color)' } }} aria-label={menuOpen ? t('header.closeMenu') : t('header.openMenu')}>
                             {menuOpen ? <Close /> : <Menu />}
                         </IconButton>
                     </Box>
@@ -171,19 +171,19 @@ const Header = () => {
                 }}
             >
                 <List sx={{ p: 2 }}>
-                    <ListItem button component={Link} to="/" onClick={() => setMenuOpen(false)}>
+                    <ListItem button component={Link} to="/" onClick={() => setMenuOpen(false)} aria-label={t('header.home')}>
                         <ListItemIcon sx={{ color: 'white' }}><Home /></ListItemIcon>
                         <ListItemText primary={t('header.home')} />
                     </ListItem>
-                    <ListItem button component={Link} to="/anime-list" onClick={() => setMenuOpen(false)}>
+                    <ListItem button component={Link} to="/anime-list" onClick={() => setMenuOpen(false)} aria-label={t('header.animeList')}>
                         <ListItemIcon sx={{ color: 'white' }}><Theaters /></ListItemIcon>
                         <ListItemText primary={t('header.animeList')} />
                     </ListItem>
-                    <ListItem button component={Link} to="/movie-list" onClick={() => setMenuOpen(false)}>
+                    <ListItem button component={Link} to="/movie-list" onClick={() => setMenuOpen(false)} aria-label={t('header.movieList')}>
                         <ListItemIcon sx={{ color: 'white' }}><Movie /></ListItemIcon>
                         <ListItemText primary={t('header.movieList')} />
                     </ListItem>
-                    <ListItem button component={Link} to="/season-anime" onClick={() => setMenuOpen(false)}>
+                    <ListItem button component={Link} to="/season-anime" onClick={() => setMenuOpen(false)} aria-label={t('header.seasonAnime')}>
                         <ListItemIcon sx={{ color: 'white' }}><Tv /></ListItemIcon>
                         <ListItemText primary={t('header.seasonAnime')} />
                     </ListItem>
