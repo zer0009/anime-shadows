@@ -18,23 +18,31 @@ const scrapeAnimeLuxe = async (pageUrl) => {
 
     // Extract streaming servers
     $('ul.server-list li a').each((i, element) => {
-      const serverName = $(element).text().trim();
-      const encodedUrl = $(element).attr('data-url');
-      const decodedUrl = atob(encodedUrl);
-      const quality = serverName.includes('-') ? serverName.split('-').pop().trim() : 'HD';
-      console.log(`Found streaming server: ${serverName}, ${decodedUrl}, ${quality}`);
-      servers.push({ serverName, quality, url: decodedUrl, type: 'streaming' });
+      try {
+        const serverName = $(element).text().trim();
+        const encodedUrl = $(element).attr('data-url');
+        const decodedUrl = atob(encodedUrl);
+        const quality = serverName.includes('-') ? serverName.split('-').pop().trim() : 'HD';
+        console.log(`Found streaming server: ${serverName}, ${decodedUrl}, ${quality}`);
+        servers.push({ serverName, quality, url: decodedUrl, type: 'streaming' });
+      } catch (err) {
+        console.error('Error extracting streaming server:', err);
+      }
     });
 
     // Extract download servers
     $('table.table tbody tr').each((i, element) => {
-      const faviconUrl = $(element).find('td div.server span.favicon').attr('data-src');
-      const serverName = faviconUrl ? url.parse(faviconUrl).hostname.replace('www.', '') : 'Unknown';
-      const encodedUrl = $(element).find('a.download-link').attr('data-url');
-      const decodedUrl = atob(encodedUrl);
-      const quality = $(element).find('td span.badge').text().trim();
-      console.log(`Found download server: ${serverName}, ${decodedUrl}, ${quality}`);
-      servers.push({ serverName, quality, url: decodedUrl, type: 'download' });
+      try {
+        const faviconUrl = $(element).find('td div.server span.favicon').attr('data-src');
+        const serverName = faviconUrl ? url.parse(faviconUrl).hostname.replace('www.', '') : 'Unknown';
+        const encodedUrl = $(element).find('a.download-link').attr('data-url');
+        const decodedUrl = atob(encodedUrl);
+        const quality = $(element).find('td span.badge').text().trim();
+        console.log(`Found download server: ${serverName}, ${decodedUrl}, ${quality}`);
+        servers.push({ serverName, quality, url: decodedUrl, type: 'download' });
+      } catch (err) {
+        console.error('Error extracting download server:', err);
+      }
     });
 
     console.log('Scraped servers:', servers);

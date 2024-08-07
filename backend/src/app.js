@@ -119,4 +119,16 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  // Application specific logging, throwing an error, or other logic here
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception thrown:', err);
+  process.exit(1);
+});
+
 module.exports = app;

@@ -41,8 +41,15 @@ router.get('/scrape-witanime', async (req, res) => {
 
 router.get('/scrape-animeluxe', async (req, res) => {
   const { url } = req.query;
-  const servers = await scrapeAnimeLuxe(url);
-  res.json(servers);
+
+  try {
+    const servers = await scrapeAnimeLuxe(url);
+    res.setHeader('Cache-Control', 'no-store'); // Disable caching
+    res.json(servers);
+  } catch (error) {
+    console.error('Error scraping AnimeLuxe:', error);
+    res.status(500).json({ error: 'Failed to scrape AnimeLuxe' });
+  }
 });
 
 router.get('/:id', optionalAuth, animeController.getAnime);

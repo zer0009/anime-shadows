@@ -52,11 +52,11 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
     const { type, index, ...updatedServer } = editServer;
     if (type === 'streaming') {
       const updatedServers = [...streamingServers];
-      updatedServers[index] = updatedServer;
+      updatedServers[index] = { ...updatedServer, type };
       setStreamingServers(updatedServers);
     } else {
       const updatedServers = [...downloadServers];
-      updatedServers[index] = updatedServer;
+      updatedServers[index] = { ...updatedServer, type };
       setDownloadServers(updatedServers);
     }
     setOpenEditDialog(false);
@@ -68,15 +68,14 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
       const servers = await scrapeFunction(scrapeUrl, {
         headers: {
           'Cache-Control': 'no-cache',
-        },
-      });
-      servers.forEach(server => {
-        if (server.type === 'streaming') {
-          setStreamingServers(prev => [...prev, server]);
-        } else {
-          setDownloadServers(prev => [...prev, server]);
+          'Pragma': 'no-cache',
         }
       });
+      if (scraperSource === 'witanime') {
+        setStreamingServers(servers);
+      } else {
+        setDownloadServers(servers);
+      }
     } catch (error) {
       console.error('Error scraping website:', error);
     }
