@@ -82,6 +82,14 @@ app.use('/api/uploads', express.static('uploads', {
   etag: false
 }));
 
+// Middleware to ensure correct MIME type for JavaScript modules
+app.use((req, res, next) => {
+  if (req.path.endsWith('.js')) {
+    res.setHeader('Content-Type', 'application/javascript');
+  }
+  next();
+});
+
 // Serve static files for the frontend
 app.use(express.static(path.join(__dirname, '../../front/public')));
 

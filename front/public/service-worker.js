@@ -21,7 +21,11 @@ self.addEventListener('fetch', event => {
     caches.match(event.request)
       .then(response => {
         // Return the cached response if found, otherwise fetch from network
-        return response || fetch(event.request);
+        return response || fetch(event.request).catch(error => {
+          console.error('Fetch failed; returning offline page instead.', error);
+          // You can return a fallback page or resource here if needed
+          return caches.match('/offline.html'); // Ensure you have an offline.html in your cache
+        });
       })
   );
 });
