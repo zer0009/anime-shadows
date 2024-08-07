@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, MenuItem, Paper, Dialog, DialogActions, DialogContent, DialogTitle, Chip, Tooltip, Switch, FormControlLabel } from '@mui/material';
+import { TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, MenuItem, Paper, Dialog, DialogActions, DialogContent, DialogTitle, Chip, Tooltip, Switch, FormControlLabel, CircularProgress } from '@mui/material';
 import { Add, Delete, Edit, FileCopy } from '@mui/icons-material';
 import { scrapeWitanime, scrapeAnimeLuxe } from '../../api/modules/admin';
 import styles from './ServerManager.module.css';
 
-const qualityOptions = ['360p', '480p', '720p', '1080p'];
+const qualityOptions = ['360p', '480p', '720p', '1080p', 'multi'];
 
 const ServerManager = ({ streamingServers, setStreamingServers, downloadServers, setDownloadServers }) => {
   const [newServer, setNewServer] = useState({ serverName: '', quality: '', url: '', type: 'streaming' });
@@ -13,6 +13,7 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
   const [useScrape, setUseScrape] = useState(false);
   const [scrapeUrl, setScrapeUrl] = useState('');
   const [scraperSource, setScraperSource] = useState('witanime');
+  const [loading, setLoading] = useState(false);
 
   const handleServerChange = (e) => {
     const { name, value } = e.target;
@@ -63,6 +64,7 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
   };
 
   const handleScrapeWebsite = async () => {
+    setLoading(true);
     try {
       const scrapeFunction = scraperSource === 'witanime' ? scrapeWitanime : scrapeAnimeLuxe;
       const servers = await scrapeFunction(scrapeUrl, {
@@ -71,13 +73,19 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
           'Pragma': 'no-cache',
         }
       });
+      console.log('Scraped servers:', servers); // Debugging log
       if (scraperSource === 'witanime') {
-        setStreamingServers(servers);
+        setStreamingServers(servers.filter(server => server.type === 'streaming'));
+        setDownloadServers(servers.filter(server => server.type === 'download'));
       } else {
         setDownloadServers(servers);
       }
+      console.log('Updated streaming servers:', streamingServers); // Debugging log
+      console.log('Updated download servers:', downloadServers); // Debugging log
     } catch (error) {
       console.error('Error scraping website:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -120,8 +128,9 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
             startIcon={<Add />} 
             fullWidth
             className={styles.addButton}
+            disabled={loading}
           >
-            Scrape Website
+            {loading ? <CircularProgress size={24} /> : 'Scrape Website'}
           </Button>
         </Box>
       )}

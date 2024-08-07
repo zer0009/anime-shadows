@@ -26,7 +26,7 @@ const scrapeAnimeLuxeWithAxios = async (pageUrl) => {
       const serverName = $(element).text().trim();
       const encodedUrl = $(element).attr('data-url');
       const decodedUrl = atob(encodedUrl);
-      const quality = serverName.includes('-') ? serverName.split('-').pop().trim() : 'HD';
+      const quality = serverName.includes('-') ? serverName.split('-').pop().trim() : '720p';
       console.log(`Found streaming server: ${serverName}, ${decodedUrl}, ${quality}`);
       servers.push({ serverName, quality, url: decodedUrl, type: 'streaming' });
     });
@@ -37,7 +37,7 @@ const scrapeAnimeLuxeWithAxios = async (pageUrl) => {
       const serverName = faviconUrl ? url.parse(faviconUrl).hostname.replace('www.', '') : 'Unknown';
       const encodedUrl = $(element).find('a.download-link').attr('data-url');
       const decodedUrl = atob(encodedUrl);
-      const quality = $(element).find('td span.badge').text().trim();
+      const quality = $(element).find('td span.badge').text().trim() || '720p';
       console.log(`Found download server: ${serverName}, ${decodedUrl}, ${quality}`);
       servers.push({ serverName, quality, url: decodedUrl, type: 'download' });
     });

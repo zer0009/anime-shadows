@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer-extra');
 const cheerio = require('cheerio');
 const atob = require('atob');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+const fs = require('fs'); // Import the fs module
 
 puppeteer.use(StealthPlugin());
 
@@ -69,10 +70,10 @@ const scrapeAnimeLuxeWithPuppeteer = async (pageUrl) => {
 
     await page.goto(pageUrl, {
       waitUntil: 'networkidle2',
-      timeout: 90000,
+      timeout: 120000, // Increase timeout to 120 seconds
     });
 
-    await page.waitForSelector('ul.server-list li a, table.table tbody tr', { timeout: 90000 });
+    await page.waitForSelector('ul.server-list li a, table.table tbody tr', { timeout: 120000 });
 
     const content = await page.content();
     const $ = cheerio.load(content);
@@ -113,6 +114,14 @@ const scrapeAnimeLuxeWithPuppeteer = async (pageUrl) => {
   } catch (error) {
     console.error('Error scraping AnimeLuxe with Puppeteer:', error.message);
     console.error('Error details:', error);
+
+    // Save a screenshot and HTML content for debugging
+    if (page) {
+      await page.screenshot({ path: 'error_screenshot.png' });
+      const htmlContent = await page.content();
+      fs.writeFileSync('error_page.html', htmlContent);
+    }
+
     throw error;
   } finally {
     if (browser) {
