@@ -1,8 +1,6 @@
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 const atob = require('atob');
-const url = require('url');
-const fs = require('fs');
 
 const scrapeAnimeLuxe = async (pageUrl) => {
   let browser;
@@ -10,25 +8,71 @@ const scrapeAnimeLuxe = async (pageUrl) => {
   try {
     console.log(`Fetching URL: ${pageUrl}`);
     browser = await puppeteer.launch({
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      headless: true, // Ensure headless mode
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--disable-gpu',
+        '--no-first-run',
+        '--no-zygote',
+        '--single-process', // <- this one doesn't work in Windows
+        '--disable-background-networking',
+        '--disable-background-timer-throttling',
+        '--disable-backgrounding-occluded-windows',
+        '--disable-breakpad',
+        '--disable-client-side-phishing-detection',
+        '--disable-component-update',
+        '--disable-default-apps',
+        '--disable-domain-reliability',
+        '--disable-extensions',
+        '--disable-features=AudioServiceOutOfProcess',
+        '--disable-hang-monitor',
+        '--disable-ipc-flooding-protection',
+        '--disable-notifications',
+        '--disable-offer-store-unmasked-wallet-cards',
+        '--disable-popup-blocking',
+        '--disable-print-preview',
+        '--disable-prompt-on-repost',
+        '--disable-renderer-backgrounding',
+        '--disable-setuid-sandbox',
+        '--disable-speech-api',
+        '--disable-sync',
+        '--hide-scrollbars',
+        '--ignore-gpu-blacklist',
+        '--metrics-recording-only',
+        '--mute-audio',
+        '--no-default-browser-check',
+        '--no-pings',
+        '--no-sandbox',
+        '--no-zygote',
+        '--password-store=basic',
+        '--use-gl=swiftshader',
+        '--use-mock-keychain',
+      ],
     });
     page = await browser.newPage();
+
+    // Block images, CSS, and other unnecessary resources
+    await page.setRequestInterception(true);
+    page.on('request', (request) => {
+      if (['image', 'stylesheet', 'font', 'media'].includes(request.resourceType())) {
+        request.abort();
+      } else {
+        request.continue();
+      }
+    });
+
     await page.goto(pageUrl, {
       waitUntil: 'networkidle2',
-      timeout: 90000, // Increase timeout to 90 seconds
+      timeout: 90000, // Reduce timeout to 60 seconds
     });
 
     // Increase the timeout for waitForSelector
     await page.waitForSelector('table.table tbody tr', { timeout: 90000 });
 
     const content = await page.content();
-    
-    // Print the HTML content of the page
-    console.log(content);
-
-    // Save the HTML content to a file
-    fs.writeFileSync('page_content_animeluxe.html', content);
-
     const $ = cheerio.load(content);
 
     const servers = [];
@@ -75,11 +119,6 @@ const scrapeAnimeLuxe = async (pageUrl) => {
 
     throw error;
   } finally {
-    if (page) {
-      // Save the HTML content to a file in the finally block to ensure it always happens
-      const content = await page.content();
-      fs.writeFileSync('page_content_animeluxe.html', content);
-    }
     if (browser) {
       await browser.close();
     }

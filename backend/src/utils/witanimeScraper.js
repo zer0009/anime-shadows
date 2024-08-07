@@ -12,12 +12,65 @@ const scrapeWitanime = async (pageUrl) => {
   try {
     console.log(`Fetching URL: ${pageUrl}`);
     browser = await puppeteer.launch({
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      headless: true, // Ensure headless mode
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--disable-gpu',
+        '--no-first-run',
+        '--no-zygote',
+        '--single-process', // <- this one doesn't work in Windows
+        '--disable-background-networking',
+        '--disable-background-timer-throttling',
+        '--disable-backgrounding-occluded-windows',
+        '--disable-breakpad',
+        '--disable-client-side-phishing-detection',
+        '--disable-component-update',
+        '--disable-default-apps',
+        '--disable-domain-reliability',
+        '--disable-extensions',
+        '--disable-features=AudioServiceOutOfProcess',
+        '--disable-hang-monitor',
+        '--disable-ipc-flooding-protection',
+        '--disable-notifications',
+        '--disable-offer-store-unmasked-wallet-cards',
+        '--disable-popup-blocking',
+        '--disable-print-preview',
+        '--disable-prompt-on-repost',
+        '--disable-renderer-backgrounding',
+        '--disable-setuid-sandbox',
+        '--disable-speech-api',
+        '--disable-sync',
+        '--hide-scrollbars',
+        '--ignore-gpu-blacklist',
+        '--metrics-recording-only',
+        '--mute-audio',
+        '--no-default-browser-check',
+        '--no-pings',
+        '--no-sandbox',
+        '--no-zygote',
+        '--password-store=basic',
+        '--use-gl=swiftshader',
+        '--use-mock-keychain',
+      ],
     });
     page = await browser.newPage();
+
+    // Block images, CSS, and other unnecessary resources
+    await page.setRequestInterception(true);
+    page.on('request', (request) => {
+      if (['image', 'stylesheet', 'font', 'media'].includes(request.resourceType())) {
+        request.abort();
+      } else {
+        request.continue();
+      }
+    });
+
     await page.goto(pageUrl, {
       waitUntil: 'networkidle2',
-      timeout: 90000, // Increase timeout to 90 seconds
+      timeout: 90000, // Reduce timeout to 60 seconds
     });
 
     // Wait for the episode servers list or download links to appear
@@ -61,14 +114,6 @@ const scrapeWitanime = async (pageUrl) => {
   } catch (error) {
     console.error('Error scraping Witanime:', error.message);
     console.error('Error details:', error);
-
-    // Save a screenshot and HTML content for debugging
-    if (page) {
-      await page.screenshot({ path: 'error_screenshot.png' });
-      const htmlContent = await page.content();
-      fs.writeFileSync('error_page.html', htmlContent);
-    }
-
     throw error;
   } finally {
     if (browser) {
