@@ -16,8 +16,8 @@ const scrapeAnimeLuxe = async (pageUrl) => {
       timeout: 60000, // Increase timeout to 60 seconds
     });
 
-    // Wait for a specific element that indicates the page has loaded
-    await page.waitForSelector('ul.server-list li a', { timeout: 60000 });
+    // Increase the timeout for waitForSelector
+    await page.waitForSelector('ul.server-list li a', { timeout: 90000 });
 
     const content = await page.content();
     const $ = cheerio.load(content);
