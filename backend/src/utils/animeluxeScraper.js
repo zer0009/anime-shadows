@@ -2,24 +2,33 @@ const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 const atob = require('atob');
 const url = require('url');
+const fs = require('fs');
 
 const scrapeAnimeLuxe = async (pageUrl) => {
   let browser;
+  let page;
   try {
     console.log(`Fetching URL: ${pageUrl}`);
     browser = await puppeteer.launch({
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
-    const page = await browser.newPage();
+    page = await browser.newPage();
     await page.goto(pageUrl, {
       waitUntil: 'networkidle2',
-      timeout: 60000, // Increase timeout to 60 seconds
+      timeout: 90000, // Increase timeout to 90 seconds
     });
 
     // Increase the timeout for waitForSelector
-    await page.waitForSelector('ul.server-list li a', { timeout: 90000 });
+    await page.waitForSelector('table.table tbody tr', { timeout: 90000 });
 
     const content = await page.content();
+    
+    // Print the HTML content of the page
+    console.log(content);
+
+    // Save the HTML content to a file
+    fs.writeFileSync('page_content_animeluxe.html', content);
+
     const $ = cheerio.load(content);
 
     const servers = [];
@@ -58,8 +67,19 @@ const scrapeAnimeLuxe = async (pageUrl) => {
   } catch (error) {
     console.error('Error scraping AnimeLuxe:', error.message);
     console.error('Error details:', error);
+
+    // Save a screenshot for debugging
+    if (page) {
+      await page.screenshot({ path: 'error_screenshot_animeluxe.png' });
+    }
+
     throw error;
   } finally {
+    if (page) {
+      // Save the HTML content to a file in the finally block to ensure it always happens
+      const content = await page.content();
+      fs.writeFileSync('page_content_animeluxe.html', content);
+    }
     if (browser) {
       await browser.close();
     }
