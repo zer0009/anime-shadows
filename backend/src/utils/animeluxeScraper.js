@@ -66,11 +66,11 @@ const scrapeAnimeLuxe = async (pageUrl) => {
 
     await page.goto(pageUrl, {
       waitUntil: 'networkidle2',
-      timeout: 90000, // Reduce timeout to 60 seconds
+      timeout: 60000, // Reduce timeout to 60 seconds
     });
 
-    // Increase the timeout for waitForSelector
-    await page.waitForSelector('table.table tbody tr', { timeout: 90000 });
+    // Wait for the episode servers list or download links to appear
+    await page.waitForSelector('.server-list li a, table.table tbody tr', { timeout: 60000 });
 
     const content = await page.content();
     const $ = cheerio.load(content);
@@ -78,7 +78,7 @@ const scrapeAnimeLuxe = async (pageUrl) => {
     const servers = [];
 
     // Extract streaming servers
-    $('ul.server-list li a').each((i, element) => {
+    $('.server-list li a').each((i, element) => {
       try {
         const serverName = $(element).text().trim();
         const encodedUrl = $(element).attr('data-url');
@@ -94,11 +94,10 @@ const scrapeAnimeLuxe = async (pageUrl) => {
     // Extract download servers
     $('table.table tbody tr').each((i, element) => {
       try {
-        const faviconUrl = $(element).find('td div.server span.favicon').attr('data-src');
-        const serverName = faviconUrl ? new URL(faviconUrl).hostname.replace('www.', '') : 'Unknown';
         const encodedUrl = $(element).find('a.download-link').attr('data-url');
         const decodedUrl = atob(encodedUrl);
-        const quality = $(element).find('td span.badge').text().trim();
+        const serverName = new URL($(element).find('span.favicon').attr('data-src')).hostname.replace('www.', '');
+        const quality = $(element).find('span.badge').text().trim();
         console.log(`Found download server: ${serverName}, ${decodedUrl}, ${quality}`);
         servers.push({ serverName, quality, url: decodedUrl, type: 'download' });
       } catch (err) {
@@ -112,9 +111,11 @@ const scrapeAnimeLuxe = async (pageUrl) => {
     console.error('Error scraping AnimeLuxe:', error.message);
     console.error('Error details:', error);
 
-    // Save a screenshot for debugging
+    // Save a screenshot and HTML content for debugging
     if (page) {
-      await page.screenshot({ path: 'error_screenshot_animeluxe.png' });
+      await page.screenshot({ path: 'error_screenshot.png' });
+      const htmlContent = await page.content();
+      fs.writeFileSync('error_page.html', htmlContent);
     }
 
     throw error;
