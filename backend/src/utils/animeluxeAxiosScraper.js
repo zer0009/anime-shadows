@@ -23,10 +23,10 @@ const scrapeAnimeLuxeWithAxios = async (pageUrl) => {
 
     // Extract streaming servers
     $('ul.server-list li a').each((i, element) => {
-      const serverName = $(element).text().trim();
+      const text = $(element).text().trim();
+      const [quality, serverName] = text.split('-').map(part => part.trim());
       const encodedUrl = $(element).attr('data-url');
       const decodedUrl = atob(encodedUrl);
-      const quality = serverName.includes('-') ? serverName.split('-').pop().trim() : '720p';
       console.log(`Found streaming server: ${serverName}, ${decodedUrl}, ${quality}`);
       servers.push({ serverName, quality, url: decodedUrl, type: 'streaming' });
     });
@@ -34,10 +34,17 @@ const scrapeAnimeLuxeWithAxios = async (pageUrl) => {
     // Extract download servers
     $('table.table tbody tr').each((i, element) => {
       const faviconUrl = $(element).find('td div.server span.favicon').attr('data-src');
-      const serverName = faviconUrl ? url.parse(faviconUrl).hostname.replace('www.', '') : 'Unknown';
+      let serverName = faviconUrl ? url.parse(faviconUrl).hostname.replace('www.', '') : 'Unknown';
       const encodedUrl = $(element).find('a.download-link').attr('data-url');
       const decodedUrl = atob(encodedUrl);
-      const quality = $(element).find('td span.badge').text().trim() || '720p';
+      const quality = $(element).find('td span.badge').text().trim() || 'Unknown'; // Extract quality from the badge
+
+      // Fallback to extracting server name from the URL if favicon URL is not helpful
+      if (serverName === 'Unknown' || serverName === 's2.googleusercontent.com') {
+        const parsedUrl = url.parse(decodedUrl);
+        serverName = parsedUrl.hostname ? parsedUrl.hostname.replace('www.', '') : 'Unknown';
+      }
+
       console.log(`Found download server: ${serverName}, ${decodedUrl}, ${quality}`);
       servers.push({ serverName, quality, url: decodedUrl, type: 'download' });
     });

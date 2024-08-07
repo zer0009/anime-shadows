@@ -33,15 +33,21 @@ const scrapeWitanimeWithAxios = async (url) => {
 
     // Extract download servers
     const downloadUrls = JSON.parse($('script:contains("var downloadUrls_")').html().match(/var downloadUrls_\w+ = ({.*});/)[1]);
+    console.log('Download URLs:', downloadUrls);
     for (const [key, value] of Object.entries(downloadUrls)) {
       const serverName = $(`a[data-key="${key}"] .notice`).text().trim();
       const decodedUrl = atob(value).split('|')[0]; // Split and take the first part
       let quality = 'HD'; // Default quality
-      if (serverName.includes('-')) {
-        quality = qualityMap[serverName.split('-').pop().trim()] || 'HD';
-      } else if (serverName.toLowerCase().includes('google drive')) {
-        quality = 'HD'; // Specific handling for Google Drive
+
+      // Determine quality based on key prefix
+      if (key.startsWith('dsd')) {
+        quality = 'SD';
+      } else if (key.startsWith('dhd')) {
+        quality = 'HD';
+      } else if (key.startsWith('dfhd')) {
+        quality = 'FHD';
       }
+
       console.log(`Found download server: ${serverName}, ${decodedUrl}, ${quality}`);
       servers.push({ serverName, quality, url: decodedUrl, type: 'download' });
     }

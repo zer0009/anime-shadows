@@ -4,7 +4,17 @@ import { Add, Delete, Edit, FileCopy } from '@mui/icons-material';
 import { scrapeWitanime, scrapeAnimeLuxe } from '../../api/modules/admin';
 import styles from './ServerManager.module.css';
 
-const qualityOptions = ['360p', '480p', '720p', '1080p', 'multi'];
+// Predefined quality categories
+const predefinedQualityOptions = ['SD', 'HD', 'FHD', 'multi'];
+
+// Function to map server-provided quality to predefined categories
+const mapQuality = (quality) => {
+  const lowerQuality = quality.toLowerCase();
+  if (['360p', '480p'].includes(lowerQuality)) return 'SD';
+  if (['720p'].includes(lowerQuality)) return 'HD';
+  if (['1080p', 'fhd'].includes(lowerQuality)) return 'FHD';
+  return quality; // Return as-is if it doesn't match predefined categories
+};
 
 const ServerManager = ({ streamingServers, setStreamingServers, downloadServers, setDownloadServers }) => {
   const [newServer, setNewServer] = useState({ serverName: '', quality: '', url: '', type: 'streaming' });
@@ -27,10 +37,12 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
 
   const addServer = () => {
     if (newServer.serverName && newServer.url) {
+      const mappedQuality = mapQuality(newServer.quality);
+      const serverToAdd = { ...newServer, quality: mappedQuality };
       if (newServer.type === 'streaming') {
-        setStreamingServers([...streamingServers, newServer]);
+        setStreamingServers([...streamingServers, serverToAdd]);
       } else {
-        setDownloadServers([...downloadServers, newServer]);
+        setDownloadServers([...downloadServers, serverToAdd]);
       }
       setNewServer({ serverName: '', quality: '', url: '', type: 'streaming' });
     }
@@ -51,13 +63,15 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
 
   const handleEditSubmit = () => {
     const { type, index, ...updatedServer } = editServer;
+    const mappedQuality = mapQuality(updatedServer.quality);
+    const serverToUpdate = { ...updatedServer, quality: mappedQuality, type };
     if (type === 'streaming') {
       const updatedServers = [...streamingServers];
-      updatedServers[index] = { ...updatedServer, type };
+      updatedServers[index] = serverToUpdate;
       setStreamingServers(updatedServers);
     } else {
       const updatedServers = [...downloadServers];
-      updatedServers[index] = { ...updatedServer, type };
+      updatedServers[index] = serverToUpdate;
       setDownloadServers(updatedServers);
     }
     setOpenEditDialog(false);
@@ -74,11 +88,15 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
         }
       });
       console.log('Scraped servers:', servers); // Debugging log
+      const mappedServers = servers.map(server => ({
+        ...server,
+        quality: mapQuality(server.quality)
+      }));
       if (scraperSource === 'witanime') {
-        setStreamingServers(servers.filter(server => server.type === 'streaming'));
-        setDownloadServers(servers.filter(server => server.type === 'download'));
+        setStreamingServers(mappedServers.filter(server => server.type === 'streaming'));
+        setDownloadServers(mappedServers.filter(server => server.type === 'download'));
       } else {
-        setDownloadServers(servers);
+        setDownloadServers(mappedServers);
       }
       console.log('Updated streaming servers:', streamingServers); // Debugging log
       console.log('Updated download servers:', downloadServers); // Debugging log
@@ -155,7 +173,7 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
           margin="normal"
           variant="outlined"
         >
-          {qualityOptions.map((option) => (
+          {predefinedQualityOptions.map((option) => (
             <MenuItem key={option} value={option}>
               {option}
             </MenuItem>
@@ -276,7 +294,7 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
             margin="normal"
             variant="outlined"
           >
-            {qualityOptions.map((option) => (
+            {predefinedQualityOptions.map((option) => (
               <MenuItem key={option} value={option}>
                 {option}
               </MenuItem>
