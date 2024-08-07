@@ -1,58 +1,79 @@
-const axios = require('axios');
+const puppeteer = require('puppeteer-extra');
 const cheerio = require('cheerio');
 const atob = require('atob');
+const fs = require('fs');
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 
-const scrapeWitanime = async (url) => {
+puppeteer.use(StealthPlugin());
+
+const scrapeWitanime = async (pageUrl) => {
+  let browser;
+  let page;
   try {
-    console.log(`Fetching URL: ${url}`);
-    const { data } = await axios.get(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-      }
+    console.log(`Fetching URL: ${pageUrl}`);
+    browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
-    console.log('Fetched data successfully');
-    const $ = cheerio.load(data);
+    page = await browser.newPage();
+    await page.goto(pageUrl, {
+      waitUntil: 'networkidle2',
+      timeout: 90000, // Increase timeout to 90 seconds
+    });
+
+    // Wait for the episode servers list or download links to appear
+    await page.waitForSelector('#episode-servers, .quality-list', { timeout: 90000 });
+
+    const content = await page.content();
+    const $ = cheerio.load(content);
 
     const servers = [];
 
     // Extract streaming servers
-    const serverUrls = JSON.parse($('script:contains("var serverUrls_")').html().match(/var serverUrls_\w+ = ({.*});/)[1]);
-    for (const [key, value] of Object.entries(serverUrls)) {
+    $('#episode-servers li a').each((i, element) => {
       try {
-        const serverName = $(`a[data-key="${key}"] .notice`).text().trim();
-        const decodedUrl = atob(value).split('|')[0]; // Split and take the first part
+        const serverName = $(element).text().trim();
+        const encodedUrl = $(element).attr('data-url');
+        const decodedUrl = atob(encodedUrl);
         const quality = serverName.includes('-') ? serverName.split('-').pop().trim() : 'HD';
         console.log(`Found streaming server: ${serverName}, ${decodedUrl}, ${quality}`);
         servers.push({ serverName, quality, url: decodedUrl, type: 'streaming' });
       } catch (err) {
         console.error('Error extracting streaming server:', err);
       }
-    }
+    });
 
     // Extract download servers
-    const downloadUrls = JSON.parse($('script:contains("var downloadUrls_")').html().match(/var downloadUrls_\w+ = ({.*});/)[1]);
-    for (const [key, value] of Object.entries(downloadUrls)) {
+    $('.quality-list li a.download-link').each((i, element) => {
       try {
-        const serverName = $(`a[data-key="${key}"] .notice`).text().trim();
-        const decodedUrl = atob(value).split('|')[0]; // Split and take the first part
-        let quality = 'HD'; // Default quality
-        if (serverName.includes('-')) {
-          quality = serverName.split('-').pop().trim();
-        } else if (serverName.toLowerCase().includes('google drive')) {
-          quality = 'HD'; // Specific handling for Google Drive
-        }
+        const serverName = $(element).find('span.notice').text().trim();
+        const encodedUrl = $(element).attr('data-url');
+        const decodedUrl = atob(encodedUrl);
+        const quality = $(element).closest('ul.quality-list').find('li').first().text().trim();
         console.log(`Found download server: ${serverName}, ${decodedUrl}, ${quality}`);
         servers.push({ serverName, quality, url: decodedUrl, type: 'download' });
       } catch (err) {
         console.error('Error extracting download server:', err);
       }
-    }
+    });
 
     console.log('Scraped servers:', servers);
     return servers;
   } catch (error) {
-    console.error('Error scraping Witanime:', error);
+    console.error('Error scraping Witanime:', error.message);
+    console.error('Error details:', error);
+
+    // Save a screenshot and HTML content for debugging
+    if (page) {
+      await page.screenshot({ path: 'error_screenshot.png' });
+      const htmlContent = await page.content();
+      fs.writeFileSync('error_page.html', htmlContent);
+    }
+
     throw error;
+  } finally {
+    if (browser) {
+      await browser.close();
+    }
   }
 };
 

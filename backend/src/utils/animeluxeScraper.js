@@ -1,18 +1,26 @@
-const axios = require('axios');
+const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 const atob = require('atob');
 const url = require('url');
 
 const scrapeAnimeLuxe = async (pageUrl) => {
+  let browser;
   try {
     console.log(`Fetching URL: ${pageUrl}`);
-    const { data } = await axios.get(pageUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-      }
+    browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
-    console.log('Fetched data successfully');
-    const $ = cheerio.load(data);
+    const page = await browser.newPage();
+    await page.goto(pageUrl, {
+      waitUntil: 'networkidle2',
+      timeout: 60000, // Increase timeout to 60 seconds
+    });
+
+    // Wait for a specific element that indicates the page has loaded
+    await page.waitForSelector('ul.server-list li a', { timeout: 60000 });
+
+    const content = await page.content();
+    const $ = cheerio.load(content);
 
     const servers = [];
 
@@ -34,7 +42,7 @@ const scrapeAnimeLuxe = async (pageUrl) => {
     $('table.table tbody tr').each((i, element) => {
       try {
         const faviconUrl = $(element).find('td div.server span.favicon').attr('data-src');
-        const serverName = faviconUrl ? url.parse(faviconUrl).hostname.replace('www.', '') : 'Unknown';
+        const serverName = faviconUrl ? new URL(faviconUrl).hostname.replace('www.', '') : 'Unknown';
         const encodedUrl = $(element).find('a.download-link').attr('data-url');
         const decodedUrl = atob(encodedUrl);
         const quality = $(element).find('td span.badge').text().trim();
@@ -48,8 +56,13 @@ const scrapeAnimeLuxe = async (pageUrl) => {
     console.log('Scraped servers:', servers);
     return servers;
   } catch (error) {
-    console.error('Error scraping AnimeLuxe:', error);
+    console.error('Error scraping AnimeLuxe:', error.message);
+    console.error('Error details:', error);
     throw error;
+  } finally {
+    if (browser) {
+      await browser.close();
+    }
   }
 };
 
