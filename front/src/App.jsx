@@ -1,37 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
 import Header from './components/common/Header.jsx';
-import Home from './pages/Home.jsx';
-import AnimeList from './pages/AnimeList.jsx';
-import MovieList from './pages/MovieList.jsx';
-import SeasonAnime from './pages/SeasonAnime.jsx';
-import Login from './pages/Login.jsx';
-import AnimeDetails from './pages/AnimeDetails.jsx';
-import Register from './pages/Register.jsx';
-import SearchPage from './pages/SearchPage.jsx';
-import Profile from './pages/Profile.jsx';
-import History from './pages/History.jsx';
-import Favorites from './pages/Favorites.jsx';
-import AdminDashboard from './pages/AdminDashboard.jsx';
-import EpisodePage from './pages/EpisodePage.jsx';
+import Footer from './components/common/Footer.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import AdminRoute from './components/AdminRoute.jsx';
-import EditAnime from './components/admin/EditAnime.jsx';
-import EditEpisodes from './components/admin/EditEpisodes.jsx';
-import ManageAnime from './components/admin/ManageAnime.jsx';
-import FilteredListPage from './pages/FilteredListPage.jsx';
-import AddEpisode from './components/admin/AddEpisode.jsx';
-import PopularAnime from './pages/PopularAnime.jsx';
-import RecentEpisodes from './pages/RecentEpisodes.jsx';
-import AdminRegister from './pages/AdminRegister.jsx';
-import Footer from './components/common/Footer.jsx';
-import NotFound from './pages/NotFound.jsx';
 import { initGA, logPageView, setConsent } from './analytics';
 import CookieConsent from 'react-cookie-consent';
 import { HelmetProvider } from 'react-helmet-async';
+import LoadingSpinner from './components/common/LoadingSpinner';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
+import './styles/global.css';
+
+const Home = lazy(() => import('./pages/Home.jsx'));
+const AnimeList = lazy(() => import('./pages/AnimeList.jsx'));
+const MovieList = lazy(() => import('./pages/MovieList.jsx'));
+const SeasonAnime = lazy(() => import('./pages/SeasonAnime.jsx'));
+const Login = lazy(() => import('./pages/Login.jsx'));
+const AnimeDetails = lazy(() => import('./pages/AnimeDetails.jsx'));
+const Register = lazy(() => import('./pages/Register.jsx'));
+const SearchPage = lazy(() => import('./pages/SearchPage.jsx'));
+const Profile = lazy(() => import('./pages/Profile.jsx'));
+const History = lazy(() => import('./pages/History.jsx'));
+const Favorites = lazy(() => import('./pages/Favorites.jsx'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard.jsx'));
+const EpisodePage = lazy(() => import('./pages/EpisodePage.jsx'));
+const EditAnime = lazy(() => import('./components/admin/EditAnime.jsx'));
+const EditEpisodes = lazy(() => import('./components/admin/EditEpisodes.jsx'));
+const ManageAnime = lazy(() => import('./components/admin/ManageAnime.jsx'));
+const FilteredListPage = lazy(() => import('./pages/FilteredListPage.jsx'));
+const AddEpisode = lazy(() => import('./components/admin/AddEpisode.jsx'));
+const PopularAnime = lazy(() => import('./pages/PopularAnime.jsx'));
+const RecentEpisodes = lazy(() => import('./pages/RecentEpisodes.jsx'));
+const AdminRegister = lazy(() => import('./pages/AdminRegister.jsx'));
+const NotFound = lazy(() => import('./pages/NotFound.jsx'));
 
 const setDirection = (language) => {
   const dir = language === 'ar' ? 'rtl' : 'ltr';
@@ -55,30 +59,32 @@ function AppContent() {
     <div className="app-container">
       <Header />
       <div className="content-wrap">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/anime-list" element={<AnimeList />} />
-          <Route path="/movie-list" element={<MovieList />} />
-          <Route path="/season-anime" element={<SeasonAnime />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/anime/:id" element={<AnimeDetails />} />
-          <Route path="/filter/:filterType/:filterValue" element={<FilteredListPage />} />
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/admin-register" element={<AdminRegister />} />
-          <Route path="/popular-anime" element={<PopularAnime />} />
-          <Route path="/recent-episodes" element={<RecentEpisodes />} />
-          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-          <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
-          <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
-          <Route path="/admin-dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-          <Route path="/episode/:episodeId" element={<EpisodePage />} />
-          <Route path="/admin/manage-anime" element={<AdminRoute><ManageAnime /></AdminRoute>} />
-          <Route path="/admin/edit-anime/:animeId" element={<AdminRoute><EditAnime /></AdminRoute>} />
-          <Route path="/admin/edit-episodes/:animeId" element={<AdminRoute><EditEpisodes /></AdminRoute>} />
-          <Route path="/admin/add-episode/:animeId" element={<AdminRoute><AddEpisode /></AdminRoute>} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Suspense fallback={<LoadingSpinner />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/anime-list" element={<AnimeList />} />
+            <Route path="/movie-list" element={<MovieList />} />
+            <Route path="/season-anime" element={<SeasonAnime />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/anime/:id" element={<AnimeDetails />} />
+            <Route path="/filter/:filterType/:filterValue" element={<FilteredListPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/admin-register" element={<AdminRegister />} />
+            <Route path="/popular-anime" element={<PopularAnime />} />
+            <Route path="/recent-episodes" element={<RecentEpisodes />} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/last-watching" element={<ProtectedRoute><History /></ProtectedRoute>} />
+            <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
+            <Route path="/admin-dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+            <Route path="/episode/:episodeId" element={<EpisodePage />} />
+            <Route path="/admin/manage-anime" element={<AdminRoute><ManageAnime /></AdminRoute>} />
+            <Route path="/admin/edit-anime/:animeId" element={<AdminRoute><EditAnime /></AdminRoute>} />
+            <Route path="/admin/edit-episodes/:animeId" element={<AdminRoute><EditEpisodes /></AdminRoute>} />
+            <Route path="/admin/add-episode/:animeId" element={<AdminRoute><AddEpisode /></AdminRoute>} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </div>
       <Footer />
       <CookieConsent
@@ -107,7 +113,9 @@ function App() {
     <I18nextProvider i18n={i18n}>
       <AuthProvider>
         <HelmetProvider>
-          <AppContent />
+          <ErrorBoundary>
+            <AppContent />
+          </ErrorBoundary>
         </HelmetProvider>
       </AuthProvider>
     </I18nextProvider>

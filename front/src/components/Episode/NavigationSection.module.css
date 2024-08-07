@@ -1,0 +1,14 @@
+.navigationSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: var(--secondary-dark);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+  }
+  
+  .navButton {
+    color: var(--badge-text-light);
+  }

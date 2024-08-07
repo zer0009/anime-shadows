@@ -1,12 +1,12 @@
 import React, { Suspense } from 'react';
 import { Box, Button, Grid, Skeleton } from '@mui/material';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Scrollbar } from 'swiper/modules';
+import { Navigation, Pagination, Scrollbar, Autoplay } from 'swiper/modules';
 import styles from './AnimeSection.module.css';
 
 const AnimeCard = React.lazy(() => import('../AnimeCard/AnimeCard'));
 
-const AnimeSection = ({ title, items, loading, navigate, handleAnimeClick, t }) => {
+const AnimeSection = ({ title, items, loading, navigate, handleAnimeClick, t, isMobile }) => {
     return (
         <section aria-labelledby={`${title}-heading`} className={styles.swiperSection}>
             <div className={styles.sectionHeader}>
@@ -38,31 +38,60 @@ const AnimeSection = ({ title, items, loading, navigate, handleAnimeClick, t }) 
                     ))}
                 </Grid>
             ) : (
-                <Swiper
-                    modules={[Navigation, Pagination, Scrollbar]}
-                    spaceBetween={30}
-                    slidesPerView={1}
-                    breakpoints={{
-                        640: { slidesPerView: 2 },
-                        768: { slidesPerView: 3 },
-                        1024: { slidesPerView: 4 },
-                        1280: { slidesPerView: 5 },
-                    }}
-                    navigation
-                    pagination={{ clickable: true }}
-                    scrollbar={{ draggable: true }}
-                >
-                    {items.map((item) => (
-                        <SwiperSlide key={item._id}>
-                            <Suspense fallback={<div>Loading...</div>}>
-                                <AnimeCard
-                                    anime={item}
-                                    onClick={() => handleAnimeClick(item._id)}
-                                />
-                            </Suspense>
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
+                isMobile ? (
+                    <Swiper
+                        modules={[Navigation, Pagination, Scrollbar, Autoplay]}
+                        spaceBetween={5}  // Decreased space between slides
+                        slidesPerView={1}
+                        breakpoints={{
+                            320: { slidesPerView: 1 },
+                            425: { slidesPerView: 2 },
+                            640: { slidesPerView: 3 },
+                        }}
+                        autoplay={{ delay: 3000 }}
+                        pagination={{ clickable: true }}
+                        scrollbar={{ draggable: true }}
+                    >
+                        {items.map((item) => (
+                            <SwiperSlide key={item._id}>
+                                <Suspense fallback={<div>Loading...</div>}>
+                                    <AnimeCard
+                                        anime={item}
+                                        onClick={() => handleAnimeClick(item._id)}
+                                    />
+                                </Suspense>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                ) : (
+                    <Swiper
+                        modules={[Navigation, Pagination, Scrollbar, Autoplay]}
+                        spaceBetween={10}  // Decreased space between slides
+                        slidesPerView={5}
+                        breakpoints={{
+                            320: { slidesPerView: 1 },
+                            425: { slidesPerView: 2 },
+                            640: { slidesPerView: 3 },
+                            1024: { slidesPerView: 4 },
+                            1280: { slidesPerView: 5 },
+                        }}
+                        navigation
+                        pagination={{ clickable: true }}
+                        scrollbar={{ draggable: true }}
+                        autoplay={{ delay: 3000 }}
+                    >
+                        {items.map((item) => (
+                            <SwiperSlide key={item._id}>
+                                <Suspense fallback={<div>Loading...</div>}>
+                                    <AnimeCard
+                                        anime={item}
+                                        onClick={() => handleAnimeClick(item._id)}
+                                    />
+                                </Suspense>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                )
             )}
         </section>
     );

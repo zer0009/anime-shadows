@@ -1,0 +1,68 @@
+.headerSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  text-align: left;
+  background-color: var(--primary-dark);
+  color: var(--text-color);
+  max-width: 800px; /* Match the max width of the video container */
+  margin: 0 auto; /* Center the header section */
+}
+
+.animeTitle {
+  font-size: 1.8rem;
+  color: var(--highlight-color);
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.animeTitleText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.episodeNumber {
+  flex-shrink: 0;
+}
+
+.iconContainer {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.iconButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--highlight-color);
+}
+
+.iconLabel {
+  margin-top: 4px;
+  color: var(--text-color);
+}
+
+@media (max-width: 600px) {
+  .headerSection {
+    padding: 15px;
+  }
+
+  .animeTitle {
+    font-size: 1.5rem;
+  }
+
+  .iconContainer {
+    gap: 10px;
+  }
+}

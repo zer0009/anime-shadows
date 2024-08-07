@@ -1,0 +1,121 @@
+.episodeListSection {
+  background-color: var(--primary-dark);
+  padding: 20px;
+  border-radius: 12px;
+  max-height: 600px;
+  box-shadow: 0 4px 8px var(--shadow-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.episodeListTitle {
+  margin-bottom: 20px;
+  color: var(--highlight-color);
+  font-size: 1.5rem;
+  text-align: center;
+  border-bottom: 2px solid var(--highlight-color);
+  padding-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.episodeListContainer {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 500px;
+}
+
+.episodeList {
+  padding: 0;
+}
+
+.episodeItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding: 10px 15px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+
+.episodeItem:last-child {
+  border-bottom: none;
+}
+
+.episodeItem:hover {
+  background-color: var(--secondary-dark);
+  transform: scale(1.02);
+}
+
+.currentEpisode {
+  background-color: var(--secondary-color-dark);
+  color: var(--badge-text-light);
+}
+
+.episodeItemText {
+  display: flex;
+  flex-direction: column;
+  direction: inherit;
+}
+
+.episodeNumber {
+  font-weight: bold;
+  color: var(--highlight-color);
+  margin-bottom: 5px;
+}
+
+.episodeTitle {
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+/* .currentEpisode .episodeNumber,
+.currentEpisode .episodeTitle {
+  color: #ffffff;
+} */
+
+[dir="rtl"] .episodeItem {
+  text-align: right;
+}
+
+[dir="ltr"] .episodeItem {
+  text-align: left;
+}
+
+.episodeListContainer::-webkit-scrollbar {
+  width: 8px;
+}
+
+.episodeListContainer::-webkit-scrollbar-thumb {
+  background-color: var(--highlight-color);
+  border-radius: 4px;
+}
+
+.episodeListContainer::-webkit-scrollbar-track {
+  background-color: var(--secondary-dark);
+}
+
+@media (max-width: 600px) {
+  .episodeListSection {
+    padding: 15px;
+  }
+
+  .episodeListTitle {
+    font-size: 1.2rem;
+  }
+
+  .episodeItem {
+    padding: 8px 10px;
+  }
+
+  .episodeNumber {
+    font-size: 1rem;
+  }
+
+  .episodeTitle {
+    font-size: 0.8rem;
+  }
+}

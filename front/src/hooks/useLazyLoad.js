@@ -1,7 +1,7 @@
 // src/hooks/useLazyLoad.js
 import { useEffect, useRef, useState } from 'react';
 
-const useLazyLoad = () => {
+const useLazyLoad = (rootMargin = '100px') => {
   const ref = useRef(null);
   const [isIntersecting, setIntersecting] = useState(false);
 
@@ -13,9 +13,7 @@ const useLazyLoad = () => {
           observer.unobserve(entry.target);
         }
       },
-      {
-        rootMargin: '100px',
-      }
+      { rootMargin }
     );
 
     if (ref.current) {
@@ -27,7 +25,7 @@ const useLazyLoad = () => {
         observer.unobserve(ref.current);
       }
     };
-  }, []);
+  }, [rootMargin]);
 
   return [ref, isIntersecting];
 };

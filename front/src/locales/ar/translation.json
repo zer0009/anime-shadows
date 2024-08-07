@@ -7,7 +7,7 @@
     "login": "تسجيل الدخول",
     "register": "تسجيل",
     "profile": "الملف الشخصي",
-    "history": "التاريخ",
+    "lastWatching": "آخر مشاهدة",
     "favorites": "المفضلة",
     "adminDashboard": "لوحة التحكم",
     "logout": "تسجيل الخروج",
@@ -38,13 +38,14 @@
     "duration": "المدة",
     "rate": "تقييم",
     "favorite": "مفضل",
-    "details": "التفاصيل"
+    "details": "التفاصيل",
+    "watchedCount": "{{count}} مشاهدة"
   },
   "home": {
-    "popularAnime": "أنمي شائع",
-    "animeList": "قائمة الأنمي",
-    "recentEpisodes": "الحلقات المحدثة حديثًا",
-    "more": "المزيد",
+    "popularAnime": "أشهر الأنميات",
+    "animeList": "آخر الأنميات المضافة",
+    "recentEpisodes": "آخر الحلقات المضافة",
+    "more": "عرض المزيد",
     "watch": "مشاهدة",
     "download": "تحميل",
     "title": "Anime Shadows",
@@ -53,7 +54,7 @@
     "introText": "مرحبًا بك في أنمي شادوز، وجهتك الأولى لمشاهدة أحدث وأفضل الأنميات. استمتع بمجموعة واسعة من الأنميات المترجمة بجودة عالية.",
     "morePopularAnime": "عرض المزيد من الأنميات الشائعة",
     "moreAnimeList": "عرض القائمة الكاملة للأنميات",
-    "moreRecentEpisodes": "عرض المزيد من الحلقات الحديثة",
+    "moreRecentEpisodes": "عرض المزيد من الحلقات المضافة",
     "featuredAnime1": "الأنمي المميز 1",
     "featuredAnime2": "الأنمي المميز 2",
     "featuredAnime3": "الأنمي المميز 3"
@@ -66,7 +67,14 @@
     "downloadEpisode": "تحميل الحلقة",
     "download": "تحميل",
     "episode": "الحلقة",
-    "title": "مترجمه، تحميل، مشاهده"
+    "title": "مترجمه، تحميل، مشاهده",
+    "report": "إبلاغ",
+    "nextEpisode": "التالي",
+    "previousEpisode": "السابق",
+    "animePage": "صفحة الأنمي",
+    "loadingVideo": "جار التحميل...",
+    "loadingVideoError": "حدث خطأ في تحميل الفيديو",
+    "downloadList": "قائمة التحميل"
   },
   "animeCard": {
     "statusCompleted": "مكتمل",

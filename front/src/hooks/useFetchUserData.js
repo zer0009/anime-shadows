@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import API from '../api/client';
 
 const useFetchUserData = () => {
@@ -7,44 +7,43 @@ const useFetchUserData = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const response = await API.get('/user/profile', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
-                setUserData(response.data);
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-                setError('Error fetching user data');
-            } finally {
-                setLoading(false);
-            }
-        };
+    const fetchUserData = useCallback(async () => {
+        try {
+            const response = await API.get('/user/profile', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            setUserData(response.data);
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            setError('Error fetching user data');
+        } finally {
+            setLoading(false);
+        }
+    }, []);
 
-        fetchUserData();
+    const fetchAnimeDetails = useCallback(async (animeId) => {
+        try {
+            const response = await API.get(`/anime/${animeId}`);
+            setAnimeDetails(prevDetails => ({
+                ...prevDetails,
+                [animeId]: response.data
+            }));
+        } catch (error) {
+            console.error(`Error fetching anime details for ID ${animeId}:`, error);
+            setAnimeDetails(prevDetails => ({
+                ...prevDetails,
+                [animeId]: { error: 'Error fetching details' }
+            }));
+        }
     }, []);
 
     useEffect(() => {
-        const fetchAnimeDetails = async (animeId) => {
-            try {
-                const response = await API.get(`/anime/${animeId}`);
-                setAnimeDetails(prevDetails => ({
-                    ...prevDetails,
-                    [animeId]: response.data
-                }));
-            } catch (error) {
-                console.error(`Error fetching anime details for ID ${animeId}:`, error);
-                // Optionally, you can set a flag or message in animeDetails to indicate the error
-                setAnimeDetails(prevDetails => ({
-                    ...prevDetails,
-                    [animeId]: { error: 'Error fetching details' }
-                }));
-            }
-        };
+        fetchUserData();
+    }, [fetchUserData]);
 
+    useEffect(() => {
         if (userData && userData.history) {
             userData.history.forEach(item => {
                 if (item.anime && !animeDetails[item.anime]) {
@@ -52,7 +51,7 @@ const useFetchUserData = () => {
                 }
             });
         }
-    }, [userData]);
+    }, [userData, animeDetails, fetchAnimeDetails]);
 
     return { userData, animeDetails, loading, error };
 };

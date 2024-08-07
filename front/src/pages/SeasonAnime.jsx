@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Typography, Container, Breadcrumbs, Link, Chip, Paper, Grid, Divider } from '@mui/material';
+import { Box, Typography, Container, Chip, Paper, Grid, Divider } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-import HomeIcon from '@mui/icons-material/Home';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
@@ -13,6 +11,7 @@ import { getCurrentSeason } from '../utils/getCurrentSeason';
 import { Helmet } from 'react-helmet-async';
 import { JsonLd } from 'react-schemaorg';
 import { useSEO } from '../hooks/useSEO';
+import BreadcrumbsComponent from '../components/common/BreadcrumbsComponent';
 import styles from './SeasonAnime.module.css';
 
 const SeasonAnime = () => {
@@ -94,23 +93,11 @@ const SeasonAnime = () => {
           <JsonLd key={index} item={item} />
         ))}
         
-        <Breadcrumbs 
-          separator={<NavigateNextIcon fontSize="small" className={styles.breadcrumbSeparator} />}
-          aria-label="breadcrumb" 
-          className={styles.breadcrumbs}
-        >
-          <Link 
-            component={RouterLink} 
-            to="/" 
-            className={styles.breadcrumbLink}
-          >
-            <HomeIcon className={styles.breadcrumbIcon} />
-            <Typography variant="body2">{t('common.home', 'الرئيسية')}</Typography>
-          </Link>
-          <Typography variant="body2" className={styles.breadcrumbCurrent}>
-            {t('seasonAnime.breadcrumb', 'أنمي الموسم')}
-          </Typography>
-        </Breadcrumbs>
+        <BreadcrumbsComponent
+          links={[
+          ]}
+          current={t('seasonAnime.breadcrumb', 'أنمي الموسم')}
+        />
 
         {/* <Paper elevation={3} className={styles.headerPaper}>
           <Grid container spacing={3} alignItems="center">

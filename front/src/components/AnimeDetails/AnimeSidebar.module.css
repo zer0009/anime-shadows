@@ -2,8 +2,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: var(--secondary-dark);
-    padding: 20px;
+    background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--secondary-light) 100%);
+    padding: 15px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     text-align: center;
@@ -21,7 +21,7 @@
     width: 100%;
     height: auto;
     border-radius: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .scoreBadge {
@@ -46,15 +46,18 @@
     color: var(--text-color);
     flex: 1;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    transition: background-color 0.3s, transform 0.3s;
 }
 
+.rateButton:hover,
 .favoriteButton:hover {
-    background-color: rgba(0, 0, 0, 0.04);
+    background-color: var(--highlight-color-dark);
+    transform: scale(1.05);
 }
 
 .animeMeta {
@@ -73,4 +76,34 @@
 .animeMeta p strong {
     font-weight: bold;
     color: var(--highlight-color);
+}
+
+@media (max-width: 768px) {
+    .animeSidebar {
+        padding: 10px;
+    }
+
+    .rateButton,
+    .favoriteButton {
+        padding: 8px;
+    }
+
+    .animeMeta p {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .animeSidebar {
+        padding: 10px;
+    }
+
+    .rateButton,
+    .favoriteButton {
+        padding: 6px;
+    }
+
+    .animeMeta p {
+        font-size: 12px;
+    }
 }

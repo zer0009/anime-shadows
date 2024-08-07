@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { fetchAnime } from '../api/modules/anime';
+import debounce from 'lodash.debounce';
 
 const useFetchAnimeList = (initialPage = 1, initialLimit = 10) => {
     const [animeList, setAnimeList] = useState([]);
@@ -19,15 +20,18 @@ const useFetchAnimeList = (initialPage = 1, initialLimit = 10) => {
             setSearchResults(data);
             setTotalPages(response.totalPages);
         } catch (error) {
+            console.error('Error fetching anime list:', error);
             setError('Error fetching anime list');
         } finally {
             setLoading(false);
         }
     }, []);
 
+    const debouncedFetchAnimeList = useMemo(() => debounce(fetchAnimeList, 300), [fetchAnimeList]);
+
     useEffect(() => {
-        fetchAnimeList(currentPage, limit);
-    }, [currentPage, limit, fetchAnimeList]);
+        debouncedFetchAnimeList(currentPage, limit);
+    }, [currentPage, limit, debouncedFetchAnimeList]);
 
     const handleSearch = useCallback(async (query = '', tags = [], type = '', season = '', sort = '', popular = '', state = '', broadMatches = false, page = 1, limit = 10) => {
         try {
@@ -38,11 +42,14 @@ const useFetchAnimeList = (initialPage = 1, initialLimit = 10) => {
             setTotalPages(response.totalPages);
             setCurrentPage(page);
         } catch (error) {
+            console.error('Error searching anime list:', error);
             setError('Error searching anime list');
         } finally {
             setLoading(false);
         }
     }, []);
+
+    const debouncedHandleSearch = useMemo(() => debounce(handleSearch, 300), [handleSearch]);
 
     return useMemo(() => ({
         animeList,
@@ -50,12 +57,12 @@ const useFetchAnimeList = (initialPage = 1, initialLimit = 10) => {
         loading,
         error,
         totalPages,
-        handleSearch,
+        handleSearch: debouncedHandleSearch,
         currentPage,
         setCurrentPage,
         limit,
         setLimit
-    }), [animeList, searchResults, loading, error, totalPages, handleSearch, currentPage, limit]);
+    }), [animeList, searchResults, loading, error, totalPages, debouncedHandleSearch, currentPage, limit]);
 };
 
 export default useFetchAnimeList;

@@ -1,21 +1,20 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams, Link as RouterLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import ListDisplay from '../components/ListDisplay/ListDisplay';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
-import { Box, Typography, Container, Breadcrumbs } from '@mui/material';
+import LoadingSpinner from '../components/common/LoadingSpinner';
+import { Box, Typography, Container } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import { JsonLd } from 'react-schemaorg';
 import { useSEO } from '../hooks/useSEO';
-import HomeIcon from '@mui/icons-material/Home';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import styles from './AnimeList.module.css';
+import BreadcrumbsComponent from '../components/common/BreadcrumbsComponent';
 
 const AnimeList = () => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentPage = parseInt(searchParams.get('page')) || 1;
+  const currentPage = useMemo(() => parseInt(searchParams.get('page')) || 1, [searchParams]);
   const { animeList, loading, error, totalPages, handleSearch } = useFetchAnimeList();
 
   useEffect(() => {
@@ -27,7 +26,7 @@ const AnimeList = () => {
     window.scrollTo(0, 0);
   }, [setSearchParams]);
 
-  const seoProps = {
+  const seoProps = useMemo(() => ({
     title: t('animeList.pageTitle', "قائمة الأنمي | أنمي شادوز - Anime Shadows"),
     description: t('animeList.pageDescription', "تصفح مجموعتنا الواسعة من مسلسلات الأنمي على أنمي شادوز (Anime Shadows). اعثر على مسلسلك المفضل القادم."),
     keywords: t('animeList.pageKeywords', "قائمة الأنمي, مسلسلات أنمي, مشاهدة أنمي اون لاين, Anime Shadows"),
@@ -53,7 +52,7 @@ const AnimeList = () => {
         "url": `https://animeshadows.xyz/anime/${anime.id}`
       }))
     }
-  };
+  }), [animeList, currentPage, t]);
 
   const seo = useSEO(seoProps);
 
@@ -77,61 +76,39 @@ const AnimeList = () => {
         </Helmet>
         {seo.jsonLd && <JsonLd item={seo.jsonLd} />}
         
-        <Breadcrumbs 
-          separator={<NavigateNextIcon fontSize="small" sx={{ color: 'var(--subtext-color)' }} />}
-          aria-label="breadcrumb" 
-          sx={{ 
-            marginBottom: '20px', 
-            '& .MuiBreadcrumbs-ol': {
-              alignItems: 'center',
-            }
-          }}
-        >
-          <RouterLink 
-            to="/" 
-            style={{ 
-              display: 'flex', 
-              alignItems: 'center',
-              color: 'var(--subtext-color)', 
-              textDecoration: 'none',
-              transition: 'color 0.3s ease',
-              '&:hover': { 
-                color: 'var(--highlight-color)' 
-              }
-            }}
-          >
-            <HomeIcon sx={{ mr: 0.5, fontSize: '1.2rem' }} />
-            <Typography variant="body2">
-              {t('common.home', 'الرئيسية')}
-            </Typography>
-          </RouterLink>
-          <Typography 
-            variant="body2" 
-            sx={{ 
-              color: 'var(--text-color)',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            {t('animeList.breadcrumb', 'قائمة الأنمي')}
-          </Typography>
-        </Breadcrumbs>
-                
-        <ListDisplay
-          title={t('animeList.listTitle', 'قائمة الأنمي')}
-          list={animeList}
-          loading={loading}
-          error={error}
-          fields={['title', 'genre', 'rating']}
+        {/* <BreadcrumbsComponent
+          links={[
+            { to: '/category', label: t('common.category', 'الفئة') },
+            { to: '/subcategory', label: t('common.subcategory', 'الفئة الفرعية') }
+          ]}
+          current={t('animeList.breadcrumb', 'قائمة الأنمي')}
+        /> */}
+
+        <BreadcrumbsComponent
+          links={[]}
+          current={t('animeList.breadcrumb', 'قائمة الأنمي')}
         />
         
-        <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
-          <PaginationComponent
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-        </Box>
+        {loading ? (
+          <LoadingSpinner />
+        ) : (
+          <>
+            <ListDisplay
+              title={t('animeList.listTitle', 'قائمة الأنمي')}
+              list={animeList}
+              loading={loading}
+              error={error}
+              fields={['title', 'genre', 'rating']}
+            />
+            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+              <PaginationComponent
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            </Box>
+          </>
+        )}
       </Container>
     </Box>
   );

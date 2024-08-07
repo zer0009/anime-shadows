@@ -2,30 +2,34 @@
     display: flex;
     align-items: center;
     background-color: var(--primary-dark); /* Updated to use primary dark color */
-    border: 1px solid var(--secondary-dark); /* Updated to use secondary dark color */
-    border-radius: 5px;
-    padding: 5px;
+    border-radius: 20px; /* Reduced border radius */
+    padding: 3px 8px; /* Reduced padding */
     width: 100%;
-    max-width: 400px;
+    max-width: 400px; /* Reduced max width */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.searchBar:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .searchInput {
+    flex-grow: 1;
+    padding: 8px; /* Reduced padding */
     border: none;
     outline: none;
-    padding: 10px;
-    flex-grow: 1;
-    border-radius: 5px 0 0 5px;
     background-color: var(--secondary-light); /* Updated to use secondary light color */
     color: var(--text-color); /* Updated to use text color */
+    border-radius: 20px 0 0 20px; /* Reduced border radius */
 }
 
 .searchButton {
     background-color: var(--highlight-color); /* Updated to use highlight color */
     color: var(--text-color); /* Updated to use text color */
     border: none;
-    padding: 10px;
-    border-radius: 0 5px 5px 0;
+    padding: 8px; /* Reduced padding */
+    border-radius: 0 20px 20px 0; /* Reduced border radius */
     cursor: pointer;
     display: flex;
     align-items: center;

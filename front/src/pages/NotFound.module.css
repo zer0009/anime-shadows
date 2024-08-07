@@ -9,22 +9,45 @@
     background-color: var(--primary-dark);
     color: var(--text-color);
     text-align: center;
-  }
-  
-  h1 {
-    font-size: 6em;
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.errorCode {
+    font-size: 8em;
     margin-bottom: 20px;
     color: var(--highlight-color);
     text-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color), 0 0 30px var(--glow-color);
-  }
-  
-  p {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.message {
     font-size: 1.5em;
     margin-bottom: 30px;
     color: var(--subtext-color);
-  }
-  
-  .link {
+}
+
+.link {
     display: inline-block;
     padding: 12px 24px;
     background-color: var(--tertiary-dark);
@@ -33,11 +56,11 @@
     border-radius: 5px;
     font-weight: bold;
     transition: all 0.3s ease;
-  }
-  
-  .link:hover {
+}
+
+.link:hover {
     background-color: var(--highlight-color);
     color: var(--primary-dark);
     transform: scale(1.05);
     box-shadow: 0 0 15px var(--glow-color);
-  }
+}

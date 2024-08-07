@@ -14,15 +14,19 @@ const Navbar = ({ onTagsClick, onTypeChange, onSeasonChange, onSortChange, onPop
             <button className={styles.navButton} onClick={onTagsClick}>
                 <FaTags /> Tags
             </button>
-            <TypeSelect onChange={onTypeChange} />
-            <SeasonSelect onChange={onSeasonChange} />
-            <SortSelect onChange={onSortChange} />
-            <PopularSelect onChange={onPopularChange} />
+            <div className={styles.selectContainer}>
+                <TypeSelect onChange={onTypeChange} />
+                <SeasonSelect onChange={onSeasonChange} />
+                <SortSelect onChange={onSortChange} />
+                <PopularSelect onChange={onPopularChange} />
+                <StateSelect onChange={onStateChange} />
+            </div>
             <button className={styles.navButton} onClick={onReset}>
                 <FaUndo /> Reset All
             </button>
-            <StateSelect onChange={onStateChange} />
-            <SearchBar onSearch={onSearch} />
+            <div className={styles.searchBarContainer}>
+                <SearchBar onSearch={onSearch} />
+            </div>
         </div>
     );
 };

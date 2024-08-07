@@ -33,7 +33,7 @@ const AnimeSidebar = React.memo(({ anime, isFavorite, handleFavoriteClick, handl
           threshold={300}
           placeholderSrc="/path/to/placeholder-image.jpg"
           width={300} // Set explicit width
-          height={450} // Set explicit height
+          height={420} // Set explicit height
         />
         <Box className={styles.scoreBadge}>
           <StarScoreDisplay score={anime.averageRating} />

@@ -1,77 +1,113 @@
 .mainContent {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: var(--primary-dark);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.animeTitle {
+  font-size: 36px;
+  color: var(--highlight-color);
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.titleAndScores {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.animeSubtitle {
+  font-size: 18px;
+  color: var(--subtext-color);
+  margin: 20px 0;
+}
+
+.animeTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.animeTag {
+  font-size: 14px !important;
+  background-color: var(--secondary-dark) !important;
+  padding: 5px 10px !important;
+  border-radius: 5px !important;
+  color: var(--badge-text-light) !important;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.scoreSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 1024px) {
+  .mainContent {
+    padding: 15px;
   }
-  
+
   .animeTitle {
-    font-size: 36px;
-    color: var(--highlight-color);
-    margin-bottom: 10px;
-    font-weight: bold;
+    font-size: 32px;
   }
-  
-  .titleAndScores {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
+
   .animeSubtitle {
-    font-size: 18px;
-    color: var(--subtext-color);
-    margin: 20px 0;
+    font-size: 17px;
   }
-  
-  .animeTags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 20px;
-  }
-  
+
   .animeTag {
-    font-size: 14px;
-    background-color: var(--secondary-dark);
-    padding: 5px 10px;
-    border-radius: 5px;
-    color: var(--text-color);
-    margin-right: 10px;
-    margin-bottom: 10px;
+    font-size: 13px;
   }
-  
-  .scoreSection {
-    display: flex;
+}
+
+@media (max-width: 768px) {
+  .titleAndScores {
     flex-direction: column;
-    align-items: flex-end;
+    align-items: flex-start;
   }
-  
-  @media (max-width: 768px) {
-    .titleAndScores {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
-    .animeTitle {
-      font-size: 28px;
-    }
-  
-    .scoreSection {
-      align-items: flex-start;
-      margin-top: 10px;
-    }
+
+  .animeTitle {
+    font-size: 28px;
   }
-  
-  @media (max-width: 480px) {
-    .animeTitle {
-      font-size: 24px;
-    }
-  
-    .animeSubtitle {
-      font-size: 16px;
-    }
-  
-    .animeTag {
-      font-size: 12px;
-    }
+
+  .scoreSection {
+    align-items: flex-start;
+    margin-top: 10px;
   }
+
+  .animeSubtitle {
+    font-size: 16px;
+  }
+
+  .animeTag {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mainContent {
+    padding: 10px;
+  }
+
+  .animeTitle {
+    font-size: 24px;
+  }
+
+  .animeSubtitle {
+    font-size: 15px;
+  }
+
+  .animeTag {
+    font-size: 11px;
+  }
+}

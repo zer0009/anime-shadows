@@ -1,20 +1,25 @@
 import React from 'react';
+import { Grid, Typography, Box } from '@mui/material';
 import AnimeCard from '../AnimeCard/AnimeCard';
 import styles from './FavoriteList.module.css';
 
 const FavoriteList = ({ favorites }) => {
     return (
-        <div className={styles.favoriteList}>
+        <Box className={styles.favoriteList}>
             {favorites.length > 0 ? (
-                <div className={styles.animeGrid}>
+                <Grid container spacing={2} className={styles.animeGrid}>
                     {favorites.map(favorite => (
-                        <AnimeCard key={favorite._id} anime={favorite} />
+                        <Grid item key={favorite._id} xs={12} sm={6} md={4} lg={2.4}>
+                            <AnimeCard anime={favorite} />
+                        </Grid>
                     ))}
-                </div>
+                </Grid>
             ) : (
-                <p className={styles.noFavorites}>You have no favorite anime yet.</p>
+                <Typography variant="body1" className={styles.noFavorites}>
+                    You have no favorite anime yet.
+                </Typography>
             )}
-        </div>
+        </Box>
     );
 };
 

@@ -2,26 +2,40 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px;
+    padding: 10px 20px;
     background-color: var(--primary-dark);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Added box-shadow */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Softer shadow */
+    border-radius: 8px; /* Rounded corners */
     direction: ltr; /* Ensure the navbar is LTR */
 }
 
 .navButton {
     display: flex;
     align-items: center;
-    gap: 5px;
-    padding: 10px 15px; /* Increased padding */
+    gap: 8px;
+    padding: 10px 20px; /* Increased padding */
     background-color: var(--secondary-dark);
     color: var(--text-color);
     border: none;
-    border-radius: 4px;
+    border-radius: 6px; /* More rounded corners */
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s; /* Added transform transition */
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Added box-shadow transition */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
 .navButton:hover {
     background-color: var(--secondary-light);
     transform: scale(1.05); /* Added scale effect on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+.selectContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1; /* Allow the select elements to take up available space */
+}
+
+.searchBarContainer {
+    flex: 1; /* Allow the search bar to take up available space */
 }

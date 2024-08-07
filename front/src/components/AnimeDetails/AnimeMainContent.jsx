@@ -1,16 +1,27 @@
 import React from 'react';
 import { Box, Button, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import ScoreDisplay from '../ScoreDisplay.jsx';
 import styles from './AnimeMainContent.module.css';
 
 const AnimeMainContent = React.memo(({ anime, handleGenreClick, getScoreDisplayProps, t }) => {
+  const { i18n } = useTranslation();
+
+  const getGenreName = (genre) => {
+    const currentLanguage = i18n.language;
+    if (currentLanguage === 'ar' && genre.name_ar && genre.name_ar !== 'N/A') {
+      return genre.name_ar;
+    }
+    return genre.name;
+  };
+
   return (
     <div className={styles.mainContent}>
+      <Box className={styles.scoreSection}>
+        <ScoreDisplay {...getScoreDisplayProps(anime)} />
+      </Box>
       <Box className={styles.titleAndScores}>
-        <Typography variant="h4" className={styles.animeTitle}>{anime.title}</Typography>
-        <Box className={styles.scoreSection}>
-          <ScoreDisplay {...getScoreDisplayProps(anime)} />
-        </Box>
+        <Typography variant="h5" className={styles.animeTitle}>{anime.title}</Typography>
       </Box>
       <Typography variant="body1" className={styles.animeSubtitle}>{anime.description}</Typography>
       <Box className={styles.animeTags}>
@@ -22,7 +33,7 @@ const AnimeMainContent = React.memo(({ anime, handleGenreClick, getScoreDisplayP
             onClick={() => handleGenreClick(genre._id)}
             className={styles.animeTag}
           >
-            {genre.name}
+            {getGenreName(genre)}
           </Button>
         ))}
       </Box>

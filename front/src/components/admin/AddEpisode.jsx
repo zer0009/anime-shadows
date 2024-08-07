@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Typography, Button, Box, Paper, TextField, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Alert } from '@mui/material';
-import { Delete, Edit, Add } from '@mui/icons-material';
+import { Typography, Button, Box, Paper, TextField, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Alert, Grid, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import { Delete, Add } from '@mui/icons-material';
 import { addEpisode, updateEpisode, deleteEpisode } from '../../api/modules/admin';
 import { fetchEpisodesByAnimeId } from '../../api/modules/anime';
 import EpisodeSelector from './EpisodeSelector';
@@ -18,7 +18,6 @@ const AddEpisode = () => {
   const [streamingServers, setStreamingServers] = useState([]);
   const [downloadServers, setDownloadServers] = useState([]);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [openEditDialog, setOpenEditDialog] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
 
   useEffect(() => {
@@ -67,7 +66,7 @@ const AddEpisode = () => {
     }
   };
 
-  const handleQuickAdd = async () => {
+  const handleQuickAdd = () => {
     const nextEpisodeNumber = allEpisodes.length + 1;
     setNumber(nextEpisodeNumber.toString());
     setTitle(`الحلقة ${nextEpisodeNumber}`);
@@ -107,7 +106,6 @@ const AddEpisode = () => {
       resetForm();
     } catch (error) {
       console.error('Error saving episode:', error);
-      console.error('Error response:', error.response);
       showSnackbar('Error saving episode', 'error');
     }
   };
@@ -133,58 +131,82 @@ const AddEpisode = () => {
     <Paper className={styles.addEpisode}>
       <Typography variant="h6" className={styles.title}>Add, Edit, or Delete Episode</Typography>
       <form onSubmit={handleSubmit} className={styles.form}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-          <EpisodeSelector
-            episodeId={episodeId}
-            setEpisodeId={handleEpisodeSelect}
-            allEpisodes={allEpisodes}
-          />
-          <Button
-            startIcon={<Add />}
-            variant="contained"
-            color="secondary"
-            onClick={handleQuickAdd}
-          >
-            Quick Add
-          </Button>
-        </Box>
-        <TextField
-          label="Number"
-          value={number}
-          onChange={(e) => setNumber(e.target.value)}
-          fullWidth
-          margin="dense"
-          placeholder="Enter episode number"
-        />
-        <TextField
-          label="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          fullWidth
-          margin="dense"
-          placeholder="Enter episode title"
-        />
-        <ServerManager
-          streamingServers={streamingServers}
-          setStreamingServers={setStreamingServers}
-          downloadServers={downloadServers}
-          setDownloadServers={setDownloadServers}
-        />
-        <Box mt={2} display="flex" justifyContent="space-between">
-          <Button type="submit" variant="contained" color="primary" fullWidth>
-            {episodeId ? 'Update Episode' : 'Add Episode'}
-          </Button>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <InputLabel>Episode</InputLabel>
+              <Select
+                value={episodeId}
+                onChange={(e) => handleEpisodeSelect(e.target.value)}
+                displayEmpty
+              >
+                <MenuItem value="" disabled>Select an episode</MenuItem>
+                {allEpisodes.map((episode) => (
+                  <MenuItem key={episode._id} value={episode._id}>
+                    {episode.title}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Button
+              startIcon={<Add />}
+              variant="contained"
+              color="secondary"
+              onClick={handleQuickAdd}
+              fullWidth
+            >
+              Quick Add
+            </Button>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Number"
+              value={number}
+              onChange={(e) => setNumber(e.target.value)}
+              fullWidth
+              margin="dense"
+              placeholder="Enter episode number"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              fullWidth
+              margin="dense"
+              placeholder="Enter episode title"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <ServerManager
+              streamingServers={streamingServers}
+              setStreamingServers={setStreamingServers}
+              downloadServers={downloadServers}
+              setDownloadServers={setDownloadServers}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Button type="submit" variant="contained" color="primary" fullWidth>
+              {episodeId ? 'Update Episode' : 'Add Episode'}
+            </Button>
+          </Grid>
           {episodeId && (
-            <>
-              <IconButton color="secondary" onClick={() => setOpenDeleteDialog(true)}>
-                <Delete />
-              </IconButton>
-              <IconButton color="primary" onClick={() => setOpenEditDialog(true)}>
-                <Edit />
-              </IconButton>
-            </>
+            <Grid item xs={12} sm={6}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => setOpenDeleteDialog(true)}
+                fullWidth
+                startIcon={<Delete />}
+              >
+                Delete Episode
+              </Button>
+            </Grid>
           )}
-        </Box>
+        </Grid>
       </form>
       <Dialog
         open={openDeleteDialog}
@@ -204,46 +226,6 @@ const AddEpisode = () => {
             Delete
           </Button>
         </DialogActions>
-      </Dialog>
-      <Dialog
-        open={openEditDialog}
-        onClose={() => setOpenEditDialog(false)}
-      >
-        <DialogTitle>Edit Episode</DialogTitle>
-        <DialogContent>
-          <form onSubmit={handleSubmit} className={styles.form}>
-            <TextField
-              label="Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              fullWidth
-              margin="dense"
-              placeholder="Enter episode title"
-            />
-            <TextField
-              label="Number"
-              value={number}
-              onChange={(e) => setNumber(e.target.value)}
-              fullWidth
-              margin="dense"
-              placeholder="Enter episode number"
-            />
-            <ServerManager
-              streamingServers={streamingServers}
-              setStreamingServers={setStreamingServers}
-              downloadServers={downloadServers}
-              setDownloadServers={setDownloadServers}
-            />
-            <DialogActions>
-              <Button onClick={() => setOpenEditDialog(false)} color="primary">
-                Cancel
-              </Button>
-              <Button type="submit" variant="contained" color="primary">
-                Save Changes
-              </Button>
-            </DialogActions>
-          </form>
-        </DialogContent>
       </Dialog>
       <Snackbar
         open={snackbar.open}

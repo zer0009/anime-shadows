@@ -1,18 +1,20 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, Suspense, lazy } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { fetchAnimeById, rateAnime } from '../api/modules/anime';
+import { fetchAnimeById, rateAnime, getMyAnimeList } from '../api/modules/anime';
 import { addFavorite, removeFavorite } from '../api/modules/user';
-import { Container, Typography, useMediaQuery } from '@mui/material';
+import { Container, Typography, useMediaQuery, Snackbar, Alert } from '@mui/material';
 import LoadingSpinner from '../components/common/LoadingSpinner.jsx';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { JsonLd } from 'react-schemaorg';
-import AnimeSidebar from '../components/AnimeDetails/AnimeSidebar.jsx';
-import AnimeMainContent from '../components/AnimeDetails/AnimeMainContent.jsx';
-import RatingDialog from '../components/AnimeDetails/RatingDialog.jsx';
-import AnimeTabs from '../components/AnimeDetails/AnimeTabs.jsx';
-import AnimeEpisodes from '../components/AnimeDetails/AnimeEpisodes.jsx';
+import useFetchUserData from '../hooks/useFetchUserData';
 import styles from './AnimeDetails.module.css';
+
+const AnimeSidebar = lazy(() => import('../components/AnimeDetails/AnimeSidebar.jsx'));
+const AnimeMainContent = lazy(() => import('../components/AnimeDetails/AnimeMainContent.jsx'));
+const RatingDialog = lazy(() => import('../components/AnimeDetails/RatingDialog.jsx'));
+const AnimeTabs = lazy(() => import('../components/AnimeDetails/AnimeTabs.jsx'));
+const AnimeEpisodes = lazy(() => import('../components/AnimeDetails/AnimeEpisodes.jsx'));
 
 const AnimeDetails = () => {
   const { t } = useTranslation();
@@ -25,7 +27,13 @@ const AnimeDetails = () => {
   const [userRating, setUserRating] = useState(null);
   const [ratingDialogOpen, setRatingDialogOpen] = useState(false);
   const [selectedRating, setSelectedRating] = useState(null);
-  const isSmallScreen = useMediaQuery('(max-width: 768px)');
+  const [viewingHistory, setViewingHistory] = useState([]);
+  const [myAnimeListData, setMyAnimeListData] = useState(null);
+  const [myAnimeListLoading, setMyAnimeListLoading] = useState(true);
+  const isSmallScreen = useMediaQuery('(max-width: 1024px)');
+  const { userData } = useFetchUserData();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const getAnimeDetails = useCallback(async () => {
     try {
@@ -49,9 +57,34 @@ const AnimeDetails = () => {
     }
   }, [id]);
 
+  const getMyAnimeListData = useCallback(async () => {
+    try {
+      setMyAnimeListLoading(true);
+      const response = await getMyAnimeList(id);
+      setMyAnimeListData(response);
+    } catch (error) {
+      console.error('Error fetching MyAnimeList data:', error);
+    } finally {
+      setMyAnimeListLoading(false);
+    }
+  }, [id]);
+
+  const getViewingHistory = useCallback(() => {
+    try {
+      if (userData && userData.history) {
+        const filteredHistory = userData.history.filter(item => item.anime === id);
+        setViewingHistory(filteredHistory);
+      }
+    } catch (error) {
+      console.error('Error fetching viewing history:', error);
+    }
+  }, [userData, id]);
+
   useEffect(() => {
     getAnimeDetails();
-  }, [getAnimeDetails]);
+    getViewingHistory();
+    getMyAnimeListData();
+  }, [getAnimeDetails, getViewingHistory, getMyAnimeListData]);
 
   useEffect(() => {
     localStorage.setItem(`favorite-${id}`, isFavorite);
@@ -61,7 +94,8 @@ const AnimeDetails = () => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) {
-        alert('Please login to favorite');
+        setSnackbarMessage('Please login to favorite');
+        setSnackbarOpen(true);
         return;
       }
       if (isFavorite) {
@@ -91,7 +125,8 @@ const AnimeDetails = () => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) {
-        alert('Please login to rate');
+        setSnackbarMessage('Please login to rate');
+        setSnackbarOpen(true);
         return;
       }
       await rateAnime(id, user._id, selectedRating);
@@ -109,7 +144,8 @@ const AnimeDetails = () => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) {
-        alert('Please login to remove rating');
+        setSnackbarMessage('Please login to remove rating');
+        setSnackbarOpen(true);
         return;
       }
       await rateAnime(id, user._id, null);
@@ -122,9 +158,16 @@ const AnimeDetails = () => {
   }, [id]);
 
   const getScoreDisplayProps = useMemo(() => (anime) => ({
-    score: anime.myAnimeListRating || 0,
-    userCount: anime.myAnimeListUserCount || 0
-  }), []);
+    score: myAnimeListData ? myAnimeListData.myAnimeListRating : 0,
+    userCount: myAnimeListData ? myAnimeListData.myAnimeListUserCount : 0
+  }), [myAnimeListData]);
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
 
   if (loading) {
     return <LoadingSpinner />;
@@ -170,7 +213,7 @@ const AnimeDetails = () => {
             "aggregateRating": {
               "@type": "AggregateRating",
               "ratingValue": anime.averageRating,
-              "reviewCount": anime.myAnimeListUserCount
+              "reviewCount": myAnimeListData ? myAnimeListData.myAnimeListUserCount : 0
             },
             "numberOfEpisodes": anime.episodes?.length || 0,
             "actor": anime.characters?.map(character => ({
@@ -185,52 +228,60 @@ const AnimeDetails = () => {
             }
           }}
         />
-        {isSmallScreen ? (
-          <AnimeTabs
-            anime={anime}
-            isFavorite={isFavorite}
-            handleFavoriteClick={handleFavoriteClick}
-            handleRateAnime={handleRateAnime}
-            handleGenreClick={handleGenreClick}
-            openModal={openModal}
-            getScoreDisplayProps={getScoreDisplayProps}
-            t={t}
-          />
-        ) : (
-          <div className={styles.animeDetailsGrid}>
-            <AnimeSidebar
+        <Suspense fallback={<LoadingSpinner />}>
+          {isSmallScreen ? (
+            <AnimeTabs
               anime={anime}
               isFavorite={isFavorite}
               handleFavoriteClick={handleFavoriteClick}
               handleRateAnime={handleRateAnime}
+              handleGenreClick={handleGenreClick}
+              openModal={openModal}
+              getScoreDisplayProps={getScoreDisplayProps}
               t={t}
-              className={styles.animeSidebar}
             />
-            <div className={styles.animeMainContent}>
-              <AnimeMainContent
+          ) : (
+            <div className={styles.animeDetailsGrid}>
+              <AnimeSidebar
                 anime={anime}
-                handleGenreClick={handleGenreClick}
-                getScoreDisplayProps={getScoreDisplayProps}
+                isFavorite={isFavorite}
+                handleFavoriteClick={handleFavoriteClick}
+                handleRateAnime={handleRateAnime}
                 t={t}
+                className={styles.animeSidebar}
               />
-              <AnimeEpisodes
-                anime={anime}
-                openModal={openModal}
-                t={t}
-              />
+              <div className={styles.animeMainContent}>
+                <AnimeMainContent
+                  anime={anime}
+                  handleGenreClick={handleGenreClick}
+                  getScoreDisplayProps={getScoreDisplayProps}
+                  t={t}
+                />
+                <AnimeEpisodes
+                  anime={anime}
+                  openModal={openModal}
+                  t={t}
+                  viewingHistory={viewingHistory}
+                />
+              </div>
             </div>
-          </div>
-        )}
-        <RatingDialog
-          ratingDialogOpen={ratingDialogOpen}
-          setRatingDialogOpen={setRatingDialogOpen}
-          selectedRating={selectedRating}
-          setSelectedRating={setSelectedRating}
-          submitRating={submitRating}
-          removeRating={removeRating}
-          userRating={userRating}
-          t={t}
-        />
+          )}
+          <RatingDialog
+            ratingDialogOpen={ratingDialogOpen}
+            setRatingDialogOpen={setRatingDialogOpen}
+            selectedRating={selectedRating}
+            setSelectedRating={setSelectedRating}
+            submitRating={submitRating}
+            removeRating={removeRating}
+            userRating={userRating}
+            t={t}
+          />
+        </Suspense>
+        <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+          <Alert onClose={handleSnackbarClose} severity="warning" sx={{ width: '100%' }}>
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
       </Container>
     </HelmetProvider>
   );

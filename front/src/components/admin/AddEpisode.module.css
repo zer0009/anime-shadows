@@ -2,13 +2,15 @@
 .addEpisode {
   padding: 20px;
   margin: 20px 0;
-  background-color: var(--primary-dark);
   color: var(--text-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .title {
   margin-bottom: 20px;
   color: var(--text-color);
+  text-align: center;
 }
 
 .form {
@@ -16,6 +18,36 @@
   flex-direction: column;
 }
 
-.submitButton {
-  margin-top: 20px;
+.MuiButton-containedSecondary {
+  background-color: var(--highlight-color);
+  color: var(--text-color);
+}
+
+.MuiButton-containedSecondary:hover {
+  background-color: var(--highlight-color-dark);
+}
+
+.MuiButton-containedPrimary {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+}
+
+.MuiButton-containedPrimary:hover {
+  background-color: var(--primary-color-dark);
+}
+
+.MuiIconButton-colorSecondary {
+  color: var(--highlight-color);
+}
+
+.MuiIconButton-colorSecondary:hover {
+  color: var(--highlight-color-dark);
+}
+
+.MuiIconButton-colorPrimary {
+  color: var(--primary-color);
+}
+
+.MuiIconButton-colorPrimary:hover {
+  color: var(--primary-color-dark);
 }

@@ -1,0 +1,120 @@
+.downloadSection {
+  background-color: var(--primary-dark);
+   padding: 10px;
+  /*border-radius: 12px; */
+  box-shadow: 0 4px 8px var(--shadow-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.downloadTitle {
+  margin-bottom: 20px;
+  color: var(--highlight-color);
+  text-align: center;
+  font-size: 1.5rem;
+  text-shadow: 0 0 10px var(--glow-color);
+}
+
+.qualityGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.downloadIcon {
+  color: var(--highlight-color);
+}
+
+.qualityChip {
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--text-color);
+  padding: 5px 10px;
+}
+
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalContent {
+  background-color: var(--secondary-dark);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px var(--shadow-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modalTitle {
+  margin-bottom: 20px;
+  color: var(--highlight-color);
+  text-align: center;
+  font-size: 1.5rem;
+  text-shadow: 0 0 10px var(--glow-color);
+}
+
+.qualityDetailsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.downloadButton {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  text-transform: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.downloadButton:hover {
+  background-color: var(--highlight-color);
+  transform: scale(1.05);
+}
+
+.downloadButton svg {
+  margin-right: 5px;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+  .downloadTitle {
+    font-size: 1.2rem;
+  }
+
+  .qualityChip {
+    font-size: 0.9rem;
+  }
+
+  .downloadButton {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 400px) {
+  .downloadTitle {
+    font-size: 1rem;
+  }
+
+  .qualityChip {
+    font-size: 0.8rem;
+  }
+
+  .downloadButton {
+    font-size: 0.7rem;
+    padding: 5px 8px;
+  }
+}

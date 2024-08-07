@@ -128,3 +128,14 @@ export const scrapeAnime = async (url) => {
     const response = await API.post('/anime/scrape-mal', { url });
     return response;
 };
+
+// New function to scrape Witanime
+export const scrapeWitanime = async (url) => {
+  const response = await API.get(`/anime/scrape-witanime?url=${encodeURIComponent(url)}`);
+  return response.data;
+};
+
+export const scrapeAnimeLuxe = async (url) => {
+  const response = await API.get(`/anime/scrape-animeluxe?url=${encodeURIComponent(url)}`);
+  return response.data;
+};

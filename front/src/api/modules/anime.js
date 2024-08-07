@@ -153,3 +153,87 @@ export const rateAnime = async (animeId,userId, rating) => {
       return { animes: [], totalPages: 1 };
     }
   };
+
+  // export const toggleEpisodeWatched = async (animeId, episodeNumber) => {
+  //   try {
+  //     const response = await API.post('/anime/toggleEpisodeWatched', { animeId, episodeNumber }, getAuthHeaders());
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error('Error toggling episode watched status:', error);
+  //     throw error;
+  //   }
+  // };
+
+
+  // export const fetchViewingHistoryByAnimeId = async (animeId) => {
+  //   try {
+  //     const response = await API.get(`/user/${animeId}/viewingHistory`, getAuthHeaders());
+  //     console.log('response 1', response);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error(`Error fetching viewing history for anime ID ${animeId}:`, error);
+  //     throw error;
+  //   }
+  // };
+
+// export const markAsWatched = async (animeId, episodeId) => {
+//   try {
+//     const response = await API.post(`/anime/${animeId}/episodes/${episodeId}/watch`, {}, getAuthHeaders());
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error marking episode as watched:', error);
+//     throw error;
+//   }
+// };
+
+// export const markAsUnwatched = async (animeId, episodeId) => {
+//   try {
+//     const response = await API.post(`/anime/${animeId}/episodes/${episodeId}/unwatch`, {}, getAuthHeaders());
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error marking episode as unwatched:', error);
+//     throw error;
+//   }
+// };
+
+// export const getViewingHistory = async () => {
+//   try {
+//     const response = await API.get('/anime/viewingHistory', getAuthHeaders());
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error fetching viewing history:', error);
+//     throw error;
+//   }
+// };
+
+
+
+export const markAsWatched = async (animeId, episodeId) => {
+  try {
+    const response = await API.post('/anime/viewingHistory/watched', { animeId, episodeId }, getAuthHeaders());
+    return response.data;
+  } catch (error) {
+    console.error('Error in markAsWatched:', error);
+    throw error;
+  }
+};
+
+export const markAsUnwatched = async (animeId, episodeId) => {
+  try {
+    const response = await API.post('/anime/viewingHistory/unwatched', { animeId, episodeId }, getAuthHeaders());
+    return response.data;
+  } catch (error) {
+    console.error('Error in markAsUnwatched:', error);
+    throw error;
+  }
+};
+
+export const getViewingHistory = async (animeId) => {
+  const response = await API.get(`/anime/viewingHistory/${animeId}`, getAuthHeaders());
+  return response.data;
+};
+
+export const getMyAnimeList = async (animeId) => {
+  const response = await API.get(`/anime/myAnimeList/${animeId}`);
+  return response.data;
+};

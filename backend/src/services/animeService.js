@@ -96,13 +96,18 @@ const toggleEpisodeWatched = async (userId, animeId, episodeNumber) => {
   );
 
   if (watchedIndex !== -1) {
+    // Remove episode from viewing history
     user.viewingHistory.splice(watchedIndex, 1);
   } else {
-    user.viewingHistory.push({ animeId, episodeNumber });
+    // Add episode to viewing history
+    user.viewingHistory.push({ animeId, episodeNumber, viewedAt: new Date() });
   }
 
   await user.save();
-  return { message: watchedIndex !== -1 ? 'Episode unmarked as watched' : 'Episode marked as watched', viewingHistory: user.viewingHistory };
+  return { 
+    message: watchedIndex !== -1 ? 'Episode unmarked as watched' : 'Episode marked as watched', 
+    viewingHistory: user.viewingHistory 
+  };
 };
 
 const addEpisode = async (animeId, { number, title, servers }) => {
@@ -199,13 +204,21 @@ const getAnime = async (animeId, userId) => {
   const averageRating = anime.calculateAverageRating();
   const userCount = anime.getUserCount();
 
-  const myAnimeListData = anime.myAnimeListUrl ? await anime.fetchMyAnimeListData() : null;
-
   return { 
     ...animeDetails, 
     isFavorite, 
     averageRating, 
-    userCount,
+    userCount
+  };
+};
+
+const getMyAnimeListData = async (animeId) => {
+  const anime = await Anime.findById(animeId);
+  if (!anime) throw new Error('Anime not found');
+
+  const myAnimeListData = anime.myAnimeListUrl ? await anime.fetchMyAnimeListData() : null;
+
+  return {
     myAnimeListRating: myAnimeListData ? myAnimeListData.rating : null,
     myAnimeListUserCount: myAnimeListData ? myAnimeListData.userCount : null
   };
@@ -351,6 +364,78 @@ const getMovies = async (page = 1, limit = 10) => {
   return { animes: movies, totalPages: Math.ceil(totalMovies / limit) };
 };
 
+const markAllEpisodesWatched = async (userId, animeId, watched = true) => {
+  const user = await User.findById(userId);
+  if (!user) throw new Error('User not found');
+
+  const anime = await Anime.findById(animeId);
+  if (!anime) throw new Error('Anime not found');
+
+  if (watched) {
+    // Mark all episodes as watched
+    anime.episodes.forEach(episode => {
+      if (!user.viewingHistory.some(history => history.animeId.toString() === animeId && history.episodeNumber === episode.number)) {
+        user.viewingHistory.push({ animeId, episodeNumber: episode.number, viewedAt: new Date() });
+      }
+    });
+  } else {
+    // Mark all episodes as unwatched
+    user.viewingHistory = user.viewingHistory.filter(history => history.animeId.toString() !== animeId);
+  }
+
+  await user.save();
+  return { message: watched ? 'All episodes marked as watched' : 'All episodes marked as unwatched', viewingHistory: user.viewingHistory };
+};
+
+const getWatchedEpisodes = async (userId, animeId) => {
+  const user = await User.findById(userId);
+  if (!user) throw new Error('User not found');
+
+  const watchedEpisodes = user.viewingHistory.filter(history => history.animeId.toString() === animeId);
+  return watchedEpisodes;
+};
+
+const markEpisodeAsWatched = async (userId, animeId, episodeId) => {
+  const user = await User.findById(userId);
+  if (!user) throw new Error('User not found');
+
+  const anime = await Anime.findById(animeId);
+  if (!anime) throw new Error('Anime not found');
+
+  const episode = await Episode.findById(episodeId);
+  if (!episode) throw new Error('Episode not found');
+
+  const historyItem = user.viewingHistory.find(item => item.animeId.toString() === animeId && item.episodeId.toString() === episodeId);
+  if (!historyItem) {
+    user.viewingHistory.push({ animeId, episodeId, viewedAt: new Date() });
+  } else {
+    // If the episode is already in the history, update the viewedAt date
+    historyItem.viewedAt = new Date();
+  }
+
+  await user.save();
+  return { message: 'Episode marked as watched', viewingHistory: user.viewingHistory };
+};
+
+const markEpisodeAsUnwatched = async (userId, animeId, episodeId) => {
+  const user = await User.findById(userId);
+  if (!user) throw new Error('User not found');
+
+  user.viewingHistory = user.viewingHistory.filter(item => !(item.animeId.toString() === animeId && item.episodeId.toString() === episodeId));
+
+  await user.save();
+  return { message: 'Episode marked as unwatched', viewingHistory: user.viewingHistory };
+};
+
+const getViewingHistory = async (userId, animeId) => {
+  const user = await User.findById(userId);
+  if (!user) throw new Error('User not found');
+
+  const viewingHistory = user.viewingHistory.filter(item => item.animeId.toString() === animeId);
+  console.log('viewingHistory', user.viewingHistory);
+  return viewingHistory;
+};
+
 module.exports = {
   createAnime,
   updateAnime,
@@ -358,6 +443,7 @@ module.exports = {
   toggleEpisodeWatched,
   getAnimes,
   getAnime,
+  getMyAnimeListData,
   getEpisode,
   rateAnime,
   deleteAnime,
@@ -365,5 +451,10 @@ module.exports = {
   getPopularEpisodes,
   addToHistory,
   getFilteredAnimes,
-  getMovies
+  getMovies,
+  markAllEpisodesWatched,
+  getWatchedEpisodes,
+  markEpisodeAsWatched,
+  markEpisodeAsUnwatched,
+  getViewingHistory
 };

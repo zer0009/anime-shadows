@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Facebook, Twitter, Instagram } from '@mui/icons-material';
-import { Box, Container, Typography, IconButton } from '@mui/material';
+import { Box, Container, Typography, IconButton, Grid } from '@mui/material';
 import styles from './Footer.module.css';
 
 const Footer = () => {
@@ -10,15 +10,9 @@ const Footer = () => {
     return (
         <Box component="footer" className={styles.footer}>
             <Container maxWidth="lg" className={styles.container}>
-                <Box className={styles.footerContent}>
-                    <Box className={styles.footerNav}>
-                        <Link to="/about" className={styles.footerLink}>About</Link>
-                        <Link to="/privacy" className={styles.footerLink}>Privacy</Link>
-                        <Link to="/terms" className={styles.footerLink}>Terms</Link>
-                        <Link to="/contact" className={styles.footerLink}>Contact</Link>
-                        <Link to="/faq" className={styles.footerLink}>FAQ</Link>
-                    </Box>
-                    <Box className={styles.socialIcons}>
+                <Grid container spacing={4} className={styles.footerContent}>
+                    <Grid item xs={12} md={4} className={styles.footerSection}>
+                        <Typography variant="h6" className={styles.footerTitle}>Anime Shadows</Typography>
                         <IconButton href="#" aria-label="Facebook" className={styles.socialIcon}>
                             <Facebook fontSize="small" />
                         </IconButton>
@@ -28,13 +22,25 @@ const Footer = () => {
                         <IconButton href="#" aria-label="Instagram" className={styles.socialIcon}>
                             <Instagram fontSize="small" />
                         </IconButton>
-                    </Box>
-                </Box>
-                <Box className={styles.footerBottom}>
+                    </Grid>
+                    {/* <Grid item xs={12} md={4} className={styles.footerSection}>
+                        <Box className={styles.footerLinks}>
+                            <Link to="/" className={styles.footerLink}>Home</Link>
+                            <Link to="/anime-list" className={styles.footerLink}>Anime List</Link>
+                        </Box>
+                    </Grid> */}
+                    <Grid item xs={12} md={4} className={styles.footerSection}>
+                        <Typography variant="body2" className={styles.footerNotice}>
+                            تنويه: هذا الموقع لا يقوم بتخزين أي ملفات على الخادم الخاص به.
+                        </Typography>
+                        <Typography variant="body2" className={styles.footerNotice}>
+                            يتم توفير جميع المحتويات من قبل أطراف ثالثة غير تابعة.
+                        </Typography>
+                    </Grid>
+                </Grid>
                     <Typography variant="body2" className={styles.copyright}>
-                        &copy; {currentYear} Anime Shadows. All rights reserved.
+                        &copy; {currentYear} Anime Shadows. All rights reserved
                     </Typography>
-                </Box>
             </Container>
         </Box>
     );

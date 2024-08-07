@@ -3,11 +3,13 @@ import { useSearchParams } from 'react-router-dom';
 import useFetchMovieList from '../hooks/useFetchMovieList';
 import ListDisplay from '../components/ListDisplay/ListDisplay';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
-import { Box } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import { JsonLd } from 'react-schemaorg';
 import { useSEO } from '../hooks/useSEO';
 import { useTranslation } from 'react-i18next';
+import BreadcrumbsComponent from '../components/common/BreadcrumbsComponent';
+import styles from './MovieList.module.css';
 
 const MovieList = () => {
     const { t } = useTranslation();
@@ -67,20 +69,26 @@ const MovieList = () => {
             </Helmet>
             {seo.jsonLd && <JsonLd item={seo.jsonLd} />}
             
-            <Box sx={{ padding: '20px' }}>
-                <ListDisplay
-                    title={t('movieList.listTitle', 'قائمة الأفلام')}
-                    list={movieList}
-                    loading={loading}
-                    error={error}
-                    fields={['title', 'genre', 'rating']}
+            <Container maxWidth="lg" className={styles.movieListPage}>
+                <BreadcrumbsComponent
+                    links={[]}
+                    current={t('movieList.breadcrumb', 'قائمة الأفلام')}
                 />
-                <PaginationComponent
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                />
-            </Box>
+                <Box sx={{ padding: '20px' }}>
+                    <ListDisplay
+                        title={t('movieList.listTitle', 'قائمة الأفلام')}
+                        list={movieList}
+                        loading={loading}
+                        error={error}
+                        fields={['title', 'genre', 'rating']}
+                    />
+                    <PaginationComponent
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />
+                </Box>
+            </Container>
         </>
     );
 };

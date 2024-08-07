@@ -1,22 +1,23 @@
 .tabsContainer {
   width: 100%;
-  background-color: var(--primary-dark);
+  background-color: var(--primary-dark) !important;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 .tabs {
-  background-color: var(--secondary-dark);
-  border-bottom: 1px solid var(--highlight-color);
+  background-color: var(--secondary-dark) !important;
+  border-bottom: 1px solid var(--highlight-color) !important;
 }
 
 .tab {
-  color: var(--text-color);
-  font-weight: bold;
-  text-transform: none;
-  padding: 12px 16px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  color: var(--text-color) !important;
+  font-weight: bold !important;
+  text-transform: none !important;
+  padding: 12px 16px !important;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
+  position: relative;
 }
 
 .tab:hover {
@@ -24,26 +25,28 @@
 }
 
 .tab.Mui-selected {
-  background-color: var(--highlight-color);
-  color: var(--primary-dark);
+  background-color: var(--highlight-color) !important;
+  color: var(--primary-dark) !important;
 }
+
 
 .tabNotSelected {
   color: var(--text-color) !important;
 }
 
 .tabContent {
-  padding: 20px;
-  background-color: var(--primary-dark);
+  padding: 20px !important;
+  background-color: var(--primary-dark) !important;
 }
 
 .detailsContainer {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
   gap: 20px;
 }
 
 @media (max-width: 1024px) {
   .detailsContainer {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 }

@@ -2,13 +2,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
 .footer {
-    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 50%, var(--tertiary-dark) 100%);
+    background: linear-gradient(135deg, #2a0f47, #8f2b88);
     color: var(--text-color);
     width: 100%;
     padding: 20px 0;
     font-family: 'Poppins', sans-serif;
     font-size: 14px;
-    min-height: 50px; /* Increased min-height for better spacing */
+    box-shadow: 0px -4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .container {
@@ -20,40 +20,39 @@
 .footerContent {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    width: 100%;
     flex-wrap: wrap;
-    margin-bottom: 10px;
-}
-
-.footerNav {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
+    /* margin-bottom: 20px; */
 }
 
 .footerLink {
     color: var(--text-color);
     text-decoration: none;
     transition: color 0.3s ease;
-    padding: 5px;
 }
 
 .footerLink:hover {
     color: var(--highlight-color);
 }
 
+.footerSection {
+    flex-direction: column;
+}
+
+.footerTitle {
+    margin-bottom: 10px;
+}
+
 .socialIcons {
-    display: flex;
+    /* display: flex; */
     gap: 15px;
-    justify-content: center;
+    margin-top: 10px; /* Ensure social icons are below the title */
 }
 
 .socialIcon {
     color: var(--text-color);
     transition: color 0.3s ease, transform 0.3s ease;
-    width: 48px; /* Reserve space for icons */
-    height: 48px; /* Reserve space for icons */
 }
 
 .socialIcon:hover {
@@ -62,42 +61,62 @@
 }
 
 .footerBottom {
-    text-align: center;
-    font-size: 10px;
+    width: 100%;
+    padding: 10px 0;
+    /* display: flex; */
+    align-items: center;
+    justify-content: center;
 }
 
-.copyright {
-    margin: 0;
+.footerNotice {
+    margin-bottom: 10px;
+    font-size: 12px;
+    direction: rtl; /* Ensure Arabic text is displayed correctly */
+    text-align: right; /* Align text to the right */
+    align-self: flex-end; /* Align to the right within the flex container */
+}
+
+.footerLinks {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
 }
 
 @media (max-width: 768px) {
     .footerContent {
         flex-direction: column;
         gap: 10px;
+        align-items: center;
     }
 
-    .footerNav {
-        order: -1;
-        margin-bottom: 10px;
+    .footerSection {
+        align-items: center;
+        width: 100%; /* Ensure it takes full width on smaller screens */
     }
 
     .socialIcons {
         justify-content: center;
+        margin-top: 10px;
+    }
+
+    .footerBottom {
+        flex-direction: column;
+        gap: 10px;
     }
 }
 
 @media (max-width: 480px) {
     .footer {
         font-size: 12px;
-        padding: 15px 0; /* Adjust padding for smaller screens */
-    }
-
-    .footerNav {
-        flex-direction: column;
-        gap: 10px; /* Increase gap for better spacing on small screens */
+        padding: 10px 0;
     }
 
     .socialIcons {
         margin-top: 10px;
+    }
+
+    .footerSection {
+        font-size: 10px;
     }
 }

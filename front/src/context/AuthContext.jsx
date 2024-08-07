@@ -7,6 +7,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true); // Add loading state
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -22,7 +23,12 @@ export const AuthProvider = ({ children }) => {
                 .catch(error => {
                     console.error('Error fetching user profile:', error);
                     localStorage.removeItem('token');
+                })
+                .finally(() => {
+                    setLoading(false); // Set loading to false after fetching
                 });
+        } else {
+            setLoading(false); // Set loading to false if no token
         }
     }, []);
 
@@ -39,7 +45,7 @@ export const AuthProvider = ({ children }) => {
                 console.log('Logged in user:', response.user); // Debug log
             }
             setUser(response.user); // Ensure the user state is correctly set
-            navigate('/profile');
+            navigate('/');
         } catch (error) {
             console.error('Error logging in:', error);
             throw error; // Throw the error so it can be caught in useAuthForm
@@ -59,7 +65,7 @@ export const AuthProvider = ({ children }) => {
                 console.log('Registered user:', response.user); // Debug log
             }
             setUser(response.user); // Ensure the user state is correctly set
-            navigate('/profile');
+            navigate('/login');
         } catch (error) {
             console.error('Error registering:', error);
             throw error; // Throw the error so it can be caught in useAuthForm
@@ -70,18 +76,19 @@ export const AuthProvider = ({ children }) => {
         try {
             await logoutUser();
             localStorage.removeItem('token');
+            localStorage.removeItem('user');
             if (process.env.NODE_ENV === 'development') {
                 console.log('User logged out'); // Debug log
             }
             setUser(null);
-            navigate('/login');
+            navigate('/');
         } catch (error) {
             console.error('Error logging out:', error);
         }
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, register, logout }}>
+        <AuthContext.Provider value={{ user, loading, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     );

@@ -1,17 +1,15 @@
 import React from 'react';
 import { TextField, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
 
-const EpisodeSelector = ({ episodeId, setEpisodeId, title, setTitle, number, setNumber, allEpisodes }) => {
+const EpisodeSelector = ({ episodeId, setEpisodeId, allEpisodes }) => {
   const handleEpisodeChange = (e) => {
-    const selectedEpisode = allEpisodes.find(ep => ep._id === e.target.value);
-    setEpisodeId(e.target.value);
-    setTitle(selectedEpisode ? selectedEpisode.title : '');
-    setNumber(selectedEpisode ? selectedEpisode.number : '');
+    const selectedEpisodeId = e.target.value;
+    setEpisodeId(selectedEpisodeId);
   };
 
   return (
     <Box>
-      <FormControl fullWidth margin="normal">
+      <FormControl fullWidth margin="dense">
         <InputLabel>Episode</InputLabel>
         <Select
           value={episodeId}
@@ -22,27 +20,11 @@ const EpisodeSelector = ({ episodeId, setEpisodeId, title, setTitle, number, set
           </MenuItem>
           {allEpisodes.map((episode) => (
             <MenuItem key={episode._id} value={episode._id}>
-              {`Episode ${episode.number}: ${episode.title}`}
+              {episode.title} (Episode {episode.number})
             </MenuItem>
           ))}
         </Select>
       </FormControl>
-      <TextField
-        label="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        fullWidth
-        margin="normal"
-        placeholder="Enter episode title"
-      />
-      <TextField
-        label="Number"
-        value={number}
-        onChange={(e) => setNumber(e.target.value)}
-        fullWidth
-        margin="normal"
-        placeholder="Enter episode number"
-      />
     </Box>
   );
 };

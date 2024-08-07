@@ -367,3 +367,107 @@ exports.getSitemapData = async (req, res) => {
       res.status(500).json({ message: 'Error fetching sitemap data', error: error.message });
   }
 };
+
+exports.getMyAnimeList = async (req, res) => {
+  const { animeId } = req.params;
+  try {
+    const myAnimeList = await AnimeService.getMyAnimeListData(animeId);
+    res.json(myAnimeList);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+// exports.markEpisodeAsWatched = async (req, res) => {
+//   const { animeId, episodeId } = req.params;
+
+//   try {
+//     const result = await AnimeService.markEpisodeAsWatched(req.user._id, animeId, episodeId);
+//     res.status(200).json(result);
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// };
+
+// exports.markEpisodeAsUnwatched = async (req, res) => {
+//   const { animeId, episodeId } = req.params;
+
+//   try {
+//     const result = await AnimeService.markEpisodeAsUnwatched(req.user._id, animeId, episodeId);
+//     res.status(200).json(result);
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// };
+
+// exports.getViewingHistory = async (req, res) => {
+//   const { animeId } = req.params;
+
+//   try {
+//     const viewingHistory = await AnimeService.getViewingHistory(req.user._id, animeId);
+//     res.status(200).json(viewingHistory);
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// };
+
+exports.markAsWatched = async (req, res) => {
+  try {
+    const { animeId, episodeId } = req.body;
+    const user = req.user;
+
+    const viewedEpisode = {
+      animeId: new mongoose.Types.ObjectId(animeId),
+      episodeId: new mongoose.Types.ObjectId(episodeId),
+      viewedAt: new Date()
+    };
+
+    user.viewingHistory.push(viewedEpisode);
+    await user.save();
+
+    res.status(201).send(user.viewingHistory);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
+exports.markAsUnwatched = async (req, res) => {
+  try {
+    const { animeId, episodeId } = req.body;
+    console.log('Received payload to mark as unwatched:', { animeId, episodeId });
+    const user = req.user;
+
+    console.log('Current viewing history:', user.viewingHistory);
+
+    user.viewingHistory = user.viewingHistory.filter((viewed) => {
+      if (!viewed.animeId || !viewed.episodeId) {
+        console.error('Invalid entry in viewing history:', viewed);
+        return true; // Keep invalid entries for further inspection
+      }
+      return !(viewed.animeId.equals(new mongoose.Types.ObjectId(animeId)) && viewed.episodeId.equals(new mongoose.Types.ObjectId(episodeId)));
+    });
+
+    await user.save();
+
+    res.status(200).send(user.viewingHistory);
+  } catch (error) {
+    console.error('Error in markAsUnwatched:', error);
+    res.status(400).send(error);
+  }
+};
+
+exports.getViewingHistory = async (req, res) => {
+  try {
+    const { animeId } = req.params;
+    const user = req.user;
+
+    const viewingHistory = user.viewingHistory.filter(viewed => viewed.animeId.equals(new mongoose.Types.ObjectId(animeId)));
+    console.log('Viewing history for anime:', animeId, viewingHistory);
+
+    res.status(200).send(viewingHistory);
+  } catch (error) {
+    console.error('Error in getViewingHistory:', error);
+    res.status(400).send(error);
+  }
+};

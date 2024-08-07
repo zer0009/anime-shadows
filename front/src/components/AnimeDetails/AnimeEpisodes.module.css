@@ -1,22 +1,68 @@
 .animeEpisodes {
-    margin-top: 20px;
-  }
-  
-  .episodeList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .episodeItem {
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: var(--secondary-dark);
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .episodeItem:hover {
-    background-color: var(--highlight-color);
-  }
+  margin-top: 20px;
+  padding: 20px;
+  background-color: var(--primary-dark);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px var(--shadow-color);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.title {
+  margin-bottom: 15px;
+  color: var(--highlight-color);
+  text-align: center;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.watchedCount {
+  margin-bottom: 15px;
+  color: var(--subtext-color);
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.episodeList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.episodeItem {
+  padding: 15px;
+  background-color: var(--secondary-dark);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.episodeItem:hover {
+  background-color: var(--highlight-color);
+  transform: translateY(-2px);
+}
+
+.episodeTitle {
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: bold;
+  flex-grow: 1;
+}
+
+.noEpisodes {
+  color: var(--subtext-color);
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.eyeIcon {
+  margin-left: 10px;
+}

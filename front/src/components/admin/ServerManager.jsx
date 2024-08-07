@@ -1,102 +1,27 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, MenuItem, Paper, Dialog, DialogActions, DialogContent, DialogTitle, Chip, Tooltip } from '@mui/material';
+import { TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, MenuItem, Paper, Dialog, DialogActions, DialogContent, DialogTitle, Chip, Tooltip, Switch, FormControlLabel } from '@mui/material';
 import { Add, Delete, Edit, FileCopy } from '@mui/icons-material';
+import { scrapeWitanime, scrapeAnimeLuxe } from '../../api/modules/admin';
 import styles from './ServerManager.module.css';
 
-const qualityOptions = ['360p', '480p', '720p', '1080p', '4K'];
-const commonStreamingDomains = ['youtube', 'vimeo', 'dailymotion', 'streamable', 'twitch'];
-const commonDownloadDomains = ['mega', 'mediafire', 'dropbox', 'drive.google'];
+const qualityOptions = ['360p', '480p', '720p', '1080p'];
 
 const ServerManager = ({ streamingServers, setStreamingServers, downloadServers, setDownloadServers }) => {
   const [newServer, setNewServer] = useState({ serverName: '', quality: '', url: '', type: 'streaming' });
   const [editServer, setEditServer] = useState(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
-
-  const detectServerInfo = (url) => {
-    let name = '';
-    let type = 'streaming';
-    let quality = '';
-
-    try {
-      // Check if the input is a valid URL
-      if (!url.startsWith('http://') && !url.startsWith('https://')) {
-        url = 'http://' + url;
-      }
-      const urlObj = new URL(url);
-      const hostname = urlObj.hostname;
-      const pathname = urlObj.pathname;
-      
-      // Detect server name
-      if (hostname.includes('youtube') || hostname.includes('youtu.be')) {
-        name = 'YouTube';
-      } else if (hostname.includes('vimeo')) {
-        name = 'Vimeo';
-      } else if (hostname.includes('dailymotion')) {
-        name = 'Dailymotion';
-      } else if (hostname.includes('streamable')) {
-        name = 'Streamable';
-      } else if (hostname.includes('twitch')) {
-        name = 'Twitch';
-      } else if (hostname.includes('ok.ru')) {
-        name = 'OK.ru';
-      } else if (hostname.includes('videa')) {
-        name = 'Videa';
-      } else if (commonDownloadDomains.some(domain => hostname.includes(domain))) {
-        name = hostname.split('.').slice(-2, -1)[0];
-        type = 'download';
-      } else {
-        // Extract name from subdomain or first part of domain
-        const parts = hostname.split('.');
-        name = parts.length > 2 ? parts[0] : parts[parts.length - 2];
-      }
-      
-      // Capitalize first letter
-      name = name.charAt(0).toUpperCase() + name.slice(1);
-      
-      // Detect quality
-      const qualityMatch = url.match(/(\d{3,4}p)/i) || pathname.match(/(\d{3,4}p)/i);
-      if (qualityMatch) {
-        quality = qualityMatch[1].toLowerCase();
-      }
-    } catch (error) {
-      console.error('Error parsing URL:', error);
-      // Return default values if URL parsing fails
-      return { name, type, quality };
-    }
-    
-    return { name, type, quality };
-  };
+  const [useScrape, setUseScrape] = useState(false);
+  const [scrapeUrl, setScrapeUrl] = useState('');
+  const [scraperSource, setScraperSource] = useState('witanime');
 
   const handleServerChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'url') {
-      const { name: detectedName, type: detectedType, quality: detectedQuality } = detectServerInfo(value);
-      setNewServer(prev => ({
-        ...prev,
-        serverName: detectedName || prev.serverName,
-        type: detectedType,
-        quality: detectedQuality || prev.quality,
-        [name]: value
-      }));
-    } else {
-      setNewServer(prev => ({ ...prev, [name]: value }));
-    }
+    setNewServer(prev => ({ ...prev, [name]: value }));
   };
 
   const handleEditServerChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'url') {
-      const { name: detectedName, type: detectedType, quality: detectedQuality } = detectServerInfo(value);
-      setEditServer(prev => ({
-        ...prev,
-        serverName: detectedName || prev.serverName,
-        type: detectedType,
-        quality: detectedQuality || prev.quality,
-        [name]: value
-      }));
-    } else {
-      setEditServer(prev => ({ ...prev, [name]: value }));
-    }
+    setEditServer(prev => ({ ...prev, [name]: value }));
   };
 
   const addServer = () => {
@@ -137,27 +62,70 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
     setOpenEditDialog(false);
   };
 
-  const extractEmbedUrl = (iframeCode) => {
-    const srcMatch = iframeCode.match(/src="([^"]+)"/);
-    return srcMatch ? srcMatch[1] : '';
-  };
-
-  const handleUrlChange = (e) => {
-    const fullUrl = e.target.value;
-    const embedUrl = extractEmbedUrl(fullUrl);
-    handleServerChange({ target: { name: 'url', value: embedUrl || fullUrl } });
-  };
-
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text).then(() => {
-      // You can add a snackbar notification here if you want
-      console.log('Copied to clipboard');
-    });
+  const handleScrapeWebsite = async () => {
+    try {
+      const scrapeFunction = scraperSource === 'witanime' ? scrapeWitanime : scrapeAnimeLuxe;
+      const servers = await scrapeFunction(scrapeUrl, {
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      });
+      servers.forEach(server => {
+        if (server.type === 'streaming') {
+          setStreamingServers(prev => [...prev, server]);
+        } else {
+          setDownloadServers(prev => [...prev, server]);
+        }
+      });
+    } catch (error) {
+      console.error('Error scraping website:', error);
+    }
   };
 
   return (
-    <Paper className={styles.serverSection} elevation={3}>
-      <Typography variant="h6" className={styles.title}>Add Server</Typography>
+    <Paper className={styles.serverManager}>
+      <Typography variant="h6" className={styles.title}>Server Manager</Typography>
+      <FormControlLabel
+        control={<Switch checked={useScrape} onChange={() => setUseScrape(!useScrape)} />}
+        label="Use Scrape"
+      />
+      {useScrape && (
+        <Box className={styles.form}>
+          <TextField
+            label="Scrape URL"
+            name="scrapeUrl"
+            value={scrapeUrl}
+            onChange={(e) => setScrapeUrl(e.target.value)}
+            fullWidth
+            margin="normal"
+            placeholder="Enter URL to scrape"
+            variant="outlined"
+          />
+          <TextField
+            label="Scraper Source"
+            name="scraperSource"
+            select
+            value={scraperSource}
+            onChange={(e) => setScraperSource(e.target.value)}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+          >
+            <MenuItem value="witanime">Witanime</MenuItem>
+            <MenuItem value="animeluxe">AnimeLuxe</MenuItem>
+          </TextField>
+          <Button 
+            variant="contained" 
+            color="secondary" 
+            onClick={handleScrapeWebsite} 
+            startIcon={<Add />} 
+            fullWidth
+            className={styles.addButton}
+          >
+            Scrape Website
+          </Button>
+        </Box>
+      )}
       <Box className={styles.form}>
         <TextField
           label="Server Name"
@@ -166,7 +134,7 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
           onChange={handleServerChange}
           fullWidth
           margin="normal"
-          placeholder="Enter server name (auto-detected)"
+          placeholder="Enter server name"
           variant="outlined"
         />
         <TextField
@@ -189,13 +157,13 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
           label="URL"
           name="url"
           value={newServer.url}
-          onChange={handleUrlChange}
+          onChange={handleServerChange}
           fullWidth
           margin="normal"
-          placeholder="Paste full iframe code or URL"
+          placeholder="Enter server URL"
+          variant="outlined"
           multiline
           rows={3}
-          variant="outlined"
         />
         <TextField
           label="Type"

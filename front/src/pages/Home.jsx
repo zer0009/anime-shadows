@@ -10,14 +10,18 @@ import { useSEO } from '../hooks/useSEO';
 import styles from './Home.module.css';
 import { Box, Container, Fab, Grid, Skeleton, Button, useMediaQuery, useTheme } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Scrollbar, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import 'swiper/css/autoplay';
 
 const HeroSection = lazy(() => import('../components/HeroSection/HeroSection'));
 const AnimeSection = lazy(() => import('../components/AnimeSection/AnimeSection'));
 const AnimeCard = lazy(() => import('../components/AnimeCard/AnimeCard'));
+const LoadingSpinner = lazy(() => import('../components/common/LoadingSpinner'));
 
 import hero1Webp from '/assets/images/hero1_optimized.webp';
 import hero2Webp from '/assets/images/hero2_optimized.webp';
@@ -158,7 +162,7 @@ const Home = () => {
             {seo.jsonLd && seo.jsonLd.map((item, index) => (
                 <JsonLd key={index} item={item} />
             ))}
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<LoadingSpinner />}>
                 <HeroSection heroImages={heroImages} t={t} />
                 <Container maxWidth="lg" className={styles.mainContent}>
                     <AnimeSection
@@ -168,6 +172,7 @@ const Home = () => {
                         navigate={navigate}
                         handleAnimeClick={handleAnimeClick}
                         t={t}
+                        isMobile={isMobile}
                     />
                     <section aria-labelledby="recent-episodes-heading" className={styles.recentEpisodesSection}>
                         <div className={styles.sectionHeader}>
@@ -181,28 +186,57 @@ const Home = () => {
                                 {t('home.more')}
                             </Button>
                         </div>
-                        <Grid container spacing={1}>
-                            {recentLoading ? (
-                                [...Array(10)].map((_, index) => (
-                                    <Grid item xs={12} sm={6} md={4} lg={2} key={index}>
+                        {recentLoading ? (
+                            <Grid container spacing={1}>
+                                {[...Array(10)].map((_, index) => (
+                                    <Grid item xs={12} sm={6} md={3} lg={2} key={index}>
                                         <Skeleton variant="rectangular" width="100%" height={200} />
                                         <Skeleton width="60%" />
                                         <Skeleton width="40%" />
                                     </Grid>
-                                ))
+                                ))}
+                            </Grid>
+                        ) : (
+                            isMobile ? (
+                                <Swiper
+                                    modules={[Navigation, Pagination, Scrollbar, Autoplay]}
+                                    spaceBetween={10}
+                                    slidesPerView={1}
+                                    breakpoints={{
+                                        320: { slidesPerView: 1 },
+                                        425: { slidesPerView: 2 },
+                                        640: { slidesPerView: 3 },
+                                    }}
+                                    autoplay={{ delay: 3000 }}
+                                    pagination={{ clickable: true }}
+                                    scrollbar={{ draggable: true }}
+                                >
+                                    {recentEpisodes.map((episode) => (
+                                        <SwiperSlide key={episode._id}>
+                                            <AnimeCard
+                                                anime={episode.anime}
+                                                episodeTitle={episode.title}
+                                                episodeId={episode._id}
+                                                onClick={() => handleAnimeClick(episode.anime._id)}
+                                            />
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
                             ) : (
-                                Array.isArray(recentEpisodes) && recentEpisodes.map((episode) => (
-                                    <Grid item xs={12} sm={6} md={4} lg={isMobile ? 6 : 2.4} key={episode._id}>
-                                        <AnimeCard
-                                            anime={episode.anime}
-                                            episodeTitle={episode.title}
-                                            episodeId={episode._id}
-                                            onClick={() => handleAnimeClick(episode.anime._id)}
-                                        />
-                                    </Grid>
-                                ))
-                            )}
-                        </Grid>
+                                <Grid container spacing={1}>
+                                    {recentEpisodes.map((episode) => (
+                                        <Grid item xs={12} sm={6} md={3} lg={2.4} key={episode._id}>
+                                            <AnimeCard
+                                                anime={episode.anime}
+                                                episodeTitle={episode.title}
+                                                episodeId={episode._id}
+                                                onClick={() => handleAnimeClick(episode.anime._id)}
+                                            />
+                                        </Grid>
+                                    ))}
+                                </Grid>
+                            )
+                        )}
                     </section>
                     <AnimeSection
                         title="animeList"
@@ -211,6 +245,7 @@ const Home = () => {
                         navigate={navigate}
                         handleAnimeClick={handleAnimeClick}
                         t={t}
+                        isMobile={isMobile}
                     />
                 </Container>
             </Suspense>

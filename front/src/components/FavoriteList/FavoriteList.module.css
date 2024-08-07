@@ -1,10 +1,10 @@
-.favoriteList {
+/* .favoriteList {
   padding: 20px;
   background-color: var(--secondary-dark);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
-}
+} */
 
 .title {
   margin-bottom: 16px;
@@ -15,10 +15,10 @@
 }
 
 .animeGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 16px;
-  justify-items: center;
+  justify-content: center;
 }
 
 .noFavorites {

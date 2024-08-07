@@ -1,0 +1,199 @@
+.streamingSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  /* padding: 16px; */
+  background-color: var(--primary-dark);
+  color: var(--text-color);
+  /* border-radius: 12px; */
+  box-shadow: 0 4px 8px var(--shadow-color);
+  overflow: hidden; /* Ensure no overflow */
+}
+
+.serverTabs {
+  width: 100%;
+  margin-bottom: 16px;
+  background-color: var(--secondary-dark);
+  box-shadow: 0 2px 4px var(--shadow-color);
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: auto;
+}
+
+.serverTab {
+  text-transform: none;
+  font-weight: 500;
+  color: var(--text-color);
+  padding: 12px 16px;
+  margin: 0 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.serverTab:hover {
+  background-color: var(--tertiary-dark);
+  color: var(--highlight-color);
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.serverTab.Mui-selected {
+  background-color: var(--highlight-color) !important;
+  color: var(--badge-text-light) !important;
+  box-shadow: 0 4px 8px var(--shadow-color) !important;
+}
+
+.scrollButtons {
+  color: var(--text-color);
+}
+
+.scrollButtons.Mui-disabled {
+  opacity: 0.3;
+}
+
+.videoContainer {
+  width: 100%;
+  max-width: 1000px;
+  position: relative;
+  background-color: var(--background-light);
+  /* border-radius: 8px; */
+  overflow: hidden;
+  box-shadow: 0 4px 8px var(--shadow-color);
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+}
+
+.videoPlayer, .iframeContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.loadingContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.loadingText {
+  margin-top: 8px;
+  color: var(--text-color);
+}
+
+.watchButton {
+  width: 100%;
+  max-width: 300px;
+  margin-top: 16px;
+  background-color: var(--accent-color);
+  color: var(--badge-text-light);
+  text-transform: none;
+  font-weight: 500;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.watchButton:hover {
+  background-color: var(--primary-light);
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.navigationButtons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+  gap: 10px; /* Add gap between buttons */
+}
+
+.leftIcons {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Add gap between the left arrow and flag */
+}
+
+.rightIcons {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Add gap between the left arrow and flag */
+}
+
+.navButton {
+  color: var(--highlight-color);
+  text-transform: none;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navButton:hover {
+  background-color: var(--primary-light);
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.animePageButton {
+  color: var(--badge-text-light);
+  background-color: var(--highlight-color);
+  text-transform: none;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.animePageButton:hover {
+  background-color: var(--primary-light);
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.reportButton {
+  color: var(--highlight-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.reportButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+@media (max-width: 600px) {
+  .serverTabs {
+    flex-direction: column;
+  }
+
+  .videoContainer {
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  }
+
+  .watchButton {
+    width: 100%;
+  }
+
+  .navigationButtons {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

@@ -12,7 +12,7 @@ const HeroSection = ({ heroImages, t }) => {
                 modules={[Navigation, Pagination, Scrollbar, Autoplay]}
                 spaceBetween={0}
                 slidesPerView={1}
-                navigation
+                // navigation
                 pagination={{ clickable: true }}
                 scrollbar={{ draggable: true }}
                 autoplay={{ delay: 5000, disableOnInteraction: false }}
@@ -33,7 +33,7 @@ const HeroSection = ({ heroImages, t }) => {
             <Box className={styles.heroContent}>
                 <Container maxWidth="lg">
                     <Typography variant="h1" className={styles.mainHeading}>
-                        {t('home.mainHeading', 'أنمي شادوز')}
+                        Anime Shadows
                     </Typography>
                     <Typography variant="h2" className={styles.subHeading}>
                         {t('home.subHeading', 'موقعك الأول لمشاهدة الأنمي')}
