@@ -18,4 +18,5 @@ libnss3
 lsb-release
 xdg-utils
 wget
-libasound2
+libasound2-data
+libasound2-dev
