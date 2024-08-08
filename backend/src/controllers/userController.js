@@ -41,7 +41,6 @@ exports.getHistory = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    console.log("i am user", user);
     res.json(user.viewingHistory);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -64,7 +63,6 @@ exports.getUserProfile = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
     const { password, ...userInfo } = user._doc; // Exclude password from the response
-    console.log("i am userInfo", userInfo);
     res.json(userInfo);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -127,9 +125,6 @@ exports.getViewingHistoryByAnimeId = async (req, res) => {
   const userId = req.user._id;
 
   try {
-    console.log(`Fetching viewing history for user ${userId} and anime ${animeId}`);
-    
-    // Validate animeId
     if (!mongoose.Types.ObjectId.isValid(animeId)) {
       return res.status(400).json({ message: 'Invalid anime ID' });
     }
@@ -142,16 +137,12 @@ exports.getViewingHistoryByAnimeId = async (req, res) => {
 
     const user = await User.findById(userId).populate('viewingHistory.animeId', 'title');
     if (!user) {
-      console.log('User not found');
       return res.status(404).json({ message: 'User not found' });
     }
 
-    console.log('User viewing history:', user.viewingHistory);
     const viewingHistory = user.viewingHistory.filter(history => {
-      console.log(`Comparing ${history.animeId.toString()} with ${animeId}`);
       return history.animeId.toString() === animeId;
     });
-    console.log('Filtered viewing history:', viewingHistory);
     res.status(200).json(viewingHistory);
   } catch (err) {
     console.error('Error fetching viewing history:', err);
