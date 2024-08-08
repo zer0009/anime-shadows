@@ -91,7 +91,7 @@ app.use((req, res, next) => {
 });
 
 // Serve static files for the frontend
-app.use(express.static(path.join(__dirname, '../../front/public')));
+app.use(express.static(path.join(__dirname, '../../front/dist')));
 
 // Set x-robots-tag header to allow indexing
 app.use((req, res, next) => {
