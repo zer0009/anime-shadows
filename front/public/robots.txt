@@ -6,4 +6,4 @@ Sitemap: https://animeshadows.xyz/sitemap.xml
 Disallow: /admin/
 Disallow: /private/
 Disallow: /api/
-Disallow: https://app.animeshadows.xyz/
+Disallow: /https://app.animeshadows.xyz/
