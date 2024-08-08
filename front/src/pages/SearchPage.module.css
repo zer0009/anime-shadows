@@ -13,6 +13,7 @@
     background-color: var(--secondary-dark);
     padding: 10px 0;
     margin-bottom: 20px;
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
 }
 
 .navButton {
@@ -46,7 +47,8 @@
     border-radius: 4px 0 0 4px;
     background-color: var(--secondary-dark);
     color: var(--text-color);
-    width: 300px;
+    width: 100%;
+    max-width: 300px;
 }
 
 .searchButton {
@@ -82,4 +84,80 @@
     font-size: 1.2rem;
     color: var(--text-color);
     margin-top: 20px;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 1024px) {
+    .searchPage {
+        padding: 15px;
+    }
+
+    .searchNavbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .navButton {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .searchForm {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .searchInput {
+        border-radius: 4px 4px 0 0;
+    }
+
+    .searchButton {
+        border-radius: 0 0 4px 4px;
+    }
+}
+
+@media (max-width: 768px) {
+    .searchPage {
+        padding: 10px;
+    }
+
+    .animeCards {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .navButton {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .searchInput {
+        padding: 8px;
+    }
+
+    .searchButton {
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .searchPage {
+        padding: 5px;
+    }
+
+    .animeCards {
+        grid-template-columns: 1fr;
+    }
+
+    .navButton {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    .searchInput {
+        padding: 6px;
+    }
+
+    .searchButton {
+        padding: 6px;
+    }
 }

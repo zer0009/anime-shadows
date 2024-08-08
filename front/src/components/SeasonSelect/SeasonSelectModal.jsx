@@ -4,7 +4,7 @@ import { FaCalendarAlt } from 'react-icons/fa';
 import { Modal, Box, Typography, Button } from '@mui/material';
 import styles from './SeasonSelectModal.module.css';
 
-const SeasonSelect = ({ onChange }) => {
+const SeasonSelectModal = ({ onChange }) => {
     const [seasons, setSeasons] = useState([]);
     const [open, setOpen] = useState(false);
 
@@ -28,11 +28,11 @@ const SeasonSelect = ({ onChange }) => {
         <div>
             <Button onClick={handleOpen} className={styles.button}>
                 <FaCalendarAlt className={styles.icon} />
-                <span className={styles.text}>Season</span>
+                <span className={styles.text}>Select Season</span>
             </Button>
             <Modal open={open} onClose={handleClose}>
                 <Box className={styles.modal}>
-                    <Typography variant="h6">Select Season</Typography>
+                    <Typography variant="h6">Season</Typography>
                     <ul className={styles.list}>
                         {seasons.map(season => (
                             <li key={season._id} onClick={() => handleSelect(season.name)}>
@@ -46,4 +46,4 @@ const SeasonSelect = ({ onChange }) => {
     );
 };
 
-export default SeasonSelect;
+export default SeasonSelectModal;

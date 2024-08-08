@@ -116,6 +116,7 @@ const AnimeEpisodes = React.memo(({ anime, openModal, t }) => {
                   : handleMarkAsWatched(anime._id, episode._id);
               }}
               className={styles.eyeIcon}
+              aria-label={watchedEpisodes[episode._id] ? 'Mark as unwatched' : 'Mark as watched'}
             >
               {watchedEpisodes[episode._id] ? <Visibility color="primary" /> : <VisibilityOff />}
             </IconButton>

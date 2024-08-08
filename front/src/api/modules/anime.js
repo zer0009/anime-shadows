@@ -60,7 +60,6 @@ export const searchAnime = async (query) => {
 export const fetchTypes = async () => {
     try {
         const response = await API.get('/types');
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error('Error fetching types:', error);
@@ -146,7 +145,6 @@ export const rateAnime = async (animeId,userId, rating) => {
     try {
       const response = await API.get(`/anime/movies?page=${page}&limit=${limit}`);
       const data = response.data;
-      console.log('data', data);
       return Array.isArray(data.animes) ? data : { animes: [], totalPages: 1 };
     } catch (error) {
       console.error('Error fetching movies:', error);

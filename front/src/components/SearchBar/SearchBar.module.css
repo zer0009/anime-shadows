@@ -1,35 +1,35 @@
 .searchBar {
     display: flex;
     align-items: center;
-    background-color: var(--primary-dark); /* Updated to use primary dark color */
-    border-radius: 20px; /* Reduced border radius */
-    padding: 3px 8px; /* Reduced padding */
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+    border-radius: 25px; /* Increased border radius */
+    padding: 5px 10px; /* Adjusted padding */
     width: 100%;
-    max-width: 400px; /* Reduced max width */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 450px; /* Increased max width */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Increased shadow for better depth */
     transition: box-shadow 0.3s ease;
 }
 
 .searchBar:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Increased shadow on hover */
 }
 
 .searchInput {
     flex-grow: 1;
-    padding: 8px; /* Reduced padding */
+    padding: 10px; /* Adjusted padding */
     border: none;
     outline: none;
-    background-color: var(--secondary-light); /* Updated to use secondary light color */
-    color: var(--text-color); /* Updated to use text color */
-    border-radius: 20px 0 0 20px; /* Reduced border radius */
+    background-color: var(--background-light); /* Updated to use background light color */
+    color: var(--text-color); /* Ensure text color is applied */
+    border-radius: 25px 0 0 25px; /* Increased border radius */
 }
 
 .searchButton {
-    background-color: var(--highlight-color); /* Updated to use highlight color */
-    color: var(--text-color); /* Updated to use text color */
+    background-color: var(--highlight-color); /* Ensure highlight color is applied */
+    color: var(--text-color); /* Ensure text color is applied */
     border: none;
-    padding: 8px; /* Reduced padding */
-    border-radius: 0 20px 20px 0; /* Reduced border radius */
+    padding: 10px; /* Adjusted padding */
+    border-radius: 0 25px 25px 0; /* Increased border radius */
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -38,5 +38,5 @@
 }
 
 .searchButton:hover {
-    background-color: var(--secondary-light); /* Updated to use secondary light color for hover */
+    background-color: var(--secondary-light); /* Ensure secondary light color for hover */
 }

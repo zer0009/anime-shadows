@@ -1,16 +1,42 @@
-.select {
-    padding: 10px; /* Increased padding for better touch target */
+.selectContainer {
+    display: flex;
+    align-items: center;
     background-color: var(--secondary-dark);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.2s;
+    padding: 5px;
+}
+
+.icon {
+    padding: 10px;
+    color: var(--text-color);
+}
+
+.select {
+    padding: 10px;
+    background-color: transparent;
     color: var(--text-color);
     border: none;
-    border-radius: 8px; /* Increased border-radius for a smoother look */
+    border-radius: 0 8px 8px 0;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s; /* Added transform transition */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Added box-shadow for depth */
+    outline: none;
+    flex: 1;
 }
 
 .select:hover {
     background-color: var(--secondary-light);
-    transform: scale(1.05); /* Slightly scales up on hover */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Enhanced box-shadow on hover */
+    transform: scale(1.05);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 768px) {
+    .selectContainer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .select {
+        border-radius: 8px;
+    }
 }

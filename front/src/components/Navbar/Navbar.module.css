@@ -7,6 +7,8 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Softer shadow */
     border-radius: 8px; /* Rounded corners */
     direction: ltr; /* Ensure the navbar is LTR */
+    flex-wrap: nowrap; /* Prevent wrapping */
+    justify-content: space-between; /* Distribute space evenly */
 }
 
 .navButton {
@@ -29,13 +31,47 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
 }
 
+.icon {
+    font-size: 1.2em;
+}
+
+.text {
+    display: inline-block;
+}
+
 .selectContainer {
     display: flex;
     align-items: center;
     gap: 10px;
     flex: 1; /* Allow the select elements to take up available space */
+    justify-content: space-between; /* Distribute space evenly */
 }
 
 .searchBarContainer {
     flex: 1; /* Allow the search bar to take up available space */
+    min-width: 200px; /* Ensure minimum width for search bar */
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+
+    .navButton {
+        padding: 8px 16px; /* Adjust padding for smaller screens */
+    }
+
+    .searchBarContainer {
+        margin-top: 5px;
+    }
+
+    .text {
+        display: none; /* Hide text on small screens */
+    }
+
+    .icon {
+        font-size: 1.5em; /* Increase icon size for better visibility */
+    }
 }

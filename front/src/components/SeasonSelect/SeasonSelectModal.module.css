@@ -1,0 +1,53 @@
+.button {
+    display: flex;
+    align-items: center;
+    background-color: var(--secondary-dark);
+    color: var(--text-color);
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.button:hover {
+    background-color: var(--secondary-light);
+    transform: scale(1.05);
+}
+
+.icon {
+    margin-right: 8px;
+}
+
+.text {
+    display: inline-block;
+}
+
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--primary-dark);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 400px;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.list li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.list li:hover {
+    background-color: var(--secondary-light);
+}

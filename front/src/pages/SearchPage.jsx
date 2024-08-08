@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import AnimeCard from '../components/AnimeCard/AnimeCard.jsx';
+import ListDisplay from '../components/ListDisplay/ListDisplay.jsx';
 import TagsModal from '../components/TagsModal/TagsModal.jsx';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import Navbar from '../components/Navbar/Navbar.jsx';
@@ -70,8 +70,6 @@ const SearchPage = () => {
         setSearchParams({ page });
     }, [setSearchParams]);
 
-    console.log('searchResults:', searchResults);
-
     return (
         <div className={styles.searchPage}>
             <Navbar
@@ -84,17 +82,13 @@ const SearchPage = () => {
                 onStateChange={handleStateChange}
                 onSearch={(query) => handleSearch(query, selectedTags, selectedType, selectedSeason, selectedSort, selectedPopular, selectedState, broadMatches, 1, limit)}
             />
-            {loading && <div className={styles.loading}>Loading...</div>}
-            {error && <div className={styles.error}>{error}</div>}
-            <div className={styles.animeCards}>
-                {searchResults.length > 0 ? (
-                    searchResults.map(anime => (
-                        <AnimeCard key={anime._id} anime={anime} />
-                    ))
-                ) : (
-                    <div className={styles.noResults}>No anime found</div>
-                )}
-            </div>
+            <ListDisplay
+                title="Search Results"
+                list={searchResults}
+                loading={loading}
+                error={error}
+                fields={{ onClick: (id) => console.log(`Clicked on anime with id: ${id}`) }}
+            />
             <PaginationComponent
                 currentPage={currentPage}
                 totalPages={totalPages}

@@ -12,7 +12,6 @@
   color: white;
   padding: 5px;
   border-radius: 3px;
-  margin-inline-end: 10px; /* Use logical property for margin */
 }
 
 .scoreDetails {
@@ -28,7 +27,7 @@
 }
 
 .userCount {
-  color: #757575;
+  color: white;
   font-size: 0.875rem;
   padding-inline-end: 10px; /* Use logical property for padding */
 }

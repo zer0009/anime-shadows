@@ -10,10 +10,12 @@ const ListDisplay = React.memo(({ title, list, loading, error, fields }) => {
     const theme = useTheme();
     const isXsScreen = useMediaQuery(theme.breakpoints.only('xs'));
     const isSmScreen = useMediaQuery(theme.breakpoints.only('sm'));
+    const isMdScreen = useMediaQuery(theme.breakpoints.only('md'));
 
     const getGridColumns = () => {
         if (isXsScreen) return 2;
         if (isSmScreen) return 3;
+        if (isMdScreen) return 4;
         return 6;
     };
 
@@ -73,9 +75,9 @@ const ListDisplay = React.memo(({ title, list, loading, error, fields }) => {
 
     return (
         <Box className={styles.listPage}>
-            <Typography variant="h4" component="h2" className={styles.pageTitle} gutterBottom>
+            {/* <Typography variant="h4" component="h2" className={styles.pageTitle} gutterBottom>
                 {title}
-            </Typography>
+            </Typography> */}
             {loading ? renderLoading() : error ? renderError() : list.length === 0 ? renderNoItems() : renderList()}
         </Box>
     );
