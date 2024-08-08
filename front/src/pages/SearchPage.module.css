@@ -39,6 +39,7 @@
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
 }
 
 .searchInput {
@@ -67,20 +68,13 @@
     justify-items: center;
 }
 
-.loading {
+.loading, .error, .noResults {
     text-align: center;
     font-size: 24px;
     color: var(--highlight-color);
 }
 
-.error {
-    text-align: center;
-    font-size: 24px;
-    color: var(--error-color);
-}
-
 .noResults {
-    text-align: center;
     font-size: 1.2rem;
     color: var(--text-color);
     margin-top: 20px;

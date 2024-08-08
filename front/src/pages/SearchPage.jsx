@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { Container, Box, Typography, CircularProgress, Alert } from '@mui/material';
 import ListDisplay from '../components/ListDisplay/ListDisplay.jsx';
 import TagsModal from '../components/TagsModal/TagsModal.jsx';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import Navbar from '../components/Navbar/Navbar.jsx';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
-import styles from './SearchPage.module.css';
 
 const SearchPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -71,7 +71,7 @@ const SearchPage = () => {
     }, [setSearchParams]);
 
     return (
-        <div className={styles.searchPage}>
+        <Container maxWidth="lg">
             <Navbar
                 onTagsClick={() => setIsTagsModalOpen(true)}
                 onTypeChange={handleTypeChange}
@@ -82,24 +82,27 @@ const SearchPage = () => {
                 onStateChange={handleStateChange}
                 onSearch={(query) => handleSearch(query, selectedTags, selectedType, selectedSeason, selectedSort, selectedPopular, selectedState, broadMatches, 1, limit)}
             />
-            <ListDisplay
-                title="Search Results"
-                list={searchResults}
-                loading={loading}
-                error={error}
-                fields={{ onClick: (id) => console.log(`Clicked on anime with id: ${id}`) }}
-            />
-            <PaginationComponent
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-            />
+            <Box my={4}>
+                {error && <Alert severity="error">{error}</Alert>}
+                <ListDisplay
+                    title="Search Results"
+                    list={searchResults}
+                    loading={loading}
+                    error={error}
+                    fields={{ onClick: (id) => console.log(`Clicked on anime with id: ${id}`) }}
+                />
+                <PaginationComponent
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
+            </Box>
             <TagsModal
                 open={isTagsModalOpen}
                 onClose={() => setIsTagsModalOpen(false)}
                 onApply={handleTagsApply}
             />
-        </div>
+        </Container>
     );
 };
 

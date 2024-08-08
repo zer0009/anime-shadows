@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
                     setUser(data);
                 })
                 .catch(error => {
-                    console.error('Error fetching user profile:', error);
+                    // console.error('Error fetching user profile:', error);
                     localStorage.removeItem('token');
                 })
                 .finally(() => {

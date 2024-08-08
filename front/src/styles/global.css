@@ -32,6 +32,7 @@
   --warning-color: #ffa000; /* Warning color */
   --info-color: #1976d2; /* Info color */
   --success-color: #388e3c; /* Success color */
+  --watched-color: #1c0141; /* Watched color */
 }
 
 html, body {

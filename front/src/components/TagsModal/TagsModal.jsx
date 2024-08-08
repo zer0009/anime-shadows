@@ -44,7 +44,6 @@ const TagsModal = ({ open, onClose, onApply }) => {
     const fetchTags = async () => {
       try {
         const response = await fetchGenre();
-        console.log(response);
         setTags(response);
       } catch (error) {
         setError('Error fetching tags');
