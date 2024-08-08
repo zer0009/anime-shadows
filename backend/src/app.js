@@ -14,6 +14,9 @@ require('./db/mongoose');
 
 const app = express();
 
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Security middleware
 app.use(helmet({
   contentSecurityPolicy: {
@@ -76,10 +79,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Serve static files
+// Serve static files from the 'uploads' directory
 app.use('/api/uploads', express.static('uploads', {
   maxAge: '1d',
   etag: false
