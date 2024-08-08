@@ -90,9 +90,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve static files for the frontend
-app.use(express.static(path.join(__dirname, '../../front/dist')));
-
 // Set x-robots-tag header to allow indexing
 app.use((req, res, next) => {
   res.setHeader('X-Robots-Tag', 'index, follow');
@@ -101,11 +98,6 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/api', routes);
-
-// Serve the frontend application
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../front/dist', 'index.html'));
-});
 
 // 404 handler for API routes
 app.use('/api', (req, res, next) => {
@@ -118,7 +110,7 @@ app.use('/api', (req, res, next) => {
 
 // 404 handler for other routes
 app.use((req, res, next) => {
-  res.status(404).sendFile(path.join(__dirname, '../../front/dist', '404.html'));
+  res.status(404).sendFile(path.join(__dirname, '../public/404.html'));
 });
 
 // Global error handler
