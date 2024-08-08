@@ -78,8 +78,7 @@ Sitemap: ${BASE_URL}/sitemap.xml
 
 Disallow: /admin/
 Disallow: /private/
-Disallow: /api/
-Disallow: /https://app.animeshadows.xyz/`;
+Disallow: /api/`;
 
     fs.writeFileSync(path.join(__dirname, 'public', 'robots.txt'), robotsTxt);
     console.log('robots.txt generated successfully');
