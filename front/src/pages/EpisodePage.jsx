@@ -65,7 +65,7 @@ const EpisodePage = () => {
   const seoProps = useMemo(() => episode ? {
     title: `${episode.anime.title} - الحلقة ${episode.number} | أنمي شادوز - Anime Shadows`,
     description: `شاهد ${episode.anime.title} الحلقة ${episode.number} اون لاين على أنمي شادوز (Anime Shadows). ${episode.description?.substring(0, 150) || ''}`,
-    keywords: `${episode.anime.title}, الحلقة ${episode.number}, مشاهدة اون لاين, تحميل, مترجم, أنمي, Anime Shadows, انمي, حلقة, ستريم, بث مباشر, جودة عالية, HD, مترجم عربي, بدون إعلانات, مجاناً, ${episode.anime.genres?.join(', ')}`,
+    keywords: `${episode.anime.title}, الحلقة ${episode.number}, أنمي 2024, مشاهدة اون لاين, تحميل, مترجم, أنمي, Anime Shadows, انمي, حلقة, ستريم, بث مباشر, جودة عالية, HD,SD,FHD,360p,480p,720p,1080p,جودة منخفضة, مترجم عربي, بدون إعلانات, مجاناً, ${episode.anime.genres?.join(', ')}`,
     canonicalUrl: `https://animeshadows.xyz/episode/${episodeId}`,
     ogType: 'video.episode',
     jsonLd: {

@@ -28,16 +28,16 @@ const MovieList = () => {
     }, [currentPage, setSearchParams]);
 
     const seoProps = {
-        title: t('movieList.title', 'قائمة الأفلام | أنمي شادوز - Anime Shadows'),
-        description: t('movieList.description', 'تصفح مجموعتنا الواسعة من الأفلام على أنمي شادوز. اكتشف أفلامك المفضلة وشاهدها اونلاين.'),
-        keywords: t('movieList.keywords', 'قائمة الأفلام, أفلام أنمي, مشاهدة أفلام اون لاين, Anime Shadows'),
+        title: t('movieList.title', 'قائمة الأفلام 2024 | أنمي شادوز - Anime Shadows'),
+        description: t('movieList.description', 'تصفح مجموعتنا الواسعة من أفلام الأنمي لعام 2024 على أنمي شادوز. اكتشف أفلامك المفضلة وشاهدها اونلاين.'),
+        keywords: t('movieList.keywords', 'قائمة الأفلام 2024, أفلام أنمي 2024, مشاهدة أفلام اون لاين, تحميل أفلام أنمي, Anime Shadows'),
         canonicalUrl: `https://animeshadows.xyz/movie-list?page=${currentPage}`,
         ogType: 'website',
         jsonLd: {
             "@context": "https://schema.org",
             "@type": "CollectionPage",
-            "name": t('movieList.title', 'قائمة الأفلام | أنمي شادوز - Anime Shadows'),
-            "description": t('movieList.description', 'تصفح مجموعتنا الواسعة من الأفلام على أنمي شادوز. اكتشف أفلامك المفضلة وشاهدها اونلاين.'),
+            "name": t('movieList.title', 'قائمة الأفلام 2024 | أنمي شادوز - Anime Shadows'),
+            "description": t('movieList.description', 'تصفح مجموعتنا الواسعة من أفلام الأنمي لعام 2024 على أنمي شادوز. اكتشف أفلامك المفضلة وشاهدها اونلاين.'),
             "url": `https://animeshadows.xyz/movie-list?page=${currentPage}`,
             "inLanguage": "ar",
             "isPartOf": {
@@ -48,7 +48,7 @@ const MovieList = () => {
             },
             "about": {
                 "@type": "Thing",
-                "name": "Anime Movies"
+                "name": "Anime Movies 2024"
             }
         }
     };

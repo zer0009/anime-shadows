@@ -7,7 +7,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import styles from './AnimeCard.module.css';
 
-const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeTitle, episodeId, onClick }) => {
+const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeNumber, episodeId, onClick }) => {
     const { t } = useTranslation();
     const [imageError, setImageError] = useState(false);
     const navigate = useNavigate();
@@ -88,9 +88,9 @@ const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeTitle,
                                 {anime.type.name}
                             </Badge>
                         )}
-                        {episodeTitle && (
+                        {episodeNumber && (
                             <Badge pill className={styles.episodeBadge} onClick={handleEpisodeClick}>
-                                {episodeTitle}
+                                {t('animeCard.episode', 'الحلقة')} {episodeNumber}
                                 <PlayArrowIcon className={styles.playIcon} />
                             </Badge>
                         )}

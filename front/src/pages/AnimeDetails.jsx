@@ -187,7 +187,7 @@ const AnimeDetails = () => {
         <Helmet>
           <title>{`${anime.title} - ${anime.subTitle} | أنمي شادوز - Anime Shadows`}</title>
           <meta name="description" content={`شاهد ${anime.title} - ${anime.subTitle} اون لاين على أنمي شادوز (Anime Shadows). ${anime.description.substring(0, 150)}...`} />
-          <meta name="keywords" content={`${anime.title}, ${anime.subTitle}, ${anime.genres.map(genre => genre.name).join(', ')}, أنمي, مشاهدة اون لاين, Anime Shadows`} />
+          <meta name="keywords" content={`أنمي 2024, ${anime.title}, ${anime.subTitle}, ${anime.genres.map(genre => genre.name).join(', ')}, أنمي مترجم, مشاهدة أنمي, تحميل أنمي, أنمي جديد, أفضل أنمي, أنمي أون لاين, حلقات أنمي, أفلام أنمي, أنمي بدون إعلانات, أنمي بالعربي, أنمي مصر, أنمي رومانسي, أنمي أكشن, أنمي كوميدي, أنمي دراما, أنمي مغامرات, أنمي خيال علمي, أنمي فانتازيا`} />
           <link rel="canonical" href={`https://animeshadows.xyz/anime/${anime._id}`} />
           <meta property="og:title" content={`${anime.title} - ${anime.subTitle} | أنمي شادوز - Anime Shadows`} />
           <meta property="og:description" content={`شاهد ${anime.title} اون لاين على أنمي شادوز (Anime Shadows). ${anime.description.substring(0, 150)}...`} />

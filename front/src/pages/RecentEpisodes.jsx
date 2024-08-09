@@ -10,7 +10,7 @@ import { Helmet } from 'react-helmet-async';
 import { JsonLd } from 'react-schemaorg';
 import { useTranslation } from 'react-i18next';
 import { useSEO } from '../hooks/useSEO';
-import styles from './RecentEpisodes.module.css'; // Assuming you have a CSS module for styling
+import styles from './RecentEpisodes.module.css';
 
 const RecentEpisodes = () => {
   const { t } = useTranslation();
@@ -139,7 +139,7 @@ const RecentEpisodes = () => {
                 <Grid item xs={12} sm={6} md={4} lg={3} key={episode._id}>
                   <AnimeCard
                     anime={episode.anime}
-                    episodeTitle={episode.title}
+                    episodeNumber={episode.number}
                     onClick={() => {
                       console.log(`Clicked on episode with id: ${episode.anime._id}`);
                     }}

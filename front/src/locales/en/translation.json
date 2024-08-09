@@ -78,5 +78,13 @@
     "loadingVideo": "Loading...",
     "loadingVideoError": "Error loading video",
     "downloadList": "Download List"
+  },
+  "animeCard": {
+    "statusCompleted": "Completed",
+    "statusOngoing": "Ongoing",
+    "statusUpcoming": "Upcoming",
+    "coverAlt": "Cover of {{title}}",
+    "lastViewed": "Last viewed: {{date}}",
+    "episode": "Episode"
   }
 }

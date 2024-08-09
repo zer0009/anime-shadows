@@ -12,7 +12,7 @@ const Footer = () => {
             <Container maxWidth="lg" className={styles.container}>
                 <Grid container spacing={4} className={styles.footerContent}>
                     <Grid item xs={12} md={4} className={styles.footerSection}>
-                        <Typography variant="h6" className={styles.footerTitle}>Anime Shadows</Typography>
+                        <Typography variant="h5" className={styles.footerTitle}>Anime Shadows</Typography>
                         <IconButton href="#" aria-label="Facebook" className={styles.socialIcon}>
                             <Facebook fontSize="small" />
                         </IconButton>

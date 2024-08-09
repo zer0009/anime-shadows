@@ -81,7 +81,8 @@
     "statusOngoing": "يعرض الآن",
     "statusUpcoming": "قادم قريبا",
     "coverAlt": "غلاف {{title}}",
-    "lastViewed": "آخر مشاهدة: {{date}}"
+    "lastViewed": "آخر مشاهدة: {{date}}",
+    "episode": "الحلقة"
   },
   "popularAnime": {
     "pageTitle": "الأنميات الشائعة | أنمي شادوز - Anime Shadows",
