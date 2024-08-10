@@ -1,4 +1,4 @@
-const CACHE_NAME = 'anime-shadows-cache-v2'; // Update the version number when you deploy a new build
+const CACHE_NAME = 'anime-shadows-cache-v3'; // Update the version number when you deploy a new build
 const urlsToCache = [
   '/',
   '/index.html',
@@ -28,7 +28,22 @@ self.addEventListener('fetch', event => {
         if (response) {
           return response;
         }
-        return fetch(event.request).catch(error => {
+        return fetch(event.request).then(networkResponse => {
+          // Check if the request is for a valid resource
+          if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+            return networkResponse;
+          }
+
+          // Clone the response
+          const responseToCache = networkResponse.clone();
+
+          caches.open(CACHE_NAME)
+            .then(cache => {
+              cache.put(event.request, responseToCache);
+            });
+
+          return networkResponse;
+        }).catch(error => {
           console.error('Fetch failed; returning offline page instead.', error);
           return caches.match('/offline.html'); // Ensure you have an offline.html in your cache
         });
