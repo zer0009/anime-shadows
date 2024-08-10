@@ -1,4 +1,4 @@
-const CACHE_NAME = 'anime-shadows-cache-v3'; // Update the version number when you deploy a new build
+const CACHE_NAME = 'anime-shadows-cache-v5'; // Update the version number when you deploy a new build
 const urlsToCache = [
   '/',
   '/index.html',
