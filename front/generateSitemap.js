@@ -30,25 +30,33 @@ async function generateSitemap() {
     const { animes, genres, types } = sitemapData;
 
     const staticPages = [
-        { url: '', changefreq: 'daily', priority: '1.0' },
-        { url: '/anime-list', changefreq: 'daily', priority: '0.8' },
-        { url: '/movie-list', changefreq: 'daily', priority: '0.8' },
+        { url: '', changefreq: 'weekly', priority: '0.8' },
+        { url: '/anime-list', changefreq: 'weekly', priority: '0.8' },
+        { url: '/movie-list', changefreq: 'weekly', priority: '0.8' },
         { url: '/season-anime', changefreq: 'weekly', priority: '0.7' },
         { url: '/search', changefreq: 'weekly', priority: '0.6' },
+        { url: '/404', changefreq: 'weekly', priority: '0.8' },
+        { url: '/offline', changefreq: 'weekly', priority: '0.8' },
     ];
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
     ${staticPages.map(page => `
     <url>
         <loc>${BASE_URL}${page.url}</loc>
+        <lastmod>${new Date().toISOString()}</lastmod>
         <changefreq>${page.changefreq}</changefreq>
         <priority>${page.priority}</priority>
     </url>`).join('')}
     ${animes.map(anime => `
     <url>
         <loc>${BASE_URL}/anime/${anime.id}</loc>
-        <lastmod>${anime.updatedAt}</lastmod>
+        <lastmod>${new Date(anime.updatedAt).toISOString()}</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>`).join('')}
@@ -66,8 +74,9 @@ async function generateSitemap() {
     </url>`).join('')}
 </urlset>`;
 
-    fs.writeFileSync(path.join(__dirname, 'public', 'sitemap.xml'), sitemap);
-    console.log('Sitemap generated successfully');
+    const sitemapPath = path.join(__dirname, 'public', 'sitemap.xml');
+    fs.writeFileSync(sitemapPath, sitemap);
+    console.log('Sitemap generated successfully at', sitemapPath);
 }
 
 function generateRobotsTxt() {
@@ -80,8 +89,9 @@ Disallow: /admin/
 Disallow: /private/
 Disallow: /api/`;
 
-    fs.writeFileSync(path.join(__dirname, 'public', 'robots.txt'), robotsTxt);
-    console.log('robots.txt generated successfully');
+    const robotsTxtPath = path.join(__dirname, 'public', 'robots.txt');
+    fs.writeFileSync(robotsTxtPath, robotsTxt);
+    console.log('robots.txt generated successfully at', robotsTxtPath);
 }
 
 async function main() {

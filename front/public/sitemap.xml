@@ -1,155 +1,201 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
     
     <url>
         <loc>https://animeshadows.xyz</loc>
-        <changefreq>daily</changefreq>
-        <priority>1.0</priority>
+        <lastmod>2024-08-10T23:25:40.789Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime-list</loc>
-        <changefreq>daily</changefreq>
+        <lastmod>2024-08-10T23:25:40.790Z</lastmod>
+        <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/movie-list</loc>
-        <changefreq>daily</changefreq>
+        <lastmod>2024-08-10T23:25:40.790Z</lastmod>
+        <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/season-anime</loc>
+        <lastmod>2024-08-10T23:25:40.790Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/search</loc>
+        <lastmod>2024-08-10T23:25:40.790Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/404</loc>
+        <lastmod>2024-08-10T23:25:40.790Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/offline</loc>
+        <lastmod>2024-08-10T23:25:40.790Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
     </url>
     
     <url>
         <loc>https://animeshadows.xyz/anime/66a2f4cc966664cd9ff554a9</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.524Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66a7fabaddc3ef14fc9b7b55</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.524Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66a805760d5fcf856cb1066e</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.524Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66aa57d92fe191ae78c687dd</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66aa5b622fe191ae78c689be</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66aa5c9e2fe191ae78c68a78</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66aacaf7bcb89e27a9ddf734</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66aae7ee8a1789166d165569</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66ab76c98a1789166d166021</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66abf396503d7008d9f723bb</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66abf44a503d7008d9f7244c</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66acdbba11373460bb2aa0bd</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66ace2273c4f125c575a2eac</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66b3c6d7d26a61eed0158838</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66b5692984b79cdf67d88637</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66b56b1984b79cdf67d886fe</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66b56c0484b79cdf67d88747</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66b56c6984b79cdf67d8878f</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66b56d4184b79cdf67d88af1</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66b56d9884b79cdf67d88b3a</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/66b667dd84b79cdf67d890e2</loc>
-        <lastmod>2024-08-10T11:36:20.801Z</lastmod>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/66b7592b5904c05d9210bb2e</loc>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/66b7c1b0474e95751800dad6</loc>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/66b7cba26a937693fb1c8931</loc>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/66b7cc1e6a937693fb1c8995</loc>
+        <lastmod>2024-08-10T23:25:40.525Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
