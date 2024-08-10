@@ -6,8 +6,10 @@ const ScoreDisplay = ({ score, userCount }) => {
   return (
     <Box className={styles.scoreContainer}>
       <Box className={styles.scoreDetails}>
-        <Typography variant="h5" className={styles.scoreValue}>{score ? score.toFixed(2) : 'N/A'}</Typography>
-        {userCount !== undefined && (
+        <Typography variant="h5" className={styles.scoreValue}>
+          {score !== null && score !== undefined ? score.toFixed(2) : 'N/A'}
+        </Typography>
+        {userCount !== null && userCount !== undefined && (
           <Typography variant="body2" className={styles.userCount}>
             {userCount.toLocaleString()}
           </Typography>

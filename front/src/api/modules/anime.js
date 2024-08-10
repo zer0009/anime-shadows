@@ -52,6 +52,7 @@ export const searchAnime = async (query) => {
         const response = await API.get(`/anime/search?q=${query}`);
         return response.data;
     } catch (error) {
+        console.error(`Error searching anime with query ${query}:`, error);
         throw error;
     }
 };
@@ -61,6 +62,7 @@ export const fetchTypes = async () => {
         const response = await API.get('/types');
         return response.data;
     } catch (error) {
+        console.error('Error fetching types:', error);
         throw error;
     }
 };
@@ -70,6 +72,7 @@ export const fetchSeasons = async () => {
         const response = await API.get('/seasons');
         return response.data;
     } catch (error) {
+        console.error('Error fetching seasons:', error);
         throw error;
     }
 };
@@ -79,6 +82,7 @@ export const fetchPopularAnime = async (timeFrame="all", page = 1) => {
         const response = await API.get(`/anime/popular/anime?timeFrame=${timeFrame}&page=${page}`);
         return response.data;
     } catch (error) {
+        console.error(`Error fetching popular anime for time frame ${timeFrame} on page ${page}:`, error);
         throw error;
     }
 };
@@ -88,6 +92,7 @@ export const fetchGenre = async () => {
         const response = await API.get('/genres');
         return response.data;
     } catch (error) {
+        console.error('Error fetching genres:', error);
         throw error;
     }
 };
@@ -98,6 +103,7 @@ export const fetchStates = async () => {
         const response = await API.get('/states');
         return response.data;
     } catch (error) {
+        console.error('Error fetching states:', error);
         throw error;
     }
 };
@@ -107,6 +113,7 @@ export const fetchEpisodesByAnimeId = async (animeId) => {
         const response = await API.get(`/episodes/anime/${animeId}`);
         return response.data;
     } catch (error) {
+        console.error(`Error fetching episodes for anime ID ${animeId}:`, error);
         throw error;
     }
 };
@@ -117,6 +124,7 @@ export const rateAnime = async (animeId,userId, rating) => {
       const response = await API.post(`/anime/${animeId}/rate`, { userId, rating },getAuthHeaders());
       return response.data;
     } catch (error) {
+      console.error('Error rating anime:', error);
       throw error;
     }
   };
@@ -127,6 +135,7 @@ export const rateAnime = async (animeId,userId, rating) => {
       const response = await API.get(`/types/${typeId}/animes`);
       return response.data;
     } catch (error) {
+      console.error('Error fetching animes by type ID:', error);
       throw error;
     }
   };
@@ -138,6 +147,7 @@ export const rateAnime = async (animeId,userId, rating) => {
       const data = response.data;
       return Array.isArray(data.animes) ? data : { animes: [], totalPages: 1 };
     } catch (error) {
+      console.error('Error fetching movies:', error);
       return { animes: [], totalPages: 1 };
     }
   };
@@ -201,6 +211,7 @@ export const markAsWatched = async (animeId, episodeId) => {
     const response = await API.post('/anime/viewingHistory/watched', { animeId, episodeId }, getAuthHeaders());
     return response.data;
   } catch (error) {
+    console.error('Error in markAsWatched:', error);
     throw error;
   }
 };
@@ -210,6 +221,7 @@ export const markAsUnwatched = async (animeId, episodeId) => {
     const response = await API.post('/anime/viewingHistory/unwatched', { animeId, episodeId }, getAuthHeaders());
     return response.data;
   } catch (error) {
+    console.error('Error in markAsUnwatched:', error);
     throw error;
   }
 };
