@@ -228,7 +228,7 @@ const Home = () => {
                                         <Grid item xs={12} sm={6} md={3} lg={2.4} key={episode._id}>
                                             <AnimeCard
                                                 anime={episode.anime}
-                                                episodeTitle={episode.title}
+                                                episodeNumber={episode.number}
                                                 episodeId={episode._id}
                                                 onClick={() => handleAnimeClick(episode.anime._id)}
                                             />

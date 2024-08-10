@@ -4,7 +4,7 @@ import { Add, Edit, Delete } from '@mui/icons-material';
 import { addEpisode, editEpisode, deleteEpisode } from '../../api/modules/admin';
 import { fetchEpisodesByAnimeId } from '../../api/modules/episode';
 import { useParams } from 'react-router-dom';
-import ServerManager from './ServerManager'; // Import ServerManager component
+import ServerManager from './ServerManager';
 import styles from './EditEpisodes.module.css';
 
 const EditEpisodes = () => {
@@ -17,11 +17,9 @@ const EditEpisodes = () => {
   const [selectedEpisode, setSelectedEpisode] = useState(null);
 
   useEffect(() => {
-    console.log("useEffect triggered with animeId:", animeId);
     const loadEpisodes = async () => {
       try {
         const data = await fetchEpisodesByAnimeId(animeId);
-        console.log("Fetched episodes data:", data);
         setEpisodes(data);
       } catch (error) {
         console.error("Error fetching episodes:", error);
@@ -33,7 +31,6 @@ const EditEpisodes = () => {
   const handleAddEpisode = async () => {
     try {
       const newEpisode = await addEpisode(animeId, { number: episodeNumber, title: episodeTitle, streamingServers, downloadServers });
-      console.log("Added new episode:", newEpisode);
       setEpisodes([...episodes, newEpisode]);
       setEpisodeNumber('');
       setEpisodeTitle('');
@@ -47,7 +44,6 @@ const EditEpisodes = () => {
   const handleEditEpisode = async () => {
     try {
       const updatedEpisode = await editEpisode(animeId, selectedEpisode._id, { number: episodeNumber, title: episodeTitle, streamingServers, downloadServers });
-      console.log("Edited episode:", updatedEpisode);
       setEpisodes(episodes.map(ep => ep._id === selectedEpisode._id ? updatedEpisode : ep));
       setSelectedEpisode(null);
       setEpisodeNumber('');
@@ -62,7 +58,6 @@ const EditEpisodes = () => {
   const handleDeleteEpisode = async (episodeId) => {
     try {
       await deleteEpisode(animeId, episodeId);
-      console.log("Deleted episode with ID:", episodeId);
       setEpisodes(episodes.filter(ep => ep._id !== episodeId));
     } catch (error) {
       console.error('Error deleting episode:', error);
@@ -70,7 +65,6 @@ const EditEpisodes = () => {
   };
 
   const handleEditClick = (episode) => {
-    console.log("Editing episode:", episode);
     setSelectedEpisode(episode);
     setEpisodeNumber(episode.number);
     setEpisodeTitle(episode.title);

@@ -20,7 +20,6 @@ const useFetchAnimeList = (initialPage = 1, initialLimit = 10) => {
             setSearchResults(data);
             setTotalPages(response.totalPages);
         } catch (error) {
-            console.error('Error fetching anime list:', error);
             setError('Error fetching anime list');
         } finally {
             setLoading(false);
@@ -42,7 +41,6 @@ const useFetchAnimeList = (initialPage = 1, initialLimit = 10) => {
             setTotalPages(response.totalPages);
             setCurrentPage(page);
         } catch (error) {
-            console.error('Error searching anime list:', error);
             setError('Error searching anime list');
         } finally {
             setLoading(false);

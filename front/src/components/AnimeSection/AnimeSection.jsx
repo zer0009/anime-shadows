@@ -47,6 +47,8 @@ const AnimeSection = ({ title, items, loading, navigate, handleAnimeClick, t, is
                             320: { slidesPerView: 1 },
                             425: { slidesPerView: 2 },
                             640: { slidesPerView: 3 },
+                            1024: { slidesPerView: 4 },
+                            1280: { slidesPerView: 5 },
                         }}
                         autoplay={{ delay: 3000 }}
                         pagination={{ clickable: true }}

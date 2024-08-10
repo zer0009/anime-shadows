@@ -60,6 +60,10 @@
 }
 
 @media (min-width: 960px) {
+    .heroSection {
+        height: 60vh; /* Increase height for larger screens */
+    }
+
     .mainHeading {
         font-size: 3.5rem !important;
     }
@@ -70,5 +74,27 @@
 
     .introText {
         font-size: 1.1rem !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .heroSection {
+        height: 50vh; /* Decrease height for smaller screens */
+    }
+
+    .mainHeading {
+        font-size: 2.5rem !important;
+    }
+
+    .subHeading {
+        font-size: 1.5rem !important;
+    }
+
+    .introText {
+        font-size: 0.9rem !important;
+    }
+
+    .heroImage {
+        object-position: top; /* Adjust image position for mobile */
     }
 }

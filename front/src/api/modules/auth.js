@@ -11,7 +11,6 @@ export const loginUser = async (credentials) => {
             },
         };
     } catch (error) {
-        console.error('Error in loginUser:', error);
         throw error;
     }
 };
@@ -28,7 +27,6 @@ export const logoutUser = async () => {
         localStorage.removeItem('user');
         return response.data;
     } catch (error) {
-        console.error('Error in logoutUser:', error);
         throw error;
     }
 };
@@ -38,7 +36,6 @@ export const registerUser = async (credentials) => {
         const response = await API.post('/user/register', credentials);
         return response.data;
     } catch (error) {
-        console.error('Error in registerUser:', error);
         throw error;
     }
 };
