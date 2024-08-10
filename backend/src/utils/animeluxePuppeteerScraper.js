@@ -83,10 +83,18 @@ const scrapeAnimeLuxeWithPuppeteer = async (pageUrl) => {
     // Extract streaming servers
     $('ul.server-list li a').each((i, element) => {
       try {
-        const serverName = $(element).text().trim();
+        const serverText = $(element).text().trim();
         const encodedUrl = $(element).attr('data-url');
         const decodedUrl = atob(encodedUrl);
-        const quality = serverName.includes('-') ? serverName.split('-').pop().trim() : 'HD';
+        const quality = serverText.includes('-') ? serverText.split('-')[0].trim() : 'HD';
+        let serverName = serverText.includes('-') ? serverText.split('-').pop().trim() : serverText.trim();
+
+        // Fallback to extracting server name from the URL if necessary
+        if (serverName === 'Unknown' || serverName === 's2.googleusercontent.com') {
+          const parsedUrl = new URL(decodedUrl);
+          serverName = parsedUrl.hostname ? parsedUrl.hostname.replace('www.', '') : 'Unknown';
+        }
+
         console.log(`Found streaming server: ${serverName}, ${decodedUrl}, ${quality}`);
         servers.push({ serverName, quality, url: decodedUrl, type: 'streaming' });
       } catch (err) {
@@ -98,10 +106,17 @@ const scrapeAnimeLuxeWithPuppeteer = async (pageUrl) => {
     $('table.table tbody tr').each((i, element) => {
       try {
         const faviconUrl = $(element).find('td div.server span.favicon').attr('data-src');
-        const serverName = faviconUrl ? new URL(faviconUrl).hostname.replace('www.', '') : 'Unknown';
+        let serverName = faviconUrl ? new URL(faviconUrl).hostname.replace('www.', '') : 'Unknown';
         const encodedUrl = $(element).find('a.download-link').attr('data-url');
         const decodedUrl = atob(encodedUrl);
-        const quality = $(element).find('td span.badge').text().trim();
+        const quality = $(element).find('td span.badge').text().trim() || 'Unknown'; // Extract quality from the badge
+
+        // Fallback to extracting server name from the URL if favicon URL is not helpful
+        if (serverName === 'Unknown' || serverName === 's2.googleusercontent.com') {
+          const parsedUrl = new URL(decodedUrl);
+          serverName = parsedUrl.hostname ? parsedUrl.hostname.replace('www.', '') : 'Unknown';
+        }
+
         console.log(`Found download server: ${serverName}, ${decodedUrl}, ${quality}`);
         servers.push({ serverName, quality, url: decodedUrl, type: 'download' });
       } catch (err) {

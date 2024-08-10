@@ -102,7 +102,7 @@ const AddEpisode = () => {
         await addEpisode(episodeData);
         showSnackbar('Episode added successfully', 'success');
       }
-      await fetchEpisodes();
+      await fetchEpisodes(); // Fetch episodes after adding/updating
       resetForm();
     } catch (error) {
       console.error('Error saving episode:', error);

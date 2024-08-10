@@ -87,7 +87,7 @@ const Home = () => {
     const seoProps = useMemo(() => ({
         title: t('home.title', 'أنمي شادوز - موقعك الأول لمشاهدة الأنمي | Anime Shadows'),
         description: t('home.description', 'استمتع بمشاهدة أحدث وأفضل الأنميات المترجمة بجودة عالية على أنمي شادوز. اكتشف مجموعة واسعة من الأنمي، من الكلاسيكيات إلى الإصدارات الجديدة.'),
-        keywords: t('home.keywords', 'أنمي مترجم, مشاهدة أنمي, تحميل أنمي, أنمي جديد, أفضل أنمي, أنمي أون لاين, حلقات أنمي, أفلام أنمي, أنمي بدون إعلانات, أنمي بالعربي, أنمي مصر, أنمي 2024, أنمي قديم, أنمي رومانسي, أنمي أكشن, أنمي كوميدي, أنمي دراما, أنمي مغامرات, أنمي خيال علمي, أنمي فانتازيا'),
+        keywords: t('home.keywords', 'أنمي مترجم, مشاهدة أنمي, تحميل أنمي, أنمي جديد 2024, أفضل أنمي, أنمي أون لاين, حلقات أنمي, أفلام أنمي, أنمي بدون إعلانات, أنمي بالعربي, أنمي مصر, أنمي رومانسي, أنمي أكشن, أنمي كوميدي, أنمي دراما, أنمي مغامرات, أنمي خيال علمي, أنمي فانتازيا, anime shadows, anime slayer, anime witcher, anime online, anime episodes, anime movies, anime without ads, anime in arabic, anime in egypt, romance anime, action anime, comedy anime, drama anime, adventure anime, sci-fi anime, fantasy anime, +17 اتشى'),
         canonicalUrl: 'https://animeshadows.xyz',
         ogType: 'website',
         jsonLd: [

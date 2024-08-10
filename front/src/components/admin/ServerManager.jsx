@@ -92,12 +92,8 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
         ...server,
         quality: mapQuality(server.quality)
       }));
-      if (scraperSource === 'witanime') {
-        setStreamingServers(mappedServers.filter(server => server.type === 'streaming'));
-        setDownloadServers(mappedServers.filter(server => server.type === 'download'));
-      } else {
-        setDownloadServers(mappedServers);
-      }
+      setStreamingServers(mappedServers.filter(server => server.type === 'streaming'));
+      setDownloadServers(mappedServers.filter(server => server.type === 'download'));
       console.log('Updated streaming servers:', streamingServers); // Debugging log
       console.log('Updated download servers:', downloadServers); // Debugging log
     } catch (error) {
@@ -139,16 +135,16 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
             <MenuItem value="witanime">Witanime</MenuItem>
             <MenuItem value="animeluxe">AnimeLuxe</MenuItem>
           </TextField>
-          <Button 
-            variant="contained" 
-            color="secondary" 
-            onClick={handleScrapeWebsite} 
-            startIcon={<Add />} 
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleScrapeWebsite}
+            disabled={loading}
+            startIcon={loading ? <CircularProgress size={24} /> : <Add />}
             fullWidth
             className={styles.addButton}
-            disabled={loading}
           >
-            {loading ? <CircularProgress size={24} /> : 'Scrape Website'}
+            Scrape Servers
           </Button>
         </Box>
       )}
@@ -204,11 +200,11 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
           <MenuItem value="streaming">Streaming</MenuItem>
           <MenuItem value="download">Download</MenuItem>
         </TextField>
-        <Button 
-          variant="contained" 
-          color="primary" 
-          onClick={addServer} 
-          startIcon={<Add />} 
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={addServer}
+          startIcon={<Add />}
           fullWidth
           className={styles.addButton}
         >
@@ -230,7 +226,7 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
                 secondary={server.url} 
               />
               <Tooltip title="Copy URL">
-                <IconButton edge="end" aria-label="copy" onClick={() => copyToClipboard(server.url)}>
+                <IconButton edge="end" aria-label="copy" onClick={() => navigator.clipboard.writeText(server.url)}>
                   <FileCopy />
                 </IconButton>
               </Tooltip>
@@ -257,7 +253,7 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
                 secondary={server.url} 
               />
               <Tooltip title="Copy URL">
-                <IconButton edge="end" aria-label="copy" onClick={() => copyToClipboard(server.url)}>
+                <IconButton edge="end" aria-label="copy" onClick={() => navigator.clipboard.writeText(server.url)}>
                   <FileCopy />
                 </IconButton>
               </Tooltip>
