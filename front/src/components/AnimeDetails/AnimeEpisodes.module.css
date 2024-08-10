@@ -2,8 +2,8 @@
   margin-top: 20px;
   padding: 20px;
   background-color: var(--primary-dark);
-  border-radius: 8px;
-  box-shadow: 0 4px 8px var(--shadow-color);
+  /* border-radius: 8px;
+  box-shadow: 0 4px 8px var(--shadow-color); */
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;

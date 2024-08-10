@@ -172,7 +172,7 @@ const EditAnime = () => {
               >
                 {allSeasons.map((season) => (
                   <MenuItem key={season._id} value={season._id}>
-                    {season.name}
+                    {season.name} {season.year}
                   </MenuItem>
                 ))}
               </Select>

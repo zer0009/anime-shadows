@@ -135,7 +135,7 @@ const AddAnime = () => {
   const getGenreNames = (selectedIds) => {
     return selectedIds.map(id => {
       const genre = genres.find(g => g._id === id);
-      return genre ? genre.name : '';
+      return genre ? genre.name: '';
     }).filter(Boolean).join(', ');
   };
 
@@ -204,7 +204,7 @@ const AddAnime = () => {
             >
               <MenuItem value="">Select a season</MenuItem>
               {seasons.map((season) => (
-                <MenuItem key={season._id} value={season._id}>{season.name}</MenuItem>
+                <MenuItem key={season._id} value={season._id}>{season.name} {season.year}</MenuItem>
               ))}
             </Select>
           </FormControl>

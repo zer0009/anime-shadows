@@ -3,7 +3,7 @@ const SeasonService = require('../services/seasonService');
 exports.createSeason = async (req, res) => {
   try {
     const { name, year, startDate, endDate } = req.body;
-    if (!name || !year || !startDate || !endDate) {
+    if (!name || !year) {
       return res.status(400).json({ error: 'All fields are required' });
     }
     const newSeason = await SeasonService.createSeason(name, year, startDate, endDate);
@@ -26,7 +26,7 @@ exports.getSeasons = async (req, res) => {
 exports.updateSeason = async (req, res) => {
   try {
     const { name, year, startDate, endDate } = req.body;
-    if (!name || !year || !startDate || !endDate) {
+    if (!name || !year) {
       return res.status(400).json({ error: 'All fields are required' });
     }
     const updatedSeason = await SeasonService.updateSeason(req.params.id, name, year, startDate, endDate);
