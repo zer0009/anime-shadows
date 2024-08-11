@@ -63,7 +63,7 @@ const EpisodePage = () => {
   }, []);
 
   const seoProps = useMemo(() => episode ? {
-    title: `${episode.anime.title} - الحلقة ${episode.number} | أنمي شادوز - Anime Shadows`,
+    title: `${episode.anime.title} - الحلقة ${episode.number} | Anime Shadows - مشاهدة الأنمي`,
     description: `شاهد ${episode.anime.title} الحلقة ${episode.number} اون لاين على أنمي شادوز (Anime Shadows). ${episode.description?.substring(0, 150) || ''}`,
     keywords: `${episode.anime.title}, الحلقة ${episode.number}, أنمي 2024, مشاهدة اون لاين, تحميل, مترجم, أنمي, Anime Shadows, انمي, حلقة, ستريم, بث مباشر, جودة عالية, HD,SD,FHD,360p,480p,720p,1080p,جودة منخفضة, مترجم عربي, بدون إعلانات, مجاناً, ${episode.anime.genres?.join(', ')}`,
     canonicalUrl: `https://animeshadows.xyz/episode/${episodeId}`,
@@ -113,7 +113,8 @@ const EpisodePage = () => {
   return (
     <div className={styles.episodePage} style={{ direction: i18n.language === 'ar' ? 'ltr' : 'rtl' }}>
       <Helmet>
-        {seo.helmet.title && <title>{seo.helmet.title}</title>}
+        <title>{`${episode.anime.title} - الحلقة ${episode.number} | Anime Shadows - مشاهدة الأنمي`}</title>
+        <meta name="description" content={`شاهد ${episode.anime.title} الحلقة ${episode.number} اون لاين على أنمي شادوز (Anime Shadows). ${episode.description?.substring(0, 150) || ''}`} />
         {seo.helmet.meta.map((meta, index) => (
           <meta key={index} {...meta} />
         ))}

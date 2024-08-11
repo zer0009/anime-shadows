@@ -5,3 +5,6 @@ http://www.animeshadows.xyz/* https://animeshadows.xyz/:splat 301!
 # Redirect non-www to www
 https://www.animeshadows.xyz/* https://animeshadows.xyz/:splat 301!
 https://animeshadows.xyz/* https://animeshadows.xyz/:splat 301!
+
+# Enforce trailing slashes
+/* /:splat/ 301!

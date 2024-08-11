@@ -85,9 +85,9 @@ const Home = () => {
     ], [t]);
 
     const seoProps = useMemo(() => ({
-        title: t('home.title', 'أنمي شادوز - موقعك الأول لمشاهدة الأنمي | Anime Shadows'),
+        title: t('home.title', 'Anime Shadows - موقعك الأول لمشاهدة الأنمي'),
         description: t('home.description', 'استمتع بمشاهدة أحدث وأفضل الأنميات المترجمة بجودة عالية وسيرفرات متعددة على أنمي شادوز. اكتشف مجموعة واسعة من الأنمي، من الكلاسيكيات إلى الإصدارات الجديدة.'),
-        keywords: t('home.keywords', 'anime ar, anime arabic, anime مترجم, تحميل, anime shadows ar, arabic anime, أنمي عربي, مشاهدة أنمي, أنمي مترجم, أنمي اون لاين, أحدث الأنميات, أفضل الأنميات, أنمي شادوز, Anime Shadows, anime online, anime streaming, مسلسلات أنمي,مواقع أنمي,مواقع الانمي,انمى بجميع الجودات, أفلام أنمي, مانجا, حلقات أنمي جديدة, تحميل أنمي, أنمي بدون إعلانات'),
+        keywords: t('home.keywords', 'anime ar, anime arabic, anime مترجم, تحميل, anime shadows ar, arabic anime, أنمي عربي, مشاهدة أنمي, أنمي مترجم, أنمي اون لاين, أحدث الأنميات, أفضل الأنميات, أنمي شادوز, Anime Shadows, anime online, anime streaming, مسلسلات أنمي,مواقع أنمي,مواقع الانمي,انمى بجمع الجودات, أفلام أنمي, مانجا, حلقات أنمي جديدة, تحميل أنمي, أنمي بدون إعلانات'),
         canonicalUrl: 'https://animeshadows.xyz',
         ogType: 'website',
         jsonLd: [
@@ -150,7 +150,8 @@ const Home = () => {
     return (
         <>
             <Helmet>
-                {seo.helmet.title && <title>{seo.helmet.title}</title>}
+                <title>{t('home.title', 'Anime Shadows - موقعك الأول لمشاهدة الأنمي')}</title>
+                <meta name="description" content={t('home.description', 'استمتع بمشاهدة أحدث وأفضل الأنميات المترجمة بجودة عالية وسيرفرات متعددة على أنمي شادوز. اكتشف مجموعة واسعة من الأنمي، من الكلاسيكيات إلى الإصدارات الجديدة.')} />
                 {seo.helmet.meta.map((meta, index) => (
                     <meta key={index} {...meta} />
                 ))}
@@ -158,6 +159,7 @@ const Home = () => {
                     <link key={index} {...link} />
                 ))}
                 <meta name="robots" content="index, follow" />
+                <link rel="canonical" href="https://animeshadows.xyz/" />
             </Helmet>
             {seo.jsonLd && seo.jsonLd.map((item, index) => (
                 <JsonLd key={index} item={item} />

@@ -27,7 +27,7 @@ const AnimeList = () => {
   }, [setSearchParams]);
 
   const seoProps = useMemo(() => ({
-    title: t('animeList.pageTitle', "قائمة الأنمي | أنمي شادوز - Anime Shadows"),
+    title: t('animeList.pageTitle', "قائمة الأنمي - Anime Shadows"),
     description: t('animeList.pageDescription', "تصفح مجموعتنا الواسعة من مسلسلات الأنمي على أنمي شادوز (Anime Shadows). اعثر على مسلسلك المفضل القادم."),
     keywords: t('animeList.pageKeywords', "قائمة الأنمي, مسلسلات أنمي, مشاهدة أنمي اون لاين, Anime Shadows"),
     canonicalUrl: `https://animeshadows.xyz/anime-list?page=${currentPage}`,

@@ -30,6 +30,7 @@
     color: var(--text-color);
     text-decoration: none;
     transition: color 0.3s ease;
+    direction: ltr;
 }
 
 .footerLink:hover {

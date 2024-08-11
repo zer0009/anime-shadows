@@ -23,12 +23,14 @@ const Footer = () => {
                             <Instagram fontSize="small" />
                         </IconButton>
                     </Grid>
-                    {/* <Grid item xs={12} md={4} className={styles.footerSection}>
+                    <Grid item xs={12} md={4} className={styles.footerSection}>
                         <Box className={styles.footerLinks}>
-                            <Link to="/" className={styles.footerLink}>Home</Link>
-                            <Link to="/anime-list" className={styles.footerLink}>Anime List</Link>
+                            <Link to="/" className={styles.footerLink}>الرئيسية</Link>
+                            <Link to="/anime-list" className={styles.footerLink}>قائمة الأنمي</Link>
+                            <Link to="/movie-list" className={styles.footerLink}>قائمة الأفلام</Link>
+                            <Link to="/recent-episodes" className={styles.footerLink}>آخر الحلقات</Link>
                         </Box>
-                    </Grid> */}
+                    </Grid>
                     <Grid item xs={12} md={4} className={styles.footerSection}>
                         <Typography variant="body2" className={styles.footerNotice}>
                             تنويه: هذا الموقع لا يقوم بتخزين أي ملفات على الخادم الخاص به.

@@ -6,3 +6,7 @@ Sitemap: https://animeshadows.xyz/sitemap.xml
 Disallow: /admin/
 Disallow: /private/
 Disallow: /api/
+Disallow: /duplicate-page/
+
+# Prevent search engines from indexing duplicate content
+Noindex: /duplicate-page/

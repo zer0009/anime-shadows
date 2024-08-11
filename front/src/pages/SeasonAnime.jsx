@@ -36,9 +36,9 @@ const SeasonAnime = () => {
   );
 
   const seoProps = useMemo(() => ({
-    title: t('seasonAnime.pageTitle', `أنمي موسم {{season}} {{year}} | أنمي شادوز`, { season: t(`seasons.${currentSeason}`, currentSeason), year: currentYear }),
-    description: t('seasonAnime.pageDescription', `اكتشف أحدث إصدارات الأنمي لموسم {{season}} {{year}}. شاهد الأنميات الجديدة والمثيرة على أنمي شادوز.`, { season: t(`seasons.${currentSeason}`, currentSeason), year: currentYear }),
-    keywords: t('seasonAnime.pageKeywords', `ربيع,خريف,شتاء,صيف,أنمي 2024, أنمي الموسم, {{season}}, {{year}}, أنميات جديدة, Anime Shadows, تحميل, مترجم, انمي, حلقة, ستريم, بث مباشر, جودة عالية, HD, مترجم عربي, دبلجة عربية, بدون إعلانات, مجاناً`, { season: t(`seasons.${currentSeason}`, currentSeason), year: currentYear }),
+    title: t('seasonAnime.pageTitle', `أنمي موسم ${t(`seasons.${currentSeason}`, currentSeason)} ${currentYear} | أنمي شادوز`),
+    description: t('seasonAnime.pageDescription', `اكتشف أحدث إصدارات الأنمي لموسم ${t(`seasons.${currentSeason}`, currentSeason)} ${currentYear}. شاهد الأنميات الجديدة والمثيرة على أنمي شادوز.`),
+    keywords: t('seasonAnime.pageKeywords', `ربيع,خريف,شتاء,صيف,أنمي 2024, أنمي الموسم, ${t(`seasons.${currentSeason}`, currentSeason)}, ${currentYear}, أنميات جديدة, Anime Shadows, تحميل, مترجم, انمي, حلقة, ستريم, بث مباشر, جودة عالية, HD, مترجم عربي, دبلجة عربية, بدون إعلانات, مجاناً`),
     canonicalUrl: `https://animeshadows.xyz/season-anime?page=${currentPage}`,
     ogType: "website",
     jsonLd: [
@@ -67,8 +67,8 @@ const SeasonAnime = () => {
       {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": t('seasonAnime.pageTitle', `أنمي موسم {{season}} {{year}} | أنمي شادوز`, { season: t(`seasons.${currentSeason}`, currentSeason), year: currentYear }),
-        "description": t('seasonAnime.pageDescription', `اكتشف أحدث إصدارات الأنمي لموسم {{season}} {{year}}. شاهد الأنميات الجديدة والمثيرة على أنمي شادوز.`, { season: t(`seasons.${currentSeason}`, currentSeason), year: currentYear }),
+        "name": t('seasonAnime.pageTitle', `أنمي موسم ${t(`seasons.${currentSeason}`, currentSeason)} ${currentYear} | أنمي شادوز`),
+        "description": t('seasonAnime.pageDescription', `اكتشف أحدث إصدارات الأنمي لموسم ${t(`seasons.${currentSeason}`, currentSeason)} ${currentYear}. شاهد الأنميات الجديدة والمثيرة على أنمي شادوز.`),
         "url": `https://animeshadows.xyz/season-anime?page=${currentPage}`
       }
     ]
