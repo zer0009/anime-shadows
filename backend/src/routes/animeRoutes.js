@@ -9,6 +9,9 @@ const { upload } = require('../middlewares/fileUpload');
 const { scrapeWitanime } = require('../utils/witanimeScraper');
 const { scrapeAnimeLuxe } = require('../utils/animeluxeScraper');
 
+// Batch route should be defined before any routes that might interpret "batch" as an ID
+router.post('/batch', authMiddleware, animeController.getAnimesByIds);
+
 // Public Routes
 router.get('/', animeController.getAnimes);
 router.get('/search', animeController.searchAnime);
@@ -18,12 +21,16 @@ router.get('/genre/:genre', animeController.getAnimeByGenre);
 router.get('/popular/anime', animeController.getPopularAnimes);
 router.get('/popular/episodes', animeController.getPopularEpisodes);
 
+
+router.get('/slug/:slug', optionalAuth, animeController.getAnimeBySlug);
+
 router.get('/myAnimeList/:animeId', animeController.getMyAnimeList);
 
 router.get('/sitemap-data', animeController.getSitemapData);
 
 router.post('/scrape-mal', animeController.scrapeMal);
 router.post('/scrape-livechart', animeController.scrapeLivechart);
+
 
 // New Route for Scraping Witanime
 router.get('/scrape-witanime', async (req, res) => {

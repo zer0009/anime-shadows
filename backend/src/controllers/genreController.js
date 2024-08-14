@@ -35,7 +35,6 @@ exports.updateGenre = async (req, res) => {
   const { id } = req.params;
   try {
     const updatedGenre = await GenreService.updateGenre(id, name, name_ar);
-    console.log(updatedGenre);
     res.json(updatedGenre);
   } catch (err) {
     res.status(400).json({ error: err.message });

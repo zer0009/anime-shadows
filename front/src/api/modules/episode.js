@@ -29,3 +29,18 @@ export const fetchRecentEpisodes = async (page = 1, limit = 10) => {
         throw error;
     }
 };
+
+export const fetchEpisodeBySlugAndNumber = async (slug, episodeNumber) => {
+    try {
+        const response = await API.get(`/episodes`, {
+            params: {
+                slug,
+                episodeNumber
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error(`Error fetching episode for slug ${slug} and episode number ${episodeNumber}:`, error);
+        throw error;
+    }
+};

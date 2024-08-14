@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { fetchMyAnimeListRating } = require('../utils/myAnimeList');
+const slugify = require('slugify');
 
 const ratingSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -25,7 +26,16 @@ const animeSchema = new mongoose.Schema({
   airingDate: { type: Date, default: Date.now },
   status: { type: String, enum: ['ongoing', 'completed', 'upcoming'], default: "upcoming", index: true },
   viewCount: { type: Number, default: 0, index: true },
-  views: [{ type: Date, default: Date.now }]
+  views: [{ type: Date, default: Date.now }],
+  slug: { type: String, unique: true }
+});
+
+// Middleware to generate slug before saving
+animeSchema.pre('save', function (next) {
+  if (this.isModified('title') && !this.slug) {
+    this.slug = slugify(this.title, { lower: true, strict: true });
+  }
+  next();
 });
 
 // Calculate average rating using aggregation
@@ -51,6 +61,5 @@ animeSchema.statics.findLean = function(query) {
   return this.find(query).lean().exec();
 };
 
-
-
-module.exports = mongoose.model('Anime', animeSchema);
+const Anime = mongoose.model('Anime', animeSchema);
+module.exports = Anime;

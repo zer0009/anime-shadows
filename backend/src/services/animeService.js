@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Anime = require('../models/anime');
 const Type = require('../models/type');
 const Genre = require('../models/genre');
@@ -6,8 +7,6 @@ const User = require('../models/user');
 const Episode = require('../models/episode');
 const { filterViewsByTimeFrame } = require('../utils/viewUtils');
 const { deleteImage } = require('../middlewares/fileUpload');
-
-
 
 const validateEntityById = async (Model, id, entityName, file) => {
   const entity = await Model.findById(id.trim());
@@ -18,45 +17,10 @@ const validateEntityById = async (Model, id, entityName, file) => {
   return entity;
 };
 
-const createAnime = async ({ title, description, seasonId, myAnimeListUrl, typeId, genres, numberOfEpisodes, source, duration, status, airingDate, pictureUrl, subTitle, studio }) => {
-  if (!typeId || !seasonId) {
-    throw new Error('Type ID and Season ID are required');
-  }
-
-  let genreIds = Array.isArray(genres) ? genres : JSON.parse(genres);
-
-  await validateEntityById(Type, typeId, 'Type');
-  await validateEntityById(Season, seasonId, 'Season');
-
-  const validGenreIds = [];
-  for (const genreId of genreIds) {
-    try {
-      const genre = await validateEntityById(Genre, genreId, 'Genre');
-      validGenreIds.push(genre._id);
-    } catch (error) {
-      console.error(`Invalid genre ID: ${genreId}`, error);
-    }
-  }
-
-  const newAnime = new Anime({
-    title,
-    subTitle,
-    studio,
-    description,
-    season: seasonId,
-    myAnimeListUrl,
-    type: typeId,
-    genres: validGenreIds,
-    numberOfEpisodes,
-    source,
-    duration,
-    status,
-    airingDate,
-    pictureUrl,
-  });
-
-  await newAnime.save();
-  return newAnime;
+const createAnime = async (animeData) => {
+  const anime = new Anime(animeData);
+  await anime.save();
+  return anime;
 };
 
 const updateAnime = async (id, updateData, file) => {
@@ -78,10 +42,9 @@ const updateAnime = async (id, updateData, file) => {
     updateData.pictureUrl = file.path;
   }
 
-  const updatedAnime = await Anime.findByIdAndUpdate(id, { $set: updateData }, { new: true });
-  if (!updatedAnime) throw new Error('Anime not found');
-
-  return updatedAnime;
+  Object.assign(anime, updateData);
+  await anime.save();
+  return anime;
 };
 
 const toggleEpisodeWatched = async (userId, animeId, episodeNumber) => {
@@ -210,6 +173,51 @@ const getAnime = async (animeId, userId) => {
     averageRating, 
     userCount
   };
+};
+
+const getAnimeBySlug = async (slug, userId) => {
+  console.log('Fetching anime details for slug:', slug); // Add logging
+  try {
+    // Fetch anime details without views and viewCount fields
+    const animeDetails = await Anime.findOne({ slug })
+      .select('-views -viewCount')
+      .populate('season')
+      .populate('type')
+      .populate('genres')
+      .populate({
+        path: 'episodes',
+        options: { sort: { number: 1 } },
+        select: '-streamingServers -downloadServers' // Exclude streamingServers and downloadServers
+      })
+      .lean();
+      console.log('animeDetails', animeDetails)
+
+    if (!animeDetails) {
+      console.error('Anime not found for slug:', slug); // Add logging
+      throw new Error('Anime not found');
+    }
+
+    // Fetch anime details with views and viewCount fields for updating
+    const anime = await Anime.findOne({ slug });
+    anime.viewCount += 1;
+    anime.views.push(new Date());
+    await anime.save();
+    animeDetails._id = anime._id.toString();
+
+    const isFavorite = userId ? (await User.findById(userId)).favorites.includes(animeDetails._id) : false;
+    const averageRating = anime.calculateAverageRating();
+    const userCount = anime.getUserCount();
+
+    return { 
+      ...animeDetails, 
+      isFavorite, 
+      averageRating, 
+      userCount
+    };
+  } catch (error) {
+    console.error('Error in getAnimeBySlug:', error); // Add logging
+    throw error;
+  }
 };
 
 const getMyAnimeListData = async (animeId) => {
@@ -432,8 +440,13 @@ const getViewingHistory = async (userId, animeId) => {
   if (!user) throw new Error('User not found');
 
   const viewingHistory = user.viewingHistory.filter(item => item.animeId.toString() === animeId);
-  console.log('viewingHistory', user.viewingHistory);
   return viewingHistory;
+};
+
+const getAnimesByIds = async (ids) => {
+  const objectIds = ids.map(id => new mongoose.Types.ObjectId(id)); // Use 'new' keyword
+  const animes = await Anime.find({ _id: { $in: objectIds } }).lean();
+  return animes;
 };
 
 module.exports = {
@@ -443,6 +456,7 @@ module.exports = {
   toggleEpisodeWatched,
   getAnimes,
   getAnime,
+  getAnimeBySlug,
   getMyAnimeListData,
   getEpisode,
   rateAnime,
@@ -456,5 +470,6 @@ module.exports = {
   getWatchedEpisodes,
   markEpisodeAsWatched,
   markEpisodeAsUnwatched,
-  getViewingHistory
+  getViewingHistory,
+  getAnimesByIds
 };

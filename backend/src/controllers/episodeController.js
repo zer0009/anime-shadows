@@ -37,6 +37,26 @@ const getEpisodeById = async (req, res) => {
     }
 };
 
+const getEpisodeBySlugAndNumber = async (req, res) => {
+    const { slug, episodeNumber } = req.query;
+    try {
+        const anime = await Anime.findOne({ slug });
+        if (!anime) {
+            return res.status(404).json({ message: 'Anime not found' });
+        }
+
+        const episode = await Episode.findOne({ anime: anime._id, number: episodeNumber }).populate('anime');
+        if (!episode) {
+            return res.status(404).json({ message: 'Episode not found' });
+        }
+
+        res.status(200).json(episode);
+    } catch (error) {
+        console.error('Error fetching episode:', error);
+        res.status(500).json({ message: 'Error fetching episode' });
+    }
+};
+
 const updateEpisode = async (req, res) => {
     const { id } = req.params;
     const { animeId, number, title, streamingServers, downloadServers } = req.body;
@@ -142,5 +162,6 @@ module.exports = {
     deleteEpisode,
     getEpisodesByAnimeId,
     getRecentlyUpdatedEpisodes,
-    updateViewCount
+    updateViewCount,
+    getEpisodeBySlugAndNumber
 };

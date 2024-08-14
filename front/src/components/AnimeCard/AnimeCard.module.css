@@ -96,7 +96,7 @@
   text-overflow: ellipsis;
   color: white;
   width: calc(100% - 30px); /* Adjust width to account for left and right margins */
-  direction: ltr;
+  direction: var(--direction, ltr);
 }
 
 .lastViewed {
@@ -110,8 +110,8 @@
   flex-wrap: wrap;
   gap: 10px;
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  right: 10px; /* Ensure badges are aligned to the right */
+  bottom: 10px; /* Ensure badges are aligned to the bottom */
   z-index: 2;
 }
 

@@ -19,7 +19,7 @@ const EpisodeListSection = ({ episodes, i18n, t }) => {
                 key={ep._id} 
                 button
                 component={Link} 
-                to={`/episode/${ep._id}`} 
+                to={`/episode/${ep.anime.slug}-الحلقة-${ep.number}`} // Updated URL format
                 className={`${styles.episodeItem} ${ep._id === episodeId ? styles.currentEpisode : ''}`}
                 style={{ direction: i18n.language === 'ar' ? 'rtl' : 'ltr' }}
               >

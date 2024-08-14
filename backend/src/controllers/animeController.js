@@ -317,7 +317,6 @@ exports.scrapeMal = async (req, res) => {
   try {
     const { url } = req.body;
     const scrapedData = await scrapeAnimeFromMAL(url);
-    console.log(scrapedData);
     res.json(scrapedData);
   } catch (error) {
     console.error('Error scraping MAL:', error);
@@ -329,7 +328,6 @@ exports.scrapeLivechart = async (req, res) => {
   try {
     const { url } = req.body;
     const scrapedData = await scrapeAnimeFromLiveChart(url);
-    console.log(scrapedData);
     res.json(scrapedData);
   } catch (error) {
     console.error('Error scraping LiveChart:', error);
@@ -435,10 +433,8 @@ exports.markAsWatched = async (req, res) => {
 exports.markAsUnwatched = async (req, res) => {
   try {
     const { animeId, episodeId } = req.body;
-    console.log('Received payload to mark as unwatched:', { animeId, episodeId });
     const user = req.user;
 
-    console.log('Current viewing history:', user.viewingHistory);
 
     user.viewingHistory = user.viewingHistory.filter((viewed) => {
       if (!viewed.animeId || !viewed.episodeId) {
@@ -463,11 +459,45 @@ exports.getViewingHistory = async (req, res) => {
     const user = req.user;
 
     const viewingHistory = user.viewingHistory.filter(viewed => viewed.animeId.equals(new mongoose.Types.ObjectId(animeId)));
-    console.log('Viewing history for anime:', animeId, viewingHistory);
 
     res.status(200).send(viewingHistory);
   } catch (error) {
     console.error('Error in getViewingHistory:', error);
     res.status(400).send(error);
+  }
+};
+
+exports.getAnimeBySlug = async (req, res) => {
+  const { slug } = req.params;
+  const user = req.user;
+
+  try {
+    const anime = user ? await AnimeService.getAnimeBySlug(slug, user._id) : await AnimeService.getAnimeBySlug(slug);
+    if (!anime) {
+      return res.status(404).json({ message: 'Anime not found' });
+    }
+
+    if (user) {
+      await AnimeService.addToHistory(user._id, anime._id);
+    }
+
+    res.json(anime);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getAnimesByIds = async (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ error: 'Invalid or empty IDs array' });
+    }
+
+    const animes = await AnimeService.getAnimesByIds(ids);
+    res.status(200).json(animes);
+  } catch (error) {
+    console.error('Error fetching animes by IDs:', error); // Add logging
+    res.status(500).json({ error: 'Failed to fetch animes' });
   }
 };

@@ -62,9 +62,9 @@ const StreamingSection = ({ episode, episodes, selectedTab, handleTabChange, emb
   };
 
   const currentIndex = episodes.findIndex(ep => ep._id === episode._id);
-  const prevEpisode = currentIndex > 0 ? `/episode/${episodes[currentIndex - 1]._id}` : null;
-  const nextEpisode = currentIndex < episodes.length - 1 ? `/episode/${episodes[currentIndex + 1]._id}` : null;
-  const animePage = `/anime/${episode.anime._id}`;
+  const prevEpisode = currentIndex > 0 ? `/episode/${episodes[currentIndex - 1].anime.slug}-الحلقة-${episodes[currentIndex - 1].number}` : null;
+  const nextEpisode = currentIndex < episodes.length - 1 ? `/episode/${episodes[currentIndex + 1].anime.slug}-الحلقة-${episodes[currentIndex + 1].number}` : null;
+  const animePage = `/anime/${episode.anime.slug}`;
 
   return (
     <Box className={styles.streamingSection}>

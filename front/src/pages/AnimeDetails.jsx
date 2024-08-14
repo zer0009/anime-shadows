@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useCallback, useMemo, Suspense, lazy } from 'react';
+import React, { useEffect, useState, useCallback, Suspense, lazy, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { fetchAnimeById, rateAnime, getMyAnimeList } from '../api/modules/anime';
+import { fetchAnimeBySlug, rateAnime, getMyAnimeList } from '../api/modules/anime';
 import { addFavorite, removeFavorite } from '../api/modules/user';
 import { Container, Typography, useMediaQuery, Snackbar, Alert } from '@mui/material';
 import LoadingSpinner from '../components/common/LoadingSpinner.jsx';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
-import { JsonLd } from 'react-schemaorg';
+import { HelmetProvider } from 'react-helmet-async';
 import useFetchUserData from '../hooks/useFetchUserData';
+import { useSEO } from '../hooks/useSEO';
 import styles from './AnimeDetails.module.css';
 
 const AnimeSidebar = lazy(() => import('../components/AnimeDetails/AnimeSidebar.jsx'));
@@ -18,7 +18,7 @@ const AnimeEpisodes = lazy(() => import('../components/AnimeDetails/AnimeEpisode
 
 const AnimeDetails = () => {
   const { t } = useTranslation();
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
   const [anime, setAnime] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -36,11 +36,16 @@ const AnimeDetails = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const getAnimeDetails = useCallback(async () => {
+    console.log('Fetching anime details for slug:', slug);
     try {
       setLoading(true);
-      const response = await fetchAnimeById(id);
+      const response = await fetchAnimeBySlug(slug);
+      console.log('Anime details response:', response);
+      if (!response) {
+        throw new Error('No anime details found');
+      }
       setAnime(response);
-      const favoriteStatus = localStorage.getItem(`favorite-${id}`);
+      const favoriteStatus = localStorage.getItem(`favorite-${response._id}`);
       setIsFavorite(favoriteStatus === 'true' || response.isFavorite || false);
       const user = JSON.parse(localStorage.getItem('user'));
       if (user && response.userRatings) {
@@ -49,48 +54,53 @@ const AnimeDetails = () => {
           setUserRating(userRating.rating);
         }
       }
+      getMyAnimeListData(response._id);
+      getViewingHistory(response._id);
     } catch (error) {
       console.error('Error fetching anime details:', error);
       setError('Error fetching anime details');
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [slug]);
 
-  const getMyAnimeListData = useCallback(async () => {
+  const getMyAnimeListData = useCallback(async (animeId) => {
+    console.log('Fetching MyAnimeList data for anime ID:', animeId);
     try {
       setMyAnimeListLoading(true);
-      const response = await getMyAnimeList(id);
+      const response = await getMyAnimeList(animeId);
+      console.log('MyAnimeList data response:', response);
       setMyAnimeListData(response);
     } catch (error) {
       console.error('Error fetching MyAnimeList data:', error);
+      setError('Error fetching MyAnimeList data');
     } finally {
       setMyAnimeListLoading(false);
     }
-  }, [id]);
+  }, []);
 
-  const getViewingHistory = useCallback(() => {
+  const getViewingHistory = useCallback(async (animeId) => {
+    console.log('Fetching viewing history for anime ID:', animeId);
     try {
       if (userData && userData.history) {
-        const filteredHistory = userData.history.filter(item => item.anime === id);
+        const filteredHistory = userData.history.filter(item => item.anime === animeId);
         setViewingHistory(filteredHistory);
       }
     } catch (error) {
       console.error('Error fetching viewing history:', error);
     }
-  }, [userData, id]);
+  }, [userData]);
 
   useEffect(() => {
     getAnimeDetails();
-    getViewingHistory();
-    getMyAnimeListData();
-  }, [getAnimeDetails, getViewingHistory, getMyAnimeListData]);
+  }, [getAnimeDetails]);
 
   useEffect(() => {
-    localStorage.setItem(`favorite-${id}`, isFavorite);
-  }, [isFavorite, id]);
+    localStorage.setItem(`favorite-${slug}`, isFavorite);
+  }, [isFavorite, slug]);
 
   const handleFavoriteClick = useCallback(async () => {
+    console.log('Toggling favorite status for anime:', anime);
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) {
@@ -110,18 +120,22 @@ const AnimeDetails = () => {
   }, [isFavorite, anime]);
 
   const openModal = useCallback((episode) => {
-    navigate(`/episode/${episode._id}`);
-  }, [navigate]);
+    console.log('Opening modal for episode:', episode);
+    navigate(`/episode/${slug}-الحلقة-${episode.number}`);
+  }, [navigate, slug]);
 
   const handleGenreClick = useCallback((genreId) => {
+    console.log('Navigating to genre:', genreId);
     navigate(`/filter/genre/${genreId}`);
   }, [navigate]);
 
   const handleRateAnime = useCallback(() => {
+    console.log('Opening rating dialog');
     setRatingDialogOpen(true);
   }, []);
 
   const submitRating = useCallback(async () => {
+    console.log('Submitting rating:', selectedRating);
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) {
@@ -129,18 +143,17 @@ const AnimeDetails = () => {
         setSnackbarOpen(true);
         return;
       }
-      await rateAnime(id, user._id, selectedRating);
+      await rateAnime(anime._id, user._id, selectedRating);
       setUserRating(selectedRating);
-      const updatedAnime = await fetchAnimeById(id);
+      const updatedAnime = await fetchAnimeBySlug(slug);
       setAnime(updatedAnime);
     } catch (error) {
       console.error('Error rating anime:', error);
-    } finally {
-      setRatingDialogOpen(false);
     }
-  }, [id, selectedRating]);
+  }, [slug, selectedRating, anime]);
 
   const removeRating = useCallback(async () => {
+    console.log('Removing rating');
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) {
@@ -148,16 +161,16 @@ const AnimeDetails = () => {
         setSnackbarOpen(true);
         return;
       }
-      await rateAnime(id, user._id, null);
+      await rateAnime(anime._id, user._id, null);
       setUserRating(null);
-      const updatedAnime = await fetchAnimeById(id);
+      const updatedAnime = await fetchAnimeBySlug(slug);
       setAnime(updatedAnime);
     } catch (error) {
       console.error('Error removing rating:', error);
     }
-  }, [id]);
+  }, [slug, anime]);
 
-  const getScoreDisplayProps = useMemo(() => (anime) => ({
+  const getScoreDisplayProps = useCallback(() => ({
     score: myAnimeListData ? myAnimeListData.myAnimeListRating : 0,
     userCount: myAnimeListData ? myAnimeListData.myAnimeListUserCount : 0
   }), [myAnimeListData]);
@@ -168,6 +181,47 @@ const AnimeDetails = () => {
     }
     setSnackbarOpen(false);
   };
+
+  const seoProps = useMemo(() => {
+    if (!anime) return { title: slug };
+    return {
+      title: `جميع حلقات انمي ${anime.title} مترجمة اون لاين - AnimeShadows`,
+      description: `شاهد ${anime.title} - ${anime.subTitle} اون لاين على أنمي شادوز (Anime Shadows). ${anime.description?.substring(0, 150)}...`,
+      keywords: `أنمي 2024, ${anime.title}, ${anime.subTitle}, ${anime.genres?.map(genre => genre.name).join(', ')}, أنمي مترجم, مشاهدة أنمي, تحميل أنمي, أنمي جديد, أفضل أنمي, أنمي أون لاين, حلقات أنمي, أفلام أنمي, أنمي بدون إعلانات, أنمي بالعربي, أنمي رومانسي, أنمي أكشن, أنمي كوميدي, أنمي دراما, أنمي مغامرات, أنمي خيال علمي, أنمي فانتازيا`,
+      canonicalUrl: `https://animeshadows.xyz/anime/${slug}`,
+      ogType: 'video.tv_show',
+      ogImage: anime.pictureUrl,
+      twitterImage: anime.pictureUrl,
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@type": "TVSeries",
+        "name": anime.title,
+        "alternateName": anime.subTitle,
+        "description": anime.description,
+        "image": anime.pictureUrl,
+        "genre": anime.genres?.map(genre => genre.name),
+        "datePublished": anime.airingDate,
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": anime.averageRating,
+          "reviewCount": myAnimeListData ? myAnimeListData.myAnimeListUserCount : 0
+        },
+        "numberOfEpisodes": anime.episodes?.length || 0,
+        "actor": anime.characters?.map(character => ({
+          "@type": "Person",
+          "name": character.name
+        })),
+        "inLanguage": "ar",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Anime Shadows",
+          "alternateName": "أنمي شادوز"
+        }
+      }
+    };
+  }, [anime, myAnimeListData, slug]);
+
+  useSEO(seoProps);
 
   if (loading) {
     return <LoadingSpinner />;
@@ -184,50 +238,6 @@ const AnimeDetails = () => {
   return (
     <HelmetProvider>
       <Container maxWidth="lg" className={styles.animeDetailsContainer}>
-        <Helmet>
-          <title>{`${anime.title} - ${anime.subTitle} | أنمي شادوز - Anime Shadows`}</title>
-          <meta name="description" content={`شاهد ${anime.title} - ${anime.subTitle} اون لاين على أنمي شادوز (Anime Shadows). ${anime.description.substring(0, 150)}...`} />
-          <meta name="keywords" content={`أنمي 2024, ${anime.title}, ${anime.subTitle}, ${anime.genres.map(genre => genre.name).join(', ')}, أنمي مترجم, مشاهدة أنمي, تحميل أنمي, أنمي جديد, أفضل أنمي, أنمي أون لاين, حلقات أنمي, أفلام أنمي, أنمي بدون إعلانات, أنمي بالعربي, أنمي مصر, أنمي رومانسي, أنمي أكشن, أنمي كوميدي, أنمي دراما, أنمي مغامرات, أنمي خيال علمي, أنمي فانتازيا`} />
-          <link rel="canonical" href={`https://animeshadows.xyz/anime/${anime._id}`} />
-          <meta property="og:title" content={`${anime.title} - ${anime.subTitle} | أنمي شادوز - Anime Shadows`} />
-          <meta property="og:description" content={`شاهد ${anime.title} اون لاين على أنمي شادوز (Anime Shadows). ${anime.description.substring(0, 150)}...`} />
-          <meta property="og:image" content={anime.pictureUrl} />
-          <meta property="og:url" content={`https://animeshadows.xyz/anime/${anime._id}`} />
-          <meta property="og:type" content="video.tv_show" />
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content={`${anime.title} - ${anime.subTitle} | أنمي شادوز - Anime Shadows`} />
-          <meta name="twitter:description" content={`شاهد ${anime.title} اون لاين على أنمي شادوز (Anime Shadows). ${anime.description.substring(0, 150)}...`} />
-          <meta name="twitter:image" content={anime.pictureUrl} />
-          <meta name="robots" content="index, follow" />
-        </Helmet>
-        <JsonLd
-          item={{
-            "@context": "https://schema.org",
-            "@type": "TVSeries",
-            "name": anime.title,
-            "alternateName": anime.subTitle,
-            "description": anime.description,
-            "image": anime.pictureUrl,
-            "genre": anime.genres.map(genre => genre.name),
-            "datePublished": anime.airingDate,
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": anime.averageRating,
-              "reviewCount": myAnimeListData ? myAnimeListData.myAnimeListUserCount : 0
-            },
-            "numberOfEpisodes": anime.episodes?.length || 0,
-            "actor": anime.characters?.map(character => ({
-              "@type": "Person",
-              "name": character.name
-            })),
-            "inLanguage": "ar",
-            "publisher": {
-              "@type": "Organization",
-              "name": "Anime Shadows",
-              "alternateName": "أنمي شادوز"
-            }
-          }}
-        />
         <Suspense fallback={<LoadingSpinner />}>
           {isSmallScreen ? (
             <AnimeTabs

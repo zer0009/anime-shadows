@@ -10,38 +10,38 @@
     width: 100%;
     max-width: 300px;
     height: fit-content;
-}
-
-.animeImageContainer {
+  }
+  
+  .animeImageContainer {
     position: relative;
     width: 100%;
-}
-
-.animeImage {
+  }
+  
+  .animeImage {
     width: 100%;
     height: auto;
     border-radius: 8px;
     margin-bottom: 10px;
-}
-
-.scoreBadge {
+  }
+  
+  .scoreBadge {
     position: absolute;
     top: 5px;
     left: 5px;
     display: flex;
     align-items: center;
-}
-
-.sidebarActions {
+  }
+  
+  .sidebarActions {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     gap: 10px;
-}
-
-.rateButton,
-.favoriteButton {
+  }
+  
+  .rateButton,
+  .favoriteButton {
     background-color: var(--highlight-color);
     color: var(--text-color);
     flex: 1;
@@ -52,58 +52,66 @@
     justify-content: center;
     gap: 8px;
     transition: background-color 0.3s, transform 0.3s;
-}
-
-.rateButton:hover,
-.favoriteButton:hover {
+  }
+  
+  .rateButton:hover,
+  .favoriteButton:hover {
     background-color: var(--highlight-color-dark);
     transform: scale(1.05);
-}
-
-.animeMeta {
+  }
+  
+  .animeMeta {
     margin-top: 20px;
     width: 100%;
-    text-align: right;
-    direction: rtl;
-}
-
-.animeMeta p {
+  }
+  
+  .animeMeta p {
     margin: 10px 0;
     font-size: 16px;
     color: var(--text-color);
-}
-
-.animeMeta p strong {
+  }
+  
+  .animeMeta p strong {
     font-weight: bold;
     color: var(--highlight-color);
-}
-
-@media (max-width: 768px) {
+  }
+  
+  .rtl .animeMeta {
+    text-align: right;
+    direction: rtl;
+  }
+  
+  .ltr .animeMeta {
+    text-align: left;
+    direction: ltr;
+  }
+  
+  @media (max-width: 768px) {
     .animeSidebar {
-        padding: 10px;
+      padding: 10px;
     }
-
+  
     .rateButton,
     .favoriteButton {
-        padding: 8px;
+      padding: 8px;
     }
-
+  
     .animeMeta p {
-        font-size: 14px;
+      font-size: 14px;
     }
-}
-
-@media (max-width: 480px) {
+  }
+  
+  @media (max-width: 480px) {
     .animeSidebar {
-        padding: 10px;
+      padding: 10px;
     }
-
+  
     .rateButton,
     .favoriteButton {
-        padding: 6px;
+      padding: 6px;
     }
-
+  
     .animeMeta p {
-        font-size: 12px;
+      font-size: 12px;
     }
-}
+  }

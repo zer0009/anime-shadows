@@ -6,7 +6,7 @@ import ListDisplay from '../components/ListDisplay/ListDisplay';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import { Box, Typography, Container } from '@mui/material';
-import { Helmet } from 'react-helmet-async';
+import { HelmetProvider } from 'react-helmet-async';
 import { JsonLd } from 'react-schemaorg';
 import { useSEO } from '../hooks/useSEO';
 import BreadcrumbsComponent from '../components/common/BreadcrumbsComponent';
@@ -18,7 +18,7 @@ const AnimeList = () => {
   const { animeList, loading, error, totalPages, handleSearch } = useFetchAnimeList();
 
   useEffect(() => {
-    handleSearch('', [], '', '', '', '', '', false, currentPage);
+    handleSearch('', [], '', '', '', '', '', false, currentPage, 25); // Ensure limit is 25
   }, [currentPage, handleSearch]);
 
   const handlePageChange = useCallback((page) => {
@@ -29,9 +29,11 @@ const AnimeList = () => {
   const seoProps = useMemo(() => ({
     title: t('animeList.pageTitle', "قائمة الأنمي - Anime Shadows"),
     description: t('animeList.pageDescription', "تصفح مجموعتنا الواسعة من مسلسلات الأنمي على أنمي شادوز (Anime Shadows). اعثر على مسلسلك المفضل القادم."),
-    keywords: t('animeList.pageKeywords', "قائمة الأنمي, مسلسلات أنمي, مشاهدة أنمي اون لاين, Anime Shadows"),
+    keywords: t('animeList.pageKeywords', "قائمة الأنمي, مسلسلات أنمي, مشاهدة أنمي اون لاين, Anime Shadows, أفضل أنمي, أنمي جديد, أنمي مترجم, تحميل أنمي, أنمي 2024"),
     canonicalUrl: `https://animeshadows.xyz/anime-list?page=${currentPage}`,
     ogType: "website",
+    ogImage: "https://animeshadows.xyz/default-og-image.jpg", // Add a default OG image
+    twitterImage: "https://animeshadows.xyz/default-twitter-image.jpg", // Add a default Twitter image
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
@@ -54,63 +56,45 @@ const AnimeList = () => {
     }
   }), [animeList, currentPage, t]);
 
-  const seo = useSEO(seoProps);
+  useSEO(seoProps);
 
   return (
-    <Box sx={{ 
-      backgroundColor: 'var(--primary-dark)', 
-      color: 'var(--text-color)',
-      minHeight: '100vh',
-      padding: '20px 0'
-    }}>
-      <Container maxWidth="lg">
-        <Helmet>
-          {seo.helmet.title && <title>{seo.helmet.title}</title>}
-          {seo.helmet.meta.map((meta, index) => (
-            <meta key={index} {...meta} />
-          ))}
-          {seo.helmet.link.map((link, index) => (
-            <link key={index} {...link} />
-          ))}
-          <meta name="robots" content="index, follow" />
-        </Helmet>
-        {seo.jsonLd && <JsonLd item={seo.jsonLd} />}
-        
-        {/* <BreadcrumbsComponent
-          links={[
-            { to: '/category', label: t('common.category', 'الفئة') },
-            { to: '/subcategory', label: t('common.subcategory', 'الفئة الفرعية') }
-          ]}
-          current={t('animeList.breadcrumb', 'قائمة الأنمي')}
-        /> */}
-
-        <BreadcrumbsComponent
-          links={[]}
-          current={t('animeList.breadcrumb', 'قائمة الأنمي')}
-        />
-        
-        {loading ? (
-          <LoadingSpinner />
-        ) : (
-          <>
-            <ListDisplay
-              title={t('animeList.listTitle', 'قائمة الأنمي')}
-              list={animeList}
-              loading={loading}
-              error={error}
-              fields={['title', 'genre', 'rating']}
-            />
-            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
-              <PaginationComponent
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
+    <HelmetProvider>
+      <Box sx={{ 
+        backgroundColor: 'var(--primary-dark)', 
+        color: 'var(--text-color)',
+        minHeight: '100vh',
+        padding: '20px 0'
+      }}>
+        <Container maxWidth="lg">
+          <BreadcrumbsComponent
+            links={[]}
+            current={t('animeList.breadcrumb', 'قائمة الأنمي')}
+          />
+          
+          {loading ? (
+            <LoadingSpinner />
+          ) : (
+            <>
+              <ListDisplay
+                title={t('animeList.listTitle', 'قائمة الأنمي')}
+                list={animeList}
+                loading={loading}
+                error={error}
+                fields={['title', 'genre', 'rating']}
               />
-            </Box>
-          </>
-        )}
-      </Container>
-    </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+                <PaginationComponent
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              </Box>
+            </>
+          )}
+        </Container>
+      </Box>
+    </HelmetProvider>
   );
 };
 

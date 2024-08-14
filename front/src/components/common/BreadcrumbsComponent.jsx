@@ -3,39 +3,21 @@ import { Breadcrumbs, Typography, Link as MuiLink } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { useTranslation } from 'react-i18next';
+import styles from './BreadcrumbsComponent.module.css';
 
 const BreadcrumbsComponent = ({ links, current }) => {
+  const { i18n, t } = useTranslation();
+  const isRTL = i18n.dir() === 'rtl';
+
   return (
     <Breadcrumbs
-      separator={<NavigateNextIcon fontSize="medium" sx={{ color: 'var(--subtext-color)' }} />}
+      separator={<NavigateNextIcon fontSize="medium" className={styles.separator} />}
       aria-label="breadcrumb"
-      sx={{
-        marginBottom: '30px',
-        padding: '10px 20px',
-        backgroundColor: 'var(--secondary-dark)',
-        borderRadius: '8px',
-        '& .MuiBreadcrumbs-ol': {
-          alignItems: 'center',
-        },
-      }}
+      className={styles.breadcrumbs}
     >
-      <RouterLink
-        to="/"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          color: 'var(--subtext-color)',
-          textDecoration: 'none',
-          transition: 'color 0.3s ease',
-          padding: '5px 10px',
-          borderRadius: '4px',
-          '&:hover': {
-            color: 'var(--highlight-color)',
-            backgroundColor: 'var(--hover-background-color)',
-          },
-        }}
-      >
-        <HomeIcon sx={{ mr: 1, fontSize: '1.5rem' }} />
+      <RouterLink to="/" className={styles.link}>
+        <HomeIcon className={styles.icon} />
         <Typography variant="h6">
           Home
         </Typography>
@@ -45,34 +27,14 @@ const BreadcrumbsComponent = ({ links, current }) => {
           key={index}
           component={RouterLink}
           to={link.to}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            color: 'var(--subtext-color)',
-            textDecoration: 'none',
-            transition: 'color 0.3s ease',
-            padding: '5px 10px',
-            borderRadius: '4px',
-            '&:hover': {
-              color: 'var(--highlight-color)',
-              backgroundColor: 'var(--hover-background-color)',
-            },
-          }}
+          className={styles.link}
         >
           <Typography variant="h6">
             {link.label}
           </Typography>
         </MuiLink>
       ))}
-      <Typography
-        variant="h6"
-        sx={{
-          color: 'var(--text-color)',
-          display: 'flex',
-          alignItems: 'center',
-          padding: '5px 10px',
-        }}
-      >
+      <Typography variant="h6" className={styles.current}>
         {current}
       </Typography>
     </Breadcrumbs>

@@ -2,8 +2,6 @@
   margin-top: 20px;
   padding: 20px;
   background-color: var(--primary-dark);
-  /* border-radius: 8px;
-  box-shadow: 0 4px 8px var(--shadow-color); */
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
@@ -80,6 +78,7 @@
   margin-left: 10px;
 }
 
+/* Custom scrollbar styles */
 .episodeListContainer::-webkit-scrollbar {
   width: 8px;
 }
@@ -93,6 +92,7 @@
   background-color: var(--secondary-dark);
 }
 
+/* Responsive design */
 @media (max-width: 600px) {
   .animeEpisodes {
     padding: 15px;

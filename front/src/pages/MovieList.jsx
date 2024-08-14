@@ -4,7 +4,7 @@ import useFetchMovieList from '../hooks/useFetchMovieList';
 import ListDisplay from '../components/ListDisplay/ListDisplay';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
 import { Box, Container } from '@mui/material';
-import { Helmet } from 'react-helmet-async';
+import { HelmetProvider } from 'react-helmet-async';
 import { JsonLd } from 'react-schemaorg';
 import { useSEO } from '../hooks/useSEO';
 import { useTranslation } from 'react-i18next';
@@ -33,6 +33,8 @@ const MovieList = () => {
         keywords: t('movieList.keywords', 'قائمة الأفلام 2024, أفلام أنمي 2024, مشاهدة أفلام اون لاين, تحميل أفلام أنمي, Anime Shadows'),
         canonicalUrl: `https://animeshadows.xyz/movie-list?page=${currentPage}`,
         ogType: 'website',
+        ogImage: 'https://animeshadows.xyz/default-og-image.jpg', // Add a default OG image
+        twitterImage: 'https://animeshadows.xyz/default-twitter-image.jpg', // Add a default Twitter image
         jsonLd: {
             "@context": "https://schema.org",
             "@type": "CollectionPage",
@@ -53,22 +55,10 @@ const MovieList = () => {
         }
     };
 
-    const seo = useSEO(seoProps);
+    useSEO(seoProps);
 
     return (
-        <>
-            <Helmet>
-                {seo.helmet.title && <title>{seo.helmet.title}</title>}
-                {seo.helmet.meta.map((meta, index) => (
-                    <meta key={index} {...meta} />
-                ))}
-                {seo.helmet.link.map((link, index) => (
-                    <link key={index} {...link} />
-                ))}
-                <meta name="robots" content="index, follow" />
-            </Helmet>
-            {seo.jsonLd && <JsonLd item={seo.jsonLd} />}
-            
+        <HelmetProvider>
             <Container maxWidth="lg" className={styles.movieListPage}>
                 <BreadcrumbsComponent
                     links={[]}
@@ -89,7 +79,7 @@ const MovieList = () => {
                     />
                 </Box>
             </Container>
-        </>
+        </HelmetProvider>
     );
 };
 

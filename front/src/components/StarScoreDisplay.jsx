@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { Star } from '@mui/icons-material';
 import styles from './StarScoreDisplay.module.css';
 
-const StarScoreDisplay = ({ score, label }) => {
+const StarScoreDisplay = ({ score = 0, label }) => {
   return (
     <Box className={styles.scoreContainer}>
       <Box className={styles.scoreDetails}>

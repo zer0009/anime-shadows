@@ -52,12 +52,20 @@ const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeNumber
     const handleEpisodeClick = (e) => {
         e.stopPropagation();
         e.preventDefault();
-        navigate(`/episode/${episodeId}`);
+        const url = `/episode/${anime.slug}-الحلقة-${episodeNumber}`;
+        console.log('Navigating to:', url); // Add logging
+        navigate(url);
+    };
+
+    const handleCardClick = (e) => {
+        if (onClick) {
+            onClick(e);
+        }
     };
 
     return (
-        <Card className={styles.animeCard} onClick={onClick}>
-            <Link to={`/anime/${anime._id}`} className={styles.animeCardLink}>
+        <Card className={styles.animeCard} onClick={handleCardClick}>
+            <Link to={`/anime/${anime.slug}`} className={styles.animeCardLink}>
                 <LazyLoadImage
                     src={imageError ? defaultPictureUrl : imageUrl}
                     alt={t('animeCard.coverAlt', 'غلاف {{title}}', { title: anime.title })}

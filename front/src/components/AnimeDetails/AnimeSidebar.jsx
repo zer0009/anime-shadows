@@ -4,8 +4,10 @@ import { Favorite, FavoriteBorder, Star } from '@mui/icons-material';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import StarScoreDisplay from '../StarScoreDisplay.jsx';
 import styles from './AnimeSidebar.module.css';
+import { useTranslation } from 'react-i18next';
 
-const AnimeSidebar = React.memo(({ anime, isFavorite, handleFavoriteClick, handleRateAnime, t }) => {
+const AnimeSidebar = React.memo(({ anime, isFavorite, handleFavoriteClick, handleRateAnime }) => {
+  const { t, i18n } = useTranslation();
   const airingYear = anime.airingDate ? new Date(anime.airingDate).getFullYear() : 'N/A';
 
   useEffect(() => {
@@ -23,7 +25,7 @@ const AnimeSidebar = React.memo(({ anime, isFavorite, handleFavoriteClick, handl
   }, [anime.pictureUrl]);
 
   return (
-    <div className={styles.animeSidebar}>
+    <div className={`${styles.animeSidebar} ${i18n.dir() === 'rtl' ? styles.rtl : styles.ltr}`}>
       <Box className={styles.animeImageContainer}>
         <LazyLoadImage
           src={anime.pictureUrl}
@@ -66,7 +68,7 @@ const AnimeSidebar = React.memo(({ anime, isFavorite, handleFavoriteClick, handl
         <Typography variant="body2"><strong>{t('animeDetails.season')}:</strong> {anime.season?.name || 'N/A'}</Typography>
         <Typography variant="body2"><strong>{t('animeDetails.source')}:</strong> {anime.source || 'N/A'}</Typography>
         <Typography variant="body2"><strong>{t('animeDetails.studio')}:</strong> {anime.studio || 'N/A'}</Typography>
-        <Typography variant="body2"><strong>{t('animeDetails.duration')}:</strong> {anime.duration ? `${anime.duration} دقيقة` : 'N/A'}</Typography>
+        <Typography variant="body2"><strong>{t('animeDetails.duration')}:</strong> {anime.duration ? `${anime.duration} ${t('animeDetails.minutes')}` : 'N/A'}</Typography>
       </Box>
     </div>
   );

@@ -1,6 +1,5 @@
 import React, { useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
 import Header from './components/common/Header.jsx';
@@ -67,7 +66,11 @@ function AppContent() {
             <Route path="/season-anime/" element={<SeasonAnime />} />
             <Route path="/login/" element={<Login />} />
             <Route path="/register/" element={<Register />} />
-            <Route path="/anime/:id/" element={<AnimeDetails />} />
+            {/* <Route path="/anime/:id/" element={<AnimeDetails />} /> */}
+            <Route path="/anime/:slug" element={<AnimeDetails />} />
+            <Route path="/episode/:episodeSlug" element={<EpisodePage />} /> {/* Define the route */}
+
+
             <Route path="/filter/:filterType/:filterValue/" element={<FilteredListPage />} />
             <Route path="/search/" element={<SearchPage />} />
             <Route path="/admin-register/" element={<AdminRegister />} />
@@ -77,7 +80,7 @@ function AppContent() {
             <Route path="/last-watching/" element={<ProtectedRoute><History /></ProtectedRoute>} />
             <Route path="/favorites/" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
             <Route path="/admin-dashboard/" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-            <Route path="/episode/:episodeId/" element={<EpisodePage />} />
+            {/* <Route path="/episode/:episodeId/" element={<EpisodePage />} /> */}
             <Route path="/admin/manage-anime/" element={<AdminRoute><ManageAnime /></AdminRoute>} />
             <Route path="/admin/edit-anime/:animeId/" element={<AdminRoute><EditAnime /></AdminRoute>} />
             <Route path="/admin/edit-episodes/:animeId/" element={<AdminRoute><EditEpisodes /></AdminRoute>} />
@@ -112,13 +115,11 @@ function App() {
 
   return (
     <I18nextProvider i18n={i18n}>
-      <AuthProvider>
-        <HelmetProvider>
-          <ErrorBoundary>
-            <AppContent />
-          </ErrorBoundary>
-        </HelmetProvider>
-      </AuthProvider>
+      <HelmetProvider>
+        <ErrorBoundary>
+          <AppContent />
+        </ErrorBoundary>
+      </HelmetProvider>
     </I18nextProvider>
   );
 }

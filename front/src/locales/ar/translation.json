@@ -39,7 +39,8 @@
     "rate": "تقييم",
     "favorite": "مفضل",
     "details": "التفاصيل",
-    "watchedCount": "{{count}} مشاهدة"
+    "watchedCount": "{{count}} مشاهدة",
+    "minutes": "دقيقة"
   },
   "home": {
     "popularAnime": "أشهر الأنميات",

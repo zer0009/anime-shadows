@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import API from '../api/client';
 
 const useFetchUserData = () => {
@@ -6,6 +6,7 @@ const useFetchUserData = () => {
     const [animeDetails, setAnimeDetails] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const fetchedAnimeIds = useRef(new Set()); // Use useRef to persist the set across renders
 
     const fetchUserData = useCallback(async () => {
         try {
@@ -22,18 +23,31 @@ const useFetchUserData = () => {
         }
     }, []);
 
-    const fetchAnimeDetails = useCallback(async (animeId) => {
+    const fetchAnimeDetailsBatch = useCallback(async (animeIds) => {
         try {
-            const response = await API.get(`/anime/${animeId}`);
+            const response = await API.post('/anime/batch', { ids: animeIds }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const newDetails = response.data.reduce((acc, anime) => {
+                acc[anime._id] = anime;
+                return acc;
+            }, {});
             setAnimeDetails(prevDetails => ({
                 ...prevDetails,
-                [animeId]: response.data
+                ...newDetails
             }));
+            // Add fetched IDs to the set
+            animeIds.forEach(id => fetchedAnimeIds.current.add(id));
         } catch (error) {
-            setAnimeDetails(prevDetails => ({
-                ...prevDetails,
-                [animeId]: { error: 'Error fetching details' }
-            }));
+            console.error('Error fetching anime details batch:', error); // Add logging
+            animeIds.forEach(id => {
+                setAnimeDetails(prevDetails => ({
+                    ...prevDetails,
+                    [id]: { error: 'Error fetching details' }
+                }));
+            });
         }
     }, []);
 
@@ -43,13 +57,15 @@ const useFetchUserData = () => {
 
     useEffect(() => {
         if (userData && userData.history) {
-            userData.history.forEach(item => {
-                if (item.anime && !animeDetails[item.anime]) {
-                    fetchAnimeDetails(item.anime);
-                }
-            });
+            const animeIdsToFetch = userData.history
+                .map(item => item.anime)
+                .filter(animeId => animeId && !fetchedAnimeIds.current.has(animeId));
+
+            if (animeIdsToFetch.length > 0) {
+                fetchAnimeDetailsBatch(animeIdsToFetch);
+            }
         }
-    }, [userData, animeDetails, fetchAnimeDetails]);
+    }, [userData, fetchAnimeDetailsBatch]);
 
     return { userData, animeDetails, loading, error };
 };

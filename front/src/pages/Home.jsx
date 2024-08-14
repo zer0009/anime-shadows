@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useCallback, useMemo, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { fetchAnimeById, fetchPopularAnime } from '../api/modules/anime';
+import { fetchAnimeBySlug, fetchPopularAnime } from '../api/modules/anime';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import useFetchRecentEpisodes from '../hooks/useFetchRecentEpisodes';
-import { Helmet } from 'react-helmet-async';
-import { JsonLd } from 'react-schemaorg';
+import { HelmetProvider } from 'react-helmet-async';
 import { useSEO } from '../hooks/useSEO';
 import styles from './Home.module.css';
 import { Box, Container, Fab, Grid, Skeleton, Button, useMediaQuery, useTheme } from '@mui/material';
@@ -68,15 +67,20 @@ const Home = () => {
         fetchPopular();
     }, []);
 
-    const handleAnimeClick = useCallback(async (animeId) => {
-        if (!animeId) return;
-        try {
-            await fetchAnimeById(animeId);
-            navigate(`/anime/${animeId}`);
-        } catch (error) {
-            console.error('Error fetching anime details:', error);
-        }
+    const handleAnimeClick = useCallback(async (slug) => {
+        if (!slug) return;
+        navigate(`/anime/${slug}`);
     }, [navigate]);
+
+    // const handleEpisodeClick = useCallback(async (slug, episodeNumber) => {
+    //     if (!slug || !episodeNumber) return;
+    //     try {
+    //         await fetchAnimeBySlug(slug);
+    //         navigate(`/episode/${slug}-الحلقة-${episodeNumber}`);
+    //     } catch (error) {
+    //         console.error('Error fetching anime details:', error);
+    //     }
+    // }, [navigate]);
 
     const heroImages = useMemo(() => [
         { webp: hero1Webp, jpg: hero1Jpg, alt: t('home.featuredAnime1') },
@@ -90,6 +94,8 @@ const Home = () => {
         keywords: t('home.keywords', 'anime ar, anime arabic, anime مترجم, تحميل, anime shadows ar, arabic anime, أنمي عربي, مشاهدة أنمي, أنمي مترجم, أنمي اون لاين, أحدث الأنميات, أفضل الأنميات, أنمي شادوز, Anime Shadows, anime online, anime streaming, مسلسلات أنمي,مواقع أنمي,مواقع الانمي,انمى بجمع الجودات, أفلام أنمي, مانجا, حلقات أنمي جديدة, تحميل أنمي, أنمي بدون إعلانات'),
         canonicalUrl: 'https://animeshadows.xyz',
         ogType: 'website',
+        ogImage: 'https://animeshadows.xyz/default-og-image.jpg', // Add a default OG image
+        twitterImage: 'https://animeshadows.xyz/default-twitter-image.jpg', // Add a default Twitter image
         jsonLd: [
             {
                 "@context": "https://schema.org",
@@ -109,7 +115,7 @@ const Home = () => {
                 "itemListElement": popularAnimes.map((anime, index) => ({
                     "@type": "ListItem",
                     "position": index + 1,
-                    "url": `https://animeshadows.xyz/anime/${anime._id}`,
+                    "url": `https://animeshadows.xyz/anime/${anime.slug}`,
                     "name": anime.title
                 }))
             },
@@ -126,7 +132,7 @@ const Home = () => {
                         "itemListElement": popularAnimes.map((anime, index) => ({
                             "@type": "ListItem",
                             "position": index + 1,
-                            "url": `https://animeshadows.xyz/anime/${anime._id}`,
+                            "url": `https://animeshadows.xyz/anime/${anime.slug}`,
                             "name": anime.title
                         }))
                     },
@@ -136,7 +142,7 @@ const Home = () => {
                         "itemListElement": recentEpisodes.map((episode, index) => ({
                             "@type": "ListItem",
                             "position": index + 1,
-                            "url": `https://animeshadows.xyz/episode/${episode._id}`,
+                            "url": `https://animeshadows.xyz/episode/${episode.anime.slug}-الحلقة-${episode.number}`,
                             "name": `${episode.anime.title} - ${episode.title}`
                         }))
                     }
@@ -145,25 +151,10 @@ const Home = () => {
         ]
     }), [t, popularAnimes, recentEpisodes]);
 
-    const seo = useSEO(seoProps);
+    useSEO(seoProps);
 
     return (
-        <>
-            <Helmet>
-                <title>{t('home.title', 'Anime Shadows - موقعك الأول لمشاهدة الأنمي')}</title>
-                <meta name="description" content={t('home.description', 'استمتع بمشاهدة أحدث وأفضل الأنميات المترجمة بجودة عالية وسيرفرات متعددة على أنمي شادوز. اكتشف مجموعة واسعة من الأنمي، من الكلاسيكيات إلى الإصدارات الجديدة.')} />
-                {seo.helmet.meta.map((meta, index) => (
-                    <meta key={index} {...meta} />
-                ))}
-                {seo.helmet.link.map((link, index) => (
-                    <link key={index} {...link} />
-                ))}
-                <meta name="robots" content="index, follow" />
-                <link rel="canonical" href="https://animeshadows.xyz/" />
-            </Helmet>
-            {seo.jsonLd && seo.jsonLd.map((item, index) => (
-                <JsonLd key={index} item={item} />
-            ))}
+        <HelmetProvider>
             <Suspense fallback={<LoadingSpinner />}>
                 <HeroSection heroImages={heroImages} t={t} />
                 <Container maxWidth="lg" className={styles.mainContent}>
@@ -172,13 +163,13 @@ const Home = () => {
                         items={popularAnimes}
                         loading={loading}
                         navigate={navigate}
-                        handleAnimeClick={handleAnimeClick}
+                        // handleAnimeClick={handleAnimeClick}
                         t={t}
                         isMobile={isMobile}
                     />
                     <section aria-labelledby="recent-episodes-heading" className={styles.recentEpisodesSection}>
                         <div className={styles.sectionHeader}>
-                            <h2 id="recent-episodes-heading" className={styles.sectionTitle}>{t('home.recentEpisodes')}</h2>
+                            <h3 id="recent-episodes-heading" className={styles.sectionTitle}>{t('home.recentEpisodes')}</h3>
                             <Button 
                                 variant="contained"
                                 onClick={() => navigate('/recent-episodes')} 
@@ -219,7 +210,7 @@ const Home = () => {
                                                 anime={episode.anime}
                                                 episodeTitle={episode.title}
                                                 episodeId={episode._id}
-                                                onClick={() => handleAnimeClick(episode.anime._id)}
+                                                onClick={() => handleAnimeClick(episode.anime.slug, episode.number)}
                                             />
                                         </SwiperSlide>
                                     ))}
@@ -232,7 +223,7 @@ const Home = () => {
                                                 anime={episode.anime}
                                                 episodeNumber={episode.number}
                                                 episodeId={episode._id}
-                                                onClick={() => handleAnimeClick(episode.anime._id)}
+                                                onClick={() => handleAnimeClick(episode.anime.slug, episode.number)}
                                             />
                                         </Grid>
                                     ))}
@@ -245,7 +236,7 @@ const Home = () => {
                         items={searchResults.length > 0 ? searchResults : animeList}
                         loading={loading}
                         navigate={navigate}
-                        handleAnimeClick={handleAnimeClick}
+                        // handleAnimeClick={handleAnimeClick}
                         t={t}
                         isMobile={isMobile}
                     />
@@ -256,7 +247,7 @@ const Home = () => {
                     <KeyboardArrowUpIcon />
                 </Fab>
             )}
-        </>
+        </HelmetProvider>
     );
 };
 

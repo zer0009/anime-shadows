@@ -4,7 +4,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "env-cmd -f ./.env nodemon server.js"
+    "dev": "env-cmd -f ./.env nodemon server.js",
+    "update-slugs": "env-cmd -f ./.env node src/scripts/updateSlugs.js"
   },
   "author": "",
   "license": "ISC",
@@ -34,6 +35,7 @@
     "puppeteer": "^22.15.0",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "slugify": "^1.6.6",
     "validator": "^13.12.0",
     "xss-clean": "^0.1.4"
   },

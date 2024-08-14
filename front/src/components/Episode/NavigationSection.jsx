@@ -7,9 +7,9 @@ import styles from './NavigationSection.module.css';
 
 const NavigationSection = ({ episode, episodes, t }) => {
   const currentIndex = episodes.findIndex(ep => ep._id === episode._id);
-  const prevEpisode = currentIndex > 0 ? `/episode/${episodes[currentIndex - 1]._id}` : null;
-  const nextEpisode = currentIndex < episodes.length - 1 ? `/episode/${episodes[currentIndex + 1]._id}` : null;
-  const animePage = `/anime/${episode.anime._id}`;
+  const prevEpisode = currentIndex > 0 ? `/episode/${episodes[currentIndex - 1].anime.slug}-الحلقة-${episodes[currentIndex - 1].number}` : null;
+  const nextEpisode = currentIndex < episodes.length - 1 ? `/episode/${episodes[currentIndex + 1].anime.slug}-الحلقة-${episodes[currentIndex + 1].number}` : null;
+  const animePage = `/anime/${episode.anime.slug}`;
 
   return (
     <Box className={styles.navigationSection}>

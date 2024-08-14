@@ -42,7 +42,8 @@
     "removeRating": "Remove Rating",
     "noEpisodes": "No Episodes",
     "details": "Details",
-    "watchedCount": "{{count}} Watched"
+    "watchedCount": "{{count}} Watched",
+    "minutes": "Minutes"
   },
   "home": {
     "popularAnime": "Popular Anime",

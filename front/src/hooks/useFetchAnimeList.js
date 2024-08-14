@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { fetchAnime } from '../api/modules/anime';
 import debounce from 'lodash.debounce';
 
-const useFetchAnimeList = (initialPage = 1, initialLimit = 10) => {
+const useFetchAnimeList = (initialPage = 1, initialLimit = 25) => {
     const [animeList, setAnimeList] = useState([]);
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -32,7 +32,7 @@ const useFetchAnimeList = (initialPage = 1, initialLimit = 10) => {
         debouncedFetchAnimeList(currentPage, limit);
     }, [currentPage, limit, debouncedFetchAnimeList]);
 
-    const handleSearch = useCallback(async (query = '', tags = [], type = '', season = '', sort = '', popular = '', state = '', broadMatches = false, page = 1, limit = 10) => {
+    const handleSearch = useCallback(async (query = '', tags = [], type = '', season = '', sort = '', popular = '', state = '', broadMatches = false, page = 1, limit = 25) => {
         try {
             setLoading(true);
             const response = await fetchAnime(page, limit, query, tags, type, season, sort, popular, state, broadMatches);

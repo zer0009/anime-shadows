@@ -6,8 +6,13 @@ import TagsModal from '../components/TagsModal/TagsModal.jsx';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import Navbar from '../components/Navbar/Navbar.jsx';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
+import { HelmetProvider } from 'react-helmet-async';
+import { JsonLd } from 'react-schemaorg';
+import { useSEO } from '../hooks/useSEO';
+import { useTranslation } from 'react-i18next';
 
 const SearchPage = () => {
+    const { t } = useTranslation();
     const [searchParams, setSearchParams] = useSearchParams();
     const currentPage = parseInt(searchParams.get('page')) || 1;
     const { searchResults, loading, error, handleSearch, totalPages, setCurrentPage, limit, setLimit } = useFetchAnimeList();
@@ -70,39 +75,71 @@ const SearchPage = () => {
         setSearchParams({ page });
     }, [setSearchParams]);
 
+    const seoProps = {
+        title: t('searchPage.title', 'نتائج البحث | أنمي شادوز - Anime Shadows'),
+        description: t('searchPage.description', 'استعرض نتائج البحث على أنمي شادوز (Anime Shadows).'),
+        keywords: t('searchPage.keywords', 'نتائج البحث, أنمي, مشاهدة أنمي اون لاين, Anime Shadows'),
+        canonicalUrl: `https://animeshadows.xyz/search?page=${currentPage}`,
+        ogType: "website",
+        ogImage: "https://animeshadows.xyz/default-og-image.jpg", // Add a default OG image
+        twitterImage: "https://animeshadows.xyz/default-twitter-image.jpg", // Add a default Twitter image
+        jsonLd: {
+            "@context": "https://schema.org",
+            "@type": "SearchResultsPage",
+            "name": t('searchPage.title', 'نتائج البحث | أنمي شادوز - Anime Shadows'),
+            "description": t('searchPage.description', 'استعرض نتائج البحث على أنمي شادوز (Anime Shadows).'),
+            "url": `https://animeshadows.xyz/search?page=${currentPage}`,
+            "inLanguage": "ar",
+            "isPartOf": {
+                "@type": "WebSite",
+                "name": "Anime Shadows",
+                "alternateName": "أنمي شادوز",
+                "url": "https://animeshadows.xyz"
+            },
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": `https://animeshadows.xyz/search?page=${currentPage}`
+            }
+        }
+    };
+
+    useSEO(seoProps);
+
     return (
-        <Container maxWidth="lg">
-            <Navbar
-                onTagsClick={() => setIsTagsModalOpen(true)}
-                onTypeChange={handleTypeChange}
-                onSeasonChange={handleSeasonChange}
-                onSortChange={handleSortChange}
-                onPopularChange={handlePopularChange}
-                onReset={handleReset}
-                onStateChange={handleStateChange}
-                onSearch={(query) => handleSearch(query, selectedTags, selectedType, selectedSeason, selectedSort, selectedPopular, selectedState, broadMatches, 1, limit)}
-            />
-            <Box my={4}>
-                {error && <Alert severity="error">{error}</Alert>}
-                <ListDisplay
-                    title="Search Results"
-                    list={searchResults}
-                    loading={loading}
-                    error={error}
-                    fields={{ onClick: (id) => console.log(`Clicked on anime with id: ${id}`) }}
+        <HelmetProvider>
+            <Container maxWidth="lg">
+                <Navbar
+                    onTagsClick={() => setIsTagsModalOpen(true)}
+                    onTypeChange={handleTypeChange}
+                    onSeasonChange={handleSeasonChange}
+                    onSortChange={handleSortChange}
+                    onPopularChange={handlePopularChange}
+                    onReset={handleReset}
+                    onStateChange={handleStateChange}
+                    onSearch={(query) => handleSearch(query, selectedTags, selectedType, selectedSeason, selectedSort, selectedPopular, selectedState, broadMatches, 1, limit)}
                 />
-                <PaginationComponent
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
+                <Box my={4}>
+                    {error && <Alert severity="error">{error}</Alert>}
+                    <ListDisplay
+                        title="Search Results"
+                        list={searchResults}
+                        loading={loading}
+                        error={error}
+                        fields={{ onClick: (id) => console.log(`Clicked on anime with id: ${id}`) }}
+                    />
+                    <PaginationComponent
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />
+                </Box>
+                <TagsModal
+                    open={isTagsModalOpen}
+                    onClose={() => setIsTagsModalOpen(false)}
+                    onApply={handleTagsApply}
                 />
-            </Box>
-            <TagsModal
-                open={isTagsModalOpen}
-                onClose={() => setIsTagsModalOpen(false)}
-                onApply={handleTagsApply}
-            />
-        </Container>
+            </Container>
+        </HelmetProvider>
     );
 };
 

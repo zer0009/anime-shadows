@@ -8,7 +8,7 @@ import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import ListDisplay from '../components/ListDisplay/ListDisplay';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
 import { getCurrentSeason } from '../utils/getCurrentSeason';
-import { Helmet } from 'react-helmet-async';
+import { HelmetProvider } from 'react-helmet-async';
 import { JsonLd } from 'react-schemaorg';
 import { useSEO } from '../hooks/useSEO';
 import BreadcrumbsComponent from '../components/common/BreadcrumbsComponent';
@@ -41,6 +41,8 @@ const SeasonAnime = () => {
     keywords: t('seasonAnime.pageKeywords', `ربيع,خريف,شتاء,صيف,أنمي 2024, أنمي الموسم, ${t(`seasons.${currentSeason}`, currentSeason)}, ${currentYear}, أنميات جديدة, Anime Shadows, تحميل, مترجم, انمي, حلقة, ستريم, بث مباشر, جودة عالية, HD, مترجم عربي, دبلجة عربية, بدون إعلانات, مجاناً`),
     canonicalUrl: `https://animeshadows.xyz/season-anime?page=${currentPage}`,
     ogType: "website",
+    ogImage: "https://animeshadows.xyz/default-og-image.jpg", // Add a default OG image
+    twitterImage: "https://animeshadows.xyz/default-twitter-image.jpg", // Add a default Twitter image
     jsonLd: [
       {
         "@context": "https://schema.org",
@@ -74,47 +76,35 @@ const SeasonAnime = () => {
     ]
   }), [t, currentSeason, currentYear, currentPage, seasonAnimeList]);
 
-  const seo = useSEO(seoProps);
+  useSEO(seoProps);
 
   return (
-    <Box className={styles.seasonAnimePage}>
-      <Container maxWidth="lg">
-        <Helmet>
-          {seo.helmet.title && <title>{seo.helmet.title}</title>}
-          {seo.helmet.meta.map((meta, index) => (
-            <meta key={index} {...meta} />
-          ))}
-          {seo.helmet.link.map((link, index) => (
-            <link key={index} {...link} />
-          ))}
-          <meta name="robots" content="index, follow" />
-        </Helmet>
-        {seo.jsonLd && seo.jsonLd.map((item, index) => (
-          <JsonLd key={index} item={item} />
-        ))}
-        
-        <BreadcrumbsComponent
-          links={[]}
-          current={t('seasonAnime.breadcrumb', 'أنمي الموسم')}
-        />
-
-        <ListDisplay
-          title={t('seasonAnime.listTitle', 'قائمة أنمي الموسم')}
-          list={seasonAnimeList}
-          loading={loading}
-          error={error}
-          fields={['title', 'genre', 'rating', 'type', 'status']}
-        />
-
-        <Box className={styles.paginationContainer}>
-          <PaginationComponent
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
+    <HelmetProvider>
+      <Box className={styles.seasonAnimePage}>
+        <Container maxWidth="lg">
+          <BreadcrumbsComponent
+            links={[]}
+            current={t('seasonAnime.breadcrumb', 'أنمي الموسم')}
           />
-        </Box>
-      </Container>
-    </Box>
+
+          <ListDisplay
+            title={t('seasonAnime.listTitle', 'قائمة أنمي الموسم')}
+            list={seasonAnimeList}
+            loading={loading}
+            error={error}
+            fields={['title', 'genre', 'rating', 'type', 'status']}
+          />
+
+          <Box className={styles.paginationContainer}>
+            <PaginationComponent
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </Box>
+        </Container>
+      </Box>
+    </HelmetProvider>
   );
 };
 

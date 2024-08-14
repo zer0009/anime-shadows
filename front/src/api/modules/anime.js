@@ -1,7 +1,7 @@
 import API from '../client';
 import getAuthHeaders from './authHeader';
 
-export const fetchAnime = async (page = 1, limit = 10, query = '', tags = [], type = '', season = '', sort = '', popular = '', state = '', broadMatches = false) => {
+export const fetchAnime = async (page = 1, limit = 25, query = '', tags = [], type = '', season = '', sort = '', popular = '', state = '', broadMatches = false) => {
     try {
         const response = await API.get('/anime', {
             params: {
@@ -36,16 +36,21 @@ export const fetchAnimeById = async (id) => {
     return response.data;
 };
 
-// export const fetchAnimeByName = async (name) => {
-//     const token = localStorage.getItem('token');
-//     const config = {
-//         headers: {
-//             Authorization: `Bearer ${token}`
-//         }
-//     };
-//     const response = await API.get(`/anime/name/${name}`, config);
-//     return response.data;
-// };
+export const fetchAnimeBySlug = async (slug) => {
+    const token = localStorage.getItem('token');
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    };  
+    try {
+        const response = await API.get(`/anime/slug/${slug}`, config);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching anime by slug:', error);
+        throw error;
+    }
+};
 
 export const searchAnime = async (query) => {
     try {
@@ -97,7 +102,6 @@ export const fetchGenre = async () => {
     }
 };
 
-
 export const fetchStates = async () => {
     try {
         const response = await API.get('/states');
@@ -118,61 +122,57 @@ export const fetchEpisodesByAnimeId = async (animeId) => {
     }
 };
 
-
-export const rateAnime = async (animeId,userId, rating) => {
+export const rateAnime = async (animeId, userId, rating) => {
     try {
-      const response = await API.post(`/anime/${animeId}/rate`, { userId, rating },getAuthHeaders());
-      return response.data;
+        const response = await API.post(`/anime/${animeId}/rate`, { userId, rating }, getAuthHeaders());
+        return response.data;
     } catch (error) {
-      console.error('Error rating anime:', error);
-      throw error;
+        console.error('Error rating anime:', error);
+        throw error;
     }
-  };
+};
 
-
-  export const fetchAnimesByTypeId = async (typeId) => {
+export const fetchAnimesByTypeId = async (typeId) => {
     try {
-      const response = await API.get(`/types/${typeId}/animes`);
-      return response.data;
+        const response = await API.get(`/types/${typeId}/animes`);
+        return response.data;
     } catch (error) {
-      console.error('Error fetching animes by type ID:', error);
-      throw error;
+        console.error('Error fetching animes by type ID:', error);
+        throw error;
     }
-  };
+};
 
-
-  export const fetchMovies = async (page = 1, limit = 10) => {
+export const fetchMovies = async (page = 1, limit = 10) => {
     try {
-      const response = await API.get(`/anime/movies?page=${page}&limit=${limit}`);
-      const data = response.data;
-      return Array.isArray(data.animes) ? data : { animes: [], totalPages: 1 };
+        const response = await API.get(`/anime/movies?page=${page}&limit=${limit}`);
+        const data = response.data;
+        return Array.isArray(data.animes) ? data : { animes: [], totalPages: 1 };
     } catch (error) {
-      console.error('Error fetching movies:', error);
-      return { animes: [], totalPages: 1 };
+        console.error('Error fetching movies:', error);
+        return { animes: [], totalPages: 1 };
     }
-  };
+};
 
-  // export const toggleEpisodeWatched = async (animeId, episodeNumber) => {
-  //   try {
-  //     const response = await API.post('/anime/toggleEpisodeWatched', { animeId, episodeNumber }, getAuthHeaders());
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('Error toggling episode watched status:', error);
-  //     throw error;
-  //   }
-  // };
+// export const toggleEpisodeWatched = async (animeId, episodeNumber) => {
+//   try {
+//     const response = await API.post('/anime/toggleEpisodeWatched', { animeId, episodeNumber }, getAuthHeaders());
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error toggling episode watched status:', error);
+//     throw error;
+//   }
+// };
 
-
-  // export const fetchViewingHistoryByAnimeId = async (animeId) => {
-  //   try {
-  //     const response = await API.get(`/user/${animeId}/viewingHistory`, getAuthHeaders());
-  //     console.log('response 1', response);
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error(`Error fetching viewing history for anime ID ${animeId}:`, error);
-  //     throw error;
-  //   }
-  // };
+// export const fetchViewingHistoryByAnimeId = async (animeId) => {
+//   try {
+//     const response = await API.get(`/user/${animeId}/viewingHistory`, getAuthHeaders());
+//     console.log('response 1', response);
+//     return response.data;
+//   } catch (error) {
+//     console.error(`Error fetching viewing history for anime ID ${animeId}:`, error);
+//     throw error;
+//   }
+// };
 
 // export const markAsWatched = async (animeId, episodeId) => {
 //   try {
@@ -203,8 +203,6 @@ export const rateAnime = async (animeId,userId, rating) => {
 //     throw error;
 //   }
 // };
-
-
 
 export const markAsWatched = async (animeId, episodeId) => {
   try {
