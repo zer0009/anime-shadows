@@ -338,10 +338,13 @@ exports.scrapeLivechart = async (req, res) => {
 
 exports.getSitemapData = async (req, res) => {
   try {
-      const animes = await Anime.find({}, '_id updatedAt')
+      const animes = await Anime.find({}, '_id updatedAt slug')
           .sort({ updatedAt: -1 })
           .limit(1000)
           .lean();
+
+          console.log('Fetched animes:', animes); // Log fetched animes
+
 
       const genres = await Genre.find({}, 'name').sort({ name: 1 }).lean();
       const types = await Type.find({}, 'name').sort({ name: 1 }).lean();
@@ -349,6 +352,7 @@ exports.getSitemapData = async (req, res) => {
       res.json({
           animes: animes.map(anime => ({
               id: anime._id,
+              slug: anime.slug ? encodeURIComponent(anime.slug.toLowerCase().replace(/\s+/g, '-')) : `Not Found ${anime._id}`,
               updatedAt: anime.updatedAt ? anime.updatedAt.toISOString() : new Date().toISOString()
           })),
           genres: genres.map(genre => ({ 

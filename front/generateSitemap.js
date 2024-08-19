@@ -7,7 +7,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const BASE_URL = 'https://animeshadows.xyz'; // Replace with your actual domain
-const API_URL = 'https://app.animeshadows.xyz/api'; // Replace with your actual API URL
+const API_URL = 'https://app.animeshadows.xyz/api'; 
+const API_URL_LOCAL = 'http://localhost:5000/api'; 
 
 async function fetchSitemapData() {
     try {
@@ -55,7 +56,7 @@ async function generateSitemap() {
     </url>`).join('')}
     ${animes.map(anime => `
     <url>
-        <loc>${BASE_URL}/anime/${anime.id}</loc>
+        <loc>${BASE_URL}/anime/${anime.slug}</loc>
         <lastmod>${new Date(anime.updatedAt).toISOString()}</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
