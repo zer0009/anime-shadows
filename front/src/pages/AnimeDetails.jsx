@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useCallback, Suspense, lazy, useMemo } from 'react';
+import React, { useCallback, Suspense, lazy, useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { fetchAnimeBySlug, rateAnime, getMyAnimeList } from '../api/modules/anime';
-import { addFavorite, removeFavorite } from '../api/modules/user';
 import { Container, Typography, useMediaQuery, Snackbar, Alert } from '@mui/material';
-import LoadingSpinner from '../components/common/LoadingSpinner.jsx';
 import { HelmetProvider } from 'react-helmet-async';
+import LoadingSpinner from '../components/common/LoadingSpinner.jsx';
 import useFetchUserData from '../hooks/useFetchUserData';
 import { useSEO } from '../hooks/useSEO';
+import { addFavorite, removeFavorite } from '../api/modules/user';
+import { rateAnime } from '../api/modules/anime';
+import useAnimeDetails from '../hooks/useAnimeDetails';
 import styles from './AnimeDetails.module.css';
 
 const AnimeSidebar = lazy(() => import('../components/AnimeDetails/AnimeSidebar.jsx'));
@@ -20,87 +21,27 @@ const AnimeDetails = () => {
   const { t } = useTranslation();
   const { slug } = useParams();
   const navigate = useNavigate();
-  const [anime, setAnime] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [userRating, setUserRating] = useState(null);
-  const [ratingDialogOpen, setRatingDialogOpen] = useState(false);
-  const [selectedRating, setSelectedRating] = useState(null);
-  const [viewingHistory, setViewingHistory] = useState([]);
-  const [myAnimeListData, setMyAnimeListData] = useState(null);
-  const [myAnimeListLoading, setMyAnimeListLoading] = useState(true);
   const isSmallScreen = useMediaQuery('(max-width: 1024px)');
   const { userData } = useFetchUserData();
+
+  const {
+    anime,
+    loading,
+    error,
+    isFavorite,
+    userRating,
+    viewingHistory,
+    myAnimeListData,
+    setIsFavorite,
+    setUserRating,
+  } = useAnimeDetails(slug, userData);
+
+  const [ratingDialogOpen, setRatingDialogOpen] = useState(false);
+  const [selectedRating, setSelectedRating] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
-  const getAnimeDetails = useCallback(async () => {
-    console.log('Fetching anime details for slug:', slug);
-    try {
-      setLoading(true);
-      const response = await fetchAnimeBySlug(slug);
-      console.log('Anime details response:', response);
-      if (!response) {
-        throw new Error('No anime details found');
-      }
-      setAnime(response);
-      const favoriteStatus = localStorage.getItem(`favorite-${response._id}`);
-      setIsFavorite(favoriteStatus === 'true' || response.isFavorite || false);
-      const user = JSON.parse(localStorage.getItem('user'));
-      if (user && response.userRatings) {
-        const userRating = response.userRatings.find(r => r.userId === user._id);
-        if (userRating) {
-          setUserRating(userRating.rating);
-        }
-      }
-      getMyAnimeListData(response._id);
-      getViewingHistory(response._id);
-    } catch (error) {
-      console.error('Error fetching anime details:', error);
-      setError('Error fetching anime details');
-    } finally {
-      setLoading(false);
-    }
-  }, [slug]);
-
-  const getMyAnimeListData = useCallback(async (animeId) => {
-    console.log('Fetching MyAnimeList data for anime ID:', animeId);
-    try {
-      setMyAnimeListLoading(true);
-      const response = await getMyAnimeList(animeId);
-      console.log('MyAnimeList data response:', response);
-      setMyAnimeListData(response);
-    } catch (error) {
-      console.error('Error fetching MyAnimeList data:', error);
-      setError('Error fetching MyAnimeList data');
-    } finally {
-      setMyAnimeListLoading(false);
-    }
-  }, []);
-
-  const getViewingHistory = useCallback(async (animeId) => {
-    console.log('Fetching viewing history for anime ID:', animeId);
-    try {
-      if (userData && userData.history) {
-        const filteredHistory = userData.history.filter(item => item.anime === animeId);
-        setViewingHistory(filteredHistory);
-      }
-    } catch (error) {
-      console.error('Error fetching viewing history:', error);
-    }
-  }, [userData]);
-
-  useEffect(() => {
-    getAnimeDetails();
-  }, [getAnimeDetails]);
-
-  useEffect(() => {
-    localStorage.setItem(`favorite-${slug}`, isFavorite);
-  }, [isFavorite, slug]);
-
   const handleFavoriteClick = useCallback(async () => {
-    console.log('Toggling favorite status for anime:', anime);
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) {
@@ -120,22 +61,18 @@ const AnimeDetails = () => {
   }, [isFavorite, anime]);
 
   const openModal = useCallback((episode) => {
-    console.log('Opening modal for episode:', episode);
     navigate(`/episode/${slug}-الحلقة-${episode.number}`);
   }, [navigate, slug]);
 
   const handleGenreClick = useCallback((genreId) => {
-    console.log('Navigating to genre:', genreId);
     navigate(`/filter/genre/${genreId}`);
   }, [navigate]);
 
   const handleRateAnime = useCallback(() => {
-    console.log('Opening rating dialog');
     setRatingDialogOpen(true);
   }, []);
 
   const submitRating = useCallback(async () => {
-    console.log('Submitting rating:', selectedRating);
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) {
@@ -145,15 +82,16 @@ const AnimeDetails = () => {
       }
       await rateAnime(anime._id, user._id, selectedRating);
       setUserRating(selectedRating);
-      const updatedAnime = await fetchAnimeBySlug(slug);
-      setAnime(updatedAnime);
+      setSnackbarMessage('Rating submitted successfully');
+      setSnackbarOpen(true);
     } catch (error) {
       console.error('Error rating anime:', error);
+      setSnackbarMessage('Error submitting rating');
+      setSnackbarOpen(true);
     }
-  }, [slug, selectedRating, anime]);
+  }, [selectedRating, anime]);
 
   const removeRating = useCallback(async () => {
-    console.log('Removing rating');
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) {
@@ -163,12 +101,14 @@ const AnimeDetails = () => {
       }
       await rateAnime(anime._id, user._id, null);
       setUserRating(null);
-      const updatedAnime = await fetchAnimeBySlug(slug);
-      setAnime(updatedAnime);
+      setSnackbarMessage('Rating removed successfully');
+      setSnackbarOpen(true);
     } catch (error) {
       console.error('Error removing rating:', error);
+      setSnackbarMessage('Error removing rating');
+      setSnackbarOpen(true);
     }
-  }, [slug, anime]);
+  }, [anime]);
 
   const getScoreDisplayProps = useCallback(() => ({
     score: myAnimeListData ? myAnimeListData.myAnimeListRating : 0,
@@ -176,14 +116,12 @@ const AnimeDetails = () => {
   }), [myAnimeListData]);
 
   const handleSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+    if (reason === 'clickaway') return;
     setSnackbarOpen(false);
   };
 
   const seoProps = useMemo(() => {
-    if (!anime) return { title: slug };
+    if (!anime) return { title: 'Loading...' };
     return {
       title: `جميع حلقات انمي ${anime.title} مترجمة اون لاين - AnimeShadows`,
       description: `شاهد ${anime.title} - ${anime.subTitle} اون لاين على أنمي شادوز (Anime Shadows). ${anime.description?.substring(0, 150)}...`,

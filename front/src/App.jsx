@@ -6,6 +6,7 @@ import Header from './components/common/Header.jsx';
 import Footer from './components/common/Footer.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import AdminRoute from './components/AdminRoute.jsx';
+import ModeratorRoute from './components/ModeratorRoute.jsx';
 import { initGA, logPageView, setConsent } from './analytics';
 import CookieConsent from 'react-cookie-consent';
 import { HelmetProvider } from 'react-helmet-async';
@@ -66,11 +67,8 @@ function AppContent() {
             <Route path="/season-anime/" element={<SeasonAnime />} />
             <Route path="/login/" element={<Login />} />
             <Route path="/register/" element={<Register />} />
-            {/* <Route path="/anime/:id/" element={<AnimeDetails />} /> */}
             <Route path="/anime/:slug" element={<AnimeDetails />} />
-            <Route path="/episode/:episodeSlug" element={<EpisodePage />} /> {/* Define the route */}
-
-
+            <Route path="/episode/:episodeSlug" element={<EpisodePage />} />
             <Route path="/filter/:filterType/:filterValue/" element={<FilteredListPage />} />
             <Route path="/search/" element={<SearchPage />} />
             <Route path="/admin-register/" element={<AdminRegister />} />
@@ -79,12 +77,11 @@ function AppContent() {
             <Route path="/profile/" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/last-watching/" element={<ProtectedRoute><History /></ProtectedRoute>} />
             <Route path="/favorites/" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
-            <Route path="/admin-dashboard/" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-            {/* <Route path="/episode/:episodeId/" element={<EpisodePage />} /> */}
-            <Route path="/admin/manage-anime/" element={<AdminRoute><ManageAnime /></AdminRoute>} />
-            <Route path="/admin/edit-anime/:animeId/" element={<AdminRoute><EditAnime /></AdminRoute>} />
-            <Route path="/admin/edit-episodes/:animeId/" element={<AdminRoute><EditEpisodes /></AdminRoute>} />
-            <Route path="/admin/add-episode/:animeId/" element={<AdminRoute><AddEpisode /></AdminRoute>} />
+            <Route path="/admin-dashboard/" element={<AdminRoute allowedRoles={['admin']}><AdminDashboard /></AdminRoute>} />
+            <Route path="/admin/manage-anime/" element={<AdminRoute allowedRoles={['admin', 'moderator']}><ManageAnime /></AdminRoute>} />
+            <Route path="/admin/edit-anime/:animeId/" element={<AdminRoute allowedRoles={['admin', 'moderator']}><EditAnime /></AdminRoute>} />
+            <Route path="/admin/edit-episodes/:animeId/" element={<AdminRoute allowedRoles={['admin', 'moderator']}><EditEpisodes /></AdminRoute>} />
+            <Route path="/admin/add-episode/:animeId/" element={<AdminRoute allowedRoles={['admin', 'moderator']}><AddEpisode /></AdminRoute>} />
             <Route path="*" element={<NotFound />} />
             <Route path="/*" element={<Navigate to={`${location.pathname}/`} replace />} />
           </Routes>

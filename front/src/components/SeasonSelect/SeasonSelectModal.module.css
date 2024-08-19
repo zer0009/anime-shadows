@@ -4,8 +4,8 @@
     background-color: var(--secondary-dark);
     color: var(--text-color);
     border: none;
-    border-radius: 8px;
-    padding: 10px;
+    border-radius: 8px; /* More rounded corners */
+    padding: 6px 14px; /* Adjusted padding */
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
 }
@@ -50,4 +50,20 @@
 
 .list li:hover {
     background-color: var(--secondary-light);
+}
+
+/* Hide the title on small screens */
+@media (max-width: 600px) {
+    .modal {
+        width: 95%;
+        padding: 20px; /* Adjusted padding for smaller screens */
+    }
+
+    .listItem {
+        padding: 10px 15px; /* Adjusted padding for smaller screens */
+    }
+
+    .text {
+        display: none; /* Hide text on smaller screens */
+    }
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Typography, Grid, Paper, Box, Tabs, Tab } from '@mui/material';
 import AddAnime from '../components/admin/AddAnime';
 import AddType from '../components/admin/AddType';
@@ -9,7 +9,15 @@ import ManageUsers from '../components/admin/ManageUsers';
 import styles from './AdminDashboard.module.css';
 
 const AdminDashboard = () => {
-  const [tabIndex, setTabIndex] = React.useState(0);
+  const [tabIndex, setTabIndex] = useState(0);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user.role === 'admin') {
+      setIsAdmin(true);
+    }
+  }, []);
 
   const handleTabChange = (event, newIndex) => {
     setTabIndex(newIndex);
@@ -39,7 +47,7 @@ const AdminDashboard = () => {
           <Tab label="Add Genre" style={{ color: 'white' }} />
           <Tab label="Manage Anime" style={{ color: 'white' }} />
           <Tab label="Add Season" style={{ color: 'white' }} />
-          <Tab label="Manage Users" style={{ color: 'white' }} />
+          {isAdmin && <Tab label="Manage Users" style={{ color: 'white' }} />}
         </Tabs>
       </Box>
       <Grid container spacing={3} className={styles.tabContent}>
@@ -78,7 +86,7 @@ const AdminDashboard = () => {
             </Paper>
           </Grid>
         )}
-        {tabIndex === 5 && ( 
+        {isAdmin && tabIndex === 5 && ( 
           <Grid item xs={12}>
             <Paper className={styles.paper}>
               <ManageUsers />

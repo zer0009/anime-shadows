@@ -7,7 +7,6 @@ import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import Navbar from '../components/Navbar/Navbar.jsx';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
 import { HelmetProvider } from 'react-helmet-async';
-import { JsonLd } from 'react-schemaorg';
 import { useSEO } from '../hooks/useSEO';
 import { useTranslation } from 'react-i18next';
 

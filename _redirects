@@ -2,7 +2,7 @@
 http://animeshadows.xyz/* https://animeshadows.xyz/:splat 301!
 http://www.animeshadows.xyz/* https://animeshadows.xyz/:splat 301!
 
-# Redirect non-www to www
+# Redirect www to non-www
 https://www.animeshadows.xyz/* https://animeshadows.xyz/:splat 301!
 
 # Enforce trailing slashes

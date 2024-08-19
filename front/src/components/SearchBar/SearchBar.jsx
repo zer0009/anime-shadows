@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import { Box, InputBase, IconButton, Paper } from '@mui/material';
+import { InputBase, IconButton, Paper } from '@mui/material';
 import styles from './SearchBar.module.css';
 
 const SearchBar = ({ onSearch }) => {
@@ -17,7 +17,6 @@ const SearchBar = ({ onSearch }) => {
             onSubmit={handleSearch}
             className={styles.searchBar}
             elevation={3}
-            sx={{ backgroundColor: 'var(--primary-dark)', color: 'var(--text-color)' }}
         >
             <InputBase
                 value={query}
@@ -25,13 +24,11 @@ const SearchBar = ({ onSearch }) => {
                 placeholder="Search anime..."
                 className={styles.searchInput}
                 inputProps={{ 'aria-label': 'search anime' }}
-                sx={{ color: 'var(--text-color)' }}
             />
             <IconButton 
                 type="submit" 
                 className={styles.searchButton} 
                 aria-label="search"
-                sx={{ color: 'var(--text-color)' }}
             >
                 <FaSearch />
             </IconButton>

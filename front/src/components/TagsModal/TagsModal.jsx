@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, ModalDialog, ModalClose, Typography, Button, Switch, CircularProgress } from '@mui/joy';
-import { FormControlLabel } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import Box from '@mui/joy/Box';
 import Chip from '@mui/joy/Chip';
@@ -10,16 +9,15 @@ import { fetchGenre } from '../../api/modules/anime';
 import styles from './TagsModal.module.css';
 
 const StyledModalDialog = styled(ModalDialog)({
-  background: 'linear-gradient(135deg, var(--secondary-dark) 0%, var(--secondary-light) 100%)',
+  background: 'var(--secondary-dark)',
   color: 'var(--text-color)',
   borderRadius: '10px',
-  padding: '2rem',
   boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
 });
 
 const StyledChip = styled(Chip)(({ checked }) => ({
   cursor: 'pointer',
-  background: checked ? 'var(--highlight-color)' : 'var(--primary-light)',
+  background: checked ? 'var(--primary-color)' : 'var(--primary-light)',
   color: 'var(--text-color)',
   '&:hover': {
     background: checked ? 'var(--highlight-color)' : 'var(--primary-dark)',
@@ -75,11 +73,6 @@ const TagsModal = ({ open, onClose, onApply }) => {
         <ModalClose className={styles.modalClose} />
         <Typography component="h2" className={styles.modalTitle}>{t('tags')}</Typography>
         <div className={styles.modalContent}>
-          <FormControlLabel
-            control={<Switch checked={broadMatches} onChange={() => setBroadMatches(!broadMatches)} />}
-            label={t('broad_matches')}
-            className={styles.switchLabel}
-          />
           <Box className={styles.tagsContainer}>
             {loading ? (
               <CircularProgress />
@@ -91,8 +84,8 @@ const TagsModal = ({ open, onClose, onApply }) => {
                 return (
                   <StyledChip
                     key={tag._id}
-                    variant="plain"
-                    color={checked ? 'primary' : 'default'}
+                    // variant="plain"
+                    // color={checked ? 'primary' : 'default'}
                     className={styles.tagChip}
                     startDecorator={checked && <CheckIcon sx={{ zIndex: 1, pointerEvents: 'none' }} />}
                     onClick={() => handleTagClick(tag)}
@@ -108,7 +101,7 @@ const TagsModal = ({ open, onClose, onApply }) => {
           </Box>
           <div className={styles.dialogActions}>
             <Button onClick={onClose} variant="outlined" color="neutral">{t('cancel')}</Button>
-            <Button onClick={handleApply} variant="contained" color="primary">{t('apply')}</Button>
+            <Button onClick={handleApply} variant="outlined" color="neutral">{t('apply')}</Button>
           </div>
         </div>
       </StyledModalDialog>

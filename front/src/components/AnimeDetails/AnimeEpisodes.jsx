@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Box, Typography, IconButton, Snackbar, Alert } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { markAsWatched, markAsUnwatched, getViewingHistory } from '../../api/modules/anime';
+import { getViewingHistory } from '../../api/modules/anime';
+import { handleMarkAsWatched, handleMarkAsUnwatched } from '../../utils/episodeUtils';
 import styles from './AnimeEpisodes.module.css';
 
 const AnimeEpisodes = React.memo(({ anime, openModal, t }) => {
@@ -17,10 +18,10 @@ const AnimeEpisodes = React.memo(({ anime, openModal, t }) => {
     const fetchViewingHistory = async () => {
       try {
         const history = await getViewingHistory(anime._id);
-        const initialWatched = {};
-        history.forEach(item => {
-          initialWatched[item.episodeId] = true;
-        });
+        const initialWatched = history.reduce((acc, item) => {
+          acc[item.episodeId] = true;
+          return acc;
+        }, {});
         setWatchedEpisodes(initialWatched);
         setWatchedCount(history.length);
       } catch (error) {
@@ -43,52 +44,10 @@ const AnimeEpisodes = React.memo(({ anime, openModal, t }) => {
     }
   }, [lastEpisodeElementRef.current]);
 
-  const handleMarkAsWatched = async (animeId, episodeId) => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (!user) {
-      setSnackbarMessage('Please login to mark as watched');
-      setSnackbarOpen(true);
-      return;
-    }
-
-    try {
-      console.log('Marking as watched:', { animeId, episodeId });
-      await markAsWatched(animeId, episodeId);
-      setWatchedEpisodes(prevWatched => ({
-        ...prevWatched,
-        [episodeId]: true
-      }));
-      setWatchedCount(prevCount => prevCount + 1);
-    } catch (error) {
-      console.error('Error marking episode as watched:', error);
-    }
-  };
-
-  const handleMarkAsUnwatched = async (animeId, episodeId) => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (!user) {
-      setSnackbarMessage('Please login to mark as unwatched');
-      setSnackbarOpen(true);
-      return;
-    }
-
-    try {
-      await markAsUnwatched(animeId, episodeId);
-      setWatchedEpisodes(prevWatched => {
-        const newWatched = { ...prevWatched };
-        delete newWatched[episodeId];
-        return newWatched;
-      });
-      setWatchedCount(prevCount => prevCount - 1);
-    } catch (error) {
-      console.error('Error marking episode as unwatched:', error);
-    }
-  };
-
-  const handleEpisodeClick = (episode) => {
-    handleMarkAsWatched(anime._id, episode._id);
+  const handleEpisodeClick = useCallback((episode) => {
+    handleMarkAsWatched(anime._id, episode._id, setWatchedEpisodes, setWatchedCount, setSnackbarMessage, setSnackbarOpen);
     openModal(episode);
-  };
+  }, [anime._id, openModal]);
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -106,7 +65,7 @@ const AnimeEpisodes = React.memo(({ anime, openModal, t }) => {
             <li
               key={episode._id}
               className={`${styles.episodeItem} ${watchedEpisodes[episode._id] ? styles.watched : ''}`}
-              ref={index === visibleEpisodes - 1 ? lastEpisodeElementRef : null} // Assign ref to the last visible episode
+              ref={index === visibleEpisodes - 1 ? lastEpisodeElementRef : null}
               onClick={() => handleEpisodeClick(episode)}
             >
               <Typography variant="body1" className={styles.episodeTitle}>
@@ -116,8 +75,8 @@ const AnimeEpisodes = React.memo(({ anime, openModal, t }) => {
                 onClick={(event) => {
                   event.stopPropagation();
                   watchedEpisodes[episode._id]
-                    ? handleMarkAsUnwatched(anime._id, episode._id)
-                    : handleMarkAsWatched(anime._id, episode._id);
+                    ? handleMarkAsUnwatched(anime._id, episode._id, setWatchedEpisodes, setWatchedCount, setSnackbarMessage, setSnackbarOpen)
+                    : handleMarkAsWatched(anime._id, episode._id, setWatchedEpisodes, setWatchedCount, setSnackbarMessage, setSnackbarOpen);
                 }}
                 className={styles.eyeIcon}
                 aria-label={watchedEpisodes[episode._id] ? 'Mark as unwatched' : 'Mark as watched'}

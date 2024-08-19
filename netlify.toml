@@ -1,18 +1,42 @@
 # example netlify.toml
-   [build]
-     command = "npm install --prefix front && npm run build --prefix front"
-     publish = "front/dist"
+[build]
+  command = "npm install --prefix front && npm run build --prefix front"
+  publish = "front/dist"
 
-   [[redirects]]
-     from = "/*"
-     to = "/index.html"
-     status = 200
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
-  ## (optional) Settings for Netlify Dev
-  ## https://github.com/netlify/cli/blob/main/docs/netlify-dev.md#project-detection
-  #[dev]
-  #  command = "yarn start" # Command to start your dev server
-  #  port = 3000 # Port that the dev server will be listening on
-  #  publish = "dist" # Folder with the static content for _redirect file
+[[redirects]]
+  from = "http://animeshadows.xyz/*"
+  to = "https://animeshadows.xyz/:splat"
+  status = 301
+  force = true
 
-  ## more info on configuring this file: https://ntl.fyi/file-based-build-config
+[[redirects]]
+  from = "http://www.animeshadows.xyz/*"
+  to = "https://animeshadows.xyz/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.animeshadows.xyz/*"
+  to = "https://animeshadows.xyz/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/:splat/"
+  status = 301
+  force = true
+
+## (optional) Settings for Netlify Dev
+## https://github.com/netlify/cli/blob/main/docs/netlify-dev.md#project-detection
+#[dev]
+#  command = "yarn start" # Command to start your dev server
+#  port = 3000 # Port that the dev server will be listening on
+#  publish = "dist" # Folder with the static content for _redirect file
+
+## more info on configuring this file: https://ntl.fyi/file-based-build-config

@@ -87,8 +87,7 @@ Sitemap: ${BASE_URL}/sitemap.xml
 
 Disallow: /admin/
 Disallow: /private/
-Disallow: /api/
-Disallow: /duplicate-page/`;
+Disallow: /api/`;
 
     const robotsTxtPath = path.join(__dirname, 'public', 'robots.txt');
     fs.writeFileSync(robotsTxtPath, robotsTxt);

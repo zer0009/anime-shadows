@@ -3,76 +3,96 @@
   justify-content: center;
   align-items: center;
 }
-  
-  .modalDialog {
-    padding: 2rem;
-    background: var(--accent-color);
-    color: var(--text-color); /* Changed text color to global text color */
-    border-radius: 10px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  }
-  
-  .modalClose {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    color: var(--text-color); /* Changed color to global text color */
-  }
-  
-  .modalTitle {
-    color: var(--text-color); /* Kept color to global text color */
-    margin-bottom: 1rem;
-  }
-  
-  .modalContent {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .switchLabel {
-    color: var(--text-color); /* Kept color to global text color */
-    margin-bottom: 1rem;
-  }
-  
-  .tagsContainer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .tagChip {
-    cursor: pointer;
-    background: var(--primary-light); /* Changed background color to global primary-light */
-    color: var(--text-color); /* Changed text color to global text color */
-  }
-  
-  .tagChip:hover {
-    background: var(--primary-dark); /* Changed hover background to global primary-dark */
-  }
-  
-  .tagChip.MuiChip-colorPrimary {
-    background: var(--highlight-color); /* Kept primary color to global highlight color */
-    color: var(--text-color); /* Kept text color to global text color */
-  }
-  
-  .dialogActions {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-  
-  .dialogActions button {
-    flex: 1;
-    margin: 0 0.5rem;
-  }
-  
-  .dialogActions button.MuiButton-outlined {
-    color: var(--text-color); /* Kept color to global text color */
-  }
-  
-  .dialogActions button.MuiButton-contained {
-    background: var(--highlight-color); /* Kept primary color to global highlight color */
-    color: var(--text-color); /* Kept text color to global text color */
-  }
+
+.modalDialog {
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--secondary-light) 100%);
+  color: var(--text-color);
+  border-radius: 10px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.modalClose {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: var(--text-color);
+}
+
+.modalTitle {
+  color: var(--text-color);
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+.switchLabel {
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+
+.tagChip {
+  cursor: pointer;
+  background: var(--primary-light) !important;
+  color: var(--text-color) !important;
+  transition: background-color 0.3s, transform 0.2s;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+}
+
+.tagChip:hover {
+  background: var(--primary-dark) !important;
+  transform: scale(1.05);
+}
+
+.tagChip.MuiChip-colorPrimary {
+  background: var(--highlight-color);
+  color: var(--text-color);
+}
+
+.dialogActions {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.dialogActions button {
+  flex: 1;
+  margin: 0 0.5rem;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.dialogActions button.MuiButton-outlined {
+  color: var(--text-color);
+  border: 1px solid var(--text-color);
+}
+
+.dialogActions button.MuiButton-outlined:hover {
+  background: var(--secondary-light);
+  transform: scale(1.05);
+}
+
+.dialogActions button.MuiButton-contained {
+  background: var(--highlight-color);
+  color: var(--text-color);
+}
+
+.dialogActions button.MuiButton-contained:hover {
+  background: var(--highlight-color-dark);
+  transform: scale(1.05);
+}

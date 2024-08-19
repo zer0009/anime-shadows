@@ -24,36 +24,28 @@ const AnimeCard = React.memo(({ anime, lastViewed, showLastViewed, episodeNumber
     }, []);
 
     const getStatusBadgeClass = (status) => {
-        switch (status) {
-            case 'completed':
-                return styles.statusBadgeCompleted;
-            case 'ongoing':
-                return styles.statusBadgeOngoing;
-            case 'upcoming':
-                return styles.statusBadgeUpcoming;
-            default:
-                return '';
-        }
+        const statusClasses = {
+            completed: styles.statusBadgeCompleted,
+            ongoing: styles.statusBadgeOngoing,
+            upcoming: styles.statusBadgeUpcoming,
+        };
+        return statusClasses[status] || '';
     };
 
     const getStatusText = (status) => {
-        switch (status) {
-            case 'completed':
-                return t('animeCard.statusCompleted', 'مكتمل');
-            case 'ongoing':
-                return t('animeCard.statusOngoing', 'يعرض الآن');
-            case 'upcoming':
-                return t('animeCard.statusUpcoming', 'قادم قريبا');
-            default:
-                return '';
-        }
+        const statusTexts = {
+            completed: t('animeCard.statusCompleted', 'مكتمل'),
+            ongoing: t('animeCard.statusOngoing', 'يعرض الآن'),
+            upcoming: t('animeCard.statusUpcoming', 'قادم قريبا'),
+        };
+        return statusTexts[status] || '';
     };
 
     const handleEpisodeClick = (e) => {
         e.stopPropagation();
         e.preventDefault();
         const url = `/episode/${anime.slug}-الحلقة-${episodeNumber}`;
-        console.log('Navigating to:', url); // Add logging
+        console.log('Navigating to:', url);
         navigate(url);
     };
 

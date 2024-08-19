@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Typography, Box, Grid, IconButton, Modal, Button, Chip } from '@mui/material';
+import { Typography, Box, Grid, IconButton, Modal, Button } from '@mui/material';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import styles from './DownloadSection.module.css';
 
@@ -29,10 +29,45 @@ const DownloadSection = ({ episode, t }) => {
   };
 
   const sortedQualities = Object.entries(groupDownloadsByQuality()).sort((a, b) => {
-    // Assuming qualities are in the format '1080p', '720p', etc.
     const qualityOrder = ['1080p', '720p', '480p', '360p'];
     return qualityOrder.indexOf(a[0]) - qualityOrder.indexOf(b[0]);
   });
+
+  const renderQualityButtons = () => (
+    sortedQualities.map(([quality, servers]) => (
+      <Grid item key={quality}>
+        <Box className={styles.qualityGroup}>
+          <IconButton onClick={() => handleOpen(servers)} className={styles.downloadIcon}>
+            <CloudDownloadIcon fontSize="large" />
+            <Typography variant="h6" className={styles.qualityChip}>
+              {quality}
+            </Typography>
+          </IconButton>
+        </Box>
+      </Grid>
+    ))
+  );
+
+  const renderModalContent = () => (
+    <Box className={styles.modalContent}>
+      <Typography variant="h6" className={styles.modalTitle}>
+        {t('episodePage.downloadList')}
+      </Typography>
+      <Box className={styles.qualityDetailsContainer}>
+        {selectedServers.map((server, index) => (
+          <Button
+            key={index}
+            variant="contained"
+            className={styles.downloadButton}
+            href={server.url}
+            download
+          >
+            {server.serverName}
+          </Button>
+        ))}
+      </Box>
+    </Box>
+  );
 
   return (
     <Box className={styles.downloadSection}>
@@ -40,39 +75,10 @@ const DownloadSection = ({ episode, t }) => {
         {t('episodePage.downloadEpisode')}
       </Typography>
       <Grid container spacing={2} justifyContent="center">
-        {sortedQualities.map(([quality, servers]) => (
-          <Grid item key={quality}>
-            <Box className={styles.qualityGroup}>
-              <IconButton onClick={() => handleOpen(servers)} className={styles.downloadIcon}>
-                <CloudDownloadIcon fontSize="large" />
-                <Typography variant="h6" className={styles.qualityChip}>
-                  {quality}
-                </Typography>
-              </IconButton>
-            </Box>
-          </Grid>
-        ))}
+        {renderQualityButtons()}
       </Grid>
       <Modal open={open} onClose={handleClose} className={styles.modal}>
-        <Box className={styles.modalContent}>
-          <Typography variant="h6" className={styles.modalTitle}>
-            {t('episodePage.downloadList')}
-          </Typography>
-          <Box className={styles.qualityDetailsContainer}>
-            {selectedServers.map((server, index) => (
-              <Button
-                key={index}
-                variant="contained"
-                className={styles.downloadButton}
-                href={server.url}
-                download
-                // startIcon={<CloudDownloadIcon />}
-              >
-                {server.serverName}
-              </Button>
-            ))}
-          </Box>
-        </Box>
+        {renderModalContent()}
       </Modal>
     </Box>
   );

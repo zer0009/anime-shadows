@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { fetchSeasons } from '../../api/modules/anime';
-import { FaCalendarAlt } from 'react-icons/fa';
+import { fetchTypes } from '../../api/modules/anime';
+import { FaListAlt } from 'react-icons/fa';
 import { Modal, Box, Typography, Button } from '@mui/material';
-import styles from './SeasonSelectModal.module.css';
+import styles from './TypeSelectModal.module.css';
 
-const SeasonSelectModal = ({ onChange }) => {
-    const [seasons, setSeasons] = useState([]);
+const TypeSelectModal = ({ onChange }) => {
+    const [types, setTypes] = useState([]);
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetchSeasons();
-            setSeasons(response);
+            const response = await fetchTypes();
+            setTypes(response);
         };
         fetchData();
     }, []);
@@ -27,16 +27,16 @@ const SeasonSelectModal = ({ onChange }) => {
     return (
         <div>
             <Button onClick={handleOpen} className={styles.button}>
-                <FaCalendarAlt className={styles.icon} />
-                <span className={styles.text}>Season</span>
+                <FaListAlt className={styles.icon} />
+                <span className={styles.text}>Type</span>
             </Button>
             <Modal open={open} onClose={handleClose}>
                 <Box className={styles.modal}>
-                    <Typography variant="h6" className={styles.modalTitle}>Season</Typography>
+                    <Typography variant="h6" className={styles.modalTitle}>Select a Type</Typography>
                     <ul className={styles.list}>
-                        {seasons.map(season => (
-                            <li key={season._id} onClick={() => handleSelect(season.name)}>
-                                {season.name} {season.year}
+                        {types.map(type => (
+                            <li key={type._id} onClick={() => handleSelect(type.name)} className={styles.listItem}>
+                                {type.name}
                             </li>
                         ))}
                     </ul>
@@ -46,4 +46,4 @@ const SeasonSelectModal = ({ onChange }) => {
     );
 };
 
-export default SeasonSelectModal;
+export default TypeSelectModal;

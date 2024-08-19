@@ -1,0 +1,80 @@
+.button {
+    display: flex;
+    align-items: center;
+    background-color: var(--secondary-dark);
+    color: var(--text-color);
+    border: none;
+    border-radius: 8px; /* More rounded corners */
+    padding: 6px 14px; /* Adjusted padding */
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s; /* Added box-shadow transition */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.button:hover {
+    background-color: var(--secondary-light);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+.icon {
+    margin-right: 10px; /* Adjusted margin */
+}
+
+.text {
+    display: inline-block;
+    font-weight: bold; /* Bold text */
+}
+
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--primary-dark);
+    padding: 30px; /* Increased padding */
+    border-radius: 12px; /* More rounded corners */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
+    width: 90%;
+    max-width: 300px; /* Increased max width */
+    transition: transform 0.3s ease-out; /* Smooth opening animation */
+}
+
+.modalTitle {
+    margin-bottom: 20px; /* Spacing below the title */
+    color: var(--highlight-color); /* Highlight color for title */
+    text-align: center; /* Centered title */
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.listItem {
+    padding: 12px 20px; /* Adjusted padding */
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s; /* Added transform transition */
+    color: var(--text-color); /* Ensure text color is applied */
+}
+
+.listItem:hover {
+    background-color: var(--secondary-light);
+    transform: scale(1.03); /* Slightly scale up on hover */
+}
+
+@media (max-width: 600px) {
+    .modal {
+        width: 95%;
+        padding: 20px; /* Adjusted padding for smaller screens */
+    }
+
+    .listItem {
+        padding: 10px 15px; /* Adjusted padding for smaller screens */
+    }
+
+    .text {
+        display: none; /* Hide text on smaller screens */
+    }
+}

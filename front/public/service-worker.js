@@ -1,4 +1,4 @@
-const CACHE_NAME = 'anime-shadows-cache-v6'; // Update the version number when you deploy a new build
+const CACHE_NAME = 'anime-shadows-cache-v7'; // Update the version number when you deploy a new build
 const urlsToCache = [
   '/',
   '/index.html',
@@ -52,15 +52,12 @@ self.addEventListener('fetch', event => {
 });
 
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (!cacheWhitelist.includes(cacheName)) {
-            console.log('Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
+          console.log('Deleting cache:', cacheName);
+          return caches.delete(cacheName);
         })
       );
     })

@@ -28,6 +28,7 @@ const ProtectedRoute = ({ children }) => {
             You must log in to access this page.
           </Alert>
         </Snackbar>
+        <Navigate to="/login" replace />
       </>
     );
   }

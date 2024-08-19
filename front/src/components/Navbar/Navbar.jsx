@@ -1,12 +1,12 @@
 import React from 'react';
 import { FaTags, FaUndo, FaList, FaCalendarAlt, FaSort, FaStar, FaSyncAlt } from 'react-icons/fa';
 import SearchBar from '../SearchBar/SearchBar.jsx';
-import TypeSelect from '../TypeSelect/TypeSelect.jsx';
-import SeasonSelect from '../SeasonSelect/SeasonSelect.jsx';
-import SortSelect from '../SortSelect/SortSelect.jsx';
-import PopularSelect from '../PopularSelect/PopularSelect.jsx';
+import TypeSelect from '../TypeSelect/TypeSelectModal.jsx';
+import SeasonSelect from '../SeasonSelect/SeasonSelectModal.jsx';
+import SortSelect from '../SortSelect/SortSelectModal.jsx';
+import PopularSelect from '../PopularSelect/PopularSelectModal.jsx';
 import styles from './Navbar.module.css';
-import StateSelect from '../StateSelect/StateSelect.jsx';
+import StateSelect from '../StateSelect/StateSelectModal.jsx';
 
 const Navbar = ({ onTagsClick, onTypeChange, onSeasonChange, onSortChange, onPopularChange, onReset, onSearch, onStateChange }) => {
     return (

@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 
 export const useSEO = ({ title, description, keywords, canonicalUrl, ogType, jsonLd, ogImage, twitterImage }) => {
   useEffect(() => {
-    document.title = title;
+    const defaultTitle = 'Anime Shadows';
+    document.title = title || defaultTitle;
 
     const metaTags = [
       { name: 'description', content: description },
@@ -22,12 +23,12 @@ export const useSEO = ({ title, description, keywords, canonicalUrl, ogType, jso
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
     ];
 
+    const existingMetaTags = document.querySelectorAll('meta[name], meta[property]');
+    existingMetaTags.forEach(tag => tag.remove());
+
     metaTags.forEach(({ name, property, content }) => {
-      let element = document.querySelector(`meta[${name ? 'name' : 'property'}="${name || property}"]`);
-      if (element) {
-        element.setAttribute('content', content);
-      } else {
-        element = document.createElement('meta');
+      if (content) {
+        const element = document.createElement('meta');
         if (name) {
           element.setAttribute('name', name);
         } else {
@@ -47,6 +48,19 @@ export const useSEO = ({ title, description, keywords, canonicalUrl, ogType, jso
       linkCanonical.setAttribute('href', canonicalUrl);
       document.head.appendChild(linkCanonical);
     }
+
+    return () => {
+      metaTags.forEach(({ name, property }) => {
+        const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
+        const element = document.querySelector(selector);
+        if (element) {
+          document.head.removeChild(element);
+        }
+      });
+      if (linkCanonical) {
+        document.head.removeChild(linkCanonical);
+      }
+    };
   }, [title, description, keywords, canonicalUrl, ogType, ogImage, twitterImage]);
 
   return {

@@ -1,42 +1,51 @@
 .searchBar {
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
-    border-radius: 25px; /* Increased border radius */
-    padding: 5px 10px; /* Adjusted padding */
+    background: var(--primary-dark);
+    border-radius: 50px; /* Rounded corners for a modern look */
+    padding: 5px 10px;
     width: 100%;
-    max-width: 450px; /* Increased max width */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Increased shadow for better depth */
-    transition: box-shadow 0.3s ease;
+    max-width: 600px; /* Increased max width */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    margin: 10px auto;
 }
 
 .searchBar:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Increased shadow on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Slightly increased shadow on hover */
+    transform: scale(1.02); /* Slightly scale up on hover */
 }
 
 .searchInput {
     flex-grow: 1;
-    padding: 10px; /* Adjusted padding */
+    padding: 7px 12px;
     border: none;
     outline: none;
-    background-color: var(--background-light); /* Updated to use background light color */
+    background-color: var(--background-light); /* Light background for input */
     color: var(--text-color); /* Ensure text color is applied */
-    border-radius: 25px 0 0 25px; /* Increased border radius */
+    border-radius: 50px 0 0 50px; /* Rounded corners for input */
+    font-size: 1rem; /* Font size for better readability */
+    transition: background-color 0.3s ease;
+}
+
+.searchInput:focus {
+    background-color: var(--background-dark); /* Change background on focus */
 }
 
 .searchButton {
-    background-color: var(--highlight-color); /* Ensure highlight color is applied */
+    background-color: var(--highlight-color); /* Highlight color for button */
     color: var(--text-color); /* Ensure text color is applied */
     border: none;
     padding: 10px; /* Adjusted padding */
-    border-radius: 0 25px 25px 0; /* Increased border radius */
+    border-radius: 0 50px 50px 0; /* Rounded corners for button */
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .searchButton:hover {
-    background-color: var(--secondary-light); /* Ensure secondary light color for hover */
+    background-color: var(--secondary-light); /* Light color for hover */
+    transform: scale(1.1); /* Slightly scale up on hover */
 }

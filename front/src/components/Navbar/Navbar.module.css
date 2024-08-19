@@ -13,7 +13,7 @@
 .navButton {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 5px;
     padding: 10px 20px; /* Increased padding */
     background-color: var(--secondary-dark);
     color: var(--text-color);
@@ -33,7 +33,7 @@
 .selectContainer {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
     flex: 1; /* Allow the select elements to take up available space */
 }
 
@@ -54,13 +54,25 @@
     }
 
     .selectContainer {
-        flex-direction: column;
-        align-items: stretch;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
     .searchBarContainer {
         width: 100%;
         margin-top: 10px;
+    }
+
+    /* Hide the text on small screens */
+    .navButton .text {
+        display: none;
+    }
+
+    .selectContainer > div {
+        flex: 1 1 20%;
+        display: flex;
+        justify-content: center;
     }
 }
 
@@ -77,13 +89,15 @@
         margin-top: 5px;
     }
 
-    /* Hide default icons and show new icons on small screens */
-    .navButton .default-icon {
+    /* Hide the text on small screens */
+    .navButton .text {
         display: none;
     }
 
-    .navButton .small-screen-icon {
-        display: inline-block;
+    .selectContainer > div {
+        flex: 1 1 20%;
+        display: flex;
+        justify-content: center;
     }
 }
 

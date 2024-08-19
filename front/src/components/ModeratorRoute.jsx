@@ -3,18 +3,18 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 
-const AdminRoute = ({ children, allowedRoles }) => {
+const ModeratorRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
     return <LoadingSpinner />;
   }
 
-  if (!user || !allowedRoles.includes(user.role)) {
+  if (!user || user.role !== 'moderator') {
     return <Navigate to="/login" />;
   }
 
   return children;
 };
 
-export default AdminRoute;
+export default ModeratorRoute;
