@@ -47,7 +47,7 @@
 
 .tagChip {
   cursor: pointer;
-  background: var(--primary-light) !important;
+  background: var(--primary-dark) !important;
   color: var(--text-color) !important;
   transition: background-color 0.3s, transform 0.2s;
   border-radius: 8px;
@@ -55,7 +55,7 @@
 }
 
 .tagChip:hover {
-  background: var(--primary-dark) !important;
+  background: var(--primary-light) !important;
   transform: scale(1.05);
 }
 

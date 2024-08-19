@@ -13,21 +13,30 @@
 .navButton {
     display: flex;
     align-items: center;
-    gap: 5px;
-    padding: 10px 20px; /* Increased padding */
     background-color: var(--secondary-dark);
     color: var(--text-color);
     border: none;
-    border-radius: 6px; /* More rounded corners */
+    border-radius: 8px; /* More rounded corners */
+    padding: 10px 18px; /* Adjusted padding */
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Added box-shadow transition */
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s; /* Added box-shadow transition */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: auto; /* Ensure the button does not stretch */
 }
 
 .navButton:hover {
     background-color: var(--secondary-light);
-    transform: scale(1.05); /* Added scale effect on hover */
+    transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+.icon {
+    margin-right: 10px; /* Adjusted margin */
+}
+
+.text {
+    display: inline-block;
+    font-weight: bold; /* Bold text */
 }
 
 .selectContainer {
@@ -49,8 +58,7 @@
     }
 
     .navButton {
-        width: 100%;
-        margin-bottom: 10px;
+        width: auto; /* Ensure the button does not stretch */
     }
 
     .selectContainer {

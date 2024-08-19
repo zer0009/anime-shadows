@@ -31,12 +31,12 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: var(--primary-dark);
+    background-color: var(--secondary-dark);
     padding: 30px; /* Increased padding */
     border-radius: 12px; /* More rounded corners */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
     width: 90%;
-    max-width: 500px; /* Increased max width */
+    max-width: 350px; /* Increased max width */
     transition: transform 0.3s ease-out; /* Smooth opening animation */
 }
 
@@ -58,7 +58,7 @@
     transition: background-color 0.3s, transform 0.2s; /* Added transform transition */
     border-radius: 8px; /* Rounded corners */
     margin-bottom: 10px; /* Spacing between items */
-    background-color: var(--background-light); /* Light background for items */
+    background-color: var(--primary-dark); /* Light background for items */
     color: var(--text-color); /* Ensure text color is applied */
 }
 

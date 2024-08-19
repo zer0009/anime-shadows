@@ -11,21 +11,21 @@ import StateSelect from '../StateSelect/StateSelectModal.jsx';
 const Navbar = ({ onTagsClick, onTypeChange, onSeasonChange, onSortChange, onPopularChange, onReset, onSearch, onStateChange }) => {
     return (
         <div className={styles.navbar}>
+            <div className={styles.selectContainer}>
             <button className={styles.navButton} onClick={onTagsClick}>
                 <FaTags className={styles.icon} />
                 <span className={styles.text}>Tags</span>
             </button>
-            <div className={styles.selectContainer}>
                 <TypeSelect onChange={onTypeChange} />
                 <SeasonSelect onChange={onSeasonChange} />
                 <SortSelect onChange={onSortChange} />
                 <PopularSelect onChange={onPopularChange} />
                 <StateSelect onChange={onStateChange} />
-            </div>
-            <button className={styles.navButton} onClick={onReset}>
+                <button className={styles.navButton} onClick={onReset}>
                 <FaUndo className={styles.icon} />
-                <span className={styles.text}>Reset All</span>
+                <span className={styles.text}>Reset</span>
             </button>
+            </div>
             <div className={styles.searchBarContainer}>
                 <SearchBar onSearch={onSearch} />
             </div>
