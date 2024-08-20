@@ -5,7 +5,7 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "theme_color": "#2a0f47",
   "icons": [
     {
       "src": "/assets/images/anime-shadows-favicon-color.png",
