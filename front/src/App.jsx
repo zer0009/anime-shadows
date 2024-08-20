@@ -9,6 +9,8 @@ import AdminRoute from './components/AdminRoute.jsx';
 import ModeratorRoute from './components/ModeratorRoute.jsx';
 import { initGA, logPageView, setConsent } from './analytics';
 import CookieConsent from 'react-cookie-consent';
+ 
+
 import { HelmetProvider } from 'react-helmet-async';
 import LoadingSpinner from './components/common/LoadingSpinner';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
@@ -35,6 +37,7 @@ const AddEpisode = lazy(() => import('./components/admin/AddEpisode.jsx'));
 const PopularAnime = lazy(() => import('./pages/PopularAnime.jsx'));
 const RecentEpisodes = lazy(() => import('./pages/RecentEpisodes.jsx'));
 const AdminRegister = lazy(() => import('./pages/AdminRegister.jsx'));
+const ContactUs = lazy(() => import('./pages/ContactUs.jsx'));
 const NotFound = lazy(() => import('./pages/NotFound.jsx'));
 
 const setDirection = (language) => {
@@ -74,6 +77,7 @@ function AppContent() {
             <Route path="/admin-register/" element={<AdminRegister />} />
             <Route path="/popular-anime/" element={<PopularAnime />} />
             <Route path="/recent-episodes/" element={<RecentEpisodes />} />
+            <Route path="/contact" element={<ContactUs />} />
             <Route path="/profile/" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/last-watching/" element={<ProtectedRoute><History /></ProtectedRoute>} />
             <Route path="/favorites/" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />

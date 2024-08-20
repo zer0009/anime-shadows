@@ -1,22 +1,28 @@
 .animeCard {
   width: 100%;
   max-width: 320px;
-  height: 300px; /* Set a fixed height */
+  height: 300px;
   margin: 8px;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   background-color: var(--secondary-dark);
   position: relative;
   display: flex;
   flex-direction: column;
-  cursor: pointer; /* Add cursor pointer to indicate clickability */
+  cursor: pointer;
 }
 
 .animeCard:hover {
-  transform: scale(1.03);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .imageWrapper {
@@ -31,7 +37,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 12px 12px 0 0;
+  border-radius: 16px;
 }
 
 .cardOverlay {
@@ -40,8 +46,21 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.6) 100%);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.6) 100%);
   z-index: 1;
+  border-radius: 16px;
+}
+
+.cardContent {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .statusBadge {
@@ -123,7 +142,7 @@
   border-radius: 16px;
   font-size: 14px;
   font-weight: bold;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -161,7 +180,7 @@
 
 @media (max-width: 480px) {
   .animeCard {
-    height: 260px; /* Further reduce height for smaller screens */
+    height: 260px;
   }
 
   .title {
@@ -175,6 +194,6 @@
   .typeBadge,
   .episodeBadge {
     font-size: 10px;
-    padding: 3px 6px;
+    padding: 3px 8px;
   }
 }

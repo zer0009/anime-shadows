@@ -1,0 +1,102 @@
+.popularAnimePage {
+    background-color: var(--primary-dark);
+    color: var(--text-color);
+    min-height: 100vh;
+    padding: 40px 0;
+}
+
+.breadcrumbs {
+    margin-bottom: 30px;
+}
+
+.breadcrumbSeparator {
+    color: var(--subtext-color);
+}
+
+.breadcrumbLink {
+    display: flex;
+    align-items: center;
+    color: var(--subtext-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.breadcrumbLink:hover {
+    color: var(--highlight-color);
+}
+
+.breadcrumbIcon {
+    margin-right: 8px;
+    font-size: 1.2rem;
+}
+
+.breadcrumbCurrent {
+    color: var(--text-color);
+}
+
+.headerPaper {
+    padding: 30px;
+    background-color: var(--secondary-dark);
+    margin-bottom: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pageTitle {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: var(--highlight-color);
+    font-weight: bold;
+}
+
+.pageDescription {
+    color: var(--subtext-color);
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.listContainer {
+    background-color: var(--secondary-dark);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.listTitle {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: var(--highlight-color);
+}
+
+.divider {
+    background-color: var(--border-color);
+    margin: 30px 0;
+}
+
+.paginationContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+@media (max-width: 600px) {
+    .popularAnimePage {
+        padding: 20px 0;
+    }
+
+    .headerPaper {
+        padding: 20px;
+    }
+
+    .pageTitle {
+        font-size: 2rem;
+    }
+
+    .listContainer {
+        padding: 15px;
+    }
+
+    .listTitle {
+        font-size: 1.5rem;
+    }
+}

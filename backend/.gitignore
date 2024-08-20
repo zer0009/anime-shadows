@@ -2,3 +2,4 @@ node_modules
 uploads
 .env
 dev.env
+test-emails.js

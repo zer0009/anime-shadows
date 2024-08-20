@@ -5,8 +5,7 @@ import styles from './EpisodeListSection.module.css';
 
 const EpisodeListSection = ({ episodes, i18n, t }) => {
   const { episodeSlug } = useParams();
-  const episodeId = parseInt(episodeSlug.split('-الحلقة-')[1], 10); // Extract and parse episode number as integer
-  console.log('episodeId', episodeId);
+  const episodeId = parseInt(episodeSlug.split('-الحلقة-')[1], 10);
 
   const renderEpisodeItem = (ep) => (
     <ListItem 
@@ -14,8 +13,8 @@ const EpisodeListSection = ({ episodes, i18n, t }) => {
       button
       component={Link} 
       to={`/episode/${ep.anime.slug}-الحلقة-${ep.number}`}
-      className={`${styles.episodeItem} ${ep.number === episodeId ? styles.currentEpisode : ''}`} // Compare episode number
-      style={{ direction: i18n.language === 'ar' ? 'rtl' : 'ltr' }}
+      className={`${styles.episodeItem} ${ep.number === episodeId ? styles.currentEpisode : ''}`}
+      sx={{ direction: i18n.language === 'ar' ? 'rtl' : 'ltr' }} // Using MUI system props
     >
       <ListItemText 
         primary={
@@ -37,9 +36,7 @@ const EpisodeListSection = ({ episodes, i18n, t }) => {
       </Typography>
       <Box className={styles.episodeListContainer}>
         <List className={styles.episodeList}>
-          {episodes.length > 0 ? (
-            episodes.map(renderEpisodeItem)
-          ) : (
+          {episodes.length > 0 ? episodes.map(renderEpisodeItem) : (
             <ListItem>
               <ListItemText primary={t('episodePage.loadingEpisodes')} />
             </ListItem>

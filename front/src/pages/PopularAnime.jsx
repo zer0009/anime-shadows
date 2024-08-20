@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { fetchPopularAnime } from '../api/modules/anime';
 import ListDisplay from '../components/ListDisplay/ListDisplay';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Container, Paper } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import { JsonLd } from 'react-schemaorg';
 import { useSEO } from '../hooks/useSEO';
+import BreadcrumbsComponent from '../components/common/BreadcrumbsComponent';
+import styles from './PopularAnime.module.css';
 
 const PopularAnime = () => {
   const { t } = useTranslation();
@@ -16,38 +18,42 @@ const PopularAnime = () => {
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await fetchPopularAnime(currentPage);
-        setAnimeList(response.sortedAnimes || []);
-        setTotalPages(response.totalPages);
-      } catch (error) {
-        setError(t('popularAnime.fetchError', 'Error fetching popular anime'));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await fetchPopularAnime(currentPage);
+      setAnimeList(response.sortedAnimes || []);
+      setTotalPages(response.totalPages);
+    } catch (error) {
+      console.error('Error fetching popular anime:', error);
+      setError(t('popularAnime.fetchError', 'Error fetching popular anime'));
+    } finally {
+      setLoading(false);
+    }
   }, [currentPage, t]);
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
-  const seoProps = {
-    title: t('popularAnime.pageTitle', 'الأنميات الشائعة | أنمي شادوز - Anime Shadows'),
-    description: t('popularAnime.pageDescription', 'اكتشف أشهر وأفضل الأنميات على أنمي شادوز. قائمة محدثة بأكثر الأنميات شعبية ومشاهدة.'),
-    keywords: t('popularAnime.pageKeywords', 'أنمي شائع, أفضل الأنميات, قائمة الأنميات الشهيرة, أنمي شادوز'),
+  const handlePageChange = useCallback((page) => {
+    setCurrentPage(page);
+    window.scrollTo(0, 0);
+  }, []);
+
+  const seoProps = useMemo(() => ({
+    title: t('popularAnime.pageTitle', `الأنميات الشائعة - الصفحة ${currentPage} | أنمي شادوز - Anime Shadows`),
+    description: t('popularAnime.pageDescription', `اكتشف أشهر وأفضل الأنميات على أنمي شادوز. قائمة محدثة بأكثر الأنميات شعبية ومشاهدة. الصفحة ${currentPage} من ${totalPages}.`),
+    keywords: t('popularAnime.pageKeywords', `أنمي شائع, أفضل الأنميات, قائمة الأنميات الشهيرة, أنمي شادوز, الصفحة ${currentPage}, أنمي ${new Date().getFullYear()}`),
     canonicalUrl: `https://animeshadows.xyz/popular-anime?page=${currentPage}`,
     ogType: 'website',
+    ogImage: 'https://animeshadows.xyz/popular-anime-og-image.jpg',
+    twitterImage: 'https://animeshadows.xyz/popular-anime-twitter-image.jpg',
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "name": t('popularAnime.pageTitle', 'الأنميات الشائعة | أنمي شادوز - Anime Shadows'),
-      "description": t('popularAnime.pageDescription', 'اكتشف أشهر وأفضل الأنميات على أنمي شادوز. قائمة محدثة بأكثر الأنميات شعبية ومشاهدة.'),
+      "name": t('popularAnime.pageTitle', `الأنميات الشائعة - الصفحة ${currentPage} | أنمي شادوز - Anime Shadows`),
+      "description": t('popularAnime.pageDescription', `اكتشف أشهر وأفضل الأنميات على أنمي شادوز. قائمة محدثة بأكثر الأنميات شعبية ومشاهدة. الصفحة ${currentPage} من ${totalPages}.`),
       "url": `https://animeshadows.xyz/popular-anime?page=${currentPage}`,
       "inLanguage": "ar",
       "isPartOf": {
@@ -63,48 +69,55 @@ const PopularAnime = () => {
       "itemListElement": animeList.map((anime, index) => ({
         "@type": "ListItem",
         "position": index + 1,
-        "url": `https://animeshadows.xyz/anime/${anime._id}`,
+        "url": `https://animeshadows.xyz/anime/${anime.slug}`,
         "name": anime.title
       }))
     }
-  };
+  }), [t, currentPage, totalPages, animeList]);
 
   const seo = useSEO(seoProps);
 
   return (
     <>
-      <Helmet>
-        {seo.helmet.title && <title>{seo.helmet.title}</title>}
-        {seo.helmet.meta.map((meta, index) => (
-          <meta key={index} {...meta} />
-        ))}
-        {seo.helmet.link.map((link, index) => (
-          <link key={index} {...link} />
-        ))}
-        <meta name="robots" content="index, follow" />
-      </Helmet>
-      {seo.jsonLd && <JsonLd item={seo.jsonLd} />}
+      {seo && (
+        <>
+          <Helmet>
+            {seo.helmet.title && <title>{seo.helmet.title}</title>}
+            {seo.helmet.meta.map((meta, index) => (
+              <meta key={index} {...meta} />
+            ))}
+            {seo.helmet.link.map((link, index) => (
+              <link key={index} {...link} />
+            ))}
+            <meta name="robots" content="index, follow" />
+          </Helmet>
+          {seo.jsonLd && <JsonLd item={seo.jsonLd} />}
+        </>
+      )}
 
-      <Box sx={{ padding: '20px' }}>
-        {/* <Typography variant="h1" sx={{ marginBottom: '20px', fontSize: '2.5rem' }}>
-          {t('popularAnime.heading', 'الأنميات الشائعة')}
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: '20px' }}>
-          {t('popularAnime.description', 'اكتشف أشهر وأفضل الأنميات على موقعنا. هذه القائمة تضم الأنميات الأكثر شعبية ومشاهدة من قبل مستخدمينا.')}
-        </Typography> */}
-        <ListDisplay
-          title={t('popularAnime.listTitle', 'قائمة الأنميات الشائعة')}
-          list={animeList}
-          loading={loading}
-          error={error}
-          fields={['title', 'genre', 'rating']}
-        />
-        <PaginationComponent
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
-      </Box>
+      <div className={styles.popularAnimePage}>
+        <Container maxWidth="lg">
+          <BreadcrumbsComponent
+            links={[
+            ]}
+            current={t('popularAnime.heading', 'الأنميات الشائعة')}
+          />
+            <ListDisplay
+              list={animeList}
+              loading={loading}
+              error={error}
+              fields={['title', 'genre', 'rating', 'type', 'status']}
+            />
+
+          <Box className={styles.paginationContainer}>
+            <PaginationComponent
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </Box>
+        </Container>
+      </div>
     </>
   );
 };

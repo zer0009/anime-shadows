@@ -88,5 +88,11 @@
     "coverAlt": "Cover of {{title}}",
     "lastViewed": "Last viewed: {{date}}",
     "episode": "Episode"
+  },
+  "animeList":{
+    "breadcrumb" : "Anime List"
+  },
+  "seasonAnime":{
+    "breadcrumb": "Season Anime"
   }
 }

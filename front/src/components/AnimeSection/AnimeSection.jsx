@@ -55,14 +55,14 @@ const AnimeSwiper = ({ items, navigate, isMobile }) => (
   </Swiper>
 );
 
-const AnimeSection = ({ title, items, loading, navigate, t, isMobile }) => {
+const AnimeSection = ({ title, items, loading, navigate, t, isMobile, moreLink }) => {
   return (
     <section aria-labelledby={`${title}-heading`} className={styles.swiperSection}>
       <div className={styles.sectionHeader}>
         <h2 id={`${title}-heading`} className={styles.sectionTitle}>{t(`home.${title}`)}</h2>
         <Button 
           variant="contained"
-          onClick={() => navigate(`/anime-list`)} 
+          onClick={() => navigate(moreLink)} 
           aria-label={t(`home.more${title}`)}
           className={styles.moreButton}
         >

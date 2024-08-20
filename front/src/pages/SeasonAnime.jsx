@@ -9,7 +9,6 @@ import ListDisplay from '../components/ListDisplay/ListDisplay';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
 import { getCurrentSeason } from '../utils/getCurrentSeason';
 import { HelmetProvider } from 'react-helmet-async';
-import { JsonLd } from 'react-schemaorg';
 import { useSEO } from '../hooks/useSEO';
 import BreadcrumbsComponent from '../components/common/BreadcrumbsComponent';
 import styles from './SeasonAnime.module.css';
@@ -37,12 +36,12 @@ const SeasonAnime = () => {
 
   const seoProps = useMemo(() => ({
     title: t('seasonAnime.pageTitle', `أنمي موسم ${t(`seasons.${currentSeason}`, currentSeason)} ${currentYear} | أنمي شادوز`),
-    description: t('seasonAnime.pageDescription', `اكتشف أحدث إصدارات الأنمي لموسم ${t(`seasons.${currentSeason}`, currentSeason)} ${currentYear}. شاهد الأنميات الجديدة والمثيرة على أنمي شادوز.`),
-    keywords: t('seasonAnime.pageKeywords', `ربيع,خريف,شتاء,صيف,أنمي 2024, أنمي الموسم, ${t(`seasons.${currentSeason}`, currentSeason)}, ${currentYear}, أنميات جديدة, Anime Shadows, تحميل, مترجم, انمي, حلقة, ستريم, بث مباشر, جودة عالية, HD, مترجم عربي, دبلجة عربية, بدون إعلانات, مجاناً`),
+    description: t('seasonAnime.pageDescription', `اكتشف أحدث إصدارات الأنمي لموسم ${t(`seasons.${currentSeason}`, currentSeason)} ${currentYear}. شاهد الأنميات الجديدة والمثيرة على أنمي شادوز. قائمة شاملة لجميع الأنميات المعروضة هذا الموسم مع تفاصيل وتصنيفات.`),
+    keywords: t('seasonAnime.pageKeywords', `ربيع, خريف, شتاء, صيف, أنمي ${currentYear}, أنمي الموسم, ${t(`seasons.${currentSeason}`, currentSeason)}, ${currentYear}, أنميات جديدة, Anime Shadows, تحميل, مترجم, انمي, حلقة, ستريم, بث مباشر, جودة عالية, HD, مترجم عربي, دبلجة عربية, بدون إعلانات, مجاناً, قائمة الأنمي, مواعيد العرض, تصنيفات الأنمي, أنمي رومانسي, أنمي أكشن, أنمي خيال علمي, أنمي كوميدي, أنمي دراما`),
     canonicalUrl: `https://animeshadows.xyz/season-anime?page=${currentPage}`,
     ogType: "website",
-    ogImage: "https://animeshadows.xyz/default-og-image.jpg", // Add a default OG image
-    twitterImage: "https://animeshadows.xyz/default-twitter-image.jpg", // Add a default Twitter image
+    ogImage: "https://animeshadows.xyz/season-anime-og-image.jpg",
+    twitterImage: "https://animeshadows.xyz/season-anime-twitter-image.jpg",
     jsonLd: [
       {
         "@context": "https://schema.org",
@@ -62,8 +61,17 @@ const SeasonAnime = () => {
         "itemListElement": seasonAnimeList.map((anime, index) => ({
           "@type": "ListItem",
           "position": index + 1,
-          "url": `https://animeshadows.xyz/anime/${anime._id}`,
-          "name": anime.title
+          "item": {
+            "@type": "TVSeries",
+            "url": `https://animeshadows.xyz/anime/${anime.slug}`,
+            "name": anime.title,
+            "image": anime.coverImage,
+            "genre": anime.genres,
+            "numberOfEpisodes": anime.episodeCount,
+            "datePublished": anime.startDate,
+            "inLanguage": "ja",
+            "subtitleLanguage": "ar"
+          }
         }))
       },
       {
@@ -71,9 +79,49 @@ const SeasonAnime = () => {
         "@type": "CollectionPage",
         "name": t('seasonAnime.pageTitle', `أنمي موسم ${t(`seasons.${currentSeason}`, currentSeason)} ${currentYear} | أنمي شادوز`),
         "description": t('seasonAnime.pageDescription', `اكتشف أحدث إصدارات الأنمي لموسم ${t(`seasons.${currentSeason}`, currentSeason)} ${currentYear}. شاهد الأنميات الجديدة والمثيرة على أنمي شادوز.`),
-        "url": `https://animeshadows.xyz/season-anime?page=${currentPage}`
+        "url": `https://animeshadows.xyz/season-anime?page=${currentPage}`,
+        "hasPart": seasonAnimeList.map(anime => ({
+          "@type": "TVSeries",
+          "url": `https://animeshadows.xyz/anime/${anime.slug}`,
+          "name": anime.title,
+          "image": anime.coverImage,
+          "genre": anime.genres,
+          "numberOfEpisodes": anime.episodeCount,
+          "datePublished": anime.startDate
+        }))
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "الرئيسية",
+            "item": "https://animeshadows.xyz"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": t('seasonAnime.breadcrumb', 'أنمي الموسم'),
+            "item": "https://animeshadows.xyz/season-anime"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": `${t(`seasons.${currentSeason}`, currentSeason)} ${currentYear}`,
+            "item": `https://animeshadows.xyz/season-anime?page=${currentPage}`
+          }
+        ]
       }
-    ]
+    ],
+    language: 'ar',
+    alternateLanguages: [
+      { lang: 'en', url: `https://animeshadows.xyz/en/season-anime?page=${currentPage}` }
+    ],
+    publishedTime: new Date().toISOString(),
+    modifiedTime: new Date().toISOString(),
+    section: 'Seasonal Anime'
   }), [t, currentSeason, currentYear, currentPage, seasonAnimeList]);
 
   useSEO(seoProps);

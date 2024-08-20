@@ -1,16 +1,17 @@
 .episodeListSection {
   background-color: var(--primary-dark);
-  padding: 20px;
+  padding: 1rem;
   border-radius: 12px;
-  max-height: 600px;
+  max-height: 80vh; /* Use viewport height for better responsiveness */
   box-shadow: 0 4px 8px var(--shadow-color);
   color: var(--text-color);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .episodeListTitle {
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
   color: var(--highlight-color);
   font-size: 1.5rem;
   text-align: center;
@@ -24,11 +25,13 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  max-height: 500px;
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: var(--highlight-color) var(--secondary-dark); /* For Firefox */
 }
 
 .episodeList {
   padding: 0;
+  margin: 0; /* Ensure no unexpected spacing */
 }
 
 .episodeItem {
@@ -64,7 +67,7 @@
 .episodeNumber {
   font-weight: bold;
   color: var(--highlight-color);
-  margin-bottom: 5px;
+  margin-bottom: 0.25rem; /* Adjusted for better visual hierarchy */
 }
 
 .episodeTitle {
@@ -100,11 +103,13 @@
 
 @media (max-width: 600px) {
   .episodeListSection {
-    padding: 15px;
+    padding: 0.75rem;
+    max-height: 70vh; /* Slightly smaller for mobile devices */
   }
 
   .episodeListTitle {
     font-size: 1.2rem;
+    padding-bottom: 8px;
   }
 
   .episodeItem {
@@ -112,10 +117,6 @@
   }
 
   .episodeNumber {
-    font-size: 1rem;
-  }
-
-  .episodeTitle {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
 }

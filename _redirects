@@ -1,9 +1,8 @@
-# Redirect HTTP to HTTPS
-http://animeshadows.xyz/* https://animeshadows.xyz/:splat 301!
+# Redirect all variants to https://animeshadows.xyz
 http://www.animeshadows.xyz/* https://animeshadows.xyz/:splat 301!
-
-# Redirect www to non-www
 https://www.animeshadows.xyz/* https://animeshadows.xyz/:splat 301!
+http://animeshadows.xyz/* https://animeshadows.xyz/:splat 301!
 
-# Enforce trailing slashes
-/* /:splat/ 301!
+# Enforce trailing slashes (only for directories, not files)
+/*/ /:splat 301
+/sitemap.xml /sitemap.xml 200

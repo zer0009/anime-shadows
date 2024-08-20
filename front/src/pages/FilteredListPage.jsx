@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import ListDisplay from '../components/ListDisplay/ListDisplay';
 import { fetchGenre, fetchTypes, fetchSeasons } from '../api/modules/anime';
-import { Box, Typography, Container, Skeleton, Grid, Chip, ThemeProvider, createTheme, CssBaseline } from '@mui/material';
+import { Box, Typography, Container, Skeleton, Grid, Chip, ThemeProvider, createTheme, CssBaseline, Paper } from '@mui/material';
 import { styled } from '@mui/system';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -142,7 +142,7 @@ const FilteredListPage = () => {
     return filteredList.slice(startIndex, startIndex + itemsPerPage);
   }, [filteredList, currentPage]);
 
-  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
+  const totalPages = useMemo(() => Math.ceil(filteredList.length / itemsPerPage), [filteredList.length, itemsPerPage]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);

@@ -7,7 +7,6 @@ import PaginationComponent from '../components/Pagination/PaginationComponent';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import { Box, Typography, Container } from '@mui/material';
 import { HelmetProvider } from 'react-helmet-async';
-import { JsonLd } from 'react-schemaorg';
 import { useSEO } from '../hooks/useSEO';
 import BreadcrumbsComponent from '../components/common/BreadcrumbsComponent';
 

@@ -26,7 +26,7 @@
 
 .swiperSection,
 .recentEpisodesSection {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     border-radius: 10px;
     padding: 1rem;
 }
@@ -67,11 +67,13 @@
     right: 20px;
     z-index: 1000;
     opacity: 0.7;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s, background-color 0.3s !important;
+    background-color: var(--highlight-color) !important;
 }
 
 .scrollTopButton:hover {
     opacity: 1;
+    background-color: var(--secondary-light) !important;
 }
 
 @media (min-width: 600px) {
@@ -87,5 +89,26 @@
     .moreButton {
         padding: 10px 20px;
         font-size: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .mainContent {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    .swiperSection,
+    .recentEpisodesSection {
+        padding: 0.5rem;
+    }
+
+    .sectionTitle {
+        font-size: 1.2rem;
+    }
+
+    .moreButton {
+        padding: 6px 12px;
+        font-size: 0.8rem;
     }
 }

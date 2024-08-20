@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram } from '@mui/icons-material';
+import { Facebook, Twitter, YouTube } from '@mui/icons-material';
 import { Box, Container, Typography, IconButton, Grid } from '@mui/material';
 import styles from './Footer.module.css';
 
@@ -19,14 +19,14 @@ const Footer = () => {
               <Link to="/recent-episodes" className={styles.footerLink}>آخر الحلقات</Link>
             </Box>
             <div className={styles.socialIcons}>
-              <IconButton href="#" aria-label="Facebook" className={styles.socialIcon}>
+              <IconButton href="https://www.facebook.com/people/Anime-Shadows/61563869637267/" aria-label="Facebook" className={styles.socialIcon}>
                 <Facebook fontSize="small" />
               </IconButton>
               <IconButton href="#" aria-label="Twitter" className={styles.socialIcon}>
                 <Twitter fontSize="small" />
               </IconButton>
-              <IconButton href="#" aria-label="Instagram" className={styles.socialIcon}>
-                <Instagram fontSize="small" />
+              <IconButton href="https://www.youtube.com/channel/UCWGWPX03RG-FmbGHDHb14aA" aria-label="YouTube" className={styles.socialIcon}>
+                <YouTube fontSize="small" />
               </IconButton>
             </div>
           </Grid>

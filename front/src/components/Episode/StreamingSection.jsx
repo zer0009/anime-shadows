@@ -26,17 +26,15 @@ const StreamingSection = ({ episode, episodes, selectedTab, handleTabChange, emb
         />
       );
     } else if (url.includes('dailymotion.com')) {
-      // Use Dailymotion Player Embed
-      const videoId = url.split('/').pop();
+      const videoId = url.match(/video\/([^_]+)/)?.[1] || url.split('/').pop().split('?')[0];
       return (
         <div className={styles.iframeContainer}>
           <iframe
             className={styles.iframe}
             src={`https://www.dailymotion.com/embed/video/${videoId}`}
             frameBorder="0"
-            allow="autoplay; fullscreen"
-            allowFullScreen
-            title="Video Player"
+            allow="autoplay; fullscreen; picture-in-picture"
+            title="Dailymotion Video Player"
             onLoad={() => setLoading(false)}
             onError={handleEmbedError}
           />
@@ -49,9 +47,7 @@ const StreamingSection = ({ episode, episodes, selectedTab, handleTabChange, emb
             className={styles.iframe}
             src={url}
             frameBorder="0"
-            allow="autoplay; fullscreen"
-            webkitallowfullscreen="true"
-            mozallowfullscreen="true"
+            allow="autoplay; fullscreen; picture-in-picture"
             title="Video Player"
             onLoad={() => setLoading(false)}
             onError={handleEmbedError}

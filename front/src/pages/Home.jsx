@@ -37,6 +37,7 @@ const Home = () => {
     const navigate = useNavigate();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
     const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -67,20 +68,10 @@ const Home = () => {
         fetchPopular();
     }, []);
 
-    const handleAnimeClick = useCallback(async (slug) => {
+    const handleAnimeClick = useCallback((slug) => {
         if (!slug) return;
         navigate(`/anime/${slug}`);
     }, [navigate]);
-
-    // const handleEpisodeClick = useCallback(async (slug, episodeNumber) => {
-    //     if (!slug || !episodeNumber) return;
-    //     try {
-    //         await fetchAnimeBySlug(slug);
-    //         navigate(`/episode/${slug}-الحلقة-${episodeNumber}`);
-    //     } catch (error) {
-    //         console.error('Error fetching anime details:', error);
-    //     }
-    // }, [navigate]);
 
     const heroImages = useMemo(() => [
         { webp: hero1Webp, jpg: hero1Jpg, alt: t('home.featuredAnime1') },
@@ -89,13 +80,13 @@ const Home = () => {
     ], [t]);
 
     const seoProps = useMemo(() => ({
-        title: t('home.title', 'Anime Shadows - موقعك الأول لمشاهدة الأنمي'),
-        description: t('home.description', 'استمتع بمشاهدة أحدث وأفضل الأنميات المترجمة بجودة عالية وسيرفرات متعددة على أنمي شادوز. اكتشف مجموعة واسعة من الأنمي، من الكلاسيكيات إلى الإصدارات الجديدة.'),
-        keywords: t('home.keywords', 'anime ar, anime arabic, anime مترجم, تحميل, anime shadows ar, arabic anime, أنمي عربي, مشاهدة أنمي, أنمي مترجم, أنمي اون لاين, أحدث الأنميات, أفضل الأنميات, أنمي شادوز, Anime Shadows, anime online, anime streaming, مسلسلات أنمي,مواقع أنمي,مواقع الانمي,انمى بجمع الجودات, أفلام أنمي, مانجا, حلقات أنمي جديدة, تحميل أنمي, أنمي بدون إعلانات'),
+        title: t('home.title', 'Anime Shadows - موقعك الأول لمشاهدة الأنمي المترجم | أنمي شادوز'),
+        description: t('home.description', 'استمتع بمشاهدة أحدث وأفضل الأنميات المترجمة بجودة عالية وسيرفرات متعددة على أنمي شادوز. اكتشف مجموعة واسعة من الأنمي، من الكلاسيكيات إلى الإصدارات الجديدة. مشاهدة مباشرة بدون إعلانات مزعجة.'),
+        keywords: t('home.keywords', 'أنمي شادوز, Anime Shadows, أنمي مترجم, مشاهدة أنمي, أنمي اون لاين, أحدث الأنميات, أفضل الأنميات, anime ar, anime arabic, anime مترجم, تحميل أنمي, arabic anime, أنمي عربي, anime online, anime streaming, مسلسلات أنمي, مواقع أنمي, مواقع الانمي, انمى بجودة عالية, أفلام أنمي, مانجا, حلقات أنمي جديدة, أنمي بدون إعلانات, أنمي مدبلج, قائمة الأنمي, مواعيد عرض الأنمي, تصنيفات الأنمي, أنمي رومانسي, أنمي أكشن, أنمي خيال علمي, أنمي كوميدي, أنمي دراما'),
         canonicalUrl: 'https://animeshadows.xyz',
         ogType: 'website',
-        ogImage: 'https://animeshadows.xyz/default-og-image.jpg', // Add a default OG image
-        twitterImage: 'https://animeshadows.xyz/default-twitter-image.jpg', // Add a default Twitter image
+        ogImage: 'https://animeshadows.xyz/default-og-image.jpg',
+        twitterImage: 'https://animeshadows.xyz/default-twitter-image.jpg',
         jsonLd: [
             {
                 "@context": "https://schema.org",
@@ -112,6 +103,7 @@ const Home = () => {
             {
                 "@context": "https://schema.org",
                 "@type": "ItemList",
+                "name": t('home.popularAnime', 'الأنميات الشائعة'),
                 "itemListElement": popularAnimes.map((anime, index) => ({
                     "@type": "ListItem",
                     "position": index + 1,
@@ -122,13 +114,13 @@ const Home = () => {
             {
                 "@context": "https://schema.org",
                 "@type": "CollectionPage",
-                "name": t('home.title'),
-                "description": t('home.description'),
+                "name": t('home.title', 'Anime Shadows - موقعك الأول لمشاهدة الأنمي'),
+                "description": t('home.description', 'استمتع بمشاهدة أحدث وأفضل الأنميات المترجمة بجودة عالية وسيرفرات متعددة على أنمي شادوز. اكتشف مجموعة واسعة من الأنمي، من الكلاسيكيات إلى الإصدارات الجديدة.'),
                 "url": "https://animeshadows.xyz",
                 "hasPart": [
                     {
                         "@type": "ItemList",
-                        "name": t('home.popularAnime'),
+                        "name": t('home.popularAnime', 'الأنميات الشائعة'),
                         "itemListElement": popularAnimes.map((anime, index) => ({
                             "@type": "ListItem",
                             "position": index + 1,
@@ -138,7 +130,7 @@ const Home = () => {
                     },
                     {
                         "@type": "ItemList",
-                        "name": t('home.recentEpisodes'),
+                        "name": t('home.recentEpisodes', 'الحلقات الجديدة'),
                         "itemListElement": recentEpisodes.map((episode, index) => ({
                             "@type": "ListItem",
                             "position": index + 1,
@@ -147,11 +139,83 @@ const Home = () => {
                         }))
                     }
                 ]
+            },
+            {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                "name": "Anime Shadows",
+                "url": "https://animeshadows.xyz",
+                "logo": "https://animeshadows.xyz/logo.png",
+                "sameAs": [
+                    "https://www.facebook.com/animeshadows",
+                    "https://twitter.com/animeshadows",
+                    "https://www.instagram.com/animeshadows"
+                ]
             }
         ]
     }), [t, popularAnimes, recentEpisodes]);
 
     useSEO(seoProps);
+
+    const renderRecentEpisodes = () => {
+        if (recentLoading) {
+            return (
+                <Grid container spacing={2}>
+                    {[...Array(10)].map((_, index) => (
+                        <Grid item xs={6} sm={4} md={3} lg={2.4} key={index}>
+                            <Skeleton variant="rectangular" width="100%" height={200} />
+                            <Skeleton width="60%" />
+                            <Skeleton width="40%" />
+                        </Grid>
+                    ))}
+                </Grid>
+            );
+        }
+
+        if (isMobile || isTablet) {
+            return (
+                <Swiper
+                    modules={[Navigation, Pagination, Scrollbar, Autoplay]}
+                    spaceBetween={10}
+                    slidesPerView={isMobile ? 1 : 2}
+                    breakpoints={{
+                        320: { slidesPerView: 1 },
+                        425: { slidesPerView: 2 },
+                        640: { slidesPerView: 3 },
+                    }}
+                    autoplay={{ delay: 3000 }}
+                    pagination={{ clickable: true }}
+                    scrollbar={{ draggable: true }}
+                >
+                    {recentEpisodes.map((episode) => (
+                        <SwiperSlide key={episode._id}>
+                            <AnimeCard
+                                anime={episode.anime}
+                                episodeTitle={episode.title}
+                                episodeId={episode._id}
+                                onClick={() => handleAnimeClick(episode.anime.slug, episode.number)}
+                            />
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+            );
+        }
+
+        return (
+            <Grid container spacing={2}>
+                {recentEpisodes.map((episode) => (
+                    <Grid item xs={12} sm={6} md={3} lg={2.4} key={episode._id}>
+                        <AnimeCard
+                            anime={episode.anime}
+                            episodeNumber={episode.number}
+                            episodeId={episode._id}
+                            onClick={() => handleAnimeClick(episode.anime.slug, episode.number)}
+                        />
+                    </Grid>
+                ))}
+            </Grid>
+        );
+    };
 
     return (
         <HelmetProvider>
@@ -163,9 +227,9 @@ const Home = () => {
                         items={popularAnimes}
                         loading={loading}
                         navigate={navigate}
-                        // handleAnimeClick={handleAnimeClick}
                         t={t}
                         isMobile={isMobile}
+                        moreLink="/popular-anime/"
                     />
                     <section aria-labelledby="recent-episodes-heading" className={styles.recentEpisodesSection}>
                         <div className={styles.sectionHeader}>
@@ -179,66 +243,16 @@ const Home = () => {
                                 {t('home.more')}
                             </Button>
                         </div>
-                        {recentLoading ? (
-                            <Grid container spacing={1}>
-                                {[...Array(10)].map((_, index) => (
-                                    <Grid item xs={12} sm={6} md={3} lg={2} key={index}>
-                                        <Skeleton variant="rectangular" width="100%" height={200} />
-                                        <Skeleton width="60%" />
-                                        <Skeleton width="40%" />
-                                    </Grid>
-                                ))}
-                            </Grid>
-                        ) : (
-                            isMobile ? (
-                                <Swiper
-                                    modules={[Navigation, Pagination, Scrollbar, Autoplay]}
-                                    spaceBetween={10}
-                                    slidesPerView={1}
-                                    breakpoints={{
-                                        320: { slidesPerView: 1 },
-                                        425: { slidesPerView: 2 },
-                                        640: { slidesPerView: 3 },
-                                    }}
-                                    autoplay={{ delay: 3000 }}
-                                    pagination={{ clickable: true }}
-                                    scrollbar={{ draggable: true }}
-                                >
-                                    {recentEpisodes.map((episode) => (
-                                        <SwiperSlide key={episode._id}>
-                                            <AnimeCard
-                                                anime={episode.anime}
-                                                episodeTitle={episode.title}
-                                                episodeId={episode._id}
-                                                onClick={() => handleAnimeClick(episode.anime.slug, episode.number)}
-                                            />
-                                        </SwiperSlide>
-                                    ))}
-                                </Swiper>
-                            ) : (
-                                <Grid container spacing={1}>
-                                    {recentEpisodes.map((episode) => (
-                                        <Grid item xs={12} sm={6} md={3} lg={2.4} key={episode._id}>
-                                            <AnimeCard
-                                                anime={episode.anime}
-                                                episodeNumber={episode.number}
-                                                episodeId={episode._id}
-                                                onClick={() => handleAnimeClick(episode.anime.slug, episode.number)}
-                                            />
-                                        </Grid>
-                                    ))}
-                                </Grid>
-                            )
-                        )}
+                        {renderRecentEpisodes()}
                     </section>
                     <AnimeSection
                         title="animeList"
                         items={searchResults.length > 0 ? searchResults : animeList}
                         loading={loading}
                         navigate={navigate}
-                        // handleAnimeClick={handleAnimeClick}
                         t={t}
                         isMobile={isMobile}
+                        moreLink="/anime-list/"
                     />
                 </Container>
             </Suspense>
