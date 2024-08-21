@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Typography, Box, Paper, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Select, MenuItem } from '@mui/material';
-import { Edit, Delete } from '@mui/icons-material';
+import { TextField, Button, Typography, Box, Paper, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Select, MenuItem, Snackbar, Alert, FormControl, InputLabel } from '@mui/material';
+import { Edit, Delete, Add } from '@mui/icons-material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
@@ -9,59 +9,74 @@ import { fetchSeasons } from '../../api/modules/anime';
 import styles from './AddSeason.module.css';
 
 const AddSeason = () => {
-  const [name, setName] = useState('');
-  const [year, setYear] = useState('');
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [seasonData, setSeasonData] = useState({
+    name: '',
+    year: '',
+    startDate: null,
+    endDate: null
+  });
   const [seasons, setSeasons] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const [currentSeasonId, setCurrentSeasonId] = useState(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [seasonToDelete, setSeasonToDelete] = useState(null);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
 
   useEffect(() => {
-    const loadSeasons = async () => {
-      const seasonsData = await fetchSeasons();
-      setSeasons(seasonsData);
-    };
     loadSeasons();
   }, []);
+
+  const loadSeasons = async () => {
+    try {
+      const seasonsData = await fetchSeasons();
+      setSeasons(seasonsData);
+    } catch (error) {
+      console.error('Error loading seasons:', error);
+      showSnackbar('Failed to load seasons', 'error');
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSeasonData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleDateChange = (name, date) => {
+    setSeasonData(prev => ({ ...prev, [name]: date }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const seasonData = { 
-        name, 
-        year, 
-        startDate: startDate ? startDate.toISOString() : null, // Convert date to ISO string
-        endDate: endDate ? endDate.toISOString() : null // Convert date to ISO string
+      const submissionData = {
+        ...seasonData,
+        startDate: seasonData.startDate ? seasonData.startDate.toISOString() : null,
+        endDate: seasonData.endDate ? seasonData.endDate.toISOString() : null
       };
-      console.log('Submitting season data:', seasonData); // Add this line
+
       if (editMode) {
-        await editSeason(currentSeasonId, seasonData);
-        alert('Season updated successfully');
+        await editSeason(currentSeasonId, submissionData);
+        showSnackbar('Season updated successfully', 'success');
       } else {
-        await addSeason(seasonData);
-        alert('Season added successfully');
+        await addSeason(submissionData);
+        showSnackbar('Season added successfully', 'success');
       }
-      setName('');
-      setYear('');
-      setStartDate(null);
-      setEndDate(null);
-      setEditMode(false);
-      setCurrentSeasonId(null);
-      const seasonsData = await fetchSeasons();
-      setSeasons(seasonsData);
+
+      resetForm();
+      loadSeasons();
     } catch (error) {
       console.error('Error adding/updating season:', error);
+      showSnackbar('Failed to add/update season', 'error');
     }
   };
 
   const handleEdit = (season) => {
-    setName(season.name);
-    setYear(season.year);
-    setStartDate(dayjs(season.startDate));
-    setEndDate(dayjs(season.endDate));
+    setSeasonData({
+      name: season.name,
+      year: season.year,
+      startDate: dayjs(season.startDate),
+      endDate: dayjs(season.endDate)
+    });
     setEditMode(true);
     setCurrentSeasonId(season._id);
   };
@@ -69,12 +84,12 @@ const AddSeason = () => {
   const handleDelete = async () => {
     try {
       await deleteSeason(seasonToDelete._id);
-      alert('Season deleted successfully');
+      showSnackbar('Season deleted successfully', 'success');
       setOpenDeleteDialog(false);
-      const seasonsData = await fetchSeasons();
-      setSeasons(seasonsData);
+      loadSeasons();
     } catch (error) {
       console.error('Error deleting season:', error);
+      showSnackbar('Failed to delete season', 'error');
     }
   };
 
@@ -83,52 +98,75 @@ const AddSeason = () => {
     setOpenDeleteDialog(true);
   };
 
+  const resetForm = () => {
+    setSeasonData({ name: '', year: '', startDate: null, endDate: null });
+    setEditMode(false);
+    setCurrentSeasonId(null);
+  };
+
+  const showSnackbar = (message, severity) => {
+    setSnackbar({ open: true, message, severity });
+  };
+
   const currentYear = new Date().getFullYear();
   const years = Array.from(new Array(10), (val, index) => currentYear - index);
 
   return (
-    <div className={styles.container}>
-      <Typography variant="h6">{editMode ? 'Edit Season' : 'Add Season'}</Typography>
+    <Paper className={styles.container}>
+      <Typography variant="h6" className={styles.title}>{editMode ? 'Edit Season' : 'Add Season'}</Typography>
       <form onSubmit={handleSubmit} className={styles.form}>
         <TextField
           label="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          name="name"
+          value={seasonData.name}
+          onChange={handleInputChange}
           fullWidth
           margin="normal"
+          required
         />
-        <Select
-          label="Year"
-          value={year}
-          onChange={(e) => setYear(e.target.value)}
-          fullWidth
-          margin="normal"
-        >
-          {years.map((year) => (
-            <MenuItem key={year} value={year}>
-              {year}
-            </MenuItem>
-          ))}
-        </Select>
+        <FormControl fullWidth margin="normal">
+          <InputLabel id="year-select-label">Year</InputLabel>
+          <Select
+            labelId="year-select-label"
+            label="Year"
+            name="year"
+            value={seasonData.year}
+            onChange={handleInputChange}
+            required
+          >
+            {years.map((year) => (
+              <MenuItem key={year} value={year.toString()}>
+                {year}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             label="Start Date"
-            value={startDate}
-            onChange={(date) => setStartDate(date)}
+            value={seasonData.startDate}
+            onChange={(date) => handleDateChange('startDate', date)}
             renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
           />
           <DatePicker
             label="End Date"
-            value={endDate}
-            onChange={(date) => setEndDate(date)}
+            value={seasonData.endDate}
+            onChange={(date) => handleDateChange('endDate', date)}
             renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
           />
         </LocalizationProvider>
-        <Button type="submit" variant="contained" color="primary">
-          {editMode ? 'Update Season' : 'Add Season'}
-        </Button>
+        <Box className={styles.buttonContainer}>
+          <Button type="submit" variant="contained" color="primary" startIcon={editMode ? <Edit /> : <Add />}>
+            {editMode ? 'Update Season' : 'Add Season'}
+          </Button>
+          {editMode && (
+            <Button onClick={resetForm} variant="outlined" color="secondary">
+              Cancel Edit
+            </Button>
+          )}
+        </Box>
       </form>
-      <TableContainer component={Paper} className={styles.tableContainer}>
+      <TableContainer className={styles.tableContainer}>
         <Table>
           <TableHead>
             <TableRow>
@@ -178,7 +216,16 @@ const AddSeason = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      >
+        <Alert onClose={() => setSnackbar({ ...snackbar, open: false })} severity={snackbar.severity}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
+    </Paper>
   );
 };
 

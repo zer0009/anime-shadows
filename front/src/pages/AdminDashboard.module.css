@@ -1,23 +1,67 @@
-/* AdminDashboard.module.css */
 .adminDashboard {
   padding: 20px;
-  direction: ltr; /* Ensure the admin dashboard is LTR */
+  direction: ltr;
 }
 
 .title {
   margin-bottom: 20px;
   text-align: center;
-  color: #1976d2;
-  direction: ltr; /* Ensure the title is LTR */
+  color: var(--primary-color);
+  direction: ltr;
 }
 
 .paper {
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  direction: ltr; /* Ensure the paper is LTR */
+  direction: ltr;
 }
 
 .tabContent {
   margin-top: 20px;
-  direction: ltr; /* Ensure the tab content is LTR */
+  direction: ltr;
+}
+
+.tabs {
+  background-color: var(--background-color);
+}
+
+.tab {
+  color: var(--text-color) !important;
+  opacity: 0.7;
+}
+
+.tab.Mui-selected {
+  color: var(--primary-color) !important;
+  opacity: 1;
+}
+
+.menuButton {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+@media (max-width: 600px) {
+  .tabs {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--background-color);
+    z-index: 1;
+  }
+
+  .showTabs {
+    display: flex;
+  }
+
+  .tab {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 10px;
+  }
 }

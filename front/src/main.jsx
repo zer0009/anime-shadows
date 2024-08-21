@@ -31,7 +31,7 @@ if ('serviceWorker' in navigator) {
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <AuthProvider> {/* Wrap App with AuthProvider */}
+      <AuthProvider>
         <App />
       </AuthProvider>
     </BrowserRouter>

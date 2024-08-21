@@ -14,40 +14,53 @@
 }
 
 .form {
-  display: flex;
-  flex-direction: column;
+  margin-top: 20px;
 }
 
-.MuiButton-containedSecondary {
-  background-color: var(--highlight-color);
-  color: var(--text-color);
-}
-
-.MuiButton-containedSecondary:hover {
-  background-color: var(--highlight-color-dark);
-}
-
-.MuiButton-containedPrimary {
+/* Override Material-UI styles */
+:global(.MuiButton-containedPrimary) {
   background-color: var(--primary-color);
   color: var(--text-color);
 }
 
-.MuiButton-containedPrimary:hover {
+:global(.MuiButton-containedPrimary:hover) {
   background-color: var(--primary-color-dark);
 }
 
-.MuiIconButton-colorSecondary {
-  color: var(--highlight-color);
+:global(.MuiButton-containedSecondary) {
+  background-color: var(--highlight-color);
+  color: var(--text-color);
 }
 
-.MuiIconButton-colorSecondary:hover {
-  color: var(--highlight-color-dark);
+:global(.MuiButton-containedSecondary:hover) {
+  background-color: var(--highlight-color-dark);
 }
 
-.MuiIconButton-colorPrimary {
+:global(.MuiTab-root) {
+  color: var(--text-color);
+}
+
+:global(.MuiTab-root.Mui-selected) {
   color: var(--primary-color);
 }
 
-.MuiIconButton-colorPrimary:hover {
-  color: var(--primary-color-dark);
+:global(.MuiTabs-indicator) {
+  background-color: var(--primary-color);
+}
+
+:global(.MuiInputLabel-root),
+:global(.MuiInputBase-root) {
+  color: var(--text-color);
+}
+
+:global(.MuiOutlinedInput-notchedOutline) {
+  border-color: var(--border-color);
+}
+
+:global(.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline) {
+  border-color: var(--primary-color);
+}
+
+:global(.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline) {
+  border-color: var(--primary-color);
 }

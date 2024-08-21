@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, Grid, Paper, Box, Tabs, Tab } from '@mui/material';
+import { Container, Typography, Grid, Paper, Box, Tabs, Tab, IconButton, useMediaQuery, useTheme } from '@mui/material';
+import { Menu as MenuIcon, Add as AddIcon, Movie as MovieIcon, Category as CategoryIcon, Theaters as TheatersIcon, People as PeopleIcon } from '@mui/icons-material';
 import AddAnime from '../components/admin/AddAnime';
 import AddType from '../components/admin/AddType';
 import AddGenre from '../components/admin/AddGenre';
@@ -11,6 +12,9 @@ import styles from './AdminDashboard.module.css';
 const AdminDashboard = () => {
   const [tabIndex, setTabIndex] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -21,78 +25,63 @@ const AdminDashboard = () => {
 
   const handleTabChange = (event, newIndex) => {
     setTabIndex(newIndex);
+    setMenuOpen(false);
+  };
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const tabComponents = [
+    { label: 'Add Anime', icon: <AddIcon />, component: AddAnime },
+    { label: 'Add Type', icon: <CategoryIcon />, component: AddType },
+    { label: 'Add Genre', icon: <TheatersIcon />, component: AddGenre },
+    { label: 'Manage Anime', icon: <MovieIcon />, component: ManageAnime },
+    { label: 'Add Season', icon: <AddIcon />, component: AddSeason },
+    ...(isAdmin ? [{ label: 'Manage Users', icon: <PeopleIcon />, component: ManageUsers }] : []),
+  ];
+
+  const renderComponent = () => {
+    const Component = tabComponents[tabIndex].component;
+    return <Component />;
   };
 
   return (
     <Container className={styles.adminDashboard}>
       <Typography variant="h4" className={styles.title}>Admin Dashboard</Typography>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', position: 'relative' }}>
+        {isMobile && (
+          <IconButton onClick={toggleMenu} className={styles.menuButton}>
+            <MenuIcon />
+          </IconButton>
+        )}
         <Tabs
           value={tabIndex}
           onChange={handleTabChange}
           aria-label="admin dashboard tabs"
           textColor="primary"
           indicatorColor="primary"
-          sx={{
-            '& .MuiTab-root': {
-              color: 'rgba(0, 0, 0, 0.6)',
-            },
-            '& .Mui-selected': {
-              color: '#1976d2',
-            },
-          }}
+          variant={isMobile ? 'scrollable' : 'standard'}
+          scrollButtons="auto"
+          className={`${styles.tabs} ${isMobile && menuOpen ? styles.showTabs : ''}`}
         >
-          <Tab label="Add Anime" style={{ color: 'white' }} />
-          <Tab label="Add Type" style={{ color: 'white' }} />
-          <Tab label="Add Genre" style={{ color: 'white' }} />
-          <Tab label="Manage Anime" style={{ color: 'white' }} />
-          <Tab label="Add Season" style={{ color: 'white' }} />
-          {isAdmin && <Tab label="Manage Users" style={{ color: 'white' }} />}
+          {tabComponents.map((tab, index) => (
+            <Tab
+              key={index}
+              label={isMobile ? '' : tab.label}
+              icon={tab.icon}
+              iconPosition="start"
+              className={styles.tab}
+            />
+          ))}
         </Tabs>
       </Box>
       <Grid container spacing={3} className={styles.tabContent}>
-        {tabIndex === 0 && (
-          <Grid item xs={12}>
-            <Paper className={styles.paper}>
-              <AddAnime />
-            </Paper>
-          </Grid>
-        )}
-        {tabIndex === 1 && (
-          <Grid item xs={12}>
-            <Paper className={styles.paper}>
-              <AddType />
-            </Paper>
-          </Grid>
-        )}
-        {tabIndex === 2 && (
-          <Grid item xs={12}>
-            <Paper className={styles.paper}>
-              <AddGenre />
-            </Paper>
-          </Grid>
-        )}
-        {tabIndex === 3 && (
-          <Grid item xs={12}>
-            <Paper className={styles.paper}>
-              <ManageAnime />
-            </Paper>
-          </Grid>
-        )}
-        {tabIndex === 4 && (
-          <Grid item xs={12}>
-            <Paper className={styles.paper}>
-              <AddSeason />
-            </Paper>
-          </Grid>
-        )}
-        {isAdmin && tabIndex === 5 && ( 
-          <Grid item xs={12}>
-            <Paper className={styles.paper}>
-              <ManageUsers />
-            </Paper>
-          </Grid>
-        )}
+        <Grid item xs={12}>
+          <Paper className={styles.paper}>
+            {renderComponent()}
+          </Paper>
+        </Grid>
       </Grid>
     </Container>
   );

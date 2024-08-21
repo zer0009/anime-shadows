@@ -1,0 +1,38 @@
+.manageUsers {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .title {
+    margin-bottom: 20px;
+    color: var(--text-color);
+    text-align: center;
+  }
+  
+  /* Override Material-UI styles */
+  :global(.MuiTableCell-head) {
+    background-color: var(--secondary-dark);
+    color: var(--text-color);
+  }
+  
+  :global(.MuiTableRow-root:nth-of-type(even)) {
+    background-color: var(--background-color-light);
+  }
+  
+  :global(.MuiIconButton-root) {
+    color: var(--text-color);
+  }
+
+  
+  :global(.MuiInputLabel-root),
+  :global(.MuiInputBase-root) {
+    color: var(--text-color);
+  }
+  
+  :global(.MuiOutlinedInput-notchedOutline) {
+    border-color: var(--border-color);
+  }
+  
+  :global(.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline) {
+    border-color: var(--primary-color);
+  }

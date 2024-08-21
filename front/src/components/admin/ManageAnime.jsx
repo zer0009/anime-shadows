@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Typography, Box, Paper, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { Search, Edit, Delete, Add } from '@mui/icons-material';
+import { TextField, Typography, Box, Paper, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from '@mui/material';
+import { Search, Edit, Delete, Add, Visibility } from '@mui/icons-material';
 import { deleteAnime } from '../../api/modules/admin';
 import { fetchAnime } from '../../api/modules/anime';
 import { useNavigate } from 'react-router-dom';
@@ -12,32 +12,49 @@ const ManageAnime = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [animeToDelete, setAnimeToDelete] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loadAnimes = async () => {
-      const { animes, totalPages } = await fetchAnime(currentPage);
-      setAnimes(animes);
-      setTotalPages(totalPages);
-    };
     loadAnimes();
   }, [currentPage]);
 
+  const loadAnimes = async () => {
+    try {
+      const { animes, totalPages } = await fetchAnime(currentPage);
+      setAnimes(animes);
+      setTotalPages(totalPages);
+    } catch (error) {
+      console.error('Error loading animes:', error);
+      // You might want to show an error message to the user here
+    }
+  };
+
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
+    setCurrentPage(1); // Reset to first page when searching
   };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
-  const handleDelete = async (animeId) => {
+  const handleDeleteClick = (anime) => {
+    setAnimeToDelete(anime);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
     try {
-      await deleteAnime(animeId);
-      setAnimes(animes.filter(anime => anime._id !== animeId));
-      alert('Anime deleted successfully');
+      await deleteAnime(animeToDelete._id);
+      setAnimes(animes.filter(anime => anime._id !== animeToDelete._id));
+      setDeleteDialogOpen(false);
+      setAnimeToDelete(null);
+      // You might want to show a success message here
     } catch (error) {
       console.error('Error deleting anime:', error);
+      // You might want to show an error message here
     }
   };
 
@@ -49,31 +66,39 @@ const ManageAnime = () => {
     navigate(`/admin/add-episode/${animeId}`);
   };
 
-  const filteredAnimes = Array.isArray(animes) ? animes.filter(anime => anime.title.toLowerCase().includes(searchQuery.toLowerCase())) : [];
+  const handleViewAnime = (animeId) => {
+    navigate(`/anime/${animeId}`);
+  };
+
+  const filteredAnimes = animes.filter(anime => 
+    anime.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
-    <div>
-      <Typography variant="h6">Manage Anime</Typography>
-      <TextField
-        label="Search Anime"
-        value={searchQuery}
-        onChange={handleSearch}
-        fullWidth
-        margin="normal"
-        InputProps={{
-          endAdornment: (
-            <IconButton>
-              <Search />
-            </IconButton>
-          ),
-        }}
-      />
-      <TableContainer component={Paper}>
+    <Paper className={styles.manageAnime}>
+      <Typography variant="h6" className={styles.title}>Manage Anime</Typography>
+      <Box className={styles.searchBox}>
+        <TextField
+          label="Search Anime"
+          value={searchQuery}
+          onChange={handleSearch}
+          fullWidth
+          variant="outlined"
+          InputProps={{
+            endAdornment: (
+              <IconButton>
+                <Search />
+              </IconButton>
+            ),
+          }}
+        />
+      </Box>
+      <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>Title</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -85,16 +110,27 @@ const ManageAnime = () => {
                     <Typography variant="body1" className={styles.titleText}>{anime.title}</Typography>
                   </Box>
                 </TableCell>
-                <TableCell>
-                  <IconButton onClick={() => handleEdit(anime._id)}>
-                    <Edit />
-                  </IconButton>
-                  <IconButton onClick={() => handleDelete(anime._id)}>
-                    <Delete />
-                  </IconButton>
-                  <IconButton onClick={() => handleAddEpisode(anime._id)}>
-                    <Add />
-                  </IconButton>
+                <TableCell align="right">
+                  <Tooltip title="View Anime">
+                    <IconButton onClick={() => handleViewAnime(anime.slug)}>
+                      <Visibility />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Edit Anime">
+                    <IconButton onClick={() => handleEdit(anime._id)}>
+                      <Edit />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Delete Anime">
+                    <IconButton onClick={() => handleDeleteClick(anime)}>
+                      <Delete />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Add Episode">
+                    <IconButton onClick={() => handleAddEpisode(anime._id)}>
+                      <Add />
+                    </IconButton>
+                  </Tooltip>
                 </TableCell>
               </TableRow>
             ))}
@@ -102,9 +138,32 @@ const ManageAnime = () => {
         </Table>
       </TableContainer>
       <Box display="flex" justifyContent="center" mt={2}>
-        <PaginationComponent totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} /> 
+        <PaginationComponent 
+          totalPages={totalPages} 
+          currentPage={currentPage} 
+          onPageChange={handlePageChange} 
+        /> 
       </Box>
-    </div>
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+      >
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete "{animeToDelete?.title}"? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="secondary">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Paper>
   );
 };
 

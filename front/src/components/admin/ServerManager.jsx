@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, MenuItem, Paper, Dialog, DialogActions, DialogContent, DialogTitle, Chip, Tooltip, Switch, FormControlLabel, CircularProgress } from '@mui/material';
-import { Add, Delete, Edit, FileCopy } from '@mui/icons-material';
+import { TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, MenuItem, Paper, Dialog, DialogActions, DialogContent, DialogTitle, Chip, Tooltip, Switch, FormControlLabel, CircularProgress, Tabs, Tab } from '@mui/material';
+import { Add, Delete, Edit, FileCopy, Refresh } from '@mui/icons-material';
 import { scrapeWitanime, scrapeAnimeLuxe } from '../../api/modules/admin';
 import styles from './ServerManager.module.css';
 
-// Predefined quality categories
 const predefinedQualityOptions = ['SD', 'HD', 'FHD', 'multi'];
-
-// Function to map server-provided quality to predefined categories
 const mapQuality = (quality) => {
   const lowerQuality = quality.toLowerCase();
   if (['360p', '480p'].includes(lowerQuality)) return 'SD';
   if (['720p'].includes(lowerQuality)) return 'HD';
   if (['1080p', 'fhd'].includes(lowerQuality)) return 'FHD';
-  return quality; // Return as-is if it doesn't match predefined categories
+  return quality;
 };
 
 const ServerManager = ({ streamingServers, setStreamingServers, downloadServers, setDownloadServers }) => {
@@ -24,6 +21,7 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
   const [scrapeUrl, setScrapeUrl] = useState('');
   const [scraperSource, setScraperSource] = useState('witanime');
   const [loading, setLoading] = useState(false);
+  const [tabValue, setTabValue] = useState(0);
 
   const handleServerChange = (e) => {
     const { name, value } = e.target;
@@ -87,15 +85,12 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
           'Pragma': 'no-cache',
         }
       });
-      console.log('Scraped servers:', servers); // Debugging log
       const mappedServers = servers.map(server => ({
         ...server,
         quality: mapQuality(server.quality)
       }));
       setStreamingServers(mappedServers.filter(server => server.type === 'streaming'));
       setDownloadServers(mappedServers.filter(server => server.type === 'download'));
-      console.log('Updated streaming servers:', streamingServers); // Debugging log
-      console.log('Updated download servers:', downloadServers); // Debugging log
     } catch (error) {
       console.error('Error scraping website:', error);
     } finally {
@@ -103,14 +98,116 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
     }
   };
 
+  const renderServerList = (servers, type) => (
+    <List>
+      {servers.map((server, index) => (
+        <ListItem key={index} className={styles.listItem}>
+          <ListItemText 
+            primary={
+              <Typography variant="subtitle1">
+                {server.serverName} 
+                <Chip label={server.quality} size="small" color={type === 'streaming' ? 'primary' : 'secondary'} className={styles.qualityChip} />
+              </Typography>
+            } 
+            secondary={server.url} 
+          />
+          <Tooltip title="Copy URL">
+            <IconButton edge="end" aria-label="copy" onClick={() => navigator.clipboard.writeText(server.url)}>
+              <FileCopy />
+            </IconButton>
+          </Tooltip>
+          <IconButton edge="end" aria-label="edit" onClick={() => openEditDialogHandler(server, type, index)}>
+            <Edit />
+          </IconButton>
+          <IconButton edge="end" aria-label="delete" onClick={() => removeServer(type, index)}>
+            <Delete />
+          </IconButton>
+        </ListItem>
+      ))}
+    </List>
+  );
+
   return (
     <Paper className={styles.serverManager}>
       <Typography variant="h6" className={styles.title}>Server Manager</Typography>
-      <FormControlLabel
-        control={<Switch checked={useScrape} onChange={() => setUseScrape(!useScrape)} />}
-        label="Use Scrape"
-      />
-      {useScrape && (
+      <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)} centered>
+        <Tab label="Add Server" />
+        <Tab label="Server List" />
+        <Tab label="Scrape Servers" />
+      </Tabs>
+      
+      {tabValue === 0 && (
+        <Box className={styles.form}>
+          <TextField
+            label="Server Name"
+            name="serverName"
+            value={newServer.serverName}
+            onChange={handleServerChange}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+          />
+          <TextField
+            label="Quality"
+            name="quality"
+            select
+            value={newServer.quality}
+            onChange={handleServerChange}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+          >
+            {predefinedQualityOptions.map((option) => (
+              <MenuItem key={option} value={option}>{option}</MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            label="URL"
+            name="url"
+            value={newServer.url}
+            onChange={handleServerChange}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            multiline
+            rows={3}
+          />
+          <TextField
+            label="Type"
+            name="type"
+            select
+            value={newServer.type}
+            onChange={handleServerChange}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+          >
+            <MenuItem value="streaming">Streaming</MenuItem>
+            <MenuItem value="download">Download</MenuItem>
+          </TextField>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={addServer}
+            startIcon={<Add />}
+            fullWidth
+            className={styles.addButton}
+          >
+            Add Server
+          </Button>
+        </Box>
+      )}
+
+      {tabValue === 1 && (
+        <Box className={styles.serverList}>
+          <Typography variant="h6" className={styles.subtitle}>Streaming Servers</Typography>
+          {renderServerList(streamingServers, 'streaming')}
+          <Typography variant="h6" className={styles.subtitle}>Download Servers</Typography>
+          {renderServerList(downloadServers, 'download')}
+        </Box>
+      )}
+
+      {tabValue === 2 && (
         <Box className={styles.form}>
           <TextField
             label="Scrape URL"
@@ -119,7 +216,6 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
             onChange={(e) => setScrapeUrl(e.target.value)}
             fullWidth
             margin="normal"
-            placeholder="Enter URL to scrape"
             variant="outlined"
           />
           <TextField
@@ -140,7 +236,7 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
             color="primary"
             onClick={handleScrapeWebsite}
             disabled={loading}
-            startIcon={loading ? <CircularProgress size={24} /> : <Add />}
+            startIcon={loading ? <CircularProgress size={24} /> : <Refresh />}
             fullWidth
             className={styles.addButton}
           >
@@ -148,125 +244,7 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
           </Button>
         </Box>
       )}
-      <Box className={styles.form}>
-        <TextField
-          label="Server Name"
-          name="serverName"
-          value={newServer.serverName}
-          onChange={handleServerChange}
-          fullWidth
-          margin="normal"
-          placeholder="Enter server name"
-          variant="outlined"
-        />
-        <TextField
-          label="Quality"
-          name="quality"
-          select
-          value={newServer.quality}
-          onChange={handleServerChange}
-          fullWidth
-          margin="normal"
-          variant="outlined"
-        >
-          {predefinedQualityOptions.map((option) => (
-            <MenuItem key={option} value={option}>
-              {option}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          label="URL"
-          name="url"
-          value={newServer.url}
-          onChange={handleServerChange}
-          fullWidth
-          margin="normal"
-          placeholder="Enter server URL"
-          variant="outlined"
-          multiline
-          rows={3}
-        />
-        <TextField
-          label="Type"
-          name="type"
-          select
-          value={newServer.type}
-          onChange={handleServerChange}
-          fullWidth
-          margin="normal"
-          variant="outlined"
-        >
-          <MenuItem value="streaming">Streaming</MenuItem>
-          <MenuItem value="download">Download</MenuItem>
-        </TextField>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={addServer}
-          startIcon={<Add />}
-          fullWidth
-          className={styles.addButton}
-        >
-          Add Server
-        </Button>
-      </Box>
-      <Box className={styles.serverList}>
-        <Typography variant="h6" className={styles.subtitle}>Streaming Servers</Typography>
-        <List>
-          {streamingServers.map((server, index) => (
-            <ListItem key={index} className={styles.listItem}>
-              <ListItemText 
-                primary={
-                  <Typography variant="subtitle1">
-                    {server.serverName} 
-                    <Chip label={server.quality} size="small" color="primary" className={styles.qualityChip} />
-                  </Typography>
-                } 
-                secondary={server.url} 
-              />
-              <Tooltip title="Copy URL">
-                <IconButton edge="end" aria-label="copy" onClick={() => navigator.clipboard.writeText(server.url)}>
-                  <FileCopy />
-                </IconButton>
-              </Tooltip>
-              <IconButton edge="end" aria-label="edit" onClick={() => openEditDialogHandler(server, 'streaming', index)}>
-                <Edit />
-              </IconButton>
-              <IconButton edge="end" aria-label="delete" onClick={() => removeServer('streaming', index)}>
-                <Delete />
-              </IconButton>
-            </ListItem>
-          ))}
-        </List>
-        <Typography variant="h6" className={styles.subtitle}>Download Servers</Typography>
-        <List>
-          {downloadServers.map((server, index) => (
-            <ListItem key={index} className={styles.listItem}>
-              <ListItemText 
-                primary={
-                  <Typography variant="subtitle1">
-                    {server.serverName}
-                    <Chip label={server.quality} size="small" color="secondary" className={styles.qualityChip} />
-                  </Typography>
-                } 
-                secondary={server.url} 
-              />
-              <Tooltip title="Copy URL">
-                <IconButton edge="end" aria-label="copy" onClick={() => navigator.clipboard.writeText(server.url)}>
-                  <FileCopy />
-                </IconButton>
-              </Tooltip>
-              <IconButton edge="end" aria-label="edit" onClick={() => openEditDialogHandler(server, 'download', index)}>
-                <Edit />
-              </IconButton>
-              <IconButton edge="end" aria-label="delete" onClick={() => removeServer('download', index)}>
-                <Delete />
-              </IconButton>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
+
       <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)}>
         <DialogTitle>Edit Server</DialogTitle>
         <DialogContent>
@@ -277,7 +255,6 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
             onChange={handleEditServerChange}
             fullWidth
             margin="normal"
-            placeholder="Enter server name"
             variant="outlined"
           />
           <TextField
@@ -291,9 +268,7 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
             variant="outlined"
           >
             {predefinedQualityOptions.map((option) => (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
+              <MenuItem key={option} value={option}>{option}</MenuItem>
             ))}
           </TextField>
           <TextField
@@ -303,7 +278,6 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
             onChange={handleEditServerChange}
             fullWidth
             margin="normal"
-            placeholder="Enter server URL"
             variant="outlined"
             multiline
             rows={3}

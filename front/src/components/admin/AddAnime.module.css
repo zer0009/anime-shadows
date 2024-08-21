@@ -1,18 +1,72 @@
 /* AddAnime.module.css */
+.addAnime {
+  max-width: 800px;
+  margin: auto;
+  padding: 2rem;
+}
+
+.title {
+  margin-bottom: 2rem;
+  color: var(--text-color);
+  text-align: center;
+}
+
 .paper {
-    padding: 20px;
-    margin: 20px 0;
-  }
-  
-  .title {
-    margin-bottom: 20px;
-  }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .submitButton {
-    margin-top: 20px;
-  }
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.fetchButton {
+  margin-top: 1rem;
+}
+
+.tabContent {
+  padding: 2rem 0;
+}
+
+.submitButton {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.previewImage {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  margin-top: 1rem;
+}
+
+/* Override Material-UI styles */
+:global(.MuiTab-root) {
+  color: var(--text-color);
+}
+
+:global(.MuiTab-root.Mui-selected) {
+  color: var(--primary-color);
+}
+
+:global(.MuiTabs-indicator) {
+  background-color: var(--primary-color);
+}
+
+:global(.MuiInputLabel-root),
+:global(.MuiInputBase-root) {
+  color: var(--text-color);
+}
+
+:global(.MuiOutlinedInput-notchedOutline) {
+  border-color: var(--border-color);
+}
+
+:global(.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline) {
+  border-color: var(--primary-color);
+}
+
+:global(.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline) {
+  border-color: var(--primary-color);
+}
+
+
+:global(.MuiButton-containedPrimary:hover) {
+  background-color: var(--primary-color-dark);
+}

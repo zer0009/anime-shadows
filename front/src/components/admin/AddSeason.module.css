@@ -1,21 +1,56 @@
 .container {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  .form {
-    margin-bottom: 20px;
-  }
-  
-  .tableContainer {
-    margin-top: 20px;
-  }
-  
-  .tableContainer .MuiTableCell-root {
-    padding: 10px;
-  }
-  
-  .tableContainer .MuiIconButton-root {
-    padding: 5px;
-  }
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.title {
+  margin-bottom: 20px;
+  color: var(--text-color);
+  text-align: center;
+}
+
+.form {
+  margin-bottom: 20px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.tableContainer {
+  margin-top: 20px;
+}
+
+.tableContainer :global(.MuiTableCell-root) {
+  padding: 10px;
+}
+
+.tableContainer :global(.MuiIconButton-root) {
+  padding: 5px;
+}
+
+/* Override Material-UI styles */
+:global(.MuiInputLabel-root),
+:global(.MuiInputBase-root) {
+  color: var(--text-color);
+}
+
+:global(.MuiOutlinedInput-notchedOutline) {
+  border-color: var(--border-color);
+}
+
+:global(.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline) {
+  border-color: var(--secondary-dark);
+}
+
+:global(.MuiButton-containedPrimary) {
+  background-color: var(--secondary-dark);
+  color: var(--text-color);
+}
+
+:global(.MuiButton-containedPrimary:hover) {
+  background-color: var(--primary-color-dark);
+}

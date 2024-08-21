@@ -1,40 +1,80 @@
-/* ServerManager.module.css */
-.serverSection {
+.serverManager {
   padding: 20px;
   margin-bottom: 20px;
 }
 
 .title {
-  margin-bottom: 20px !important;
-  color: #333;
+  margin-bottom: 20px;
+  color: var(--text-color);
+  text-align: center;
 }
 
 .form {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  margin-top: 20px;
 }
 
 .addButton {
-  margin-top: 10px !important;
+  margin-top: 10px;
 }
 
 .serverList {
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 .subtitle {
-  margin-top: 20px !important;
-  margin-bottom: 10px !important;
-  color: #555;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: var(--text-color);
 }
 
 .listItem {
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
-  margin-bottom: 10px !important;
+  margin-bottom: 10px;
 }
 
 .qualityChip {
-  margin-left: 10px !important;
+  margin-left: 10px;
+}
+
+/* Override Material-UI styles */
+:global(.MuiTab-root) {
+  color: var(--text-color);
+}
+
+:global(.MuiTab-root.Mui-selected) {
+  color: var(--primary-color);
+}
+
+:global(.MuiTabs-indicator) {
+  background-color: var(--primary-color);
+}
+
+:global(.MuiInputLabel-root),
+:global(.MuiInputBase-root) {
+  color: var(--text-color);
+}
+
+:global(.MuiOutlinedInput-notchedOutline) {
+  border-color: var(--border-color);
+}
+
+:global(.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline) {
+  border-color: var(--primary-color);
+}
+
+:global(.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline) {
+  border-color: var(--primary-color);
+}
+
+:global(.MuiButton-containedPrimary) {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+:global(.MuiIconButton-root) {
+  color: white;
 }

@@ -29,30 +29,45 @@ const EditAnime = () => {
 
   useEffect(() => {
     const loadAnime = async () => {
-      const data = await fetchAnimeById(animeId);
-      setAnime(data);
-      setTitle(data.title);
-      setSubTitle(data.subTitle); // Set subTitle
-      setStudio(data.studio); // Set studio
-      setDescription(data.description); // Set description
-      setPictureUrl(data.pictureUrl);
-      setType(data.type._id); // Ensure type is set correctly
-      setGenres(data.genres.map(genre => genre._id)); // Ensure genres are in the correct format
-      setSeason(data.season._id); // Ensure season is set correctly
-      setMyAnimeListUrl(data.myAnimeListUrl);
-      setNumberOfEpisodes(data.numberOfEpisodes);
-      setSource(data.source);
-      setDuration(data.duration);
-      setStatus(data.status);
+      try {
+        const data = await fetchAnimeById(animeId);
+        console.log('data', data);
+        setAnime(data);
+        setTitle(data.title || '');
+        setSubTitle(data.subTitle || '');
+        setStudio(data.studio || '');
+        setDescription(data.description || '');
+        setPictureUrl(data.pictureUrl || '');
+        setType(data.type?._id || '');
+        setGenres(data.genres?.map(genre => genre._id) || []);
+        setSeason(data.season?._id || '');
+        setMyAnimeListUrl(data.myAnimeListUrl || '');
+        setNumberOfEpisodes(data.numberOfEpisodes || '');
+        setSource(data.source || '');
+        setDuration(data.duration || '');
+        setStatus(data.status || '');
+      } catch (error) {
+        console.error('Error loading anime:', error);
+        // Optionally, show an error message to the user
+      }
     };
+
     const loadMetadata = async () => {
-      const genresData = await fetchGenre();
-      const typesData = await fetchTypes();
-      const seasonsData = await fetchSeasons();
-      setAllGenres(genresData);
-      setAllTypes(typesData);
-      setAllSeasons(seasonsData);
+      try {
+        const [genresData, typesData, seasonsData] = await Promise.all([
+          fetchGenre(),
+          fetchTypes(),
+          fetchSeasons()
+        ]);
+        setAllGenres(genresData);
+        setAllTypes(typesData);
+        setAllSeasons(seasonsData);
+      } catch (error) {
+        console.error('Error loading metadata:', error);
+        // Optionally, show an error message to the user
+      }
     };
+
     loadAnime();
     loadMetadata();
   }, [animeId]);
