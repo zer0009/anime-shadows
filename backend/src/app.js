@@ -94,10 +94,10 @@ app.use((req, res, next) => {
 });
 
 // Set x-robots-tag header to disallow indexing for the backend
-app.use((req, res, next) => {
-  res.setHeader('X-Robots-Tag', 'noindex, nofollow');
-  next();
-});
+// app.use((req, res, next) => {
+//   res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+//   next();
+// });
 
 // Routes
 app.use('/api', routes);
