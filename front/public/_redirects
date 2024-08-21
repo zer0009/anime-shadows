@@ -3,11 +3,8 @@ http://www.animeshadows.xyz/* https://animeshadows.xyz/:splat 301!
 https://www.animeshadows.xyz/* https://animeshadows.xyz/:splat 301!
 http://animeshadows.xyz/* https://animeshadows.xyz/:splat 301!
 
-# Enforce trailing slashes (only for directories, not files)
-/*/ /:splat 301
-
 # Serve sitemap directly
 /sitemap.xml /sitemap.xml 200
 
-# Handle SPA routing
+# Handle SPA routing (this should be the last rule)
 /* /index.html 200
