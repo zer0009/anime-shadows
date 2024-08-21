@@ -32,7 +32,7 @@
     "studio": "Studio",
     "duration": "Duration",
     "rating": "Rating",
-    "favorite": "Fav",
+    "favorite": "Favorite",
     "rate": "Rate",
     "rateAnime": "Rate Anime",
     "yourRating": "Your Rating",
@@ -52,8 +52,8 @@
     "more": "More",
     "watch": "Watch",
     "download": "Download",
-    "title": "Anime Shadows",
-    "description": "Anime Shadows for watching all anime and anime movies with high quality online.",
+    "title": "Anime Shadows - Best Site for Watching and Downloading Translated Anime",
+    "description": "Anime Shadows for watching all anime and anime movies translated, with high quality online.",
     "mainHeading": "Anime Shadows - Your First Site for Watching Anime",
     "introText": "Welcome to Anime Shadows, your first destination for watching the latest and best anime. Enjoy a wide range of high-quality translated anime.",
     "morePopularAnime": "Show More Popular Anime",
@@ -89,10 +89,72 @@
     "lastViewed": "Last viewed: {{date}}",
     "episode": "Episode"
   },
-  "animeList":{
-    "breadcrumb" : "Anime List"
+  "popularAnime": {
+    "pageTitle": "Popular Anime | Anime Shadows",
+    "pageDescription": "Discover the most popular and best anime on Anime Shadows. Updated list of the most watched and popular anime.",
+    "pageKeywords": "popular anime, best anime, popular anime list, Anime Shadows",
+    "heading": "Popular Anime",
+    "description": "Discover the most popular and best anime on our site. This list includes the most popular and watched anime by our users.",
+    "listTitle": "Popular Anime List",
+    "fetchError": "Error fetching popular anime"
   },
-  "seasonAnime":{
-    "breadcrumb": "Season Anime"
+  "filteredList": {
+    "title": "{{filterType}}: {{filterName}}",
+    "description": "Explore {{filterName}} anime in the {{filterType}} category. Find the best shows and discover new favorites.",
+    "results": "Results"
+  },
+  "filterTypes": {
+    "genre": "Genre",
+    "genrePlural": "Genres",
+    "type": "Type",
+    "typePlural": "Types",
+    "season": "Season",
+    "seasonPlural": "Seasons",
+    "state": "Status",
+    "statePlural": "Statuses"
+  },
+  "common": {
+    "home": "Home",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "noResults": "No results found",
+    "genres": "Genres",
+    "types": "Types",
+    "seasons": "Seasons",
+    "states": "Statuses"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {{page}} of {{totalPages}}"
+  },
+  "search": {
+    "placeholder": "Search for anime...",
+    "button": "Search",
+    "noResults": "No results found for '{{query}}'"
+  },
+  "footer": {
+    "copyright": "All rights reserved © {{year}} Anime Shadows",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "contactUs": "Contact Us"
+  },
+  "seasonAnime": {
+    "pageTitle": "{{season}} Season Anime | Anime Shadows",
+    "pageDescription": "Discover the latest anime releases for the {{season}} season. Watch new and exciting anime on Anime Shadows.",
+    "pageKeywords": "season anime, {{season}}, new anime, Anime Shadows",
+    "breadcrumb": "Season Anime",
+    "heading": "{{season}} Season Anime",
+    "description": "Discover the latest anime releases for this season. Enjoy watching new and exciting anime.",
+    "listTitle": "Season Anime List"
+  },
+  "seasons": {
+    "winter": "Winter",
+    "spring": "Spring",
+    "summer": "Summer",
+    "fall": "Fall"
+  },
+  "animeList": {
+    "breadcrumb": "Anime List"
   }
 }
