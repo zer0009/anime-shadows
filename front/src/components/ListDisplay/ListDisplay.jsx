@@ -75,9 +75,9 @@ const ListDisplay = React.memo(({ title, list, loading, error, fields }) => {
 
     return (
         <Box className={styles.listPage}>
-            {/* <Typography variant="h4" component="h2" className={styles.pageTitle} gutterBottom>
+            <Typography variant="h4" component="h2" className={styles.pageTitle} gutterBottom>
                 {title}
-            </Typography> */}
+            </Typography>
             {loading ? renderLoading() : error ? renderError() : list.length === 0 ? renderNoItems() : renderList()}
         </Box>
     );

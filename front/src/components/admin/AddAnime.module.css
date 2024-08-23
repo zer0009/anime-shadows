@@ -36,37 +36,7 @@
   margin-top: 1rem;
 }
 
-/* Override Material-UI styles */
-:global(.MuiTab-root) {
-  color: var(--text-color);
-}
 
 :global(.MuiTab-root.Mui-selected) {
   color: var(--primary-color);
-}
-
-:global(.MuiTabs-indicator) {
-  background-color: var(--primary-color);
-}
-
-:global(.MuiInputLabel-root),
-:global(.MuiInputBase-root) {
-  color: var(--text-color);
-}
-
-:global(.MuiOutlinedInput-notchedOutline) {
-  border-color: var(--border-color);
-}
-
-:global(.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline) {
-  border-color: var(--primary-color);
-}
-
-:global(.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline) {
-  border-color: var(--primary-color);
-}
-
-
-:global(.MuiButton-containedPrimary:hover) {
-  background-color: var(--primary-color-dark);
 }

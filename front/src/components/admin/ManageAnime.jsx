@@ -18,11 +18,11 @@ const ManageAnime = () => {
 
   useEffect(() => {
     loadAnimes();
-  }, [currentPage]);
+  }, [currentPage, searchQuery]); // Add searchQuery to the dependency array
 
   const loadAnimes = async () => {
     try {
-      const { animes, totalPages } = await fetchAnime(currentPage);
+      const { animes, totalPages } = await fetchAnime(currentPage, 25, searchQuery); // Pass searchQuery to fetchAnime
       setAnimes(animes);
       setTotalPages(totalPages);
     } catch (error) {
@@ -70,10 +70,6 @@ const ManageAnime = () => {
     navigate(`/anime/${animeId}`);
   };
 
-  const filteredAnimes = animes.filter(anime => 
-    anime.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   return (
     <Paper className={styles.manageAnime}>
       <Typography variant="h6" className={styles.title}>Manage Anime</Typography>
@@ -102,7 +98,7 @@ const ManageAnime = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredAnimes.map((anime) => (
+            {animes.map((anime) => (
               <TableRow key={anime._id}>
                 <TableCell>
                   <Box display="flex" alignItems="center">

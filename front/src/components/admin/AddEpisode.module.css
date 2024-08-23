@@ -32,10 +32,6 @@
   color: var(--text-color);
 }
 
-:global(.MuiButton-containedSecondary:hover) {
-  background-color: var(--highlight-color-dark);
-}
-
 :global(.MuiTab-root) {
   color: var(--text-color);
 }

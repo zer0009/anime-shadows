@@ -72,9 +72,9 @@
 
 :global(.MuiButton-containedPrimary) {
   background-color: var(--primary-color);
-  color: white;
+  color: var(--secondary-dark);
 }
 
-:global(.MuiIconButton-root) {
-  color: white;
-}
+/* :global(.MuiIconButton-root) {
+  color: var(--secondary-dark);
+} */
