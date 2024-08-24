@@ -19,7 +19,7 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [useScrape, setUseScrape] = useState(false);
   const [scrapeUrl, setScrapeUrl] = useState('');
-  const [scraperSource, setScraperSource] = useState('witanime');
+  const [scraperSource, setScraperSource] = useState('animeluxe'); // Set default to 'animeluxe'
   const [loading, setLoading] = useState(false);
   const [tabValue, setTabValue] = useState(0);
 
@@ -78,7 +78,7 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
   const handleScrapeWebsite = async () => {
     setLoading(true);
     try {
-      const scrapeFunction = scraperSource === 'witanime' ? scrapeWitanime : scrapeAnimeLuxe;
+      const scrapeFunction = scraperSource === 'animeluxe' ? scrapeAnimeLuxe : scrapeWitanime;
       const servers = await scrapeFunction(scrapeUrl, {
         headers: {
           'Cache-Control': 'no-cache',
@@ -131,12 +131,12 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
     <Paper className={styles.serverManager}>
       <Typography variant="h6" className={styles.title}>Server Manager</Typography>
       <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)} centered>
-        <Tab label="Add Server" />
-        <Tab label="Server List" />
         <Tab label="Scrape Servers" />
+        <Tab label="Server List" />
+        <Tab label="Add Server" />
       </Tabs>
       
-      {tabValue === 0 && (
+      {tabValue === 2 && (
         <Box className={styles.form}>
           <TextField
             label="Server Name"
@@ -207,7 +207,7 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
         </Box>
       )}
 
-      {tabValue === 2 && (
+      {tabValue === 0 && (
         <Box className={styles.form}>
           <TextField
             label="Scrape URL"
@@ -228,8 +228,8 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
             margin="normal"
             variant="outlined"
           >
-            <MenuItem value="witanime">Witanime</MenuItem>
             <MenuItem value="animeluxe">AnimeLuxe</MenuItem>
+            <MenuItem value="witanime">Witanime</MenuItem>
           </TextField>
           <Button
             variant="contained"
