@@ -27,10 +27,12 @@ const MovieList = () => {
         }
     }, [currentPage, setSearchParams]);
 
+    const currentYear = new Date().getFullYear();
+
     const seoProps = useMemo(() => ({
-        title: t('movieList.title', `قائمة أفلام الأنمي ${new Date().getFullYear()} | أنمي شادوز - Anime Shadows`),
-        description: t('movieList.description', `تصفح مجموعتنا الواسعة من أفلام الأنمي لعام ${new Date().getFullYear()} على أنمي شادوز. اكتشف أفلامك المفضلة وشاهدها اونلاين بجودة عالية ومترجمة للعربية. قائمة شاملة لأحدث وأفضل أفلام الأنمي.`),
-        keywords: t('movieList.keywords', `قائمة الأفلام ${new Date().getFullYear()}, أفلام أنمي ${new Date().getFullYear()}, مشاهدة أفلام اون لاين, تحميل أفلام أنمي, Anime Shadows, أنمي شادوز, أفلام أنمي مترجمة, أفلام أنمي مدبلجة, أفلام أنمي عربي, أفلام أنمي HD, أفلام أنمي جديدة, أفلام أنمي رومانسية, أفلام أنمي أكشن, أفلام أنمي مغامرات, أفلام أنمي خيال علمي, أفلام أنمي كوميدي`),
+        title: t('movieList.title', `قائمة أفلام الأنمي ${currentYear} | أنمي شادوز - Anime Shadows`),
+        description: t('movieList.description', `أحدث أفلام الأنمي لعام ${currentYear} على أنمي شادوز. شاهد أفلامك المفضلة مترجمة بجودة عالية. اكتشف أفضل الأفلام الآن!`),
+        keywords: t('movieList.keywords', `أفلام أنمي ${currentYear}, أنمي شادوز, أفلام مترجمة, أفلام HD, أنمي جديد, رومانسي, أكشن, مغامرات, خيال علمي, كوميدي`),
         canonicalUrl: `https://animeshadows.xyz/movie-list?page=${currentPage}`,
         ogType: 'website',
         ogImage: 'https://animeshadows.xyz/anime-movies-og-image.jpg',
@@ -39,8 +41,8 @@ const MovieList = () => {
             {
                 "@context": "https://schema.org",
                 "@type": "CollectionPage",
-                "name": t('movieList.title', `قائمة أفلام الأنمي ${new Date().getFullYear()} | أنمي شادوز - Anime Shadows`),
-                "description": t('movieList.description', `تصفح مجموعتنا الواسعة من أفلام الأنمي لعام ${new Date().getFullYear()} على أنمي شادوز. اكتشف أفلامك المفضلة وشاهدها اونلاين.`),
+                "name": t('movieList.title', `قائمة أفلام الأنمي ${currentYear} | أنمي شادوز - Anime Shadows`),
+                "description": t('movieList.description', `أحدث أفلام الأنمي لعام ${currentYear} على أنمي شادوز. شاهد أفلامك المفضلة مترجمة بجودة عالية. اكتشف أفضل الأفلام الآن!`),
                 "url": `https://animeshadows.xyz/movie-list?page=${currentPage}`,
                 "inLanguage": "ar",
                 "isPartOf": {
@@ -51,7 +53,7 @@ const MovieList = () => {
                 },
                 "about": {
                     "@type": "Thing",
-                    "name": `Anime Movies ${new Date().getFullYear()}`
+                    "name": `Anime Movies ${currentYear}`
                 }
             },
             {
@@ -67,7 +69,7 @@ const MovieList = () => {
                 }))
             }
         ]
-    }), [t, currentPage, movieList]);
+    }), [t, currentPage, movieList, currentYear]);
 
     useSEO(seoProps);
 

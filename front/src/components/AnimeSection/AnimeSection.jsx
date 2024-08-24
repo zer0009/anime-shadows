@@ -40,7 +40,7 @@ const AnimeSwiper = ({ items, navigate, isMobile }) => (
     navigation={!isMobile}
     pagination={{ clickable: true }}
     scrollbar={{ draggable: true }}
-    autoplay={{ delay: 3000 }}
+    // autoplay={{ delay: 3000 }}
   >
     {items.map((item) => (
       <SwiperSlide key={item._id}>

@@ -17,13 +17,14 @@ const PopularAnime = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
+  const limit = 25; // Set the limit to 25
 
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetchPopularAnime(currentPage);
+      const response = await fetchPopularAnime('all', currentPage, limit);
       setAnimeList(response.sortedAnimes || []);
-      setTotalPages(response.totalPages);
+      setTotalPages(response.pages);
     } catch (error) {
       console.error('Error fetching popular anime:', error);
       setError(t('popularAnime.fetchError', 'Error fetching popular anime'));
@@ -98,16 +99,16 @@ const PopularAnime = () => {
       <div className={styles.popularAnimePage}>
         <Container maxWidth="lg">
           <BreadcrumbsComponent
-            links={[
-            ]}
+            links={[]}
             current={t('popularAnime.heading', 'الأنميات الشائعة')}
           />
-            <ListDisplay
-              list={animeList}
-              loading={loading}
-              error={error}
-              fields={['title', 'genre', 'rating', 'type', 'status']}
-            />
+          <ListDisplay
+            title={t('popularAnime.listTitle', 'الأنميات الشائعة')}
+            list={animeList}
+            loading={loading}
+            error={error}
+            fields={['title', 'genre', 'rating', 'type', 'status']}
+          />
 
           <Box className={styles.paginationContainer}>
             <PaginationComponent

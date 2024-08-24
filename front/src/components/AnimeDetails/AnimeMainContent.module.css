@@ -52,6 +52,15 @@
   margin-bottom: 10px;
 }
 
+.hiddenH1 {
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+  padding: 0;
+  display: inline;
+  color: inherit;
+}
+
 @media (max-width: 1024px) {
   .mainContent {
     padding: 15px;

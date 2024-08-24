@@ -17,9 +17,7 @@ const AnimeMainContent = React.memo(({ anime, handleGenreClick, getScoreDisplayP
       <Box className={styles.scoreSection}>
         <ScoreDisplay {...getScoreDisplayProps(anime)} />
       </Box>
-      <Box className={styles.titleAndScores}>
         <Typography variant="h5" className={styles.animeTitle}>{anime.title}</Typography>
-      </Box>
       <Typography variant="body1" className={styles.animeSubtitle}>{anime.description}</Typography>
       <Box className={styles.animeTags}>
         {anime.genres.map((genre) => (

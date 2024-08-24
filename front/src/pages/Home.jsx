@@ -183,7 +183,7 @@ const Home = () => {
                         425: { slidesPerView: 2 },
                         640: { slidesPerView: 3 },
                     }}
-                    autoplay={{ delay: 3000 }}
+                    // autoplay={{ delay: 3000 }}
                     pagination={{ clickable: true }}
                     scrollbar={{ draggable: true }}
                 >

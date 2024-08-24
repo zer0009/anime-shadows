@@ -120,11 +120,17 @@ const AnimeDetails = () => {
     setSnackbarOpen(false);
   };
 
+  const truncateDescription = (description, maxLength) => {
+    if (description.length <= maxLength) return description;
+    return description.substring(0, maxLength) + '...';
+  };
+
   const seoProps = useMemo(() => {
     if (!anime) return { title: 'Loading...' };
+    const description = truncateDescription(`شاهد ${anime.title} - ${anime.subTitle} اون لاين على أنمي شادوز (Anime Shadows). ${anime.description}`, 160);
     return {
       title: `جميع حلقات انمي ${anime.title} مترجمة اون لاين - AnimeShadows`,
-      description: `شاهد ${anime.title} - ${anime.subTitle} اون لاين على أنمي شادوز (Anime Shadows). ${anime.description?.substring(0, 150)}...`,
+      description,
       keywords: `أنمي 2024, ${anime.title}, ${anime.subTitle}, ${anime.genres?.map(genre => genre.name).join(', ')}, أنمي مترجم, مشاهدة أنمي, تحميل أنمي, أنمي جديد, أفضل أنمي, أنمي أون لاين, حلقات أنمي, أفلام أنمي, أنمي بدون إعلانات, أنمي بالعربي, أنمي رومانسي, أنمي أكشن, أنمي كوميدي, أنمي دراما, أنمي مغامرات, أنمي خيال علمي, أنمي فانتازيا`,
       canonicalUrl: `https://animeshadows.xyz/anime/${slug}`,
       ogType: 'video.tv_show',
@@ -176,6 +182,7 @@ const AnimeDetails = () => {
   return (
     <HelmetProvider>
       <Container maxWidth="lg" className={styles.animeDetailsContainer}>
+        <h1 className={styles.hiddenH1}>{anime.title}</h1>
         <Suspense fallback={<LoadingSpinner />}>
           {isSmallScreen ? (
             <AnimeTabs

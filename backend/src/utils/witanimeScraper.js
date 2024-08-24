@@ -7,13 +7,13 @@ const scrapeWitanime = async (pageUrl) => {
     return await scrapeWitanimeWithAxios(pageUrl);
   } catch (error) {
     console.error('Axios method failed:', error.message);
-    console.log('Trying Puppeteer as fallback...');
-    try {
-      return await scrapeWitanimeWithPuppeteer(pageUrl);
-    } catch (fallbackError) {
-      console.error('Puppeteer method also failed:', fallbackError.message);
-      throw fallbackError;
-    }
+    // console.log('Trying Puppeteer as fallback...');
+    // try {
+    //   return await scrapeWitanimeWithPuppeteer(pageUrl);
+    // } catch (fallbackError) {
+    //   console.error('Puppeteer method also failed:', fallbackError.message);
+    //   throw fallbackError;
+    // }
   }
 };
 

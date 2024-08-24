@@ -82,9 +82,9 @@ export const fetchSeasons = async () => {
     }
 };
 
-export const fetchPopularAnime = async (timeFrame="all", page = 1) => {
+export const fetchPopularAnime = async (timeFrame = "all", page = 1, limit = 25) => {
     try {
-        const response = await API.get(`/anime/popular/anime?timeFrame=${timeFrame}&page=${page}`);
+        const response = await API.get(`/anime/popular/anime?timeFrame=${timeFrame}&page=${page}&limit=${limit}`);
         return response.data;
     } catch (error) {
         console.error(`Error fetching popular anime for time frame ${timeFrame} on page ${page}:`, error);

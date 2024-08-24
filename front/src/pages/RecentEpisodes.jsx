@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, Link as RouterLink } from 'react-router-dom';
-import { Box, Typography, Grid, CircularProgress, Alert, Breadcrumbs, Container } from '@mui/material';
-import HomeIcon from '@mui/icons-material/Home';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { Box, Typography, Grid, CircularProgress, Alert, Container } from '@mui/material';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
 import useFetchRecentEpisodes from '../hooks/useFetchRecentEpisodes';
 import AnimeCard from '../components/AnimeCard/AnimeCard';
 import { HelmetProvider } from 'react-helmet-async';
-import { JsonLd } from 'react-schemaorg';
 import { useTranslation } from 'react-i18next';
 import { useSEO } from '../hooks/useSEO';
 import BreadcrumbsComponent from '../components/common/BreadcrumbsComponent';
@@ -17,7 +14,7 @@ const RecentEpisodes = () => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get('page')) || 1;
-  const { recentEpisodes, loading, error, totalPages, setCurrentPage } = useFetchRecentEpisodes(currentPage, 16);
+  const { recentEpisodes, loading, error, totalPages, setCurrentPage } = useFetchRecentEpisodes(currentPage, 25);
 
   useEffect(() => {
     setSearchParams({ page: currentPage.toString() });
