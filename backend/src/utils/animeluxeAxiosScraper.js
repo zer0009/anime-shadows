@@ -14,6 +14,9 @@ const scrapeAnimeLuxeWithAxios = async (pageUrl) => {
         'Accept-Language': 'en-US,en;q=0.9',
         'Connection': 'keep-alive',
         'Upgrade-Insecure-Requests': '1',
+        'Referer': 'https://animeluxe.org/', // Add referer header
+        'DNT': '1', // Do Not Track header
+        'Cache-Control': 'no-cache', // Cache control header
       }
     });
     console.log('Fetched data successfully');
