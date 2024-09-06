@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import axios from 'axios';
@@ -12,12 +12,16 @@ const API_URL_LOCAL = 'http://localhost:5000/api';
 
 async function fetchSitemapData() {
     try {
-        const response = await axios.get(`${API_URL}/anime/sitemap-data`);
+        const response = await axios.get(`${API_URL}/anime/sitemap-data`, { timeout: 10000 });
         return response.data;
     } catch (error) {
-        console.error('Error fetching sitemap data:', error);
+        console.error('Error fetching sitemap data:', error.message);
         return null;
     }
+}
+
+function formatDate(date) {
+    return new Date(date).toISOString();
 }
 
 async function generateSitemap() {
@@ -31,73 +35,73 @@ async function generateSitemap() {
     const { animes, genres, types } = sitemapData;
 
     const staticPages = [
-        { url: '', changefreq: 'weekly', priority: '0.8' },
-        { url: '/anime-list', changefreq: 'weekly', priority: '0.8' },
-        { url: '/movie-list', changefreq: 'weekly', priority: '0.8' },
-        { url: '/season-anime', changefreq: 'weekly', priority: '0.7' },
+        { url: '', changefreq: 'daily', priority: '1.0' },
+        { url: '/anime-list', changefreq: 'daily', priority: '0.8' },
+        { url: '/movie-list', changefreq: 'daily', priority: '0.8' },
+        { url: '/season-anime', changefreq: 'daily', priority: '0.7' },
         { url: '/search', changefreq: 'weekly', priority: '0.6' },
-        { url: '/404', changefreq: 'weekly', priority: '0.8' },
-        { url: '/offline', changefreq: 'weekly', priority: '0.8' },
+        // Remove 404 and offline pages from sitemap
     ];
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml"
-        xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     ${staticPages.map(page => `
     <url>
         <loc>${BASE_URL}${page.url}</loc>
-        <lastmod>${new Date().toISOString()}</lastmod>
+        <lastmod>${formatDate(new Date())}</lastmod>
         <changefreq>${page.changefreq}</changefreq>
         <priority>${page.priority}</priority>
     </url>`).join('')}
     ${animes.map(anime => `
     <url>
         <loc>${BASE_URL}/anime/${anime.slug}</loc>
-        <lastmod>${new Date(anime.updatedAt).toISOString()}</lastmod>
+        <lastmod>${formatDate(anime.updatedAt)}</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>`).join('')}
     ${genres.map(genre => `
     <url>
         <loc>${BASE_URL}/filter/genre/${genre.slug}</loc>
+        <lastmod>${formatDate(new Date())}</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>`).join('')}
     ${types.map(type => `
     <url>
         <loc>${BASE_URL}/filter/type/${type.slug}</loc>
+        <lastmod>${formatDate(new Date())}</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>`).join('')}
 </urlset>`;
 
     const sitemapPath = path.join(__dirname, 'public', 'sitemap.xml');
-    fs.writeFileSync(sitemapPath, sitemap);
+    await fs.writeFile(sitemapPath, sitemap);
     console.log('Sitemap generated successfully at', sitemapPath);
 }
 
-function generateRobotsTxt() {
+async function generateRobotsTxt() {
     const robotsTxt = `User-agent: *
-Allow: /
-
-Sitemap: ${BASE_URL}/sitemap.xml
-
 Disallow: /admin/
 Disallow: /private/
-Disallow: /api/`;
+Disallow: /api/
+Allow: /
+
+Sitemap: ${BASE_URL}/sitemap.xml`
+;
 
     const robotsTxtPath = path.join(__dirname, 'public', 'robots.txt');
-    fs.writeFileSync(robotsTxtPath, robotsTxt);
+    await fs.writeFile(robotsTxtPath, robotsTxt);
     console.log('robots.txt generated successfully at', robotsTxtPath);
 }
 
 async function main() {
-    await generateSitemap();
-    generateRobotsTxt();
+    try {
+        await generateSitemap();
+        await generateRobotsTxt();
+    } catch (error) {
+        console.error('An error occurred:', error);
+    }
 }
 
-main().catch(console.error);
+main();
