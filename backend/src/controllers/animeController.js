@@ -362,14 +362,6 @@ exports.getSitemapData = async (req, res) => {
       .limit(50)
       .lean();
 
-    console.log('Popular anime query result:', popularAnime);
-
-    console.log('Animes count:', animes.length);
-    console.log('Genres count:', genres.length);
-    console.log('Types count:', types.length);
-    console.log('Recent episodes count:', recentEpisodes.length);
-    console.log('Popular anime count:', popularAnime.length);
-
     res.json({
       animes: animes.map(anime => ({
         id: anime._id,

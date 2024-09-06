@@ -122,7 +122,7 @@ const getRecentlyUpdatedEpisodes = async (req, res) => {
 
         const populatedEpisodes = await Episode.populate(recentEpisodes, {
             path: 'anime',
-            select: 'title slug' // Explicitly select the slug field
+            select: 'title slug pictureUrl'
         });
 
         const filteredEpisodes = populatedEpisodes.filter(episode => episode.anime !== null);
