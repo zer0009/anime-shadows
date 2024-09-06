@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useEffect, useState } from 'react';
 import { fetchRecentEpisodes } from '../api/modules/episode'; // Import the correct function
 
-const useFetchRecentEpisodes = (initialPage = 1, initialLimit = 10) => {
+const useFetchRecentEpisodes = (initialPage = 1, initialLimit = 24) => {
     const [recentEpisodes, setRecentEpisodes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);

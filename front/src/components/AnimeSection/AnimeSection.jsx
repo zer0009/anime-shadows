@@ -34,8 +34,10 @@ const AnimeSwiper = ({ items, navigate, isMobile }) => (
       320: { slidesPerView: 1 },
       425: { slidesPerView: 2 },
       640: { slidesPerView: 3 },
-      1024: { slidesPerView: 4 },
-      1280: { slidesPerView: 5 },
+      768: { slidesPerView: 4 },
+      1024: { slidesPerView: 5 },
+      1280: { slidesPerView: 6 },
+      1536: { slidesPerView: 7 },
     }}
     navigation={!isMobile}
     pagination={{ clickable: true }}

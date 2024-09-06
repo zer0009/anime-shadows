@@ -1,7 +1,7 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, Autoplay, EffectFade } from 'swiper/modules';
-import { Box, Container, Typography, Button } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import styles from './HeroSection.module.css';
 import 'swiper/css/effect-fade';
@@ -42,9 +42,6 @@ const HeroSection = ({ heroImages, t }) => {
                     <Typography variant="body1" className={styles.introText}>
                         {t('home.introText', 'مرحبًا بك في أنمي شادوز، وجهتك الأولى لمشاهدة أحدث وأفضل الأنميات. استمتع بمجموعة واسعة من الأنميات المترجمة بجودة عالية.')}
                     </Typography>
-                    {/* <Button variant="contained" color="primary" className={styles.ctaButton}>
-                        {t('home.exploreButton', 'استكشف الأنميات')}
-                    </Button> */}
                 </Container>
             </Box>
         </Box>

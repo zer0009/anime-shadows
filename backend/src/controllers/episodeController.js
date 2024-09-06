@@ -112,22 +112,31 @@ const getRecentlyUpdatedEpisodes = async (req, res) => {
     const { page = 1, limit = 10 } = req.query;
     try {
         const recentEpisodes = await Episode.aggregate([
-            { $sort: { updatedAt: -1, _id: -1 } }, // Sort by updatedAt and then by _id in descending order
-            { $group: { _id: "$anime", latestEpisode: { $first: "$$ROOT" } } }, // Group by anime and get the latest episode
-            { $replaceRoot: { newRoot: "$latestEpisode" } }, // Replace root with the latest episode
-            { $sort: { updatedAt: -1, _id: -1 } }, // Sort again to ensure consistent order
-            { $skip: (page - 1) * limit }, // Skip for pagination
-            { $limit: parseInt(limit) } // Limit the number of results
+            { $sort: { updatedAt: -1, _id: -1 } },
+            { $group: { _id: "$anime", latestEpisode: { $first: "$$ROOT" } } },
+            { $replaceRoot: { newRoot: "$latestEpisode" } },
+            { $sort: { updatedAt: -1, _id: -1 } },
+            { $skip: (page - 1) * limit },
+            { $limit: parseInt(limit) }
         ]);
 
-        const populatedEpisodes = await Episode.populate(recentEpisodes, { path: 'anime' });
+        const populatedEpisodes = await Episode.populate(recentEpisodes, {
+            path: 'anime',
+            select: 'title slug' // Explicitly select the slug field
+        });
+
         const filteredEpisodes = populatedEpisodes.filter(episode => episode.anime !== null);
 
-        // Calculate the total number of unique animes
+        // Map the episodes to include the slug in the response
+        const episodesWithSlug = filteredEpisodes.map(episode => ({
+            ...episode,
+            animeSlug: episode.anime.slug // Add the slug to the response
+        }));
+
         const totalAnimes = await Episode.distinct('anime').then(animes => animes.length);
 
         res.status(200).json({
-            episodes: filteredEpisodes,
+            episodes: episodesWithSlug,
             totalPages: Math.ceil(totalAnimes / limit),
             currentPage: parseInt(page)
         });

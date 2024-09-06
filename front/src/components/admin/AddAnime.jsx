@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Checkbox, FormControlLabel, Select, MenuItem, InputLabel, FormControl, Box, Typography, CircularProgress, Snackbar, Grid, Paper, Tabs, Tab, Alert } from '@mui/material';
+import { TextField, Button, Checkbox, FormControlLabel, Select, MenuItem, InputLabel, FormControl, Box, Typography, CircularProgress, Snackbar, Grid, Paper, Tabs, Tab, Alert, IconButton } from '@mui/material';
+import { AddPhotoAlternate, Link as LinkIcon } from '@mui/icons-material';
 import { addAnime, scrapeAnime } from '../../api/modules/admin';
 import { fetchGenre, fetchTypes, fetchSeasons } from '../../api/modules/anime';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -337,11 +338,16 @@ const AddAnime = () => {
           id="raised-button-file"
         />
         <label htmlFor="raised-button-file">
-          <Button variant="contained" component="span">
+          <Button
+            variant="outlined"
+            component="span"
+            startIcon={<AddPhotoAlternate />}
+            className={styles.imageUploadButton}
+          >
             Upload Image
           </Button>
         </label>
-        {file && <Typography variant="body2">{file.name}</Typography>}
+        {file && <Typography variant="body2" style={{ marginTop: '0.5rem' }}>{file.name}</Typography>}
       </Grid>
       {(animeData.pictureUrl || file) && (
         <Grid item xs={12}>
@@ -356,39 +362,52 @@ const AddAnime = () => {
   );
 
   return (
-    <Box component="form" onSubmit={handleSubmit} className={styles.addAnime}>
+    <Box className={styles.addAnime}>
       <Typography variant="h4" gutterBottom className={styles.title}>Add New Anime</Typography>
 
       <Paper elevation={3} className={styles.paper}>
-        <Typography variant="h6" gutterBottom>Fetch from MyAnimeList</Typography>
-        <TextField
-          name="myAnimeListUrl"
-          label="MyAnimeList URL"
-          value={animeData.myAnimeListUrl}
-          onChange={handleInputChange}
-          fullWidth
-          margin="normal"
-        />
-        <Button 
-          onClick={handleFetchFromMAL} 
-          variant="contained" 
-          color="primary" 
-          disabled={loading}
-          className={styles.fetchButton}
-        >
-          {loading ? <CircularProgress size={24} /> : 'Fetch Data'}
-        </Button>
+        <Box className={styles.malFetch}>
+          <TextField
+            name="myAnimeListUrl"
+            label="MyAnimeList URL"
+            value={animeData.myAnimeListUrl}
+            onChange={handleInputChange}
+            fullWidth
+            margin="normal"
+            InputProps={{
+              startAdornment: (
+                <IconButton onClick={handleFetchFromMAL} disabled={loading}>
+                  <LinkIcon color="primary" />
+                </IconButton>
+              ),
+            }}
+          />
+          <Button 
+            onClick={handleFetchFromMAL} 
+            variant="contained" 
+            color="primary" 
+            disabled={loading}
+            className={styles.fetchButton}
+          >
+            {loading ? <CircularProgress size={24} /> : 'Fetch Data'}
+          </Button>
+        </Box>
       </Paper>
 
       <Paper elevation={3} className={styles.paper}>
-        <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)} centered>
+        <Tabs 
+          value={tabValue} 
+          onChange={(e, newValue) => setTabValue(newValue)} 
+          variant="fullWidth"
+          className={styles.tabs}
+        >
           <Tab label="Basic Info" />
           <Tab label="Additional Info" />
           <Tab label="Details" />
           <Tab label="Image" />
         </Tabs>
         <Box className={styles.tabContent}>
-          <Grid container spacing={2}>
+          <Grid container spacing={3}>
             {tabValue === 0 && renderBasicInfo()}
             {tabValue === 1 && renderAdditionalInfo()}
             {tabValue === 2 && renderDetailsInfo()}
@@ -403,6 +422,7 @@ const AddAnime = () => {
         color="primary" 
         disabled={loading} 
         className={styles.submitButton}
+        onClick={handleSubmit}
       >
         {loading ? <CircularProgress size={24} /> : 'Add Anime'}
       </Button>

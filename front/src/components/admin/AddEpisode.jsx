@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Typography, Button, Paper, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Alert, Grid, MenuItem, Select, FormControl, InputLabel, Tabs, Tab } from '@mui/material';
-import { Delete, Add, Edit } from '@mui/icons-material';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Typography, Button, Paper, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Alert, Grid, MenuItem, Select, FormControl, InputLabel, Tabs, Tab, IconButton, Box } from '@mui/material';
+import { Delete, Add, Edit, ArrowBack } from '@mui/icons-material';
 import { addEpisode, updateEpisode, deleteEpisode } from '../../api/modules/admin';
 import { fetchEpisodesByAnimeId } from '../../api/modules/anime';
 import ServerManager from './ServerManager';
@@ -9,6 +9,7 @@ import styles from './AddEpisode.module.css';
 
 const AddEpisode = () => {
   const { animeId: paramAnimeId } = useParams();
+  const navigate = useNavigate();
   const [animeId] = useState(paramAnimeId || '');
   const [episodeId, setEpisodeId] = useState('');
   const [title, setTitle] = useState('');
@@ -124,10 +125,19 @@ const AddEpisode = () => {
     setSnackbar({ open: true, message, severity });
   };
 
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   return (
-    <Paper className={styles.addEpisode}>
-      <Typography variant="h6" className={styles.title}>Manage Episodes</Typography>
-      <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)} centered>
+    <Paper className={styles.addEpisode} elevation={0}>
+      <Box className={styles.header}>
+        <Typography variant="h6" className={styles.title}>Manage Episodes</Typography>
+        <IconButton onClick={handleGoBack} className={styles.backButton}>
+          <ArrowBack />
+        </IconButton>
+      </Box>
+      <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)} variant="fullWidth">
         <Tab label="Add/Edit Episode" />
         <Tab label="Episode List" />
       </Tabs>
@@ -141,6 +151,7 @@ const AddEpisode = () => {
                 color="primary"
                 onClick={handleQuickAdd}
                 fullWidth
+                size="small"
               >
                 {mode === 'add' ? 'Quick Add New Episode' : 'Switch to Add Mode'}
               </Button>
@@ -151,7 +162,7 @@ const AddEpisode = () => {
                 value={number}
                 onChange={(e) => setNumber(e.target.value)}
                 fullWidth
-                margin="dense"
+                size="small"
                 placeholder="Enter episode number"
               />
             </Grid>
@@ -161,7 +172,7 @@ const AddEpisode = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 fullWidth
-                margin="dense"
+                size="small"
                 placeholder="Enter episode title"
               />
             </Grid>
@@ -174,7 +185,7 @@ const AddEpisode = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <Button type="submit" variant="contained" color="primary" fullWidth>
+              <Button type="submit" variant="contained" color="primary" fullWidth size="small">
                 {mode === 'edit' ? 'Update Episode' : 'Add Episode'}
               </Button>
             </Grid>
@@ -186,6 +197,7 @@ const AddEpisode = () => {
                   onClick={() => setOpenDeleteDialog(true)}
                   fullWidth
                   startIcon={<Delete />}
+                  size="small"
                 >
                   Delete Episode
                 </Button>
@@ -197,7 +209,7 @@ const AddEpisode = () => {
       {tabValue === 1 && (
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <FormControl fullWidth margin="normal">
+            <FormControl fullWidth size="small" margin="normal">
               <InputLabel>Select Episode to Edit</InputLabel>
               <Select
                 value={episodeId}

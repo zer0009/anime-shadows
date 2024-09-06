@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, MenuItem, Paper, Dialog, DialogActions, DialogContent, DialogTitle, Chip, Tooltip, Switch, FormControlLabel, CircularProgress, Tabs, Tab } from '@mui/material';
+import { TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, MenuItem, Paper, Dialog, DialogActions, DialogContent, DialogTitle, Chip, Tooltip, Switch, FormControlLabel, CircularProgress, Tabs, Tab, Grid } from '@mui/material';
 import { Add, Delete, Edit, FileCopy, Refresh } from '@mui/icons-material';
 import { scrapeWitanime, scrapeAnimeLuxe } from '../../api/modules/admin';
 import styles from './ServerManager.module.css';
@@ -130,118 +130,130 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
   return (
     <Paper className={styles.serverManager}>
       <Typography variant="h6" className={styles.title}>Server Manager</Typography>
-      <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)} centered>
-        <Tab label="Scrape Servers" />
-        <Tab label="Server List" />
-        <Tab label="Add Server" />
+      <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)} variant="fullWidth">
+        <Tab label="Scrape" />
+        <Tab label="Servers" />
+        <Tab label="Add" />
       </Tabs>
       
       {tabValue === 2 && (
         <Box className={styles.form}>
-          <TextField
-            label="Server Name"
-            name="serverName"
-            value={newServer.serverName}
-            onChange={handleServerChange}
-            fullWidth
-            margin="normal"
-            variant="outlined"
-          />
-          <TextField
-            label="Quality"
-            name="quality"
-            select
-            value={newServer.quality}
-            onChange={handleServerChange}
-            fullWidth
-            margin="normal"
-            variant="outlined"
-          >
-            {predefinedQualityOptions.map((option) => (
-              <MenuItem key={option} value={option}>{option}</MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            label="URL"
-            name="url"
-            value={newServer.url}
-            onChange={handleServerChange}
-            fullWidth
-            margin="normal"
-            variant="outlined"
-            multiline
-            rows={3}
-          />
-          <TextField
-            label="Type"
-            name="type"
-            select
-            value={newServer.type}
-            onChange={handleServerChange}
-            fullWidth
-            margin="normal"
-            variant="outlined"
-          >
-            <MenuItem value="streaming">Streaming</MenuItem>
-            <MenuItem value="download">Download</MenuItem>
-          </TextField>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={addServer}
-            startIcon={<Add />}
-            fullWidth
-            className={styles.addButton}
-          >
-            Add Server
-          </Button>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Server Name"
+                name="serverName"
+                value={newServer.serverName}
+                onChange={handleServerChange}
+                fullWidth
+                size="small"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Quality"
+                name="quality"
+                select
+                value={newServer.quality}
+                onChange={handleServerChange}
+                fullWidth
+                size="small"
+              >
+                {predefinedQualityOptions.map((option) => (
+                  <MenuItem key={option} value={option}>{option}</MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="URL"
+                name="url"
+                value={newServer.url}
+                onChange={handleServerChange}
+                fullWidth
+                size="small"
+                multiline
+                rows={2}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Type"
+                name="type"
+                select
+                value={newServer.type}
+                onChange={handleServerChange}
+                fullWidth
+                size="small"
+              >
+                <MenuItem value="streaming">Streaming</MenuItem>
+                <MenuItem value="download">Download</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={addServer}
+                startIcon={<Add />}
+                fullWidth
+              >
+                Add Server
+              </Button>
+            </Grid>
+          </Grid>
         </Box>
       )}
 
       {tabValue === 1 && (
         <Box className={styles.serverList}>
-          <Typography variant="h6" className={styles.subtitle}>Streaming Servers</Typography>
+          <Typography variant="subtitle1" className={styles.subtitle}>Streaming Servers</Typography>
           {renderServerList(streamingServers, 'streaming')}
-          <Typography variant="h6" className={styles.subtitle}>Download Servers</Typography>
+          <Typography variant="subtitle1" className={styles.subtitle}>Download Servers</Typography>
           {renderServerList(downloadServers, 'download')}
         </Box>
       )}
 
       {tabValue === 0 && (
         <Box className={styles.form}>
-          <TextField
-            label="Scrape URL"
-            name="scrapeUrl"
-            value={scrapeUrl}
-            onChange={(e) => setScrapeUrl(e.target.value)}
-            fullWidth
-            margin="normal"
-            variant="outlined"
-          />
-          <TextField
-            label="Scraper Source"
-            name="scraperSource"
-            select
-            value={scraperSource}
-            onChange={(e) => setScraperSource(e.target.value)}
-            fullWidth
-            margin="normal"
-            variant="outlined"
-          >
-            <MenuItem value="animeluxe">AnimeLuxe</MenuItem>
-            <MenuItem value="witanime">Witanime</MenuItem>
-          </TextField>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleScrapeWebsite}
-            disabled={loading}
-            startIcon={loading ? <CircularProgress size={24} /> : <Refresh />}
-            fullWidth
-            className={styles.addButton}
-          >
-            Scrape Servers
-          </Button>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                label="Scrape URL"
+                name="scrapeUrl"
+                value={scrapeUrl}
+                onChange={(e) => setScrapeUrl(e.target.value)}
+                fullWidth
+                size="small"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Scraper Source"
+                name="scraperSource"
+                select
+                value={scraperSource}
+                onChange={(e) => setScraperSource(e.target.value)}
+                fullWidth
+                size="small"
+              >
+                <MenuItem value="animeluxe">AnimeLuxe</MenuItem>
+                <MenuItem value="witanime">Witanime</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleScrapeWebsite}
+                disabled={loading}
+                startIcon={loading ? <CircularProgress size={20} /> : <Refresh />}
+                fullWidth
+              >
+                Scrape Servers
+              </Button>
+            </Grid>
+          </Grid>
         </Box>
       )}
 

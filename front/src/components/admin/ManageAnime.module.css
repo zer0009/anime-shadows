@@ -4,8 +4,28 @@
     object-fit: cover;
     margin-right: 10px;
     border-radius: 4px;
-  }
-  
-  .titleText {
+    transition: transform 0.3s ease;
+}
+
+.coverImage:hover {
+    transform: scale(1.1);
+}
+
+.titleText {
     font-weight: bold;
-  }
+}
+
+@media (max-width: 600px) {
+    .manageAnime {
+        padding: 10px;
+    }
+
+    .tableContainer {
+        max-height: calc(100vh - 250px);
+    }
+
+    .coverImage {
+        width: 40px;
+        height: 56px;
+    }
+}

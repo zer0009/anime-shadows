@@ -3,358 +3,1176 @@
     
     <url>
         <loc>https://animeshadows.xyz</loc>
-        <lastmod>2024-09-06T07:36:48.348Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime-list</loc>
-        <lastmod>2024-09-06T07:36:48.349Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/movie-list</loc>
-        <lastmod>2024-09-06T07:36:48.349Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/season-anime</loc>
-        <lastmod>2024-09-06T07:36:48.349Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/search</loc>
-        <lastmod>2024-09-06T07:36:48.349Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/recent-episodes</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>hourly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/popular-anime</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
     </url>
     
     <url>
         <loc>https://animeshadows.xyz/anime/tokidoki-bosotto-russia-go-de-dereru-tonari-no-alya-san</loc>
-        <lastmod>2024-09-06T07:36:49.594Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/oshi-no-ko-2nd-season</loc>
-        <lastmod>2024-09-06T07:36:49.594Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/kami-no-tou-2nd-season</loc>
-        <lastmod>2024-09-06T07:36:49.594Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/isekai-shikkaku</loc>
-        <lastmod>2024-09-06T07:36:49.594Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/maougun-saikyou-no-majutsushi-wa-ningen-datta</loc>
-        <lastmod>2024-09-06T07:36:49.594Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/fairy-tail-100-years-quest</loc>
-        <lastmod>2024-09-06T07:36:49.594Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/sousou-no-frieren</loc>
-        <lastmod>2024-09-06T07:36:49.594Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/ookami-to-koushinryou-merchant-meets-the-wise-wolf</loc>
-        <lastmod>2024-09-06T07:36:49.594Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/isekai-suicide-squad</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/hazurewaku-no-joutai-ijou-skill-de-saikyou-ni-natta-ore-ga-subete-wo-juurin-suru-made</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/giji-harem</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/shinmai-ossan-boukensha-saikyou-party-ni-shinu-hodo-kitaerarete-muteki-ni-naru</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/megami-no-cafe-terrace-2nd-season</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/spy-x-family-movie-code-white</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/kitarou-tanjou-gegege-no-nazo</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/mushoku-tensei-ii-isekai-ittara-honki-dasu-part-2</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/kimetsu-no-yaiba-hashira-geiko-hen</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/kaijuu-8-gou</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/tensei-shitara-slime-datta-ken-3rd-season</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/gimai-seikatsu</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/nierautomata-ver11a-part-2</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/rezero-kara-hajimeru-isekai-seikatsu-3rd-season</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/ore-dake-level-up-na-ken</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/kono-subarashii-sekai-ni-shukufuku-wo-3</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/jiisan-baasan-wakagaeru</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/one-piece</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/meitantei-conan</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/naze-boku-no-sekai-wo-daremo-oboeteinai-no-ka</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/katsute-mahou-shoujo-to-aku-wa-tekitai-shiteita</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/25-jigen-no-ririsa</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/yozakura-san-chi-no-daisakusen</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/tsue-to-tsurugi-no-wistoria</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/boku-no-hero-academia-7th-season</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/anime/sengoku-youko-senma-konton-hen</loc>
-        <lastmod>2024-09-06T07:36:49.595Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     
     <url>
+        <loc>https://animeshadows.xyz/episode/megami-no-cafe-terrace-2nd-season-الحلقة-10</loc>
+        <lastmod>2024-09-05</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/giji-harem-الحلقة-10</loc>
+        <lastmod>2024-09-05</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/isekai-shikkaku-الحلقة-9</loc>
+        <lastmod>2024-09-04</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/tokidoki-bosotto-russia-go-de-dereru-tonari-no-alya-san-الحلقة-10</loc>
+        <lastmod>2024-09-04</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/boku-no-hero-academia-7th-season-الحلقة-15</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/boku-no-hero-academia-7th-season-الحلقة-14</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/boku-no-hero-academia-7th-season-الحلقة-13</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/boku-no-hero-academia-7th-season-الحلقة-12</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/boku-no-hero-academia-7th-season-الحلقة-11</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/boku-no-hero-academia-7th-season-الحلقة-10</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/boku-no-hero-academia-7th-season-الحلقة-9</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/boku-no-hero-academia-7th-season-الحلقة-8</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/boku-no-hero-academia-7th-season-الحلقة-7</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/boku-no-hero-academia-7th-season-الحلقة-6</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/boku-no-hero-academia-7th-season-الحلقة-5</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/boku-no-hero-academia-7th-season-الحلقة-4</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/boku-no-hero-academia-7th-season-الحلقة-3</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/boku-no-hero-academia-7th-season-الحلقة-2</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/boku-no-hero-academia-7th-season-الحلقة-1</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/tsue-to-tsurugi-no-wistoria-الحلقة-8</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/tsue-to-tsurugi-no-wistoria-الحلقة-7</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/tsue-to-tsurugi-no-wistoria-الحلقة-6</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/tsue-to-tsurugi-no-wistoria-الحلقة-5</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/tsue-to-tsurugi-no-wistoria-الحلقة-4</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/tsue-to-tsurugi-no-wistoria-الحلقة-3</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/tsue-to-tsurugi-no-wistoria-الحلقة-2</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/tsue-to-tsurugi-no-wistoria-الحلقة-1</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-22</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-21</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-20</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-19</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-18</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-17</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-16</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-15</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-14</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-13</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-12</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-11</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-10</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-9</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-8</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-7</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-6</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-5</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-4</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-3</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-2</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/yozakura-san-chi-no-daisakusen-الحلقة-1</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/one-piece-الحلقة-1117</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/one-piece-الحلقة-1116</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/kami-no-tou-2nd-season-الحلقة-9</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/fairy-tail-100-years-quest-الحلقة-9</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/shinmai-ossan-boukensha-saikyou-party-ni-shinu-hodo-kitaerarete-muteki-ni-naru-الحلقة-9</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/ookami-to-koushinryou-merchant-meets-the-wise-wolf-الحلقة-22</loc>
+        <lastmod>2024-09-03</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/oshi-no-ko-2nd-season-الحلقة-9</loc>
+        <lastmod>2024-08-31</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/tokidoki-bosotto-russia-go-de-dereru-tonari-no-alya-san-الحلقة-9</loc>
+        <lastmod>2024-08-31</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/giji-harem-الحلقة-9</loc>
+        <lastmod>2024-08-31</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/giji-harem-الحلقة-8</loc>
+        <lastmod>2024-08-31</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/giji-harem-الحلقة-7</loc>
+        <lastmod>2024-08-31</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/megami-no-cafe-terrace-2nd-season-الحلقة-9</loc>
+        <lastmod>2024-08-31</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/tensei-shitara-slime-datta-ken-3rd-season-الحلقة-20</loc>
+        <lastmod>2024-08-31</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/hazurewaku-no-joutai-ijou-skill-de-saikyou-ni-natta-ore-ga-subete-wo-juurin-suru-made-الحلقة-8</loc>
+        <lastmod>2024-08-31</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/fairy-tail-100-years-quest-الحلقة-8</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/fairy-tail-100-years-quest-الحلقة-7</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/fairy-tail-100-years-quest-الحلقة-6</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/25-jigen-no-ririsa-الحلقة-8</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/25-jigen-no-ririsa-الحلقة-7</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/25-jigen-no-ririsa-الحلقة-6</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/25-jigen-no-ririsa-الحلقة-5</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/25-jigen-no-ririsa-الحلقة-4</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/25-jigen-no-ririsa-الحلقة-3</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/25-jigen-no-ririsa-الحلقة-2</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/25-jigen-no-ririsa-الحلقة-1</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/ookami-to-koushinryou-merchant-meets-the-wise-wolf-الحلقة-21</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/ookami-to-koushinryou-merchant-meets-the-wise-wolf-الحلقة-20</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/katsute-mahou-shoujo-to-aku-wa-tekitai-shiteita-الحلقة-8</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/katsute-mahou-shoujo-to-aku-wa-tekitai-shiteita-الحلقة-7</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/katsute-mahou-shoujo-to-aku-wa-tekitai-shiteita-الحلقة-6</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/katsute-mahou-shoujo-to-aku-wa-tekitai-shiteita-الحلقة-5</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/katsute-mahou-shoujo-to-aku-wa-tekitai-shiteita-الحلقة-4</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/katsute-mahou-shoujo-to-aku-wa-tekitai-shiteita-الحلقة-3</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/katsute-mahou-shoujo-to-aku-wa-tekitai-shiteita-الحلقة-2</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/katsute-mahou-shoujo-to-aku-wa-tekitai-shiteita-الحلقة-1</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/shinmai-ossan-boukensha-saikyou-party-ni-shinu-hodo-kitaerarete-muteki-ni-naru-الحلقة-8</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/shinmai-ossan-boukensha-saikyou-party-ni-shinu-hodo-kitaerarete-muteki-ni-naru-الحلقة-7</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/shinmai-ossan-boukensha-saikyou-party-ni-shinu-hodo-kitaerarete-muteki-ni-naru-الحلقة-6</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/isekai-shikkaku-الحلقة-8</loc>
+        <lastmod>2024-08-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/kami-no-tou-2nd-season-الحلقة-8</loc>
+        <lastmod>2024-08-25</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/naze-boku-no-sekai-wo-daremo-oboeteinai-no-ka-الحلقة-7</loc>
+        <lastmod>2024-08-25</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/naze-boku-no-sekai-wo-daremo-oboeteinai-no-ka-الحلقة-6</loc>
+        <lastmod>2024-08-25</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/naze-boku-no-sekai-wo-daremo-oboeteinai-no-ka-الحلقة-5</loc>
+        <lastmod>2024-08-25</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/naze-boku-no-sekai-wo-daremo-oboeteinai-no-ka-الحلقة-4</loc>
+        <lastmod>2024-08-25</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/naze-boku-no-sekai-wo-daremo-oboeteinai-no-ka-الحلقة-3</loc>
+        <lastmod>2024-08-25</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/naze-boku-no-sekai-wo-daremo-oboeteinai-no-ka-الحلقة-2</loc>
+        <lastmod>2024-08-25</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/naze-boku-no-sekai-wo-daremo-oboeteinai-no-ka-الحلقة-1</loc>
+        <lastmod>2024-08-25</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/tensei-shitara-slime-datta-ken-3rd-season-الحلقة-19</loc>
+        <lastmod>2024-08-24</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/nierautomata-ver11a-part-2-الحلقة-7</loc>
+        <lastmod>2024-08-24</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/kami-no-tou-2nd-season-الحلقة-7</loc>
+        <lastmod>2024-08-23</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/episode/kami-no-tou-2nd-season-الحلقة-6</loc>
+        <lastmod>2024-08-23</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://animeshadows.xyz/anime/tokidoki-bosotto-russia-go-de-dereru-tonari-no-alya-san</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/maougun-saikyou-no-majutsushi-wa-ningen-datta</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/megami-no-cafe-terrace-2nd-season</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/shinmai-ossan-boukensha-saikyou-party-ni-shinu-hodo-kitaerarete-muteki-ni-naru</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/kami-no-tou-2nd-season</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/hazurewaku-no-joutai-ijou-skill-de-saikyou-ni-natta-ore-ga-subete-wo-juurin-suru-made</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/oshi-no-ko-2nd-season</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/giji-harem</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/one-piece</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/jiisan-baasan-wakagaeru</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/isekai-suicide-squad</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/spy-x-family-movie-code-white</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/ore-dake-level-up-na-ken</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/nierautomata-ver11a-part-2</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/rezero-kara-hajimeru-isekai-seikatsu-3rd-season</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/tensei-shitara-slime-datta-ken-3rd-season</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/kimetsu-no-yaiba-hashira-geiko-hen</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/ookami-to-koushinryou-merchant-meets-the-wise-wolf</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/mushoku-tensei-ii-isekai-ittara-honki-dasu-part-2</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/kaijuu-8-gou</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/sousou-no-frieren</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/kitarou-tanjou-gegege-no-nazo</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/isekai-shikkaku</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/fairy-tail-100-years-quest</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/meitantei-conan</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/gimai-seikatsu</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/katsute-mahou-shoujo-to-aku-wa-tekitai-shiteita</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/kono-subarashii-sekai-ni-shukufuku-wo-3</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/25-jigen-no-ririsa</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/sengoku-youko-senma-konton-hen</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/yozakura-san-chi-no-daisakusen</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/naze-boku-no-sekai-wo-daremo-oboeteinai-no-ka</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/boku-no-hero-academia-7th-season</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://animeshadows.xyz/anime/tsue-to-tsurugi-no-wistoria</loc>
+        <lastmod>2024-09-06</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <url>
         <loc>https://animeshadows.xyz/filter/genre/action</loc>
-        <lastmod>2024-09-06T07:36:48.349Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/filter/genre/adventure</loc>
-        <lastmod>2024-09-06T07:36:48.349Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/filter/genre/comedy</loc>
-        <lastmod>2024-09-06T07:36:48.349Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/filter/genre/drama</loc>
-        <lastmod>2024-09-06T07:36:48.349Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/filter/genre/ecchi</loc>
-        <lastmod>2024-09-06T07:36:48.349Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/filter/genre/fantasy</loc>
-        <lastmod>2024-09-06T07:36:48.349Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/filter/genre/isekai</loc>
-        <lastmod>2024-09-06T07:36:48.349Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/filter/genre/mystery</loc>
-        <lastmod>2024-09-06T07:36:48.349Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/filter/genre/reincarnation</loc>
-        <lastmod>2024-09-06T07:36:48.349Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/filter/genre/romance</loc>
-        <lastmod>2024-09-06T07:36:48.350Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/filter/genre/school</loc>
-        <lastmod>2024-09-06T07:36:48.350Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/filter/genre/sci-fi</loc>
-        <lastmod>2024-09-06T07:36:48.350Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/filter/genre/showbiz</loc>
-        <lastmod>2024-09-06T07:36:48.350Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/filter/genre/slice-of-life</loc>
-        <lastmod>2024-09-06T07:36:48.350Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/filter/genre/super-power</loc>
-        <lastmod>2024-09-06T07:36:48.350Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/filter/genre/supernatural</loc>
-        <lastmod>2024-09-06T07:36:48.350Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     
     <url>
         <loc>https://animeshadows.xyz/filter/type/movie</loc>
-        <lastmod>2024-09-06T07:36:48.350Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/filter/type/ona</loc>
-        <lastmod>2024-09-06T07:36:48.350Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/filter/type/ova</loc>
-        <lastmod>2024-09-06T07:36:48.350Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://animeshadows.xyz/filter/type/tv</loc>
-        <lastmod>2024-09-06T07:36:48.350Z</lastmod>
+        <lastmod>2024-09-06</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>

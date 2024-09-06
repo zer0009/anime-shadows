@@ -20,7 +20,7 @@ export const fetchEpisodeById = async (episodeId) => {
     }
 };
 
-export const fetchRecentEpisodes = async (page = 1, limit = 10) => {
+export const fetchRecentEpisodes = async (page = 1, limit = 24) => {
     try {
         const response = await API.get(`/episodes/recent?page=${page}&limit=${limit}`);
         return response.data; // Ensure the correct data is returned

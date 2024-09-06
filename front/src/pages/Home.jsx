@@ -160,40 +160,40 @@ const Home = () => {
     const renderRecentEpisodes = () => {
         if (recentLoading) {
             return (
-                <Grid container spacing={2}>
-                    {[...Array(10)].map((_, index) => (
-                        <Grid item xs={6} sm={4} md={3} lg={2.4} key={index}>
-                            <Skeleton variant="rectangular" width="100%" height={200} />
-                            <Skeleton width="60%" />
-                            <Skeleton width="40%" />
-                        </Grid>
+                <div className={styles.recentAnimeGrid}>
+                    {[...Array(24)].map((_, index) => (
+                        <Skeleton key={index} variant="rectangular" className={styles.recentAnimeCard} />
                     ))}
-                </Grid>
+                </div>
             );
         }
+
+        const displayCount = isMobile ? 12 : isTablet ? 18 : 24;
+        const displayEpisodes = recentEpisodes.slice(0, displayCount);
 
         if (isMobile || isTablet) {
             return (
                 <Swiper
                     modules={[Navigation, Pagination, Scrollbar, Autoplay]}
                     spaceBetween={10}
-                    slidesPerView={isMobile ? 1 : 2}
+                    slidesPerView={isMobile ? 2 : 3}
                     breakpoints={{
-                        320: { slidesPerView: 1 },
-                        425: { slidesPerView: 2 },
-                        640: { slidesPerView: 3 },
+                        320: { slidesPerView: 2 },
+                        480: { slidesPerView: 3 },
+                        640: { slidesPerView: 4 },
                     }}
-                    // autoplay={{ delay: 3000 }}
                     pagination={{ clickable: true }}
                     scrollbar={{ draggable: true }}
+                    style={{ height: '200px' }}
                 >
-                    {recentEpisodes.map((episode) => (
+                    {displayEpisodes.map((episode) => (
                         <SwiperSlide key={episode._id}>
                             <AnimeCard
                                 anime={episode.anime}
                                 episodeTitle={episode.title}
                                 episodeId={episode._id}
                                 onClick={() => handleAnimeClick(episode.anime.slug, episode.number)}
+                                className={styles.recentAnimeCard}
                             />
                         </SwiperSlide>
                     ))}
@@ -202,18 +202,18 @@ const Home = () => {
         }
 
         return (
-            <Grid container spacing={2}>
-                {recentEpisodes.map((episode) => (
-                    <Grid item xs={12} sm={6} md={3} lg={2.4} key={episode._id}>
-                        <AnimeCard
-                            anime={episode.anime}
-                            episodeNumber={episode.number}
-                            episodeId={episode._id}
-                            onClick={() => handleAnimeClick(episode.anime.slug, episode.number)}
-                        />
-                    </Grid>
+            <div className={styles.recentAnimeGrid}>
+                {displayEpisodes.map((episode) => (
+                    <AnimeCard
+                        key={episode._id}
+                        anime={episode.anime}
+                        episodeNumber={episode.number}
+                        episodeId={episode._id}
+                        onClick={() => handleAnimeClick(episode.anime.slug, episode.number)}
+                        className={styles.recentAnimeCard}
+                    />
                 ))}
-            </Grid>
+            </div>
         );
     };
 
@@ -221,7 +221,7 @@ const Home = () => {
         <HelmetProvider>
             <Suspense fallback={<LoadingSpinner />}>
                 <HeroSection heroImages={heroImages} t={t} />
-                <Container maxWidth="lg" className={styles.mainContent}>
+                <Container maxWidth={false} className={styles.mainContent}>
                     <AnimeSection
                         title="popularAnime"
                         items={popularAnimes}

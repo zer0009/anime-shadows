@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Typography, Grid, Paper, Box, Tabs, Tab, IconButton, useMediaQuery, useTheme } from '@mui/material';
-import { Menu as MenuIcon, Add as AddIcon, Movie as MovieIcon, Category as CategoryIcon, Theaters as TheatersIcon, People as PeopleIcon } from '@mui/icons-material';
+import { Menu as MenuIcon, Add as AddIcon, Movie as MovieIcon, Category as CategoryIcon, Theaters as TheatersIcon, People as PeopleIcon, VideoLibrary as VideoLibraryIcon } from '@mui/icons-material';
+import ManageAnime from '../components/admin/ManageAnime';
 import AddAnime from '../components/admin/AddAnime';
 import AddType from '../components/admin/AddType';
 import AddGenre from '../components/admin/AddGenre';
-import ManageAnime from '../components/admin/ManageAnime';
 import AddSeason from '../components/admin/AddSeason';
 import ManageUsers from '../components/admin/ManageUsers';
 import styles from './AdminDashboard.module.css';
@@ -33,10 +33,10 @@ const AdminDashboard = () => {
   };
 
   const tabComponents = [
+    { label: 'Manage Anime', icon: <MovieIcon />, component: ManageAnime },
     { label: 'Add Anime', icon: <AddIcon />, component: AddAnime },
     { label: 'Add Type', icon: <CategoryIcon />, component: AddType },
     { label: 'Add Genre', icon: <TheatersIcon />, component: AddGenre },
-    { label: 'Manage Anime', icon: <MovieIcon />, component: ManageAnime },
     { label: 'Add Season', icon: <AddIcon />, component: AddSeason },
     ...(isAdmin ? [{ label: 'Manage Users', icon: <PeopleIcon />, component: ManageUsers }] : []),
   ];

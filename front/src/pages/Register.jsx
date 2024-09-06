@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Container, Box, IconButton, InputAdornment, Paper, Alert } from '@mui/material';
+import { TextField, Button, Typography, Container, Box, IconButton, InputAdornment, Paper, Alert, Snackbar } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -50,8 +50,8 @@ const validationSchema = yup.object({
   password: yup
     .string('Enter your password')
     .min(8, 'Password should be at least 8 characters')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, 
-      'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character')
+    .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/, 
+      'Password must contain at least one letter and one number')
     .required('Password is required'),
   confirmPassword: yup
     .string('Confirm your password')
@@ -62,6 +62,7 @@ const validationSchema = yup.object({
 const Register = () => {
   const { handleRegister, error: authError } = useAuthForm();
   const [showPassword, setShowPassword] = useState(false);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
 
   const formik = useFormik({
     initialValues: {
@@ -73,12 +74,24 @@ const Register = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       const { confirmPassword, ...registerValues } = values;
-      await handleRegister(registerValues);
+      try {
+        await handleRegister(registerValues);
+        setSnackbar({ open: true, message: 'Registration successful!', severity: 'success' });
+      } catch (error) {
+        setSnackbar({ open: true, message: error.message || 'Registration failed. Please try again.', severity: 'error' });
+      }
     },
   });
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbar({ ...snackbar, open: false });
   };
 
   return (
@@ -199,6 +212,16 @@ const Register = () => {
           </Box>
         </Box>
       </Paper>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

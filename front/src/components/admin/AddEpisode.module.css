@@ -1,62 +1,78 @@
 /* AddEpisode.module.css */
 .addEpisode {
-  padding: 20px;
-  margin: 20px 0;
-  color: var(--text-color);
+  padding: 16px;
+  margin: 16px 0;
+  color: #2c3e50;
+  background-color: #f0f4f8;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.backButton {
+  margin-right: 16px;
 }
 
 .title {
-  margin-bottom: 20px;
-  color: var(--text-color);
+  flex-grow: 1;
+  margin-bottom: 16px;
+  color: #2c3e50;
   text-align: center;
+  font-weight: 500;
 }
 
 .form {
-  margin-top: 20px;
+  margin-top: 16px;
 }
 
-/* Override Material-UI styles */
-:global(.MuiButton-containedPrimary) {
-  background-color: var(--primary-color);
-  color: var(--text-color);
+.containedPrimary {
+  background-color: #3498db;
+  color: #ffffff;
 }
 
-:global(.MuiButton-containedPrimary:hover) {
-  background-color: var(--primary-color-dark);
+.containedPrimary:hover {
+  background-color: #2980b9;
 }
 
-:global(.MuiButton-containedSecondary) {
-  background-color: var(--highlight-color);
-  color: var(--text-color);
+.containedSecondary {
+  background-color: #e74c3c;
+  color: #ffffff;
 }
 
-:global(.MuiTab-root) {
-  color: var(--text-color);
+.containedSecondary:hover {
+  background-color: #c0392b;
 }
 
-:global(.MuiTab-root.Mui-selected) {
-  color: var(--primary-color);
+.tab {
+  color: #34495e;
 }
 
-:global(.MuiTabs-indicator) {
-  background-color: var(--primary-color);
+.tabSelected {
+  color: #3498db;
 }
 
-:global(.MuiInputLabel-root),
-:global(.MuiInputBase-root) {
-  color: var(--text-color);
+.tabsIndicator {
+  background-color: #3498db;
 }
 
-:global(.MuiOutlinedInput-notchedOutline) {
-  border-color: var(--border-color);
+.inputLabel,
+.inputBase {
+  color: #2c3e50;
 }
 
-:global(.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline) {
-  border-color: var(--primary-color);
+.outlinedInput {
+  border-color: #bdc3c7;
 }
 
-:global(.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline) {
-  border-color: var(--primary-color);
+.outlinedInputHover {
+  border-color: #3498db;
+}
+
+.outlinedInputFocused {
+  border-color: #3498db;
 }

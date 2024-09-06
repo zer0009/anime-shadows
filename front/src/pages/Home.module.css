@@ -76,19 +76,47 @@
     background-color: var(--secondary-light) !important;
 }
 
+/* New styles for the recent anime grid */
+.recentAnimeGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.75rem;
+}
+
+.recentAnimeCard {
+    aspect-ratio: 3 / 4;
+    max-width: 100%;
+    height: auto;
+    max-height: 180px;
+}
+
 @media (min-width: 600px) {
-    .swiperSection,
-    .recentEpisodesSection {
-        padding: 2rem;
+    .recentAnimeGrid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     }
 
-    .sectionTitle {
-        font-size: 2rem;
+    .recentAnimeCard {
+        max-height: 200px;
+    }
+}
+
+@media (min-width: 960px) {
+    .recentAnimeGrid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     }
 
-    .moreButton {
-        padding: 10px 20px;
-        font-size: 1rem;
+    .recentAnimeCard {
+        max-height: 220px;
+    }
+}
+
+@media (min-width: 1280px) {
+    .recentAnimeGrid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+
+    .recentAnimeCard {
+        max-height: 240px;
     }
 }
 
@@ -110,6 +138,15 @@
     .moreButton {
         padding: 6px 12px;
         font-size: 0.8rem;
+    }
+
+    .recentAnimeGrid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 0.5rem;
+    }
+
+    .recentAnimeCard {
+        max-height: 160px;
     }
 }
 
