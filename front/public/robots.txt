@@ -4,4 +4,4 @@ Disallow: /private/
 Disallow: /api/
 Allow: /
 
-Sitemap: https://animeshadows.xyz/sitemap.xml
+Sitemap: https://animeshadows.xyz/sitemap_index.xml

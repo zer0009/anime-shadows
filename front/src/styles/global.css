@@ -75,7 +75,7 @@ a:hover {
   color: var(--text-color); /* Ensure text color is applied */
 }
 
-.hero-section {
+/* .hero-section {
   position: relative;
   height: 600px;
   background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 50%, var(--tertiary-dark) 100%);
@@ -84,9 +84,9 @@ a:hover {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 20px; /* Added padding */
-  color: var(--text-color); /* Ensure text color is applied */
-}
+  padding: 20px; 
+  color: var(--text-color); 
+} */
 
 .hero-overlay {
   position: absolute;
@@ -99,7 +99,7 @@ a:hover {
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: var(--text-color); /* Ensure text color is applied */
+  color: var(--text-color);
 }
 
 .hero-title {

@@ -174,7 +174,7 @@ const EpisodePage = () => {
 
   return (
     <HelmetProvider>
-      <div className={styles.episodePage} style={{ direction: i18n.language === 'ar' ? 'ltr' : 'rtl' }}>
+      <div className={`${styles.episodePage} ${i18n.language === 'ar' ? styles.rtl : styles.ltr}`}>
         {seoProps.jsonLd && <JsonLd item={seoProps.jsonLd} />}
         <Suspense fallback={<CircularProgress />}>
           <Box className={styles.mainContent}>

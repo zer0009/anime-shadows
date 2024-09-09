@@ -184,14 +184,16 @@ const Home = () => {
                     }}
                     pagination={{ clickable: true }}
                     scrollbar={{ draggable: true }}
-                    style={{ height: '200px' }}
+                    className={styles.recentEpisodesSwiper}
                 >
                     {displayEpisodes.map((episode) => (
                         <SwiperSlide key={episode._id}>
                             <AnimeCard
                                 anime={episode.anime}
                                 episodeTitle={episode.title}
+                                episodeNumber={episode.number}
                                 episodeId={episode._id}
+                                availableSubtitles={episode.availableSubtitles} // Make sure this is correct
                                 onClick={() => handleAnimeClick(episode.anime.slug, episode.number)}
                                 className={styles.recentAnimeCard}
                             />
@@ -209,6 +211,7 @@ const Home = () => {
                         anime={episode.anime}
                         episodeNumber={episode.number}
                         episodeId={episode._id}
+                        availableSubtitles={episode.availableSubtitles} // Make sure this is correct
                         onClick={() => handleAnimeClick(episode.anime.slug, episode.number)}
                         className={styles.recentAnimeCard}
                     />

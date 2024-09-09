@@ -8,6 +8,7 @@ const optionalAuth = require('../middlewares/optionalAuth');
 const { upload } = require('../middlewares/fileUpload');
 const { scrapeWitanime } = require('../utils/witanimeScraper');
 const { scrapeAnimeLuxe } = require('../utils/animeluxeScraper');
+const { scrapeGogoanime } = require('../utils/scrapeGogoanime');
 
 // Batch route should be defined before any routes that might interpret "batch" as an ID
 router.post('/batch', authMiddleware, animeController.getAnimesByIds);
@@ -21,7 +22,6 @@ router.get('/genre/:genre', animeController.getAnimeByGenre);
 router.get('/popular/anime', animeController.getPopularAnimes);
 router.get('/popular/episodes', animeController.getPopularEpisodes);
 
-
 router.get('/slug/:slug', optionalAuth, animeController.getAnimeBySlug);
 
 router.get('/myAnimeList/:animeId', animeController.getMyAnimeList);
@@ -30,7 +30,6 @@ router.get('/sitemap-data', animeController.getSitemapData);
 
 router.post('/scrape-mal', animeController.scrapeMal);
 router.post('/scrape-livechart', animeController.scrapeLivechart);
-
 
 // New Route for Scraping Witanime
 router.get('/scrape-witanime', async (req, res) => {
@@ -56,6 +55,23 @@ router.get('/scrape-animeluxe', async (req, res) => {
   } catch (error) {
     console.error('Error scraping AnimeLuxe:', error);
     res.status(500).json({ error: 'Failed to scrape AnimeLuxe' });
+  }
+});
+
+router.get('/scrape-gogoanime', async (req, res) => {
+  const { url } = req.query;
+
+  if (!url) {
+    return res.status(400).json({ error: 'URL parameter is required' });
+  }
+
+  try {
+    const result = await scrapeGogoanime(url);
+    res.setHeader('Cache-Control', 'no-store'); // Disable caching
+    res.json(result);
+  } catch (error) {
+    console.error('Error scraping Gogoanime:', error);
+    res.status(500).json({ error: 'Failed to scrape Gogoanime' });
   }
 });
 

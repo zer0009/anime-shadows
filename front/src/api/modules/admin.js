@@ -139,3 +139,9 @@ export const scrapeAnimeLuxe = async (url) => {
   const response = await API.get(`/anime/scrape-animeluxe?url=${encodeURIComponent(url)}`);
   return response.data;
 };
+
+export const scrapeGogoanime = async (url) => {
+  const response = await API.get(`/anime/scrape-gogoanime?url=${encodeURIComponent(url)}`);
+  return response.data;
+};
+

@@ -13,7 +13,9 @@ const Header = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const [authPopoverOpen, setAuthPopoverOpen] = useState(false);
+    const [langPopoverOpen, setLangPopoverOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [langAnchorEl, setLangAnchorEl] = useState(null);
     const [loading, setLoading] = useState(false);
     const menuRef = useRef(null);
     const theme = useTheme();
@@ -31,6 +33,11 @@ const Header = () => {
     const toggleAuthPopover = (event) => {
         setAnchorEl(event.currentTarget);
         setAuthPopoverOpen(!authPopoverOpen);
+    };
+
+    const toggleLangPopover = (event) => {
+        setLangAnchorEl(event.currentTarget);
+        setLangPopoverOpen(!langPopoverOpen);
     };
 
     const handleLogout = async () => {
@@ -60,7 +67,9 @@ const Header = () => {
 
     const changeLanguage = (lng) => {
         i18n.changeLanguage(lng);
+        localStorage.setItem('language', lng);
         document.documentElement.dir = lng === 'ar' ? 'rtl' : 'ltr';
+        setLangPopoverOpen(false);
     };
 
     const defaultProfilePicture = '/assets/images/default-profile-picture.jpg';
@@ -84,6 +93,39 @@ const Header = () => {
                         <IconButton component={Link} to="/search" color="inherit" aria-label={t('header.search')} sx={{ color: 'white', '&:hover': { color: 'var(--highlight-color)' } }}>
                             <Search />
                         </IconButton>
+                        <IconButton onClick={toggleLangPopover} color="inherit" sx={{ color: 'white', '&:hover': { color: 'var(--highlight-color)' } }} aria-label={t('header.changeLanguage')}>
+                            <Language />
+                        </IconButton>
+                        <Popover
+                            open={langPopoverOpen}
+                            anchorEl={langAnchorEl}
+                            onClose={() => setLangPopoverOpen(false)}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'right',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            PaperProps={{
+                                style: {
+                                    width: '150px',
+                                    backgroundColor: 'var(--primary-dark)',
+                                    color: 'white',
+                                    boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
+                                },
+                            }}
+                        >
+                            <List sx={{ p: 1 }}>
+                                <ListItem button onClick={() => changeLanguage('en')} aria-label="Change language to English">
+                                    <ListItemText primary="English" />
+                                </ListItem>
+                                <ListItem button onClick={() => changeLanguage('ar')} aria-label="Change language to Arabic">
+                                    <ListItemText primary="العربية" />
+                                </ListItem>
+                            </List>
+                        </Popover>
                         {!user ? (
                             <>
                                 <IconButton onClick={toggleAuthPopover} color="inherit" sx={{ color: 'white', '&:hover': { color: 'var(--highlight-color)' } }} aria-label={t('header.authMenu')}>
@@ -225,15 +267,6 @@ const Header = () => {
                         <ListItem button component={Link} to="/favorites" onClick={toggleMenu} aria-label={t('header.favorites')}>
                             <ListItemIcon sx={{ color: 'white' }}><Favorite /></ListItemIcon>
                             <ListItemText primary={t('header.favorites')} />
-                        </ListItem>
-                        <Divider sx={{ my: 1, borderColor: 'rgba(255, 255, 255, 0.2)' }} />
-                        <ListItem button onClick={() => changeLanguage('en')} aria-label="Change language to English">
-                            <ListItemIcon sx={{ color: 'white' }}><Language /></ListItemIcon>
-                            <ListItemText primary="English" />
-                        </ListItem>
-                        <ListItem button onClick={() => changeLanguage('ar')} aria-label="Change language to Arabic">
-                            <ListItemIcon sx={{ color: 'white' }}><Language /></ListItemIcon>
-                            <ListItemText primary="العربية" />
                         </ListItem>
                     </List>
                 </Box>

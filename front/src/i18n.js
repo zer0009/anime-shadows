@@ -12,11 +12,14 @@ const resources = {
   }
 };
 
+// Get the saved language from local storage or default to 'ar'
+const savedLanguage = localStorage.getItem('language') || 'ar';
+
 i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: 'ar', // default language
+    lng: savedLanguage, // Use saved language
     fallbackLng: 'ar',
     interpolation: {
       escapeValue: false
@@ -31,6 +34,7 @@ document.documentElement.lang = i18n.language;
 i18n.on('languageChanged', (lng) => {
   document.documentElement.dir = i18n.dir();
   document.documentElement.lang = lng;
+  localStorage.setItem('language', lng); // Save the selected language
 });
 
 export default i18n;

@@ -29,10 +29,10 @@ const AnimeSwiper = ({ items, navigate, isMobile }) => (
   <Swiper
     modules={[Navigation, Pagination, Scrollbar, Autoplay]}
     spaceBetween={10}
-    slidesPerView={1}
+    slidesPerView={2}
     breakpoints={{
-      320: { slidesPerView: 1 },
-      425: { slidesPerView: 2 },
+      320: { slidesPerView: 2, spaceBetween: 8 },
+      480: { slidesPerView: 2, spaceBetween: 10 },
       640: { slidesPerView: 3 },
       768: { slidesPerView: 4 },
       1024: { slidesPerView: 5 },
@@ -42,7 +42,6 @@ const AnimeSwiper = ({ items, navigate, isMobile }) => (
     navigation={!isMobile}
     pagination={{ clickable: true }}
     scrollbar={{ draggable: true }}
-    // autoplay={{ delay: 3000 }}
   >
     {items.map((item) => (
       <SwiperSlide key={item._id}>

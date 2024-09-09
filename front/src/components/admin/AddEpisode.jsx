@@ -33,6 +33,7 @@ const AddEpisode = () => {
   const fetchEpisodes = async () => {
     try {
       const episodesData = await fetchEpisodesByAnimeId(animeId);
+      console.log('Fetched episodes:', JSON.stringify(episodesData, null, 2));
       setAllEpisodes(episodesData);
     } catch (error) {
       console.error('Error fetching episodes:', error);
@@ -50,13 +51,17 @@ const AddEpisode = () => {
   };
 
   const handleEpisodeSelect = (selectedEpisodeId) => {
+    console.log('Selected episode ID:', selectedEpisodeId);
     const selectedEpisode = allEpisodes.find(ep => ep._id === selectedEpisodeId);
+    console.log('Selected episode:', selectedEpisode);
     if (selectedEpisode) {
       setEpisodeId(selectedEpisode._id);
       setTitle(selectedEpisode.title);
       setNumber(selectedEpisode.number);
-      setStreamingServers(selectedEpisode.streamingServers);
-      setDownloadServers(selectedEpisode.downloadServers);
+      console.log('Setting streaming servers:', selectedEpisode.streamingServers);
+      setStreamingServers(selectedEpisode.streamingServers || []);
+      console.log('Setting download servers:', selectedEpisode.downloadServers);
+      setDownloadServers(selectedEpisode.downloadServers || []);
       setMode('edit');
     } else {
       resetForm();
@@ -83,13 +88,15 @@ const AddEpisode = () => {
           serverName: server.serverName,
           type: server.type,
           quality: server.quality,
-          url: server.url
+          url: server.url,
+          subtitle: server.subtitle // Add this line
         })),
         downloadServers: downloadServers.map(server => ({
           serverName: server.serverName,
           type: server.type,
           quality: server.quality,
-          url: server.url
+          url: server.url,
+          subtitle: server.subtitle // Add this line
         }))
       };
 

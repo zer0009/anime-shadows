@@ -40,6 +40,27 @@ const scrapeWitanimeWithAxios = async (url) => {
       }
     }
 
+    // Use Puppeteer to get the actual download URLs
+    const browser = await puppeteer.launch({ headless: true });
+    const page = await browser.newPage();
+    await page.setUserAgent(getRandomUserAgent());
+    await page.goto(url, { waitUntil: 'networkidle2' });
+
+    // Wait for the download links to be available
+    await page.waitForSelector('a.download-link');
+
+    const downloadLinks = await page.evaluate(() => {
+      const linkElements = document.querySelectorAll('a.download-link');
+      return Array.from(linkElements).map(element => ({
+        linkText: element.textContent.trim(),
+        downloadUrl: element.getAttribute('href')
+      }));
+    });
+
+    servers.push(...downloadLinks);
+
+    await browser.close();
+
     console.log('Scraped servers:', servers);
     return servers;
   } catch (error) {

@@ -30,6 +30,17 @@ const getEpisodeById = async (req, res) => {
         if (!episode) {
             return res.status(404).json({ message: 'Episode not found' });
         }
+
+        // Ensure subtitle field exists for all servers
+        episode.streamingServers = episode.streamingServers.map(server => ({
+            ...server.toObject(),
+            subtitle: server.subtitle || 'AR'
+        }));
+        episode.downloadServers = episode.downloadServers.map(server => ({
+            ...server.toObject(),
+            subtitle: server.subtitle || 'AR'
+        }));
+
         res.status(200).json(episode);
     } catch (error) {
         console.error('Error fetching episode:', error);
@@ -63,8 +74,20 @@ const updateEpisode = async (req, res) => {
     try {
         const updatedEpisode = await Episode.findByIdAndUpdate(
             id,
-            { anime: animeId, number, title, streamingServers, downloadServers, updatedAt: Date.now() },
-            { new: true }
+            { 
+                anime: animeId, 
+                number, 
+                title, 
+                streamingServers: streamingServers.map(server => ({
+                    ...server,
+                    subtitle: server.subtitle || 'AR'
+                })),
+                downloadServers: downloadServers.map(server => ({
+                    ...server,
+                    subtitle: server.subtitle || 'AR'
+                }))
+            },
+            { new: true, runValidators: true }
         );
         if (!updatedEpisode) {
             return res.status(404).json({ message: 'Episode not found' });
@@ -100,7 +123,10 @@ const deleteEpisode = async (req, res) => {
 const getEpisodesByAnimeId = async (req, res) => {
     const { animeId } = req.params;
     try {
-        const episodes = await Episode.find({ anime: animeId }).sort({ number: 1 }).populate('anime');
+        const episodes = await Episode.find({ anime: animeId })
+            .sort({ number: 1 })
+            .select('number title streamingServers downloadServers anime')
+            .populate('anime', 'title slug');
         res.status(200).json(episodes);
     } catch (error) {
         console.error('Error fetching episodes:', error);
@@ -117,7 +143,17 @@ const getRecentlyUpdatedEpisodes = async (req, res) => {
             { $replaceRoot: { newRoot: "$latestEpisode" } },
             { $sort: { updatedAt: -1, _id: -1 } },
             { $skip: (page - 1) * limit },
-            { $limit: parseInt(limit) }
+            { $limit: parseInt(limit) },
+            { $project: { 
+                _id: 1, 
+                anime: 1, 
+                number: 1, 
+                title: 1, 
+                streamingServers: 1,
+                downloadServers: 1,
+                viewCount: 1, 
+                updatedAt: 1 
+            }}
         ]);
 
         const populatedEpisodes = await Episode.populate(recentEpisodes, {
@@ -127,11 +163,17 @@ const getRecentlyUpdatedEpisodes = async (req, res) => {
 
         const filteredEpisodes = populatedEpisodes.filter(episode => episode.anime !== null);
 
-        // Map the episodes to include the slug in the response
-        const episodesWithSlug = filteredEpisodes.map(episode => ({
-            ...episode,
-            animeSlug: episode.anime.slug // Add the slug to the response
-        }));
+        const episodesWithSlug = filteredEpisodes.map(episode => {
+            const subtitles = new Set();
+            episode.streamingServers.concat(episode.downloadServers).forEach(server => {
+                if (server.subtitle) subtitles.add(server.subtitle);
+            });
+            return {
+                ...episode,
+                animeSlug: episode.anime.slug,
+                availableSubtitles: Array.from(subtitles).sort()
+            };
+        });
 
         const totalAnimes = await Episode.distinct('anime').then(animes => animes.length);
 
@@ -146,17 +188,17 @@ const getRecentlyUpdatedEpisodes = async (req, res) => {
     }
 };
 
-// Update view count without modifying updatedAt
 const updateViewCount = async (req, res) => {
     const { episodeId } = req.params;
     try {
-        const episode = await Episode.findById(episodeId);
+        const episode = await Episode.findByIdAndUpdate(
+            episodeId,
+            { $inc: { viewCount: 1 }, $push: { views: Date.now() } },
+            { new: true, select: 'viewCount views', timestamps: false }
+        );
         if (!episode) {
             return res.status(404).json({ message: 'Episode not found' });
         }
-        episode.viewCount += 1;
-        episode.views.push(Date.now());
-        await episode.save({ timestamps: false }); // Disable automatic timestamp updates
         res.status(200).json(episode);
     } catch (error) {
         console.error('Error updating view count:', error);

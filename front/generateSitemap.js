@@ -120,19 +120,22 @@ async function generateSitemap() {
     )).join('')}
 </urlset>`;
 
-    const sitemapPath = path.join(__dirname, 'public', 'sitemap.xml');
+    const sitemapFileName = 'sitemap_index.xml'; // New filename
+    const sitemapPath = path.join(__dirname, 'public', sitemapFileName);
     await fs.writeFile(sitemapPath, sitemap);
     console.log('Sitemap generated successfully at', sitemapPath);
+
+    return sitemapFileName; // Return the new filename
 }
 
-async function generateRobotsTxt() {
+async function generateRobotsTxt(sitemapFileName) {
     const robotsTxt = `User-agent: *
 Disallow: /admin/
 Disallow: /private/
 Disallow: /api/
 Allow: /
 
-Sitemap: ${BASE_URL}/sitemap.xml
+Sitemap: ${BASE_URL}/${sitemapFileName}
 `;
 
     const robotsTxtPath = path.join(__dirname, 'public', 'robots.txt');
@@ -142,8 +145,8 @@ Sitemap: ${BASE_URL}/sitemap.xml
 
 async function main() {
     try {
-        await generateSitemap();
-        await generateRobotsTxt();
+        const sitemapFileName = await generateSitemap();
+        await generateRobotsTxt(sitemapFileName);
     } catch (error) {
         console.error('An error occurred:', error);
         process.exit(1); // Exit with error code

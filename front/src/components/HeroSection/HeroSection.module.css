@@ -1,8 +1,8 @@
 .heroSection {
     position: relative;
     height: 60vh;
-    min-height: 300px;
-    max-height: 600px;
+    min-height: 250px;
+    max-height: 500px;
     overflow: hidden;
     width: 100%;
 }
@@ -28,41 +28,44 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%);
+    background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%);
 }
 
 .mainHeading {
-    font-size: 3.5rem !important;
-    font-weight: 700 !important;
+    font-size: 4rem !important;
+    font-weight: 800 !important;
     margin-bottom: 0.5rem !important;
-    background: linear-gradient(to right, var(--highlight-color), var(--tertiary-dark));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    text-shadow: 0 0 5px var(--glow-color);
     line-height: 1.2 !important;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.animePart {
+    color: var(--highlight-color);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.shadowsPart {
+    color: var(--tertiary-dark);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .subHeading {
-    font-size: 1.8rem !important;
-    font-weight: 500 !important;
+    font-size: 2rem !important;
+    font-weight: 600 !important;
     margin-bottom: 1rem !important;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     line-height: 1.3 !important;
+    color: var(--text-color);
 }
 
 .introText {
-    font-size: 1rem !important;
+    font-size: 1.1rem !important;
     max-width: 800px !important;
     margin: 0 auto 1.5rem !important;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    line-height: 1.5 !important;
-}
-
-.ctaButton {
-    font-size: 1.1rem !important;
-    padding: 0.4rem 1.5rem !important;
-    text-transform: none !important;
+    line-height: 1.6 !important;
+    color: var(--subtext-color);
 }
 
 .heroSwiper {
@@ -79,16 +82,16 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center center !important;
+    object-position: center top !important; /* Changed from center center to center top */
 }
 
 @media (max-width: 1200px) {
     .heroSection {
-        height: 55vh;
+        height: 45vh;
     }
 
     .mainHeading {
-        font-size: 3rem !important;
+        font-size: 3.2rem !important;
     }
 
     .subHeading {
@@ -102,11 +105,11 @@
 
 @media (max-width: 960px) {
     .heroSection {
-        height: 50vh;
+        height: 40vh;
     }
 
     .mainHeading {
-        font-size: 2.5rem !important;
+        font-size: 2.8rem !important;
     }
 
     .subHeading {
@@ -120,33 +123,33 @@
 
 @media (max-width: 600px) {
     .heroSection {
-        height: 45vh;
+        height: 35vh;
     }
 
     .heroContent {
-        justify-content: flex-start;
-        padding-top: 1.5rem;
+        justify-content: center;
+        padding-top: 0;
     }
 
     .mainHeading {
-        font-size: 2rem !important;
-        margin-bottom: 0.3rem !important;
+        font-size: 2.2rem !important;
+        margin-bottom: 0.2rem !important;
     }
 
     .subHeading {
         font-size: 1.2rem !important;
-        margin-bottom: 0.5rem !important;
+        margin-bottom: 0.4rem !important;
     }
 
     .introText {
         font-size: 0.85rem !important;
-        margin-bottom: 0.5rem !important;
+        margin-bottom: 0.4rem !important;
     }
 }
 
 @media (max-width: 400px) {
     .heroSection {
-        height: 40vh;
+        height: 30vh;
     }
 
     .mainHeading {

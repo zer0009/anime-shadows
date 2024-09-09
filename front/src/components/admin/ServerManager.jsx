@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, MenuItem, Paper, Dialog, DialogActions, DialogContent, DialogTitle, Chip, Tooltip, Switch, FormControlLabel, CircularProgress, Tabs, Tab, Grid } from '@mui/material';
-import { Add, Delete, Edit, FileCopy, Refresh } from '@mui/icons-material';
-import { scrapeWitanime, scrapeAnimeLuxe } from '../../api/modules/admin';
+import { TextField, Button, Typography, Box, IconButton, List, ListItem, ListItemText, MenuItem, Paper, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Chip, Tooltip, Switch, FormControlLabel, CircularProgress, Tabs, Tab, Grid } from '@mui/material';
+import { Add, Delete, Edit, FileCopy, Refresh, Clear } from '@mui/icons-material';
+import { scrapeWitanime, scrapeAnimeLuxe, scrapeGogoanime } from '../../api/modules/admin';
 import styles from './ServerManager.module.css';
 
 const predefinedQualityOptions = ['SD', 'HD', 'FHD', 'multi'];
+const subtitleOptions = ['AR', 'EN', 'RAW'];
+
 const mapQuality = (quality) => {
   const lowerQuality = quality.toLowerCase();
   if (['360p', '480p'].includes(lowerQuality)) return 'SD';
@@ -13,13 +15,13 @@ const mapQuality = (quality) => {
   return quality;
 };
 
-const ServerManager = ({ streamingServers, setStreamingServers, downloadServers, setDownloadServers }) => {
-  const [newServer, setNewServer] = useState({ serverName: '', quality: '', url: '', type: 'streaming' });
+const ServerManager = ({ streamingServers = [], setStreamingServers, downloadServers = [], setDownloadServers }) => {
+  const [newServer, setNewServer] = useState({ serverName: '', quality: '', url: '', type: 'streaming', subtitle: '' });
   const [editServer, setEditServer] = useState(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
-  const [useScrape, setUseScrape] = useState(false);
+  const [openClearDialog, setOpenClearDialog] = useState(false);
   const [scrapeUrl, setScrapeUrl] = useState('');
-  const [scraperSource, setScraperSource] = useState('animeluxe'); // Set default to 'animeluxe'
+  const [scraperSource, setScraperSource] = useState('animeluxe');
   const [loading, setLoading] = useState(false);
   const [tabValue, setTabValue] = useState(0);
 
@@ -34,15 +36,15 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
   };
 
   const addServer = () => {
-    if (newServer.serverName && newServer.url) {
+    if (newServer.serverName && newServer.url && newServer.subtitle) {
       const mappedQuality = mapQuality(newServer.quality);
       const serverToAdd = { ...newServer, quality: mappedQuality };
       if (newServer.type === 'streaming') {
-        setStreamingServers([...streamingServers, serverToAdd]);
+        setStreamingServers(prev => [...prev, serverToAdd]);
       } else {
-        setDownloadServers([...downloadServers, serverToAdd]);
+        setDownloadServers(prev => [...prev, serverToAdd]);
       }
-      setNewServer({ serverName: '', quality: '', url: '', type: 'streaming' });
+      setNewServer({ serverName: '', quality: '', url: '', type: 'streaming', subtitle: '' });
     }
   };
 
@@ -78,19 +80,38 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
   const handleScrapeWebsite = async () => {
     setLoading(true);
     try {
-      const scrapeFunction = scraperSource === 'animeluxe' ? scrapeAnimeLuxe : scrapeWitanime;
+      let scrapeFunction;
+      switch (scraperSource) {
+        case 'animeluxe':
+          scrapeFunction = scrapeAnimeLuxe;
+          break;
+        case 'witanime':
+          scrapeFunction = scrapeWitanime;
+          break;
+        case 'gogoanime':
+          scrapeFunction = scrapeGogoanime;
+          break;
+        default:
+          throw new Error('Invalid scraper source');
+      }
+      
       const servers = await scrapeFunction(scrapeUrl, {
         headers: {
           'Cache-Control': 'no-cache',
           'Pragma': 'no-cache',
         }
       });
+      
+      console.log('Scraped servers:', servers);
+
       const mappedServers = servers.map(server => ({
         ...server,
-        quality: mapQuality(server.quality)
+        quality: mapQuality(server.quality),
+        subtitle: server.subtitle || 'RAW' // Set a default subtitle if not provided
       }));
-      setStreamingServers(mappedServers.filter(server => server.type === 'streaming'));
-      setDownloadServers(mappedServers.filter(server => server.type === 'download'));
+
+      setStreamingServers(prevServers => [...prevServers, ...mappedServers.filter(server => server.type === 'streaming')]);
+      setDownloadServers(prevServers => [...prevServers, ...mappedServers.filter(server => server.type === 'download')]);
     } catch (error) {
       console.error('Error scraping website:', error);
     } finally {
@@ -98,34 +119,52 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
     }
   };
 
-  const renderServerList = (servers, type) => (
-    <List>
-      {servers.map((server, index) => (
-        <ListItem key={index} className={styles.listItem}>
-          <ListItemText 
-            primary={
-              <Typography variant="subtitle1">
-                {server.serverName} 
-                <Chip label={server.quality} size="small" color={type === 'streaming' ? 'primary' : 'secondary'} className={styles.qualityChip} />
-              </Typography>
-            } 
-            secondary={server.url} 
-          />
-          <Tooltip title="Copy URL">
-            <IconButton edge="end" aria-label="copy" onClick={() => navigator.clipboard.writeText(server.url)}>
-              <FileCopy />
+  const handleClearAllServers = () => {
+    setOpenClearDialog(true);
+  };
+
+  const confirmClearAllServers = () => {
+    setStreamingServers([]);
+    setDownloadServers([]);
+    setOpenClearDialog(false);
+  };
+
+  const renderServerList = (servers, type) => {
+    console.log(`Rendering ${type} servers:`, servers);
+    if (!servers || !Array.isArray(servers) || servers.length === 0) {
+      console.log(`No ${type} servers available`);
+      return <Typography>No {type} servers available.</Typography>;
+    }
+    return (
+      <List>
+        {servers.map((server, index) => (
+          <ListItem key={index} className={styles.listItem}>
+            <ListItemText 
+              primary={
+                <Typography variant="subtitle1">
+                  {server.serverName} 
+                  <Chip label={server.quality} size="small" color={type === 'streaming' ? 'primary' : 'secondary'} className={styles.qualityChip} />
+                  <Chip label={server.subtitle} size="small" color="default" className={styles.subtitleChip} />
+                </Typography>
+              } 
+              secondary={server.url} 
+            />
+            <Tooltip title="Copy URL">
+              <IconButton edge="end" aria-label="copy" onClick={() => navigator.clipboard.writeText(server.url)}>
+                <FileCopy />
+              </IconButton>
+            </Tooltip>
+            <IconButton edge="end" aria-label="edit" onClick={() => openEditDialogHandler(server, type, index)}>
+              <Edit />
             </IconButton>
-          </Tooltip>
-          <IconButton edge="end" aria-label="edit" onClick={() => openEditDialogHandler(server, type, index)}>
-            <Edit />
-          </IconButton>
-          <IconButton edge="end" aria-label="delete" onClick={() => removeServer(type, index)}>
-            <Delete />
-          </IconButton>
-        </ListItem>
-      ))}
-    </List>
-  );
+            <IconButton edge="end" aria-label="delete" onClick={() => removeServer(type, index)}>
+              <Delete />
+            </IconButton>
+          </ListItem>
+        ))}
+      </List>
+    );
+  };
 
   return (
     <Paper className={styles.serverManager}>
@@ -191,6 +230,21 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
               </TextField>
             </Grid>
             <Grid item xs={12} sm={6}>
+              <TextField
+                label="Subtitle"
+                name="subtitle"
+                select
+                value={newServer.subtitle}
+                onChange={handleServerChange}
+                fullWidth
+                size="small"
+              >
+                {subtitleOptions.map((option) => (
+                  <MenuItem key={option} value={option}>{option}</MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid item xs={12}>
               <Button
                 variant="contained"
                 color="primary"
@@ -207,9 +261,21 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
 
       {tabValue === 1 && (
         <Box className={styles.serverList}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleClearAllServers}
+            startIcon={<Clear />}
+            fullWidth
+            style={{ marginBottom: '16px' }}
+          >
+            Clear All Servers
+          </Button>
           <Typography variant="subtitle1" className={styles.subtitle}>Streaming Servers</Typography>
+          {console.log('Streaming Servers:', streamingServers)}
           {renderServerList(streamingServers, 'streaming')}
           <Typography variant="subtitle1" className={styles.subtitle}>Download Servers</Typography>
+          {console.log('Download Servers:', downloadServers)}
           {renderServerList(downloadServers, 'download')}
         </Box>
       )}
@@ -239,6 +305,7 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
               >
                 <MenuItem value="animeluxe">AnimeLuxe</MenuItem>
                 <MenuItem value="witanime">Witanime</MenuItem>
+                <MenuItem value="gogoanime">Gogoanime</MenuItem>
               </TextField>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -307,6 +374,20 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
             <MenuItem value="streaming">Streaming</MenuItem>
             <MenuItem value="download">Download</MenuItem>
           </TextField>
+          <TextField
+            label="Subtitle"
+            name="subtitle"
+            select
+            value={editServer?.subtitle || ''}
+            onChange={handleEditServerChange}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+          >
+            {subtitleOptions.map((option) => (
+              <MenuItem key={option} value={option}>{option}</MenuItem>
+            ))}
+          </TextField>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenEditDialog(false)} color="primary">
@@ -314,6 +395,28 @@ const ServerManager = ({ streamingServers, setStreamingServers, downloadServers,
           </Button>
           <Button onClick={handleEditSubmit} color="primary" variant="contained">
             Save Changes
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openClearDialog}
+        onClose={() => setOpenClearDialog(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Clear All Servers?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to clear all servers? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenClearDialog(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={confirmClearAllServers} color="secondary" autoFocus>
+            Clear
           </Button>
         </DialogActions>
       </Dialog>

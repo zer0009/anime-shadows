@@ -31,7 +31,7 @@ const scrapeAnimeLuxeWithAxios = async (pageUrl) => {
       const encodedUrl = $(element).attr('data-url');
       const decodedUrl = atob(encodedUrl);
       console.log(`Found streaming server: ${serverName}, ${decodedUrl}, ${quality}`);
-      servers.push({ serverName, quality, url: decodedUrl, type: 'streaming' });
+      servers.push({ serverName, quality, url: decodedUrl, type: 'streaming', subtitle: 'AR' });
     });
 
     // Extract download servers
@@ -49,7 +49,7 @@ const scrapeAnimeLuxeWithAxios = async (pageUrl) => {
       }
 
       console.log(`Found download server: ${serverName}, ${decodedUrl}, ${quality}`);
-      servers.push({ serverName, quality, url: decodedUrl, type: 'download' });
+      servers.push({ serverName, quality, url: decodedUrl, type: 'download', subtitle: 'AR' });
     });
 
     console.log('Scraped servers:', servers);

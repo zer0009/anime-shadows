@@ -9,6 +9,14 @@
   box-shadow: 0 6px 12px var(--shadow-color);
 }
 
+.rtl {
+  direction: ltr;
+}
+
+.ltr {
+  direction: ltr;
+}
+
 .mainContent {
   display: flex;
   flex-direction: row;
