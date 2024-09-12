@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { fetchPopularAnime } from '../api/modules/anime';
-import ListDisplay from '../components/ListDisplay/ListDisplay';
+import AnimeCard from '../components/AnimeCard/AnimeCard';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
-import { Box, Typography, Container, Paper } from '@mui/material';
+import { Box, Typography, Container, Grid } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import { JsonLd } from 'react-schemaorg';
 import { useSEO } from '../hooks/useSEO';
@@ -17,7 +17,7 @@ const PopularAnime = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
-  const limit = 25; // Set the limit to 25
+  const limit = 36; // Increased to 36 items per page
 
   const fetchData = useCallback(async () => {
     try {
@@ -96,29 +96,41 @@ const PopularAnime = () => {
         </>
       )}
 
-      <div className={styles.popularAnimePage}>
-        <Container maxWidth="lg">
+      <Box className={styles.popularAnimePage}>
+        <Container maxWidth="xl">
           <BreadcrumbsComponent
             links={[]}
             current={t('popularAnime.heading', 'الأنميات الشائعة')}
           />
-          <ListDisplay
-            title={t('popularAnime.listTitle', 'الأنميات الشائعة')}
-            list={animeList}
-            loading={loading}
-            error={error}
-            fields={['title', 'genre', 'rating', 'type', 'status']}
-          />
+          
+          <Typography variant="h1" className={styles.pageTitle}>
+            {t('popularAnime.listTitle', 'الأنميات الشائعة')}
+          </Typography>
 
-          <Box className={styles.paginationContainer}>
-            <PaginationComponent
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
-          </Box>
+          {loading ? (
+            <Typography>{t('common.loading', 'جاري التحميل...')}</Typography>
+          ) : error ? (
+            <Typography color="error">{error}</Typography>
+          ) : (
+            <>
+              <Grid container spacing={2}>
+                {animeList.map((anime) => (
+                  <Grid item xs={6} sm={4} md={3} lg={2} xl={2} key={anime._id}>
+                    <AnimeCard anime={anime} />
+                  </Grid>
+                ))}
+              </Grid>
+              <Box className={styles.paginationContainer}>
+                <PaginationComponent
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              </Box>
+            </>
+          )}
         </Container>
-      </div>
+      </Box>
     </>
   );
 };

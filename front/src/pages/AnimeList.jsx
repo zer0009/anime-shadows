@@ -1,14 +1,15 @@
 import React, { useEffect, useCallback, useMemo } from 'react';
-import { useSearchParams, Link as RouterLink } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
-import ListDisplay from '../components/ListDisplay/ListDisplay';
+import AnimeCard from '../components/AnimeCard/AnimeCard';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
 import LoadingSpinner from '../components/common/LoadingSpinner';
-import { Box, Typography, Container } from '@mui/material';
+import { Box, Typography, Container, Grid } from '@mui/material';
 import { HelmetProvider } from 'react-helmet-async';
 import { useSEO } from '../hooks/useSEO';
 import BreadcrumbsComponent from '../components/common/BreadcrumbsComponent';
+import styles from './AnimeList.module.css';
 
 const AnimeList = () => {
   const { t } = useTranslation();
@@ -17,7 +18,7 @@ const AnimeList = () => {
   const { animeList, loading, error, totalPages, handleSearch } = useFetchAnimeList();
 
   useEffect(() => {
-    handleSearch('', [], '', '', '', '', '', false, currentPage, 25); // Ensure limit is 25
+    handleSearch('', [], '', '', '', '', '', false, currentPage, 36); // Increased to 36 items per page
   }, [currentPage, handleSearch]);
 
   const handlePageChange = useCallback((page) => {
@@ -25,10 +26,14 @@ const AnimeList = () => {
     window.scrollTo(0, 0);
   }, [setSearchParams]);
 
+  const handleAnimeClick = useCallback((slug) => {
+    window.location.href = `/anime/${slug}`;
+  }, []);
+
   const seoProps = useMemo(() => ({
-    title: t('animeList.pageTitle', "قائمة الأنمي - Anime Shadows"),
-    description: t('animeList.pageDescription', "تصفح مجموعتنا الواسعة من مسلسلات الأنمي على أنمي شادوز (Anime Shadows). اعثر على مسلسلك المفضل القادم."),
-    keywords: t('animeList.pageKeywords', "قائمة الأنمي, مسلسلات أنمي, مشاهدة أنمي اون لاين, Anime Shadows, أفضل أنمي, أنمي جديد, أنمي مترجم, تحميل أنمي, أنمي 2024"),
+    title: t('animeList.pageTitle'),
+    description: t('animeList.pageDescription'),
+    keywords: t('animeList.pageKeywords'),
     canonicalUrl: `https://animeshadows.xyz/anime-list?page=${currentPage}`,
     ogType: "website",
     ogImage: "https://animeshadows.xyz/default-og-image.jpg", // Add a default OG image
@@ -36,8 +41,8 @@ const AnimeList = () => {
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "name": t('animeList.pageTitle', "قائمة الأنمي | أنمي شادوز - Anime Shadows"),
-      "description": t('animeList.pageDescription', "تصفح مجموعتنا الواسعة من مسلسلات الأنمي على أنمي شادوز (Anime Shadows). اعثر على مسلسلك المفضل القادم."),
+      "name": t('animeList.pageTitle'),
+      "description": t('animeList.pageDescription'),
       "url": `https://animeshadows.xyz/anime-list?page=${currentPage}`,
       "inLanguage": "ar",
       "isPartOf": {
@@ -59,30 +64,36 @@ const AnimeList = () => {
 
   return (
     <HelmetProvider>
-      <Box sx={{ 
-        backgroundColor: 'var(--primary-dark)', 
-        color: 'var(--text-color)',
-        minHeight: '100vh',
-        padding: '20px 0'
-      }}>
-        <Container maxWidth="lg">
+      <Box className={styles.animeListPage}>
+        <Container maxWidth="xl">
           <BreadcrumbsComponent
             links={[]}
-            current={t('animeList.breadcrumb', 'قائمة الأنمي')}
+            current={t('animeList.breadcrumb')}
           />
           
+          <Typography variant="h1" className={styles.pageTitle}>
+            {t('animeList.listTitle')}
+          </Typography>
+
           {loading ? (
             <LoadingSpinner />
+          ) : error ? (
+            <Typography color="error" className={styles.errorMessage}>
+              {t('common.error')}
+            </Typography>
           ) : (
             <>
-              <ListDisplay
-                title={t('animeList.listTitle', 'قائمة الأنمي')}
-                list={animeList}
-                loading={loading}
-                error={error}
-                fields={['title', 'genre', 'rating']}
-              />
-              <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+              <Grid container spacing={2}>
+                {animeList.map((anime) => (
+                  <Grid item xs={6} sm={4} md={3} lg={2} key={anime._id}>
+                    <AnimeCard
+                      anime={anime}
+                      onClick={() => handleAnimeClick(anime.slug)}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+              <Box className={styles.paginationContainer}>
                 <PaginationComponent
                   currentPage={currentPage}
                   totalPages={totalPages}

@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Typography, Container, Chip, Paper, Grid, Divider } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
+import { Box, Typography, Container, Grid } from '@mui/material';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
-import ListDisplay from '../components/ListDisplay/ListDisplay';
+import AnimeCard from '../components/AnimeCard/AnimeCard';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
 import { getCurrentSeason } from '../utils/getCurrentSeason';
 import { HelmetProvider } from 'react-helmet-async';
@@ -16,12 +13,14 @@ import styles from './SeasonAnime.module.css';
 const SeasonAnime = () => {
   const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
-  const { animeList, loading, error, totalPages, handleSearch } = useFetchAnimeList();
+  const { animeList, loading, error, totalPages, handleSearch } = useFetchAnimeList(1, 36); // Increased to 36 items per page
   const currentSeason = getCurrentSeason();
   const currentYear = new Date().getFullYear();
 
+  const translatedSeason = useMemo(() => t(`seasons.${currentSeason.toLowerCase()}`), [t, currentSeason]);
+
   useEffect(() => {
-    handleSearch('', [], '', currentSeason, currentYear.toString(), '', '', false, currentPage);
+    handleSearch('', [], '', currentSeason, currentYear.toString(), '', '', false, currentPage, 36);
   }, [currentPage, currentSeason, currentYear, handleSearch]);
 
   const handlePageChange = (page) => {
@@ -29,15 +28,10 @@ const SeasonAnime = () => {
     window.scrollTo(0, 0);
   };
 
-  const seasonAnimeList = animeList.filter(anime => 
-    anime.season && 
-    anime.season.name.toLowerCase() === currentSeason.toLowerCase()
-  );
-
   const seoProps = useMemo(() => ({
-    title: t('seasonAnime.pageTitle', `أنمي موسم ${t(`seasons.${currentSeason}`, currentSeason)} ${currentYear} | أنمي شادوز`),
-    description: t('seasonAnime.pageDescription', `اكتشف أحدث إصدارات الأنمي لموسم ${t(`seasons.${currentSeason}`, currentSeason)} ${currentYear}. شاهد الأنميات الجديدة والمثيرة على أنمي شادوز. قائمة شاملة لجميع الأنميات المعروضة هذا الموسم مع تفاصيل وتصنيفات.`),
-    keywords: t('seasonAnime.pageKeywords', `ربيع, خريف, شتاء, صيف, أنمي ${currentYear}, أنمي الموسم, ${t(`seasons.${currentSeason}`, currentSeason)}, ${currentYear}, أنميات جديدة, Anime Shadows, تحميل, مترجم, انمي, حلقة, ستريم, بث مباشر, جودة عالية, HD, مترجم عربي, دبلجة عربية, بدون إعلانات, مجاناً, قائمة الأنمي, مواعيد العرض, تصنيفات الأنمي, أنمي رومانسي, أنمي أكشن, أنمي خيال علمي, أنمي كوميدي, أنمي دراما`),
+    title: t('seasonAnime.pageTitle', { season: translatedSeason, year: currentYear }),
+    description: t('seasonAnime.pageDescription', { season: translatedSeason, year: currentYear }),
+    keywords: t('seasonAnime.pageKeywords', { season: translatedSeason, year: currentYear }),
     canonicalUrl: `https://animeshadows.xyz/season-anime?page=${currentPage}`,
     ogType: "website",
     ogImage: "https://animeshadows.xyz/season-anime-og-image.jpg",
@@ -58,7 +52,7 @@ const SeasonAnime = () => {
       {
         "@context": "https://schema.org",
         "@type": "ItemList",
-        "itemListElement": seasonAnimeList.map((anime, index) => ({
+        "itemListElement": animeList.map((anime, index) => ({
           "@type": "ListItem",
           "position": index + 1,
           "item": {
@@ -77,10 +71,10 @@ const SeasonAnime = () => {
       {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": t('seasonAnime.pageTitle', `أنمي موسم ${t(`seasons.${currentSeason}`, currentSeason)} ${currentYear} | أنمي شادوز`),
-        "description": t('seasonAnime.pageDescription', `اكتشف أحدث إصدارات الأنمي لموسم ${t(`seasons.${currentSeason}`, currentSeason)} ${currentYear}. شاهد الأنميات الجديدة والمثيرة على أنمي شادوز.`),
+        "name": t('seasonAnime.heading', { season: translatedSeason, year: currentYear }),
+        "description": t('seasonAnime.description', { season: translatedSeason, year: currentYear }),
         "url": `https://animeshadows.xyz/season-anime?page=${currentPage}`,
-        "hasPart": seasonAnimeList.map(anime => ({
+        "hasPart": animeList.map(anime => ({
           "@type": "TVSeries",
           "url": `https://animeshadows.xyz/anime/${anime.slug}`,
           "name": anime.title,
@@ -109,7 +103,7 @@ const SeasonAnime = () => {
           {
             "@type": "ListItem",
             "position": 3,
-            "name": `${t(`seasons.${currentSeason}`, currentSeason)} ${currentYear}`,
+            "name": t('seasonAnime.heading', { season: translatedSeason, year: currentYear }),
             "item": `https://animeshadows.xyz/season-anime?page=${currentPage}`
           }
         ]
@@ -122,34 +116,45 @@ const SeasonAnime = () => {
     publishedTime: new Date().toISOString(),
     modifiedTime: new Date().toISOString(),
     section: 'Seasonal Anime'
-  }), [t, currentSeason, currentYear, currentPage, seasonAnimeList]);
+  }), [t, translatedSeason, currentYear, currentPage, animeList]);
 
   useSEO(seoProps);
 
   return (
     <HelmetProvider>
       <Box className={styles.seasonAnimePage}>
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <BreadcrumbsComponent
             links={[]}
             current={t('seasonAnime.breadcrumb', 'أنمي الموسم')}
           />
 
-          <ListDisplay
-            title={t('seasonAnime.listTitle', 'قائمة أنمي الموسم')}
-            list={seasonAnimeList}
-            loading={loading}
-            error={error}
-            fields={['title', 'genre', 'rating', 'type', 'status']}
-          />
+          <Typography variant="h1" className={styles.pageTitle}>
+            {t('seasonAnime.heading', { season: translatedSeason, year: currentYear })}
+          </Typography>
 
-          <Box className={styles.paginationContainer}>
-            <PaginationComponent
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
-          </Box>
+          {loading ? (
+            <Typography>{t('common.loading')}</Typography>
+          ) : error ? (
+            <Typography color="error">{t('common.error')}</Typography>
+          ) : (
+            <>
+              <Grid container spacing={2}>
+                {animeList.map((anime) => (
+                  <Grid item xs={6} sm={4} md={3} lg={2} xl={2} key={anime._id}>
+                    <AnimeCard anime={anime} />
+                  </Grid>
+                ))}
+              </Grid>
+              <Box className={styles.paginationContainer}>
+                <PaginationComponent
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              </Box>
+            </>
+          )}
         </Container>
       </Box>
     </HelmetProvider>

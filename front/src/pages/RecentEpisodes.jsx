@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams, Link as RouterLink } from 'react-router-dom';
 import { Box, Typography, Grid, CircularProgress, Alert, Container } from '@mui/material';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
@@ -14,7 +14,7 @@ const RecentEpisodes = () => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get('page')) || 1;
-  const { recentEpisodes, loading, error, totalPages, setCurrentPage } = useFetchRecentEpisodes(currentPage, 25);
+  const { recentEpisodes, loading, error, totalPages, setCurrentPage } = useFetchRecentEpisodes(currentPage, 36); // 36 items per page
 
   useEffect(() => {
     setSearchParams({ page: currentPage.toString() });
@@ -26,19 +26,24 @@ const RecentEpisodes = () => {
     window.scrollTo(0, 0);
   }, [setCurrentPage, setSearchParams]);
 
-  const seoProps = {
-    title: t('recentEpisodes.pageTitle', "Anime Shadows - الحلقات المحدثة مؤخرًا"),
-    description: t('recentEpisodes.pageDescription', "استعرض أحدث الحلقات المحدثة على أنمي شادوز (Anime Shadows)."),
-    keywords: t('recentEpisodes.pageKeywords', "الحلقات المحدثة, أنمي, مشاهدة أنمي اون لاين, Anime Shadows, أنمي شادوز"),
+  const handleAnimeClick = useCallback((slug, episodeNumber) => {
+    // Navigate to the episode page
+    window.location.href = `/anime/${slug}/episode/${episodeNumber}`;
+  }, []);
+
+  const seoProps = useMemo(() => ({
+    title: t('recentEpisodes.pageTitle'),
+    description: t('recentEpisodes.pageDescription'),
+    keywords: t('recentEpisodes.pageKeywords'),
     canonicalUrl: `https://animeshadows.xyz/recent-episodes?page=${currentPage}`,
     ogType: "website",
-    ogImage: "https://animeshadows.xyz/default-og-image.jpg", // Add a default OG image
-    twitterImage: "https://animeshadows.xyz/default-twitter-image.jpg", // Add a default Twitter image
+    ogImage: "https://animeshadows.xyz/default-og-image.jpg",
+    twitterImage: "https://animeshadows.xyz/default-twitter-image.jpg",
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "name": t('recentEpisodes.pageTitle', "Anime Shadows - الحلقات المحدثة مؤخرًا"),
-      "description": t('recentEpisodes.pageDescription', "استعرض أحدث الحلقات المحدثة على أنمي شادوز (Anime Shadows)."),
+      "name": t('recentEpisodes.pageTitle'),
+      "description": t('recentEpisodes.pageDescription'),
       "url": `https://animeshadows.xyz/recent-episodes?page=${currentPage}`,
       "inLanguage": "ar",
       "isPartOf": {
@@ -54,56 +59,51 @@ const RecentEpisodes = () => {
         "url": `https://animeshadows.xyz/episode/${episode._id}`
       }))
     }
-  };
+  }), [t, currentPage, recentEpisodes]);
 
   useSEO(seoProps);
 
   return (
     <HelmetProvider>
-      <Box sx={{ 
-        backgroundColor: 'var(--primary-dark)', 
-        color: 'var(--text-color)',
-        minHeight: '100vh',
-        padding: '20px 0'
-      }}>
-        <Container maxWidth="lg">
-          <BreadcrumbsComponent
-            links={[
-              { to: "/anime-list", label: t('common.animeList', 'قائمة الأنمي') }
-            ]}
-            current={t('recentEpisodes.breadcrumb', 'الحلقات المحدثة مؤخرًا')}
-          />
+      <Box className={styles.recentEpisodesPage}>
+        <Container maxWidth="xl">
+          <Box className={styles.breadcrumbsContainer}>
+            <BreadcrumbsComponent
+              links={[
+                { to: "/anime-list", label: t('common.animeList') }
+              ]}
+              current={t('recentEpisodes.breadcrumb')}
+            />
+          </Box>
                 
-          <Typography variant="h4" sx={{ marginBottom: '20px' }}>
-            {t('recentEpisodes.pageTitle', 'الحلقات المحدثة مؤخرًا')}
+          <Typography variant="h1" className={styles.pageTitle}>
+            {t('recentEpisodes.heading')}
           </Typography>
 
-          {loading && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          {loading ? (
+            <Box className={styles.loader}>
               <CircularProgress />
             </Box>
-          )}
-          {error && (
-            <Alert severity="error" sx={{ marginBottom: '20px' }}>
-              {error}
+          ) : error ? (
+            <Alert severity="error" className={styles.errorMessage}>
+              {t('common.error')}
             </Alert>
-          )}
-          {!loading && !error && (
+          ) : (
             <>
-              <Grid container spacing={1} className={styles.grid}>
+              <Grid container spacing={2}>
                 {Array.isArray(recentEpisodes) && recentEpisodes.map((episode) => (
-                  <Grid item xs={12} sm={6} md={4} lg={2.3} key={episode._id}>
+                  <Grid item xs={6} sm={4} md={3} lg={2} key={episode._id}>
                     <AnimeCard
                       anime={episode.anime}
                       episodeNumber={episode.number}
-                      onClick={() => {
-                        console.log(`Clicked on episode with id: ${episode.anime._id}`);
-                      }}
+                      episodeId={episode._id}
+                      availableSubtitles={episode.availableSubtitles}
+                      onClick={() => handleAnimeClick(episode.anime.slug, episode.number)}
                     />
                   </Grid>
                 ))}
               </Grid>
-              <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+              <Box className={styles.paginationContainer}>
                 <PaginationComponent
                   currentPage={currentPage}
                   totalPages={totalPages}

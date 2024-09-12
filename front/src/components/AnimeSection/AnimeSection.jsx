@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Box, Button, Grid, Skeleton } from '@mui/material';
+import { Box, Button, Grid, Skeleton, Typography } from '@mui/material';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, Autoplay } from 'swiper/modules';
 import styles from './AnimeSection.module.css';
@@ -60,7 +60,9 @@ const AnimeSection = ({ title, items, loading, navigate, t, isMobile, moreLink }
   return (
     <section aria-labelledby={`${title}-heading`} className={styles.swiperSection}>
       <div className={styles.sectionHeader}>
-        <h2 id={`${title}-heading`} className={styles.sectionTitle}>{t(`home.${title}`)}</h2>
+        <Typography variant="h2" component="h2" id={`${title}-heading`} className={styles.sectionTitle}>
+          {t(`home.${title}`)}
+        </Typography>
         <Button 
           variant="contained"
           onClick={() => navigate(moreLink)} 

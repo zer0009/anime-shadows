@@ -96,7 +96,7 @@ const scrapeAnimeLuxeWithPuppeteer = async (pageUrl) => {
         }
 
         console.log(`Found streaming server: ${serverName}, ${decodedUrl}, ${quality}`);
-        servers.push({ serverName, quality, url: decodedUrl, type: 'streaming' });
+        servers.push({ serverName, quality, url: decodedUrl, type: 'streaming', subtitle: 'AR' });
       } catch (err) {
         console.error('Error extracting streaming server:', err);
       }
@@ -118,7 +118,7 @@ const scrapeAnimeLuxeWithPuppeteer = async (pageUrl) => {
         }
 
         console.log(`Found download server: ${serverName}, ${decodedUrl}, ${quality}`);
-        servers.push({ serverName, quality, url: decodedUrl, type: 'download' });
+        servers.push({ serverName, quality, url: decodedUrl, type: 'download', subtitle: 'AR' });
       } catch (err) {
         console.error('Error extracting download server:', err);
       }

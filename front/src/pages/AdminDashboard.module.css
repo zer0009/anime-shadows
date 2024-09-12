@@ -1,58 +1,88 @@
 .adminDashboard {
   padding: 20px;
   direction: ltr;
+  background-color: var(--primary-dark);
+  color: var(--text-color);
 }
 
 .title {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   text-align: center;
-  color: var(--primary-color);
+  color: var(--highlight-color);
   direction: ltr;
 }
 
-.paper {
+.dashboardContent {
+  display: flex;
+  gap: 30px;
+  background-color: var(--secondary-dark);
+  border-radius: 8px;
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  direction: ltr;
 }
 
-.tabContent {
-  margin-top: 20px;
-  direction: ltr;
+.tabContainer {
+  flex: 0 0 200px;
+  position: relative;
 }
 
 .tabs {
-  background-color: var(--background-color);
+  background-color: var(--tertiary-dark);
+  height: 100%;
+  border-radius: 8px;
 }
 
 .tab {
   color: var(--text-color) !important;
   opacity: 0.7;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  padding: 15px 20px;
+  text-align: left;
+}
+
+.tab:hover {
+  opacity: 1;
+  background-color: var(--accent-color);
 }
 
 .tab.Mui-selected {
-  color: var(--primary-color) !important;
+  color: var(--highlight-color) !important;
   opacity: 1;
+  background-color: var(--secondary-light);
+}
+
+.tabContent {
+  flex: 1;
+  background-color: var(--background-light);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 12px var(--shadow-color);
 }
 
 .menuButton {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1;
+  display: none;
+  color: var(--text-color);
 }
 
 @media (max-width: 600px) {
+  .dashboardContent {
+    flex-direction: column;
+  }
+
+  .tabContainer {
+    flex: none;
+  }
+
   .tabs {
     display: none;
-    flex-direction: column;
+    flex-direction: row;
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
-    background-color: var(--background-color);
+    background-color: var(--tertiary-dark);
     z-index: 1;
+    box-shadow: 0 4px 12px var(--shadow-color);
   }
 
   .showTabs {
@@ -60,8 +90,16 @@
   }
 
   .tab {
-    width: 100%;
-    justify-content: flex-start;
+    flex: 1;
+    justify-content: center;
     padding: 10px;
+  }
+
+  .menuButton {
+    display: block;
+    position: absolute;
+    right: 10px;
+    top: -40px;
+    z-index: 1;
   }
 }

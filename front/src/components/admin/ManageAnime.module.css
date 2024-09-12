@@ -1,10 +1,42 @@
+.manageAnime {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background-light);
+    color: var(--text-color);
+}
+
+.sectionTitle {
+    margin-bottom: 20px;
+    color: var(--highlight-color);
+}
+
+.searchBox {
+    margin-bottom: 20px;
+}
+
+.tableContainer {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    background-color: var(--secondary-dark);
+    border-radius: 8px;
+}
+
+.tableHeader {
+    background-color: var(--tertiary-dark);
+    font-weight: bold;
+    color: var(--text-color);
+}
+
 .coverImage {
     width: 50px;
     height: 70px;
     object-fit: cover;
-    margin-right: 10px;
+    margin-right: 16px;
     border-radius: 4px;
     transition: transform 0.3s ease;
+    box-shadow: 0 2px 4px var(--shadow-color);
 }
 
 .coverImage:hover {
@@ -12,16 +44,22 @@
 }
 
 .titleText {
-    font-weight: bold;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.actionButton {
+    margin-left: 8px;
+    color: var(--subtext-color);
+}
+
+.actionButton:hover {
+    color: var(--highlight-color);
 }
 
 @media (max-width: 600px) {
-    .manageAnime {
-        padding: 10px;
-    }
-
     .tableContainer {
-        max-height: calc(100vh - 250px);
+        max-height: calc(100vh - 300px);
     }
 
     .coverImage {

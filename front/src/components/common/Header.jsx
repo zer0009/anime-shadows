@@ -74,6 +74,8 @@ const Header = () => {
 
     const defaultProfilePicture = '/assets/images/default-profile-picture.jpg';
 
+    const isAdminOrModerator = user && (user.role === 'admin' || user.role === 'moderator');
+
     return (
         <AppBar position="sticky" sx={{ background: 'linear-gradient(135deg, #1a237e 20%, #8e24aa 80%)', transition: 'all 0.3s ease' }}>
             <Toolbar>
@@ -203,7 +205,7 @@ const Header = () => {
                                             <ListItemIcon sx={{ color: 'white' }}><Favorite /></ListItemIcon>
                                             <ListItemText primary={t('header.favorites')} />
                                         </ListItem>
-                                        {user.role === 'admin' && (
+                                        {isAdminOrModerator && (
                                             <ListItem button component={Link} to="/admin-dashboard" onClick={() => setDropdownOpen(false)} aria-label={t('header.adminDashboard')}>
                                                 <ListItemIcon sx={{ color: 'white' }}><Dashboard /></ListItemIcon>
                                                 <ListItemText primary={t('header.adminDashboard')} />

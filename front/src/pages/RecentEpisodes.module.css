@@ -1,12 +1,19 @@
-.listPage {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+.recentEpisodesPage {
+    background-color: var(--primary-dark);
+    color: var(--text-color);
+    min-height: 100vh;
+    padding: 20px 0;
+}
+
+.breadcrumbsContainer {
+    margin-bottom: 20px;
 }
 
 .pageTitle {
-    margin-bottom: 20px;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
     color: var(--highlight-color);
+    font-weight: bold;
     text-align: center;
 }
 
@@ -27,10 +34,37 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Full viewport height */
+    height: 50vh;
 }
 
 .errorMessage {
     text-align: center;
     margin-top: 20px;
+}
+
+.paginationContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    padding: 20px 0;
+}
+
+@media (max-width: 600px) {
+    .recentEpisodesPage {
+        padding: 10px 0;
+    }
+
+    .breadcrumbsContainer {
+        margin-bottom: 10px;
+    }
+
+    .pageTitle {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    .paginationContainer {
+        margin-top: 20px;
+        padding: 10px 0;
+    }
 }

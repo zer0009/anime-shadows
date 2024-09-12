@@ -37,6 +37,7 @@ const useFetchAnimeList = (initialPage = 1, initialLimit = 25) => {
             setLoading(true);
             const response = await fetchAnime(page, limit, query, tags, type, season, sort, popular, state, broadMatches);
             const data = Array.isArray(response.animes) ? response.animes : [];
+            setAnimeList(data); // Change this line
             setSearchResults(data);
             setTotalPages(response.totalPages);
             setCurrentPage(page);

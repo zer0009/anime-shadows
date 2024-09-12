@@ -1,20 +1,43 @@
-.animeList {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 20px;
+.animeListPage {
     background-color: var(--primary-dark);
     color: var(--text-color);
+    min-height: 100vh;
+    padding: 40px 0;
 }
 
-.loading {
-    text-align: center;
-    font-size: 24px;
+.pageTitle {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
     color: var(--highlight-color);
+    font-weight: bold;
+    text-align: center;
 }
 
-.error {
+.errorMessage {
     text-align: center;
-    font-size: 24px;
-    color: var(--error-color);
+    font-size: 1.2rem;
+    margin-top: 20px;
+}
+
+.paginationContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    padding: 20px 0;
+}
+
+@media (max-width: 600px) {
+    .animeListPage {
+        padding: 20px 0;
+    }
+
+    .pageTitle {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    .paginationContainer {
+        margin-top: 20px;
+        padding: 10px 0;
+    }
 }

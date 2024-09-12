@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, Grid, Paper, Box, Tabs, Tab, IconButton, useMediaQuery, useTheme } from '@mui/material';
-import { Menu as MenuIcon, Add as AddIcon, Movie as MovieIcon, Category as CategoryIcon, Theaters as TheatersIcon, People as PeopleIcon, VideoLibrary as VideoLibraryIcon } from '@mui/icons-material';
+import { Container, Typography, Box, Tabs, Tab, IconButton, useMediaQuery, useTheme } from '@mui/material';
+import { Menu as MenuIcon, Add as AddIcon, Movie as MovieIcon, Category as CategoryIcon, Theaters as TheatersIcon, People as PeopleIcon } from '@mui/icons-material';
 import ManageAnime from '../components/admin/ManageAnime';
 import AddAnime from '../components/admin/AddAnime';
 import AddType from '../components/admin/AddType';
@@ -47,42 +47,41 @@ const AdminDashboard = () => {
   };
 
   return (
-    <Container className={styles.adminDashboard}>
+    <Container maxWidth="xl" className={styles.adminDashboard}>
       <Typography variant="h4" className={styles.title}>Admin Dashboard</Typography>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', position: 'relative' }}>
-        {isMobile && (
-          <IconButton onClick={toggleMenu} className={styles.menuButton}>
-            <MenuIcon />
-          </IconButton>
-        )}
-        <Tabs
-          value={tabIndex}
-          onChange={handleTabChange}
-          aria-label="admin dashboard tabs"
-          textColor="primary"
-          indicatorColor="primary"
-          variant={isMobile ? 'scrollable' : 'standard'}
-          scrollButtons="auto"
-          className={`${styles.tabs} ${isMobile && menuOpen ? styles.showTabs : ''}`}
-        >
-          {tabComponents.map((tab, index) => (
-            <Tab
-              key={index}
-              label={isMobile ? '' : tab.label}
-              icon={tab.icon}
-              iconPosition="start"
-              className={styles.tab}
-            />
-          ))}
-        </Tabs>
+      <Box className={styles.dashboardContent}>
+        <Box className={styles.tabContainer}>
+          {isMobile && (
+            <IconButton onClick={toggleMenu} className={styles.menuButton}>
+              <MenuIcon />
+            </IconButton>
+          )}
+          <Tabs
+            orientation={isMobile ? "horizontal" : "vertical"}
+            value={tabIndex}
+            onChange={handleTabChange}
+            aria-label="admin dashboard tabs"
+            textColor="primary"
+            indicatorColor="primary"
+            variant={isMobile ? 'scrollable' : 'standard'}
+            scrollButtons="auto"
+            className={`${styles.tabs} ${isMobile && menuOpen ? styles.showTabs : ''}`}
+          >
+            {tabComponents.map((tab, index) => (
+              <Tab
+                key={index}
+                label={isMobile ? '' : tab.label}
+                icon={tab.icon}
+                iconPosition="start"
+                className={styles.tab}
+              />
+            ))}
+          </Tabs>
+        </Box>
+        <Box className={styles.tabContent}>
+          {renderComponent()}
+        </Box>
       </Box>
-      <Grid container spacing={3} className={styles.tabContent}>
-        <Grid item xs={12}>
-          <Paper className={styles.paper}>
-            {renderComponent()}
-          </Paper>
-        </Grid>
-      </Grid>
     </Container>
   );
 };

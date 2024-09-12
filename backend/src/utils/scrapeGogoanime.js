@@ -48,7 +48,7 @@ const scrapeGogoanime = async (url) => {
 
     // Return an array with a single server object to match the expected format
     return [{
-      serverName: 'Gogoanime',
+      serverName: 'English Servers',
       quality: '720p',
       url: videoUrl,
       type: 'streaming',

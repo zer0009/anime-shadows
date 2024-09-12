@@ -116,7 +116,7 @@
   "common": {
     "home": "Home",
     "loading": "Loading...",
-    "error": "An error occurred",
+    "error": "An error occurred. Please try again.",
     "noResults": "No results found",
     "genres": "Genres",
     "types": "Types",
@@ -134,10 +134,14 @@
     "noResults": "No results found for '{{query}}'"
   },
   "footer": {
-    "copyright": "All rights reserved © {{year}} Anime Shadows",
     "termsOfService": "Terms of Service",
     "privacyPolicy": "Privacy Policy",
-    "contactUs": "Contact Us"
+    "contactUs": "Contact Us",
+    "disclaimer": "Anime Shadows does not store any files on our server. We only link to the media which is hosted on 3rd party services. Anime Shadows is not responsible for any content hosted on third party websites. All content is provided by third-party sources and Anime Shadows has no affiliation with them.",
+    "copyright": "© {{year}} Anime Shadows. All rights reserved.",
+    "animeList": "Anime List",
+    "movieList": "Movie List",
+    "recentEpisodes": "Recent Episodes"
   },
   "seasonAnime": {
     "pageTitle": "{{season}} Season Anime | Anime Shadows",
@@ -155,6 +159,24 @@
     "fall": "Fall"
   },
   "animeList": {
-    "breadcrumb": "Anime List"
+    "pageTitle": "Anime List | Anime Shadows",
+    "pageDescription": "Browse our extensive collection of anime series on Anime Shadows. Find your next favorite series.",
+    "pageKeywords": "anime list, anime series, watch anime online, Anime Shadows, best anime, new anime, translated anime, download anime, anime 2024",
+    "breadcrumb": "Anime List",
+    "listTitle": "Anime List"
+  },
+  "movieList": {
+    "title": "Anime Movies List {{year}} | Anime Shadows",
+    "description": "Latest anime movies of {{year}} on Anime Shadows. Watch your favorite movies translated in high quality. Discover the best movies now!",
+    "keywords": "Anime movies {{year}}, Anime Shadows, translated movies, HD movies, new anime, romance, action, adventure, sci-fi, comedy",
+    "breadcrumb": "Movie List",
+    "listTitle": "Anime Movies List"
+  },
+  "recentEpisodes": {
+    "pageTitle": "Recently Updated Episodes | Anime Shadows",
+    "pageDescription": "Browse the latest updated episodes on Anime Shadows.",
+    "pageKeywords": "updated episodes, anime, watch anime online, Anime Shadows",
+    "breadcrumb": "Recently Updated Episodes",
+    "heading": "Recently Updated Episodes"
   }
 }

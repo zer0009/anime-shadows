@@ -2,17 +2,19 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
-import ListDisplay from '../components/ListDisplay/ListDisplay';
 import { fetchGenre, fetchTypes, fetchSeasons } from '../api/modules/anime';
-import { Box, Typography, Container, Skeleton, Grid, Chip, ThemeProvider, createTheme, CssBaseline, Paper } from '@mui/material';
+import { Box, Typography, Container, Skeleton, Grid, Chip, ThemeProvider, createTheme, CssBaseline, Paper, Select, MenuItem, IconButton, Tooltip } from '@mui/material';
 import { styled } from '@mui/system';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import ViewListIcon from '@mui/icons-material/ViewList';
+import ViewModuleIcon from '@mui/icons-material/ViewModule';
+import SortIcon from '@mui/icons-material/Sort';
 import { HelmetProvider } from 'react-helmet-async';
-import { JsonLd } from 'react-schemaorg';
 import { useSEO } from '../hooks/useSEO';
 import BreadcrumbsComponent from '../components/common/BreadcrumbsComponent';
-// Create a theme instance using your color palette
+import AnimeCard from '../components/AnimeCard/AnimeCard';
+
 const theme = createTheme({
   direction: 'rtl',
   palette: {
@@ -57,7 +59,6 @@ const theme = createTheme({
   },
 });
 
-// Styled components
 const StyledLink = styled(Link)({
   textDecoration: 'none',
   color: 'inherit',
@@ -73,7 +74,10 @@ const FilteredListPage = () => {
   const [filteredList, setFilteredList] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
+  const [sortOption, setSortOption] = useState('default');
+  const [viewMode, setViewMode] = useState('grid');
+  const [quickFilter, setQuickFilter] = useState('all');
+  const itemsPerPage = 24;
 
   const fetchData = useCallback(async () => {
     let name = filterValue;
@@ -134,8 +138,31 @@ const FilteredListPage = () => {
         filtered = animeList;
     }
 
+    // Apply quick filter
+    if (quickFilter !== 'all') {
+      filtered = filtered.filter(anime => anime.status === quickFilter);
+    }
+
+    // Apply sorting
+    switch (sortOption) {
+      case 'title_asc':
+        filtered.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case 'title_desc':
+        filtered.sort((a, b) => b.title.localeCompare(a.title));
+        break;
+      case 'rating_desc':
+        filtered.sort((a, b) => b.rating - a.rating);
+        break;
+      case 'latest':
+        filtered.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+        break;
+      default:
+        break;
+    }
+
     setFilteredList(filtered);
-  }, [filterType, filterValue, animeList]);
+  }, [filterType, filterValue, animeList, quickFilter, sortOption]);
 
   const paginatedList = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -147,6 +174,18 @@ const FilteredListPage = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSortChange = (event) => {
+    setSortOption(event.target.value);
+  };
+
+  const toggleViewMode = () => {
+    setViewMode(prevMode => prevMode === 'grid' ? 'list' : 'grid');
+  };
+
+  const handleQuickFilterChange = (event) => {
+    setQuickFilter(event.target.value);
   };
 
   const pageTitle = `${t(`filterTypes.${filterType}`, filterType)}: ${filterName} | أنمي شادوز`;
@@ -176,8 +215,15 @@ const FilteredListPage = () => {
     <HelmetProvider>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Box sx={{ padding: '20px 0' }}>
+            <BreadcrumbsComponent
+              links={[
+                { to: `/${filterType}s`, label: t(`filterTypes.${filterType}Plural`, `${filterType}s`) }
+              ]}
+              current={filterName}
+            />
+
             <Box sx={{ 
               display: 'flex', 
               flexDirection: 'column', 
@@ -186,21 +232,13 @@ const FilteredListPage = () => {
               borderBottom: '2px solid #3e3e5e',
               paddingBottom: '20px'
             }}>
-              <BreadcrumbsComponent
-                links={[
-                  { to: `/${filterType}s`, label: t(`filterTypes.${filterType}Plural`, `${filterType}s`) }
-                ]}
-                current={filterName}
-              />
-
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: '20px' }}>
                 <Typography 
                   variant="h1" 
                   sx={{ 
                     fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' }, 
                     fontWeight: 'bold',
                     color: 'primary.main',
-                    marginRight: '20px'
                   }}
                 >
                   {t('filteredList.title', '{{filterType}}: {{filterName}}', { filterType: t(`filterTypes.${filterType}`, filterType), filterName })}
@@ -219,13 +257,46 @@ const FilteredListPage = () => {
                   }}
                 />
               </Box>
+
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Select
+                    value={sortOption}
+                    onChange={handleSortChange}
+                    displayEmpty
+                    sx={{ marginRight: '10px', minWidth: '120px' }}
+                  >
+                    <MenuItem value="default">{t('filteredList.sortDefault', 'Default')}</MenuItem>
+                    <MenuItem value="title_asc">{t('filteredList.sortTitleAsc', 'Title (A-Z)')}</MenuItem>
+                    <MenuItem value="title_desc">{t('filteredList.sortTitleDesc', 'Title (Z-A)')}</MenuItem>
+                    <MenuItem value="rating_desc">{t('filteredList.sortRating', 'Highest Rated')}</MenuItem>
+                    <MenuItem value="latest">{t('filteredList.sortLatest', 'Latest')}</MenuItem>
+                  </Select>
+                  <Select
+                    value={quickFilter}
+                    onChange={handleQuickFilterChange}
+                    displayEmpty
+                    sx={{ minWidth: '120px' }}
+                  >
+                    <MenuItem value="all">{t('filteredList.filterAll', 'All Status')}</MenuItem>
+                    <MenuItem value="ongoing">{t('animeStatus.ongoing', 'Ongoing')}</MenuItem>
+                    <MenuItem value="completed">{t('animeStatus.completed', 'Completed')}</MenuItem>
+                    <MenuItem value="upcoming">{t('animeStatus.upcoming', 'Upcoming')}</MenuItem>
+                  </Select>
+                </Box>
+                <Tooltip title={viewMode === 'grid' ? t('filteredList.switchToList', 'Switch to List View') : t('filteredList.switchToGrid', 'Switch to Grid View')}>
+                  <IconButton onClick={toggleViewMode}>
+                    {viewMode === 'grid' ? <ViewListIcon /> : <ViewModuleIcon />}
+                  </IconButton>
+                </Tooltip>
+              </Box>
             </Box>
 
             {loading ? (
               <Grid container spacing={3}>
-                {[...Array(6)].map((_, index) => (
-                  <Grid item xs={12} sm={6} md={4} key={index}>
-                    <Skeleton variant="rectangular" width="100%" height={200} />
+                {[...Array(12)].map((_, index) => (
+                  <Grid item xs={6} sm={4} md={3} lg={2} key={index}>
+                    <Skeleton variant="rectangular" width="100%" height={300} />
                     <Skeleton width="60%" />
                     <Skeleton width="40%" />
                   </Grid>
@@ -235,14 +306,31 @@ const FilteredListPage = () => {
               <Paper elevation={3} sx={{ padding: '20px', backgroundColor: 'error.main', color: 'error.contrastText' }}>
                 <Typography>{error}</Typography>
               </Paper>
+            ) : filteredList.length === 0 ? (
+              <Paper elevation={3} sx={{ padding: '20px', textAlign: 'center' }}>
+                <Typography>{t('filteredList.noResults', 'No results found')}</Typography>
+              </Paper>
             ) : (
               <>
-                <ListDisplay
-                  list={paginatedList}
-                  loading={loading}
-                  error={error}
-                  fields={['title', 'genre', 'rating']}
-                />
+                {viewMode === 'grid' ? (
+                  <Grid container spacing={2}>
+                    {paginatedList.map((anime) => (
+                      <Grid item xs={6} sm={4} md={3} lg={2} xl={2} key={anime._id}>
+                        <AnimeCard anime={anime} />
+                      </Grid>
+                    ))}
+                  </Grid>
+                ) : (
+                  <Paper elevation={3} sx={{ padding: '20px' }}>
+                    {paginatedList.map((anime) => (
+                      <Box key={anime._id} sx={{ marginBottom: '20px', borderBottom: '1px solid #3e3e5e', paddingBottom: '20px' }}>
+                        <Typography variant="h6">{anime.title}</Typography>
+                        <Typography variant="body2">{anime.description}</Typography>
+                        <Typography variant="caption">Rating: {anime.rating}</Typography>
+                      </Box>
+                    ))}
+                  </Paper>
+                )}
                 <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
                   <PaginationComponent
                     currentPage={currentPage}

@@ -9,7 +9,6 @@ import AdminRoute from './components/AdminRoute.jsx';
 import ModeratorRoute from './components/ModeratorRoute.jsx';
 import { initGA, logPageView, setConsent } from './analytics';
 import CookieConsent from 'react-cookie-consent';
- 
 
 import { HelmetProvider } from 'react-helmet-async';
 import LoadingSpinner from './components/common/LoadingSpinner';
@@ -39,6 +38,7 @@ const RecentEpisodes = lazy(() => import('./pages/RecentEpisodes.jsx'));
 const AdminRegister = lazy(() => import('./pages/AdminRegister.jsx'));
 const ContactUs = lazy(() => import('./pages/ContactUs.jsx'));
 const NotFound = lazy(() => import('./pages/NotFound.jsx'));
+const GenrePage = lazy(() => import('./pages/GenrePage.jsx'));
 
 const setDirection = (language) => {
   const dir = language === 'ar' ? 'rtl' : 'ltr';
@@ -81,11 +81,13 @@ function AppContent() {
             <Route path="/profile/" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/last-watching/" element={<ProtectedRoute><History /></ProtectedRoute>} />
             <Route path="/favorites/" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
-            <Route path="/admin-dashboard/" element={<AdminRoute allowedRoles={['admin']}><AdminDashboard /></AdminRoute>} />
+            <Route path="/admin-dashboard/" element={<AdminRoute allowedRoles={['admin', 'moderator']}><AdminDashboard /></AdminRoute>} />
             <Route path="/admin/manage-anime/" element={<AdminRoute allowedRoles={['admin', 'moderator']}><ManageAnime /></AdminRoute>} />
             <Route path="/admin/edit-anime/:animeId/" element={<AdminRoute allowedRoles={['admin', 'moderator']}><EditAnime /></AdminRoute>} />
             <Route path="/admin/edit-episodes/:animeId/" element={<AdminRoute allowedRoles={['admin', 'moderator']}><EditEpisodes /></AdminRoute>} />
             <Route path="/admin/add-episode/:animeId/" element={<AdminRoute allowedRoles={['admin', 'moderator']}><AddEpisode /></AdminRoute>} />
+            <Route path="/genres" element={<GenrePage />} />
+            <Route path="/genre/:genreId" element={<FilteredListPage />} />
             <Route path="*" element={<NotFound />} />
             <Route path="/*" element={<Navigate to={`${location.pathname}/`} replace />} />
           </Routes>

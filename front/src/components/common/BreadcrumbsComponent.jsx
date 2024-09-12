@@ -11,33 +11,35 @@ const BreadcrumbsComponent = ({ links, current }) => {
   const isRTL = i18n.dir() === 'rtl';
 
   return (
-    <Breadcrumbs
-      separator={<NavigateNextIcon fontSize="medium" className={styles.separator} />}
-      aria-label="breadcrumb"
-      className={styles.breadcrumbs}
-    >
-      <RouterLink to="/" className={styles.link}>
-        <HomeIcon className={styles.icon} />
-        <Typography variant="h6">
-          Home
-        </Typography>
-      </RouterLink>
-      {links.map((link, index) => (
-        <MuiLink
-          key={index}
-          component={RouterLink}
-          to={link.to}
-          className={styles.link}
-        >
-          <Typography variant="h6">
-            {link.label}
+    <div className={styles.breadcrumbsWrapper}>
+      <Breadcrumbs
+        separator={<NavigateNextIcon fontSize="small" className={styles.separator} />}
+        aria-label="breadcrumb"
+        className={styles.breadcrumbs}
+      >
+        <RouterLink to="/" className={styles.link}>
+          <HomeIcon className={styles.icon} />
+          <Typography variant="body2">
+            {t('common.home', 'Home')}
           </Typography>
-        </MuiLink>
-      ))}
-      <Typography variant="h6" className={styles.current}>
-        {current}
-      </Typography>
-    </Breadcrumbs>
+        </RouterLink>
+        {links.map((link, index) => (
+          <MuiLink
+            key={index}
+            component={RouterLink}
+            to={link.to}
+            className={styles.link}
+          >
+            <Typography variant="body2">
+              {link.label}
+            </Typography>
+          </MuiLink>
+        ))}
+        <Typography variant="body2" className={styles.current}>
+          {current}
+        </Typography>
+      </Breadcrumbs>
+    </div>
   );
 };
 

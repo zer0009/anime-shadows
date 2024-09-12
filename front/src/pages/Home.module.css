@@ -19,9 +19,10 @@
 }
 
 .mainContent {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     border-radius: 10px;
+    background-color: var(--primary-dark);
 }
 
 .swiperSection,
@@ -36,32 +37,33 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
-    border-bottom: 2px solid var(--primary-color-light);
+    border-bottom: 2px solid var(--accent-color);
     padding-bottom: 0.5rem;
 }
 
 .sectionTitle {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--primary-color);
+    color: var(--highlight-color);
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .moreButton {
-    background-color: var(--primary-color) !important;
+    background-color: var(--accent-color) !important;
     color: var(--text-color) !important;
     padding: 8px 16px;
-    border-radius: 20px;
+    border-radius: 25px;
     transition: all 0.3s ease;
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 1px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    border: 2px solid var(--primary-color-light);
+    border: none;
+    font-weight: 600;
 }
 
 .moreButton:hover {
-    background-color: var(--primary-color-light) !important;
+    background-color: var(--highlight-color) !important;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
