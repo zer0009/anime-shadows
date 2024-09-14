@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { useSearchParams, Link as RouterLink } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Box, Typography, Grid, CircularProgress, Alert, Container } from '@mui/material';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
 import useFetchRecentEpisodes from '../hooks/useFetchRecentEpisodes';
@@ -25,11 +25,6 @@ const RecentEpisodes = () => {
     setSearchParams({ page: page.toString() });
     window.scrollTo(0, 0);
   }, [setCurrentPage, setSearchParams]);
-
-  const handleAnimeClick = useCallback((slug, episodeNumber) => {
-    // Navigate to the episode page
-    window.location.href = `/anime/${slug}/episode/${episodeNumber}`;
-  }, []);
 
   const seoProps = useMemo(() => ({
     title: t('recentEpisodes.pageTitle'),
@@ -98,7 +93,6 @@ const RecentEpisodes = () => {
                       episodeNumber={episode.number}
                       episodeId={episode._id}
                       availableSubtitles={episode.availableSubtitles}
-                      onClick={() => handleAnimeClick(episode.anime.slug, episode.number)}
                     />
                   </Grid>
                 ))}
