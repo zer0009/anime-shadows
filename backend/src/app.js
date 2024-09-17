@@ -22,7 +22,7 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "https://trusted.cdn.com", "https://www.googletagmanager.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://trusted.cdn.com", "https://www.googletagmanager.com", "https://alwingulla.com"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://trusted.cdn.com"],
       imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
       connectSrc: ["'self'", "https://www.google-analytics.com", "https://analytics.google.com"],
