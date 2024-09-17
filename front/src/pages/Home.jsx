@@ -18,6 +18,7 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/autoplay';
 import { useAuth } from '../context/AuthContext'; // Import useAuth
 import AdComponent from '../components/AdComponent/AdComponent'; // Import AdComponent
+import AdMontag from '../components/AdComponent/AdMontag';
 
 const HeroSection = lazy(() => import('../components/HeroSection/HeroSection'));
 const AnimeSection = lazy(() => import('../components/AnimeSection/AnimeSection'));
@@ -228,6 +229,7 @@ const Home = () => {
         <HelmetProvider>
             <Suspense fallback={<LoadingSpinner />}>
                 <HeroSection heroImages={heroImages} t={t} />
+                <AdMontag showAd={!isAdminOrModerator} />
                 <AdComponent adKey="ea9ea029a7a095b803da9b265289a2fe" format="iframe" height={90} width={728} showAd={!isAdminOrModerator} /> {/* Top Banner Ad */}
                 <Container maxWidth={false} className={styles.mainContent}>
                     <AnimeSection
