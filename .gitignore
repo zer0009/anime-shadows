@@ -4,4 +4,3 @@ frontend1
 .env
 # Local Netlify folder
 .netlify
-sw.js
