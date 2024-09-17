@@ -120,6 +120,13 @@ const AddAnime = () => {
       if (file) {
         formData.append('image', file);
       }
+
+      // Debugging: Log FormData entries
+      console.log('FormData entries:');
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+      }
+
       await addAnime(formData);
       showSnackbar('Anime added successfully', 'success');
       resetForm();

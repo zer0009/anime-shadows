@@ -16,6 +16,8 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import 'swiper/css/autoplay';
+import { useAuth } from '../context/AuthContext'; // Import useAuth
+import AdComponent from '../components/AdComponent/AdComponent'; // Import AdComponent
 
 const HeroSection = lazy(() => import('../components/HeroSection/HeroSection'));
 const AnimeSection = lazy(() => import('../components/AnimeSection/AnimeSection'));
@@ -38,6 +40,8 @@ const Home = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+    const { user } = useAuth(); // Get user from useAuth
+    const isAdminOrModerator = user && (user.role === 'admin' || user.role === 'moderator'); // Define isAdminOrModerator
 
     const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -224,6 +228,7 @@ const Home = () => {
         <HelmetProvider>
             <Suspense fallback={<LoadingSpinner />}>
                 <HeroSection heroImages={heroImages} t={t} />
+                <AdComponent adKey="ea9ea029a7a095b803da9b265289a2fe" format="iframe" height={90} width={728} showAd={!isAdminOrModerator} /> {/* Top Banner Ad */}
                 <Container maxWidth={false} className={styles.mainContent}>
                     <AnimeSection
                         title="popularAnime"
@@ -258,6 +263,7 @@ const Home = () => {
                         moreLink="/anime-list/"
                     />
                 </Container>
+                <AdComponent adKey="ea9ea029a7a095b803da9b265289a2fe" format="iframe" height={90} width={728} showAd={!isAdminOrModerator}/> {/* Bottom Banner Ad */}
             </Suspense>
             {showScrollTop && (
                 <Fab color="primary" size="small" aria-label="scroll back to top" className={styles.scrollTopButton} onClick={scrollToTop}>

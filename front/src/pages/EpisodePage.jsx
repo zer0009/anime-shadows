@@ -9,6 +9,8 @@ import { useSEO } from '../hooks/useSEO';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import styles from './EpisodePage.module.css';
 import { handleMarkAsWatched } from '../utils/episodeUtils';
+import AdComponent from '../components/AdComponent/AdComponent'; // Import AdComponent
+import { useAuth } from '../context/AuthContext'; // Import useAuth
 
 const HeaderSection = lazy(() => import('../components/Episode/HeaderSection'));
 const StreamingSection = lazy(() => import('../components/Episode/StreamingSection'));
@@ -18,6 +20,7 @@ const DownloadSection = lazy(() => import('../components/Episode/DownloadSection
 const EpisodePage = () => {
   const { episodeSlug } = useParams();
   const { t, i18n } = useTranslation();
+  const { user } = useAuth(); // Get user from useAuth
   const [episode, setEpisode] = useState(null);
   const [episodes, setEpisodes] = useState([]);
   const [selectedTab, setSelectedTab] = useState(0);
@@ -25,6 +28,8 @@ const EpisodePage = () => {
   const [loading, setLoading] = useState(true);
 
   const [slug, episodeNumber] = episodeSlug.split('-الحلقة-');
+
+  const isAdminOrModerator = user && (user.role === 'admin' || user.role === 'moderator');
 
   useEffect(() => {
     const getEpisodeDetails = async () => {
@@ -176,6 +181,7 @@ const EpisodePage = () => {
     <HelmetProvider>
       <div className={`${styles.episodePage} ${i18n.language === 'ar' ? styles.rtl : styles.ltr}`}>
         {seoProps.jsonLd && <JsonLd item={seoProps.jsonLd} />}
+        <AdComponent adKey="ea9ea029a7a095b803da9b265289a2fe" format="iframe" height={90} width={728} showAd={!isAdminOrModerator} /> {/* Top Banner Ad */}
         <Suspense fallback={<CircularProgress />}>
           <Box className={styles.mainContent}>
             <Box className={styles.streamingSection}>
@@ -191,12 +197,14 @@ const EpisodePage = () => {
                 t={t}
               />
             </Box>
+            <AdComponent adKey="d3b3d418ac4671f3a58fb377907a15ef" format="iframe" height={250} width={300} showAd={!isAdminOrModerator} /> {/* In-Content Ad */}
             <Box className={styles.episodeListSection}>
               <EpisodeListSection episodes={episodes} i18n={i18n} t={t} />
             </Box>
           </Box>
         </Suspense>
         <DownloadSection episode={episode} t={t} />
+        <AdComponent adKey="ea9ea029a7a095b803da9b265289a2fe" format="iframe" height={90} width={728} showAd={!isAdminOrModerator} /> {/* Bottom Banner Ad */}
       </div>
     </HelmetProvider>
   );

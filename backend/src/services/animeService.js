@@ -18,6 +18,16 @@ const validateEntityById = async (Model, id, entityName, file) => {
 };
 
 const createAnime = async (animeData) => {
+  // Validate and convert type and season to ObjectId
+  if (animeData.type) {
+    await validateEntityById(Type, animeData.type, 'Type');
+    animeData.type = new mongoose.Types.ObjectId(animeData.type);
+  }
+  if (animeData.season) {
+    await validateEntityById(Season, animeData.season, 'Season');
+    animeData.season = new mongoose.Types.ObjectId(animeData.season);
+  }
+
   const anime = new Anime(animeData);
   await anime.save();
   return anime;

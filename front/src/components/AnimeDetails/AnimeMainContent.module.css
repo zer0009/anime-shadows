@@ -26,6 +26,9 @@
   font-size: 18px;
   color: var(--subtext-color);
   margin: 20px 0;
+  font-family: 'Roboto', sans-serif; /* Change to a more appealing font */
+  line-height: 1.6; /* Improve readability */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Add subtle text shadow */
 }
 
 .animeTags {

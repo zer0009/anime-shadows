@@ -35,8 +35,8 @@ exports.uploadAnime = async (req, res) => {
       title, 
       subTitle, 
       description, 
-      typeId,
-      seasonId,
+      type: typeId, // Use type instead of typeId
+      season: seasonId, // Use season instead of seasonId
       numberOfEpisodes, 
       status, 
       airingDate, 
@@ -71,8 +71,8 @@ exports.uploadAnime = async (req, res) => {
       throw new Error('Genres must be an array');
     }
 
-    // Validate typeId and seasonId
-    if (!animeData.typeId || !animeData.seasonId) {
+    // Validate type and season
+    if (!animeData.type || !animeData.season) {
       throw new Error('Type ID and Season ID are required');
     }
 
