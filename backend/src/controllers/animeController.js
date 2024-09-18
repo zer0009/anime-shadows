@@ -149,9 +149,24 @@ exports.getAnimes = async (req, res) => {
 
   try {
     const parsedTags = JSON.parse(tags);
-    const result = await AnimeService.getAnimes(query, parsedTags, type, season, sort, popular, state, broadMatches === 'true', parseInt(page), parseInt(limit));
+    const validSeasons = ['Winter', 'Spring', 'Summer', 'Fall'];
+    const validatedSeason = validSeasons.includes(season) ? season : '';
+
+    const result = await AnimeService.getAnimes(
+      query, 
+      parsedTags, 
+      type, 
+      validatedSeason, 
+      sort, 
+      popular, 
+      state, 
+      broadMatches === 'true', 
+      parseInt(page), 
+      parseInt(limit)
+    );
     res.json(result);
   } catch (err) {
+    console.error('Error in getAnimes:', err);
     res.status(400).json({ error: err.message });
   }
 };

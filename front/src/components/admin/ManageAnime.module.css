@@ -67,3 +67,13 @@
         height: 56px;
     }
 }
+
+.filterContainer {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.filterSelect {
+    min-width: 120px;
+}

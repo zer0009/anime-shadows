@@ -52,10 +52,28 @@ const scrapeWitanimeWithAxios = async (url) => {
     const downloadLinks = await page.evaluate(() => {
       const linkElements = document.querySelectorAll('a.download-link');
       return Array.from(linkElements).map(element => ({
-        linkText: element.textContent.trim(),
+        linkText: element.querySelector('.notice').textContent.trim(),
         downloadUrl: element.getAttribute('href')
       }));
     });
+
+    for (let link of downloadLinks) {
+      if (link.downloadUrl === '#') {
+        const newUrl = await page.evaluateHandle(async (linkText) => {
+          const linkElement = Array.from(document.querySelectorAll('a.download-link')).find(el => el.querySelector('.notice').textContent.trim() === linkText);
+          if (linkElement) {
+            linkElement.click();
+            return new Promise((resolve) => {
+              setTimeout(() => {
+                resolve(window.location.href);
+              }, 3000); // Wait for 3 seconds to allow the navigation to complete
+            });
+          }
+        }, link.linkText);
+        link.downloadUrl = await newUrl.jsonValue();
+        await page.goBack({ waitUntil: 'networkidle2' });
+      }
+    }
 
     servers.push(...downloadLinks);
 

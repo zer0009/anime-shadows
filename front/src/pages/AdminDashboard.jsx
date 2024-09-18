@@ -70,7 +70,7 @@ const AdminDashboard = () => {
             {tabComponents.map((tab, index) => (
               <Tab
                 key={index}
-                label={isMobile ? '' : tab.label}
+                label={tab.label}
                 icon={tab.icon}
                 iconPosition="start"
                 className={styles.tab}
