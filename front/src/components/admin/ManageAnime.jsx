@@ -21,13 +21,13 @@ const ManageAnime = () => {
   const [seasonFilter, setSeasonFilter] = useState('');
   const [sortBy, setSortBy] = useState('');
 
-  const loadAnimes = useCallback(async () => {
+  const loadAnimes = useCallback(async (query = searchQuery) => {
     setIsLoading(true);
     try {
       const { animes, totalPages } = await fetchAnime(
         currentPage,
         25,
-        searchQuery,
+        query,
         [], // tags (empty array for now)
         typeFilter,
         seasonFilter,
@@ -54,7 +54,7 @@ const ManageAnime = () => {
       setCurrentPage(1);
       loadAnimes(query);
     }, 300),
-    []
+    [loadAnimes]
   );
 
   const handleSearch = (e) => {
