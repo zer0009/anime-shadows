@@ -20,14 +20,15 @@ const ManageAnime = () => {
   const [typeFilter, setTypeFilter] = useState('');
   const [seasonFilter, setSeasonFilter] = useState('');
   const [sortBy, setSortBy] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
 
-  const loadAnimes = useCallback(async (query = searchQuery) => {
+  const loadAnimes = useCallback(async () => {
     setIsLoading(true);
     try {
       const { animes, totalPages } = await fetchAnime(
         currentPage,
         25,
-        query,
+        debouncedSearchQuery, // Use debouncedSearchQuery instead of searchQuery
         [], // tags (empty array for now)
         typeFilter,
         seasonFilter,
@@ -43,18 +44,18 @@ const ManageAnime = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, searchQuery, typeFilter, seasonFilter, sortBy]);
+  }, [currentPage, debouncedSearchQuery, typeFilter, seasonFilter, sortBy]);
 
   useEffect(() => {
     loadAnimes();
-  }, [loadAnimes, currentPage, typeFilter, seasonFilter, sortBy]);
+  }, [loadAnimes, currentPage, debouncedSearchQuery, typeFilter, seasonFilter, sortBy]);
 
   const debouncedSearch = useCallback(
     debounce((query) => {
+      setDebouncedSearchQuery(query);
       setCurrentPage(1);
-      loadAnimes(query);
     }, 300),
-    [loadAnimes]
+    []
   );
 
   const handleSearch = (e) => {
