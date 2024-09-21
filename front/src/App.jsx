@@ -106,7 +106,6 @@ function AppContent() {
         buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
         expires={150}
         onAccept={() => {
-          console.log('Cookie consent accepted');
           setConsent(true);
         }}
       >
@@ -119,7 +118,6 @@ function AppContent() {
 function App() {
   useEffect(() => {
     const measurementId = import.meta.env.VITE_REACT_APP_GA_MEASUREMENT_ID;
-    console.log('Initializing GA with ID:', measurementId); // Add this log
     initGA(measurementId);
   }, []);
 
