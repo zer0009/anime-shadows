@@ -25,7 +25,7 @@ app.use(helmet({
       scriptSrc: ["'self'", "'unsafe-inline'", "https://trusted.cdn.com", "https://www.googletagmanager.com", "https://alwingulla.com"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://trusted.cdn.com"],
       imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
-      connectSrc: ["'self'", "https://www.google-analytics.com", "https://analytics.google.com", "https://e2ertt.com"],
+      connectSrc: ["'self'", "https://www.google-analytics.com", "https://analytics.google.com", "https://e2ertt.com", "https://www.googletagmanager.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       objectSrc: ["'none'"],
       mediaSrc: ["'self'"],
