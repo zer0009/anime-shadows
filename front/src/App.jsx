@@ -56,10 +56,6 @@ function AppContent() {
 
   useEffect(() => {
     logPageView(location.pathname);
-  }, []);
-
-  useEffect(() => {
-    logPageView(location.pathname);
   }, [location]);
 
   return (
@@ -119,6 +115,9 @@ function App() {
   useEffect(() => {
     const measurementId = import.meta.env.VITE_REACT_APP_GA_MEASUREMENT_ID;
     initGA(measurementId);
+
+    // Log initial page view
+    logPageView(window.location.pathname);
   }, []);
 
   return (
