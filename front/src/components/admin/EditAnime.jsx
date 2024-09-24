@@ -80,9 +80,9 @@ const EditAnime = () => {
       formData.append('subTitle', subTitle); // Append subTitle
       formData.append('studio', studio); // Append studio
       formData.append('description', description); // Append description
-      formData.append('type', type);
+      formData.append('type', type); // Make sure this is a valid ObjectId
       formData.append('genres', JSON.stringify(genres));
-      formData.append('season', season); // Change seasonId to season
+      formData.append('season', season); // Make sure this is a valid ObjectId
       formData.append('myAnimeListUrl', myAnimeListUrl);
       formData.append('numberOfEpisodes', numberOfEpisodes);
       formData.append('source', source);
@@ -94,12 +94,13 @@ const EditAnime = () => {
         formData.append('pictureUrl', pictureUrl); // Append existing pictureUrl if no new file
       }
 
-      console.log('Sending update data:', formData); // Add this line to log the sent data
+      console.log('Sending update data:', Object.fromEntries(formData));
       await editAnime(animeId, formData);
       alert('Anime edited successfully');
       navigate('/admin/manage-anime');
     } catch (error) {
       console.error('Error editing anime:', error);
+      alert(`Error editing anime: ${error.response?.data?.error || error.message}`);
     }
   };
 

@@ -105,11 +105,14 @@ exports.updateAnime = async (req, res) => {
       updateData.genres = genresArray.map(genre => new mongoose.Types.ObjectId(genre));
     }
 
-    if (updateData.seasonId) {
-      const seasonDoc = await Season.findById(updateData.seasonId).lean();
-      if (!seasonDoc) {
-        throw new Error('Invalid season ID');
-      }
+    // Validate type
+    if (updateData.type && !mongoose.Types.ObjectId.isValid(updateData.type)) {
+      throw new Error('Invalid type ID');
+    }
+
+    // Validate season
+    if (updateData.season && !mongoose.Types.ObjectId.isValid(updateData.season)) {
+      throw new Error('Invalid season ID');
     }
 
     const updatedAnime = await AnimeService.updateAnime(id, updateData, file);
