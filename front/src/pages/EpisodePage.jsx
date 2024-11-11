@@ -29,7 +29,7 @@ const EpisodePage = () => {
 
   const [slug, episodeNumber] = episodeSlug.split('-الحلقة-');
 
-  const isAdminOrModerator = user && (user.role === 'admin' || user.role === 'moderator');
+  const isAdminOrModerator = user ? (user.role === 'admin' || user.role === 'moderator') : false;
 
   useEffect(() => {
     const getEpisodeDetails = async () => {
@@ -181,7 +181,22 @@ const EpisodePage = () => {
     <HelmetProvider>
       <div className={`${styles.episodePage} ${i18n.language === 'ar' ? styles.rtl : styles.ltr}`}>
         {seoProps.jsonLd && <JsonLd item={seoProps.jsonLd} />}
-        <AdComponent adKey="ea9ea029a7a095b803da9b265289a2fe" format="iframe" height={90} width={728} showAd={!isAdminOrModerator} /> {/* Top Banner Ad */}
+        
+        {/* Social Bar Ad */}
+        <AdComponent 
+          adKey="social-bar"
+          showAd={!isAdminOrModerator}
+        />
+
+        {/* Top Banner Ad */}
+        <AdComponent 
+          adKey="ea9ea029a7a095b803da9b265289a2fe"
+          format="iframe"
+          height={90}
+          width={728}
+          showAd={!isAdminOrModerator}
+        />
+
         <Suspense fallback={<CircularProgress />}>
           <Box className={styles.mainContent}>
             <Box className={styles.streamingSection}>
@@ -204,7 +219,8 @@ const EpisodePage = () => {
           </Box>
         </Suspense>
         <DownloadSection episode={episode} t={t} />
-        <AdComponent adKey="ea9ea029a7a095b803da9b265289a2fe" format="iframe" height={90} width={728} showAd={!isAdminOrModerator} /> {/* Bottom Banner Ad */}
+        <AdComponent adKey="28630403fc8223d48e43d715d6859324" format="iframe" height={60} width={468} showAd={!isAdminOrModerator} /> {/* Bottom Banner Ad */}
+        <AdComponent adKey="popunder" showAd={!isAdminOrModerator} /> {/* Popunder Ad */}
       </div>
     </HelmetProvider>
   );

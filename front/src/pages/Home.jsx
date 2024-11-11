@@ -61,7 +61,7 @@ const Home = () => {
     useEffect(() => {
         const fetchPopular = async () => {
             try {
-                const response = await fetchPopularAnime('all');
+                const response = await fetchPopularAnime('today');
                 setPopularAnimes(response.sortedAnimes || []);
             } catch (error) {
                 console.error('Error fetching popular animes:', error);
@@ -228,7 +228,16 @@ const Home = () => {
         <HelmetProvider>
             <Suspense fallback={<LoadingSpinner />}>
                 <HeroSection heroImages={heroImages} t={t} />
-                {/* <AdComponent adKey="ea9ea029a7a095b803da9b265289a2fe" format="iframe" height={90} width={728} showAd={!isAdminOrModerator} /> */}
+                
+                {/* Top Banner Ad */}
+                <AdComponent 
+                    adKey="ea9ea029a7a095b803da9b265289a2fe"
+                    format="iframe"
+                    height={90}
+                    width={728}
+                    showAd={!isAdminOrModerator}
+                />
+                
                 <Container maxWidth={false} className={styles.mainContent}>
                     <AnimeSection
                         title="popularAnime"
@@ -239,9 +248,21 @@ const Home = () => {
                         isMobile={isMobile}
                         moreLink="/popular-anime/"
                     />
+                    
+                    {/* Medium Rectangle Ad */}
+                    <AdComponent 
+                        adKey="d3b3d418ac4671f3a58fb377907a15ef"
+                        format="iframe"
+                        height={250}
+                        width={300}
+                        showAd={!isAdminOrModerator}
+                    />
+                    
                     <section aria-labelledby="recent-episodes-heading" className={styles.recentEpisodesSection}>
                         <div className={styles.sectionHeader}>
-                            <h3 id="recent-episodes-heading" className={styles.sectionTitle}>{t('home.recentEpisodes')}</h3>
+                            <h3 id="recent-episodes-heading" className={styles.sectionTitle}>
+                                {t('home.recentEpisodes')}
+                            </h3>
                             <Button 
                                 variant="contained"
                                 onClick={() => navigate('/recent-episodes')} 
@@ -253,6 +274,16 @@ const Home = () => {
                         </div>
                         {renderRecentEpisodes()}
                     </section>
+                    
+                    {/* Small Banner Ad */}
+                    <AdComponent 
+                        adKey="28630403fc8223d48e43d715d6859324"
+                        format="iframe"
+                        height={60}
+                        width={468}
+                        showAd={!isAdminOrModerator}
+                    />
+                    
                     <AnimeSection
                         title="animeList"
                         items={searchResults.length > 0 ? searchResults : animeList}
@@ -263,10 +294,30 @@ const Home = () => {
                         moreLink="/anime-list/"
                     />
                 </Container>
-                {/* <AdComponent adKey="ea9ea029a7a095b803da9b265289a2fe" format="iframe" height={90} width={728} showAd={!isAdminOrModerator}/> */}
+                
+                {/* Bottom Banner Ad */}
+                <AdComponent 
+                    adKey="ea9ea029a7a095b803da9b265289a2fe"
+                    format="iframe"
+                    height={90}
+                    width={728}
+                    showAd={!isAdminOrModerator}
+                />
+
+                {/* Popunder Ad */}
+                <AdComponent 
+                    adKey="popunder"
+                    showAd={!isAdminOrModerator}
+                />
             </Suspense>
             {showScrollTop && (
-                <Fab color="primary" size="small" aria-label="scroll back to top" className={styles.scrollTopButton} onClick={scrollToTop}>
+                <Fab 
+                    color="primary" 
+                    size="small" 
+                    aria-label="scroll back to top" 
+                    className={styles.scrollTopButton} 
+                    onClick={scrollToTop}
+                >
                     <KeyboardArrowUpIcon />
                 </Fab>
             )}

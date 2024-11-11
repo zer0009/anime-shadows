@@ -10,6 +10,8 @@ import { addFavorite, removeFavorite } from '../api/modules/user';
 import { rateAnime } from '../api/modules/anime';
 import useAnimeDetails from '../hooks/useAnimeDetails';
 import styles from './AnimeDetails.module.css';
+import AdComponent from '../components/AdComponent/AdComponent.jsx';
+import { useAuth } from '../context/AuthContext';
 
 const AnimeSidebar = lazy(() => import('../components/AnimeDetails/AnimeSidebar.jsx'));
 const AnimeMainContent = lazy(() => import('../components/AnimeDetails/AnimeMainContent.jsx'));
@@ -23,6 +25,9 @@ const AnimeDetails = () => {
   const navigate = useNavigate();
   const isSmallScreen = useMediaQuery('(max-width: 1024px)');
   const { userData } = useFetchUserData();
+  const { user } = useAuth();
+
+  const isAdminOrModerator = user && (user.role === 'admin' || user.role === 'moderator');
 
   const {
     anime,
@@ -182,6 +187,22 @@ const AnimeDetails = () => {
   return (
     <HelmetProvider>
       <Container maxWidth="lg" className={styles.animeDetailsContainer}>
+        {/* Top Banner Ad */}
+        <AdComponent 
+          adKey="ea9ea029a7a095b803da9b265289a2fe"
+          format="iframe"
+          height={90}
+          width={728}
+          showAd={!isAdminOrModerator}
+        />
+        
+        {/* Social Bar Ad */}
+        <AdComponent 
+          adKey="social-bar"
+          showAd={!isAdminOrModerator}
+        />
+
+        {/* Rest of your content */}
         <h1 className={styles.hiddenH1}>{anime.title}</h1>
         <Suspense fallback={<LoadingSpinner />}>
           {isSmallScreen ? (
@@ -231,12 +252,30 @@ const AnimeDetails = () => {
             userRating={userRating}
             t={t}
           />
+          {/* Medium Rectangle Ad */}
+          <AdComponent 
+            adKey="d3b3d418ac4671f3a58fb377907a15ef"
+            format="iframe"
+            height={250}
+            width={300}
+            showAd={!isAdminOrModerator}
+          />
         </Suspense>
-        <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
-          <Alert onClose={handleSnackbarClose} severity="warning" sx={{ width: '100%' }}>
-            {snackbarMessage}
-          </Alert>
-        </Snackbar>
+
+        {/* Bottom Banner Ad */}
+        <AdComponent 
+          adKey="28630403fc8223d48e43d715d6859324"
+          format="iframe"
+          height={60}
+          width={468}
+          showAd={!isAdminOrModerator}
+        />
+        
+        {/* Popunder Ad */}
+        <AdComponent 
+          adKey="popunder"
+          showAd={!isAdminOrModerator}
+        />
       </Container>
     </HelmetProvider>
   );

@@ -459,6 +459,56 @@ const getAnimesByIds = async (ids) => {
   return animes;
 };
 
+const getSeasonalAnime = async (seasonName, year, page = 1, limit = 36) => {
+    try {
+        // Find the season document with proper capitalization
+        const season = await Season.findOne({
+            name: seasonName.charAt(0).toUpperCase() + seasonName.slice(1).toLowerCase(),
+            year: parseInt(year)
+        });
+
+        if (!season) {
+            return {
+                animes: [],
+                totalPages: 0,
+                currentPage: page
+            };
+        }
+
+        const skip = (page - 1) * limit;
+
+        const [animes, total] = await Promise.all([
+            Anime.find({ season: season._id })
+                .populate('type')
+                .populate('genres')
+                .populate({
+                    path: 'season',
+                    select: 'name year startDate endDate'
+                })
+                .sort({ airingDate: -1 })
+                .skip(skip)
+                .limit(limit)
+                .lean(),
+            Anime.countDocuments({ season: season._id })
+        ]);
+
+        return {
+            animes,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page,
+            season: {
+                name: season.name,
+                year: season.year,
+                startDate: season.startDate,
+                endDate: season.endDate
+            }
+        };
+    } catch (error) {
+        console.error('Error in getSeasonalAnime:', error);
+        throw error;
+    }
+};
+
 module.exports = {
   createAnime,
   updateAnime,
@@ -481,5 +531,6 @@ module.exports = {
   markEpisodeAsWatched,
   markEpisodeAsUnwatched,
   getViewingHistory,
-  getAnimesByIds
+  getAnimesByIds,
+  getSeasonalAnime
 };
