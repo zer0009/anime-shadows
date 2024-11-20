@@ -7,7 +7,7 @@ import useFetchRecentEpisodes from '../hooks/useFetchRecentEpisodes';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
 import { useSEO } from '../hooks/useSEO';
 import styles from './Home.module.css';
-import { Box, Container, Fab, Grid, Skeleton, Button, useMediaQuery, useTheme } from '@mui/material';
+import {Container, Fab,Skeleton, Button, useMediaQuery, useTheme } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, Autoplay } from 'swiper/modules';

@@ -1,7 +1,7 @@
 import React, { useCallback, Suspense, lazy, useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Container, Typography, useMediaQuery, Snackbar, Alert } from '@mui/material';
+import { Container, Typography, useMediaQuery} from '@mui/material';
 import { HelmetProvider } from 'react-helmet-async';
 import LoadingSpinner from '../components/common/LoadingSpinner.jsx';
 import useFetchUserData from '../hooks/useFetchUserData';
