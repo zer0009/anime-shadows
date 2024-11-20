@@ -5,7 +5,6 @@ export const fetchEpisodesByAnimeId = async (animeId) => {
         const response = await API.get(`/episodes/anime/${animeId}`);
         return response.data;
     } catch (error) {
-        console.error(`Error fetching episodes for anime ID ${animeId}:`, error);
         throw error;
     }
 };
@@ -15,7 +14,6 @@ export const fetchEpisodeById = async (episodeId) => {
         const response = await API.get(`/episodes/${episodeId}`);
         return response.data;
     } catch (error) {
-        console.error(`Error fetching episode ID ${episodeId}:`, error);
         throw error;
     }
 };
@@ -25,7 +23,6 @@ export const fetchRecentEpisodes = async (page = 1, limit = 24) => {
         const response = await API.get(`/episodes/recent?page=${page}&limit=${limit}`);
         return response.data; // Ensure the correct data is returned
     } catch (error) {
-        console.error('Error fetching recent episodes:', error);
         throw error;
     }
 };
@@ -40,7 +37,6 @@ export const fetchEpisodeBySlugAndNumber = async (slug, episodeNumber) => {
         });
         return response.data;
     } catch (error) {
-        console.error(`Error fetching episode for slug ${slug} and episode number ${episodeNumber}:`, error);
         throw error;
     }
 };

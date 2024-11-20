@@ -11,7 +11,6 @@ export const addAnime = async (formData) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error adding anime:', error);
     throw error;
   }
 };
@@ -60,7 +59,6 @@ export const editType = async (typeId, typeData) => {
 
 export const editGenre = async (genreId, genreData) => {
   const response = await API.put(`/genres/${genreId}`, genreData, getAuthHeaders());
-  console.log(response.data);
   return response.data;
 };
 
@@ -89,7 +87,6 @@ export const updateEpisode = async (episodeId, episodeData) => {
         const response = await API.put(`/episodes/${episodeId}`, episodeData, getAuthHeaders());
         return response.data;
     } catch (error) {
-        console.error(`Error updating episode ID ${episodeId}:`, error);
         throw error;
     }
 };
@@ -98,7 +95,6 @@ export const deleteEpisode = async (episodeId) => {
     try {
         await API.delete(`/episodes/${episodeId}`, getAuthHeaders());
     } catch (error) {
-        console.error(`Error deleting episode ID ${episodeId}:`, error);
         throw error;
     }
 };
@@ -107,7 +103,6 @@ export const deleteAnime = async (animeId) => {
     try {
         await API.delete(`/anime/${animeId}`, getAuthHeaders());
     } catch (error) {
-        console.error(`Error deleting anime ID ${animeId}:`, error);
         throw error;
     }
 };
