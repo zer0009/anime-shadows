@@ -7,8 +7,7 @@ import Footer from './components/common/Footer.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import AdminRoute from './components/AdminRoute.jsx';
 import ModeratorRoute from './components/ModeratorRoute.jsx';
-import { initGA, logPageView, setConsent } from './analytics';
-import CookieConsent from 'react-cookie-consent';
+import { initGA, logPageView } from './analytics';
 
 import { HelmetProvider } from 'react-helmet-async';
 import LoadingSpinner from './components/common/LoadingSpinner';
@@ -94,19 +93,6 @@ function AppContent() {
         </Suspense>
       </div>
       <Footer />
-      <CookieConsent
-        location="bottom"
-        buttonText="Accept"
-        cookieName="ga_consent"
-        style={{ background: "#2B373B" }}
-        buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
-        expires={150}
-        onAccept={() => {
-          setConsent(true);
-        }}
-      >
-        This website uses cookies to enhance the user experience.
-      </CookieConsent>
     </div>
   );
 }

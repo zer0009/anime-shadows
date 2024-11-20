@@ -36,7 +36,6 @@ const AdComponent = ({
 
             // Error handling for script loading
             script.onerror = () => {
-                console.log('Ad failed to load:', adKey);
                 setAdError(true);
                 if (adRef.current) {
                     adRef.current.style.display = 'none';
@@ -73,7 +72,6 @@ const AdComponent = ({
                 }
             };
         } catch (error) {
-            console.log('Error setting up ad:', error);
             setAdError(true);
         }
     }, [adKey, format, showAd, width, height, adError]);

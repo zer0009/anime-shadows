@@ -64,7 +64,6 @@ const Home = () => {
                 const response = await fetchPopularAnime('today');
                 setPopularAnimes(response.sortedAnimes || []);
             } catch (error) {
-                console.error('Error fetching popular animes:', error);
                 setPopularAnimes([]);
             }
         };

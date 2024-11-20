@@ -35,9 +35,3 @@ export const logEvent = (category, action, label) => {
     label: label,
   });
 };
-
-export const setConsent = (consent) => {
-  ReactGA.gtag('consent', 'update', {
-    'analytics_storage': consent ? 'granted' : 'denied'
-  });
-};
