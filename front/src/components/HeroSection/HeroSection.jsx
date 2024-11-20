@@ -25,6 +25,7 @@ const HeroSection = ({ heroImages, t }) => {
                             jpg={image.jpg}
                             alt={image.alt}
                             className={styles.heroImage}
+                            loading="eager"
                         />
                         <Box className={styles.slideOverlay} />
                     </SwiperSlide>

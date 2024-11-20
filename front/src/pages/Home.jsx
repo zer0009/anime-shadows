@@ -196,7 +196,7 @@ const Home = () => {
                                 episodeTitle={episode.title}
                                 episodeNumber={episode.number}
                                 episodeId={episode._id}
-                                availableSubtitles={episode.availableSubtitles} // Make sure this is correct
+                                availableSubtitles={episode.availableSubtitles} // Ensure correctness
                                 onClick={() => handleAnimeClick(episode.anime.slug, episode.number)}
                                 className={styles.recentAnimeCard}
                             />
@@ -214,7 +214,7 @@ const Home = () => {
                         anime={episode.anime}
                         episodeNumber={episode.number}
                         episodeId={episode._id}
-                        availableSubtitles={episode.availableSubtitles} // Make sure this is correct
+                        availableSubtitles={episode.availableSubtitles} // Ensure correctness
                         onClick={() => handleAnimeClick(episode.anime.slug, episode.number)}
                         className={styles.recentAnimeCard}
                     />
@@ -226,6 +226,7 @@ const Home = () => {
     return (
         <HelmetProvider>
             <Helmet>
+                {/* Preload both webp and jpg formats for better compatibility */}
                 <link
                     rel="preload"
                     as="image"
@@ -233,10 +234,17 @@ const Home = () => {
                     type="image/webp"
                     crossorigin="anonymous"
                 />
+                <link
+                    rel="preload"
+                    as="image"
+                    href="/assets/images/hero1_optimized.jpg"
+                    type="image/jpeg"
+                    crossorigin="anonymous"
+                />
             </Helmet>
             <Suspense fallback={<LoadingSpinner />}>
                 <HeroSection heroImages={heroImages} t={t} />
-                
+
                 {/* Top Banner Ad */}
                 <AdComponent 
                     adKey="ea9ea029a7a095b803da9b265289a2fe"
