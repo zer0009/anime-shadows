@@ -226,20 +226,18 @@ const Home = () => {
     return (
         <HelmetProvider>
             <Helmet>
-                {/* Preload both webp and jpg formats for better compatibility */}
+                {/* Preload without crossorigin */}
                 <link
                     rel="preload"
                     as="image"
                     href="/assets/images/hero1_optimized.webp"
                     type="image/webp"
-                    crossorigin="anonymous"
                 />
                 <link
                     rel="preload"
                     as="image"
                     href="/assets/images/hero1_optimized.jpg"
                     type="image/jpeg"
-                    crossorigin="anonymous"
                 />
             </Helmet>
             <Suspense fallback={<LoadingSpinner />}>

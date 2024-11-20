@@ -26,6 +26,7 @@ const HeroSection = ({ heroImages, t }) => {
                             alt={image.alt}
                             className={styles.heroImage}
                             loading="eager"
+                            crossorigin="anonymous"
                         />
                         <Box className={styles.slideOverlay} />
                     </SwiperSlide>
