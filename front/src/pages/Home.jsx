@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { fetchPopularAnime } from '../api/modules/anime';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import useFetchRecentEpisodes from '../hooks/useFetchRecentEpisodes';
-import { HelmetProvider } from 'react-helmet-async';
+import { HelmetProvider, Helmet } from 'react-helmet-async';
 import { useSEO } from '../hooks/useSEO';
 import styles from './Home.module.css';
 import { Box, Container, Fab, Grid, Skeleton, Button, useMediaQuery, useTheme } from '@mui/material';
@@ -225,6 +225,15 @@ const Home = () => {
 
     return (
         <HelmetProvider>
+            <Helmet>
+                <link
+                    rel="preload"
+                    as="image"
+                    href="/assets/images/hero1_optimized.webp"
+                    type="image/webp"
+                    crossorigin="anonymous"
+                />
+            </Helmet>
             <Suspense fallback={<LoadingSpinner />}>
                 <HeroSection heroImages={heroImages} t={t} />
                 

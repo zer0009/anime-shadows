@@ -40,7 +40,7 @@ const HeroSection = ({ heroImages, t }) => {
                         {t('home.subHeading', 'موقعك الأول لمشاهدة الأنمي')}
                     </Typography>
                     <Typography variant="body1" className={styles.introText}>
-                        {t('home.introText', 'مرحبًا بك في أنمي شادوز، وجهتك الأولى لمشاهدة أحدث وأفضل الأنميات. استمتع بمجموعة واسعة من الأنميات المترجمة بجودة عالية.')}
+                        {t('home.introText', 'مرحبًا بك في أنمي شادوز، وجهتك الأولى لمشاهدة أحدث وأفضل الأنميات المترجمة بجودة عالية. استمتع بمجموعة واسعة من الأنميات المترجمة بجودة عالية.')}
                     </Typography>
                 </Container>
             </Box>

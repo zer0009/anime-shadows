@@ -11,9 +11,40 @@ const AdComponent = ({
 }) => {
     const adRef = useRef(null);
     const [adError, setAdError] = useState(false);
+    const [isInView, setIsInView] = useState(false);
 
     useEffect(() => {
-        if (!showAd || !adRef.current || adError) return;
+        if (!showAd || adError) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        setIsInView(true);
+                        observer.disconnect();
+                    }
+                });
+            },
+            {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            }
+        );
+
+        if (adRef.current) {
+            observer.observe(adRef.current);
+        }
+
+        return () => {
+            if (adRef.current) {
+                observer.unobserve(adRef.current);
+            }
+        };
+    }, [showAd, adError]);
+
+    useEffect(() => {
+        if (!isInView || !adRef.current || adError) return;
 
         // Clear any existing content
         adRef.current.innerHTML = '';
@@ -74,7 +105,7 @@ const AdComponent = ({
         } catch (error) {
             setAdError(true);
         }
-    }, [adKey, format, showAd, width, height, adError]);
+    }, [isInView, adKey, format, showAd, width, height, adError]);
 
     // Don't render anything if there's an error or we shouldn't show the ad
     if (!showAd || adError) return null;
