@@ -225,6 +225,21 @@ const Home = () => {
 
     return (
         <HelmetProvider>
+            <Helmet>
+                {/* Preload without crossorigin */}
+                <link
+                    rel="preload"
+                    as="image"
+                    href="/assets/images/hero1_optimized.webp"
+                    type="image/webp"
+                />
+                <link
+                    rel="preload"
+                    as="image"
+                    href="/assets/images/hero1_optimized.jpg"
+                    type="image/jpeg"
+                />
+            </Helmet>
             <Suspense fallback={<LoadingSpinner />}>
                 <HeroSection heroImages={heroImages} t={t} />
 
