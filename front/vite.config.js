@@ -13,12 +13,6 @@ export default defineConfig({
   build: {
     sourcemap: true, // Enable source map generation for debugging
     outDir: 'dist',
-    minify: 'terser', // Use Terser for minification
-    terserOptions: {
-      compress: {
-        drop_console: true, // Remove console logs in production
-      },
-    },
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
