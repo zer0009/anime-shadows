@@ -10,7 +10,6 @@ const scrapeAnimeLuxeWithPuppeteer = async (pageUrl) => {
   let browser;
   let page;
   try {
-    console.log(`Fetching URL: ${pageUrl}`);
     browser = await puppeteer.launch({
       headless: true,
       args: [
@@ -95,7 +94,6 @@ const scrapeAnimeLuxeWithPuppeteer = async (pageUrl) => {
           serverName = parsedUrl.hostname ? parsedUrl.hostname.replace('www.', '') : 'Unknown';
         }
 
-        console.log(`Found streaming server: ${serverName}, ${decodedUrl}, ${quality}`);
         servers.push({ serverName, quality, url: decodedUrl, type: 'streaming', subtitle: 'AR' });
       } catch (err) {
         console.error('Error extracting streaming server:', err);
@@ -117,14 +115,12 @@ const scrapeAnimeLuxeWithPuppeteer = async (pageUrl) => {
           serverName = parsedUrl.hostname ? parsedUrl.hostname.replace('www.', '') : 'Unknown';
         }
 
-        console.log(`Found download server: ${serverName}, ${decodedUrl}, ${quality}`);
         servers.push({ serverName, quality, url: decodedUrl, type: 'download', subtitle: 'AR' });
       } catch (err) {
         console.error('Error extracting download server:', err);
       }
     });
 
-    console.log('Scraped servers:', servers);
     return servers;
   } catch (error) {
     console.error('Error scraping AnimeLuxe with Puppeteer:', error.message);

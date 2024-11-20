@@ -186,7 +186,6 @@ const getAnime = async (animeId, userId) => {
 };
 
 const getAnimeBySlug = async (slug, userId) => {
-  console.log('Fetching anime details for slug:', slug); // Add logging
   try {
     // Fetch anime details without views and viewCount fields
     const animeDetails = await Anime.findOne({ slug })
@@ -200,10 +199,8 @@ const getAnimeBySlug = async (slug, userId) => {
         select: '-streamingServers -downloadServers' // Exclude streamingServers and downloadServers
       })
       .lean();
-      console.log('animeDetails', animeDetails)
 
     if (!animeDetails) {
-      console.error('Anime not found for slug:', slug); // Add logging
       throw new Error('Anime not found');
     }
 

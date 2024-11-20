@@ -6,7 +6,6 @@ const { getRandomUserAgent } = require('./userAgents');
 
 const scrapeAnimeLuxeWithAxios = async (pageUrl) => {
   try {
-    console.log(`Fetching URL: ${pageUrl}`);
     const { data } = await axios.get(pageUrl, {
       headers: {
         'User-Agent': getRandomUserAgent(),
@@ -19,7 +18,6 @@ const scrapeAnimeLuxeWithAxios = async (pageUrl) => {
         'Cache-Control': 'no-cache', // Cache control header
       }
     });
-    console.log('Fetched data successfully');
     const $ = cheerio.load(data);
 
     const servers = [];
@@ -30,7 +28,6 @@ const scrapeAnimeLuxeWithAxios = async (pageUrl) => {
       const [quality, serverName] = text.split('-').map(part => part.trim());
       const encodedUrl = $(element).attr('data-url');
       const decodedUrl = atob(encodedUrl);
-      console.log(`Found streaming server: ${serverName}, ${decodedUrl}, ${quality}`);
       servers.push({ serverName, quality, url: decodedUrl, type: 'streaming', subtitle: 'AR' });
     });
 
@@ -48,11 +45,9 @@ const scrapeAnimeLuxeWithAxios = async (pageUrl) => {
         serverName = parsedUrl.hostname ? parsedUrl.hostname.replace('www.', '') : 'Unknown';
       }
 
-      console.log(`Found download server: ${serverName}, ${decodedUrl}, ${quality}`);
       servers.push({ serverName, quality, url: decodedUrl, type: 'download', subtitle: 'AR' });
     });
 
-    console.log('Scraped servers:', servers);
     return servers;
   } catch (error) {
     console.error('Error scraping AnimeLuxe with Axios:', error);

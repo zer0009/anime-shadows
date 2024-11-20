@@ -371,9 +371,6 @@ exports.getSitemapData = async (req, res) => {
       .limit(100)
       .populate('anime', 'slug')
       .lean();
-
-    console.log('Recent episodes query result:', recentEpisodes);
-
     // Fetch popular anime (assuming you have a viewCount field)
     const popularAnime = await Anime.find({}, '_id updatedAt slug viewCount')
       .sort({ viewCount: -1 })
