@@ -17,7 +17,6 @@ const useFetchMovieList = (currentPage = 1) => {
                 setTotalPages(response.totalPages || 1);
             } catch (error) {
                 setError('Error fetching movie list');
-                console.error('Error fetching movie list:', error);
             } finally {
                 setLoading(false);
             }

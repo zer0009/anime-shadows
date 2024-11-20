@@ -47,7 +47,6 @@ export const AuthProvider = ({ children }) => {
             setUser(response.user); // Ensure the user state is correctly set
             navigate('/');
         } catch (error) {
-            console.error('Error logging in:', error);
             throw error; // Throw the error so it can be caught in useAuthForm
         }
     };
@@ -67,7 +66,6 @@ export const AuthProvider = ({ children }) => {
             setUser(response.user); // Ensure the user state is correctly set
             navigate('/login');
         } catch (error) {
-            console.error('Error registering:', error);
             throw error; // Throw the error so it can be caught in useAuthForm
         }
     };

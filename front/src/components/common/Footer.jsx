@@ -13,20 +13,35 @@ const Footer = () => {
         <Grid container spacing={2} className={styles.footerContent}>
           <Grid item xs={12} className={styles.footerSection}>
             <Box className={styles.footerLinks}>
-              <Link to="/" className={styles.footerLink}>الرئيسية</Link>
-              <Link to="/anime-list" className={styles.footerLink}>قائمة الأنمي</Link>
-              <Link to="/movie-list" className={styles.footerLink}>قائمة الأفلام</Link>
-              <Link to="/recent-episodes" className={styles.footerLink}>آخر الحلقات</Link>
+              <Link to="/" className={styles.footerLink} aria-label="Home">الرئيسية</Link>
+              <Link to="/anime-list" className={styles.footerLink} aria-label="Anime List">قائمة الأنمي</Link>
+              <Link to="/movie-list" className={styles.footerLink} aria-label="Movie List">قائمة الأفلام</Link>
+              <Link to="/recent-episodes" className={styles.footerLink} aria-label="Recent Episodes">آخر الحلقات</Link>
             </Box>
             <div className={styles.socialIcons}>
-              <IconButton href="https://www.facebook.com/people/Anime-Shadows/61563869637267/" aria-label="Facebook" className={styles.socialIcon}>
-                <Facebook fontSize="small" />
+              <IconButton 
+                href="https://www.facebook.com/people/Anime-Shadows/61563869637267/" 
+                aria-label="Facebook" 
+                className={styles.socialIcon}
+                size="large"
+              >
+                <Facebook fontSize="inherit" />
               </IconButton>
-              <IconButton href="#" aria-label="Twitter" className={styles.socialIcon}>
-                <Twitter fontSize="small" />
+              <IconButton 
+                href="#" 
+                aria-label="Twitter" 
+                className={styles.socialIcon}
+                size="large"
+              >
+                <Twitter fontSize="inherit" />
               </IconButton>
-              <IconButton href="https://www.youtube.com/channel/UCWGWPX03RG-FmbGHDHb14aA" aria-label="YouTube" className={styles.socialIcon}>
-                <YouTube fontSize="small" />
+              <IconButton 
+                href="https://www.youtube.com/channel/UCWGWPX03RG-FmbGHDHb14aA" 
+                aria-label="YouTube" 
+                className={styles.socialIcon}
+                size="large"
+              >
+                <YouTube fontSize="inherit" />
               </IconButton>
             </div>
           </Grid>

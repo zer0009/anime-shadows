@@ -10,7 +10,6 @@ const useAuthForm = () => {
       await login(values);
       setError(null);
     } catch (err) {
-      console.error('Error in handleLogin:', err);
       if (err.response && err.response.data && err.response.data.error) {
         setError(err.response.data.error);
       } else {
@@ -24,7 +23,6 @@ const useAuthForm = () => {
       await register(values);
       setError(null); // Clear any previous errors on success
     } catch (err) {
-      console.error('Error in handleRegister:', err);
       if (err.response && err.response.data && err.response.data.error) {
         const errorMessage = err.response.data.error;
         if (errorMessage.includes('duplicate key error')) {

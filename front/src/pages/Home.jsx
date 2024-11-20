@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback, useMemo, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { fetchAnimeBySlug, fetchPopularAnime } from '../api/modules/anime';
+import { fetchPopularAnime } from '../api/modules/anime';
 import useFetchAnimeList from '../hooks/useFetchAnimeList';
 import useFetchRecentEpisodes from '../hooks/useFetchRecentEpisodes';
 import { HelmetProvider } from 'react-helmet-async';

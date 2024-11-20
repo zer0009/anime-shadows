@@ -31,6 +31,12 @@
   text-decoration: none;
   transition: color 0.3s ease;
   margin: 0 10px;
+  padding: 12px;
+  min-width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .footerLink:hover {
@@ -53,6 +59,8 @@
 .socialIcon {
   color: var(--text-color);
   transition: color 0.3s ease, transform 0.3s ease;
+  width: 48px;
+  height: 48px;
 }
 
 .socialIcon:hover {
@@ -95,6 +103,10 @@
     justify-content: center;
     margin-top: 10px;
   }
+
+  .footerLink {
+    margin: 5px 0;
+  }
 }
 
 @media (max-width: 480px) {
@@ -105,5 +117,16 @@
 
   .footerSection {
     font-size: 10px;
+  }
+
+  .footerLink {
+    padding: 10px;
+    min-width: 40px;
+    height: 40px;
+  }
+
+  .socialIcon {
+    width: 40px;
+    height: 40px;
   }
 }

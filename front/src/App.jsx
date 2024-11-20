@@ -6,7 +6,6 @@ import Header from './components/common/Header.jsx';
 import Footer from './components/common/Footer.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import AdminRoute from './components/AdminRoute.jsx';
-import ModeratorRoute from './components/ModeratorRoute.jsx';
 import { initGA, logPageView } from './analytics';
 
 import { HelmetProvider } from 'react-helmet-async';

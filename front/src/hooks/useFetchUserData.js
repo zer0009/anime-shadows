@@ -20,7 +20,6 @@ const useFetchUserData = () => {
       setUserData(response.data);
     } catch (error) {
       setError('Error fetching user data');
-      console.error('Error fetching user data:', error);
     } finally {
       setLoading(false);
     }
@@ -43,7 +42,6 @@ const useFetchUserData = () => {
       }));
       animeIds.forEach(id => fetchedAnimeIds.current.add(id));
     } catch (error) {
-      console.error('Error fetching anime details batch:', error);
       animeIds.forEach(id => {
         setAnimeDetails(prevDetails => ({
           ...prevDetails,

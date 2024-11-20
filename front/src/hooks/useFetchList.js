@@ -17,7 +17,6 @@ const useFetchList = (fetchFunction, page = 1, limit = 10) => {
                 setTotalPages(response.totalPages);
             } catch (error) {
                 setError('Error fetching list');
-                console.error('Error fetching list:', error);
             } finally {
                 setLoading(false);
             }
@@ -82,7 +81,6 @@ const useFetchList = (fetchFunction, page = 1, limit = 10) => {
             setSearchResults(results);
         } catch (error) {
             setError('Error searching list');
-            console.error('Error searching list:', error);
         } finally {
             setLoading(false);
         }
